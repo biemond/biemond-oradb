@@ -11,6 +11,7 @@
 #            databaseType => 'SE',
 #            oracleBase   => '/oracle',
 #            oracleHome   => '/oracle/product/11.2/db',
+#            createUser   => 'true',
 #            user         => 'oracle',
 #            group        => 'dba',
 #            downloadDir  => '/install',
@@ -22,6 +23,7 @@
 #            databaseType => 'SE',
 #            oracleBase   => '/oracle',
 #            oracleHome   => '/oracle/product/11.2/db',
+#            createUser   => 'true',
 #            user         => 'oracle',
 #            group        => 'dba',
 #            downloadDir  => '/install',
@@ -34,6 +36,7 @@ define oradb::installdb( $version                 = undef,
                          $databaseType            = 'SE',
                          $oracleBase              = undef,
                          $oracleHome              = undef,
+                         $createUser              = true,
                          $user                    = 'oracle',
                          $group                   = 'dba',
                          $downloadDir             = '/install',
@@ -68,7 +71,6 @@ define oradb::installdb( $version                 = undef,
           group       => $group,
           logoutput   => true,
         }
-
         File {
           ensure      => present,
           mode        => 0775,
@@ -76,7 +78,6 @@ define oradb::installdb( $version                 = undef,
           group       => $group,
         }
       }
-
       default: {
         fail("Unrecognized operating system")
       }
@@ -88,23 +89,29 @@ define oradb::installdb( $version                 = undef,
       $mountPoint     = $puppetDownloadMntPoint
     }
 
-    if ! defined(Group[$group]) {
-      group { $group :
-        ensure        => present,
+    if ( $createUser ) {
+      # Whether Puppet will manage the group or relying on external methods
+      if ! defined(Group[$group]) {
+        group { $group :
+          ensure      => present,
+        }
       }
     }
 
-    if ! defined(User[$user]) {
-      # http://raftaman.net/?p=1311 for generating password
-      user { $user :
-        ensure        => present,
-        groups        => $group,
-        shell         => '/bin/bash',
-        password      => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
-        home          => "/home/${user}",
-        comment       => "This user ${user} was created by Puppet",
-        require       => Group[$group],
-        managehome    => true,
+    if ( $createUser ) {
+      # Whether Puppet will manage the user or relying on external methods
+      if ! defined(User[$user]) {
+        # http://raftaman.net/?p=1311 for generating password
+        user { $user :
+          ensure      => present,
+          groups      => $group,
+          shell       => '/bin/bash',
+          password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
+          home        => "/home/${user}",
+          comment     => "This user ${user} was created by Puppet",
+          require     => Group[$group],
+          managehome  => true,
+        }
       }
     }
 
