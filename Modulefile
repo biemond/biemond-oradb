@@ -1,5 +1,5 @@
 name 'biemond-oradb'
-version '0.8.2'
+version '0.8.3'
 
 author 'Edwin Biemond'
 license 'GNU General Public License version 3 of the License'
