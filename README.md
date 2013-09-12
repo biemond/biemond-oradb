@@ -12,6 +12,7 @@ Works with Puppet 2.7 & 3.0
 Version updates
 ---------------
 
+- 0.8.2 OPatch upgrade fix for Offline, option to skip to create user and group    
 - 0.8.1 Removed sleep and replaced by waitforcompletion   
 - 0.8.0 Autostart bugfixes and support for oracle 11.2.0.4  database   
 - 0.7.9 Autostart of listener and database with chkconfig / init.d   
@@ -131,6 +132,7 @@ The databaseType value should contain only one of these choices.
             oracleHome             => '/oracle/product/12.1/db',
             user                   => 'oracle',
             group                  => 'dba',
+            createUser             => true,
             downloadDir            => '/data/install',
             puppetDownloadMntPoint => $puppetDownloadMntPoint,  
      }
@@ -145,6 +147,7 @@ or
             oracleHome             => '/oracle/product/11.2/db',
             user                   => 'oracle',
             group                  => 'dba',
+            createUser             => true,
             downloadDir            => '/install',
             puppetDownloadMntPoint => $puppetDownloadMntPoint,  
     }
@@ -159,6 +162,7 @@ or
             oracleHome             => '/oracle/product/11.2/db',
             user                   => 'oracle',
             group                  => 'dba',
+            createUser             => true,            
             downloadDir            => '/install',
             puppetDownloadMntPoint => $puppetDownloadMntPoint,   
      }
@@ -173,6 +177,7 @@ or
             oracleHome   => '/oracle/product/11.2/db',
             user         => 'oracle',
             group        => 'dba',
+            createUser   => true,
             downloadDir  => '/install',  
      }
 

@@ -298,4 +298,3 @@ define oradb::installdb( $version                 = undef,
     }
   }
 }
-#EOF

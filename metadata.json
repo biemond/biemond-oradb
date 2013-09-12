@@ -1,6 +1,6 @@
 {
   "name": "biemond-oradb",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "summary": "Oracle Database 11g / 12 linux",
   "author": "Edwin Biemond",
   "description": "Oracle Database 11g / 12 puppet module",

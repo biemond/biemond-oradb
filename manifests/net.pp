@@ -4,56 +4,50 @@
 #
 #
 #
-
 define oradb::net( $oracleHome   = undef,
                    $version      = "11.2",
                    $user         = 'oracle',
                    $group        = 'dba',
-                   $downloadDir  = '/install',){
+                   $downloadDir  = '/install',
+)
 
-   if $version == "11.2" or $version == "12.1" {
-     
-   } else { 
-     fail("Unrecognized version") 
-   }
+{
+  if $version == "11.2" or $version == "12.1" {
+  } else {
+    fail("Unrecognized version")
+  }
 
-   case $operatingsystem {
-     CentOS, RedHat, OracleLinux, Ubuntu, Debian, SLES: { 
+  case $operatingsystem {
+    CentOS, RedHat, OracleLinux, Ubuntu, Debian, SLES: {
+      $execPath    = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
+      $path        = $downloadDir
+      Exec { path  => $execPath,
+        user       => $user,
+        group      => $group,
+        logoutput  => true,
+      }
+      File {
+        ensure     => present,
+        mode       => 0775,
+        owner      => $user,
+        group      => $group,
+      }
+    }
+    default: {
+      fail("Unrecognized operating system")
+    }
+  }
 
-        $execPath        = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
-        $path            = $downloadDir
-        
-        Exec { path      => $execPath,
-               user      => $user,
-               group     => $group,
-               logoutput => true,
-             }
-        File {
-               ensure  => present,
-               mode    => 0775,
-               owner   => $user,
-               group   => $group,
-             }        
-     }
-     default: { 
-        fail("Unrecognized operating system") 
-     }
-   }
+  if ! defined(File["${path}/netca_${version}.rsp"]) {
+    file { "${path}/netca_${version}.rsp":
+      ensure       => present,
+      content      => template("oradb/netca_${version}.rsp.erb"),
+    }
+  }
 
-   if ! defined(File["${path}/netca_${version}.rsp"]) {
-     file { "${path}/netca_${version}.rsp":
-            ensure  => present,
-            content => template("oradb/netca_${version}.rsp.erb"),
-          }
-   }
-
-   exec { "install oracle net ${title}":
-            command     => "netca /silent /responsefile ${path}/netca_${version}.rsp",
-            require     => File["${path}/netca_${version}.rsp"],
-            creates     => "${oracleHome}/network/admin/listener.ora",
-   } 
-
-
+  exec { "install oracle net ${title}":
+    command        => "netca /silent /responsefile ${path}/netca_${version}.rsp",
+    require        => File["${path}/netca_${version}.rsp"],
+    creates        => "${oracleHome}/network/admin/listener.ora",
+  }
 }
-
-
