@@ -1,10 +1,13 @@
 # == Class: oradb::rcu
 #    rcu for soa suite, webcenter
 #
+#    product = soasuite|webcenter|all
+#
 #    oradb::rcu{ 'DEV_PS6':
 #                rcuFile        => 'ofm_rcu_linux_11.1.1.7.0_32_disk1_1of1.zip',
 #                version        => '11.1.1.7',
 #                oracleHome     => '/oracle/product/11.2/db',
+#                product        => 'all',
 #                user           => 'oracle',
 #                group          => 'dba',
 #                downloadDir    => '/install',
@@ -62,6 +65,10 @@ define oradb::rcu( $rcuFile                 = undef,
     $components           = '-component MDS -component OPSS -component CONTENTSERVER11 -component CONTENTSERVER11SEARCH -component URM -component PORTLET -component WEBCENTER -component ACTIVITIES -component DISCUSSIONS'
     # extra password for DISCUSSIONS and ACTIVITIES
     $componentsPasswords  = [$reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword]
+  } elsif $product == 'all' {
+    $components           = '-component SOAINFRA -component ORASDPM -component MDS -component OPSS -component BAM -component CONTENTSERVER11 -component CONTENTSERVER11SEARCH -component URM -component PORTLET -component WEBCENTER -component ACTIVITIES -component DISCUSSIONS'
+    # extra password for DISCUSSIONS and ACTIVITIES
+    $componentsPasswords  = [ $reposPassword, $reposPassword, $reposPassword,$reposPassword,$reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword]
   } else {
     fail("Unrecognized FMW product")
   }

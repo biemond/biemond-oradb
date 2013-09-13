@@ -12,7 +12,7 @@ Works with Puppet 2.7 & 3.0
 Version updates
 ---------------
 
-- 0.8.3 support for extracted oracle software (shared storage) with zipExtract +downloadDir parameter     
+- 0.8.3 support for extracted oracle software (shared storage) with zipExtract , RCU product value "all"    
 - 0.8.2 OPatch upgrade fix for Offline, option to skip to create user and group    
 - 0.8.1 Removed sleep and replaced by waitforcompletion
 - 0.8.0 Autostart bugfixes and support for oracle 11.2.0.4  database
@@ -137,6 +137,21 @@ The databaseType value should contain only one of these choices.
             downloadDir            => '/data/install',
             zipExtract             => true,
             puppetDownloadMntPoint => $puppetDownloadMntPoint,
+     }
+
+or with zipExtract ( does not download or extract , software is in /install/linuxamd64_12c_database )  
+
+     oradb::installdb{ '12.1.0.1_Linux-x86-64':
+            version                => '12.1.0.1',
+            file                   => 'linuxamd64_12c_database',
+            databaseType           => 'SE',
+            oracleBase             => '/oracle',
+            oracleHome             => '/oracle/product/12.1/db',
+            user                   => 'oracle',
+            group                  => 'dba',
+            createUser             => true,
+            downloadDir            => '/install',
+            zipExtract             => false,
      }
 
 or
@@ -337,7 +352,7 @@ other
 
 
 
-Oracle SOA Suite Repository Creation Utility (RCU)
+Oracle SOA Suite Repository Creation Utility (RCU), product = soasuite|webcenter|all
 
     oradb::rcu{     'DEV_PS6':
                      rcuFile          => 'ofm_rcu_linux_11.1.1.7.0_32_disk1_1of1.zip',
@@ -446,13 +461,3 @@ install the following module to set the database user limits parameters
 
      node 'dbagent1.alfa.local' inherits database {
      }
-
-       package { $install:
-         ensure  => present,
-       }
-     
-     }
-     
-     node 'dbagent1.alfa.local' inherits database {
-     }
-     

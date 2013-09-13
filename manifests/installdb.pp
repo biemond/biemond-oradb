@@ -66,7 +66,6 @@ define oradb::installdb( $version                 = undef,
     case $operatingsystem {
       CentOS, RedHat, OracleLinux, Ubuntu, Debian, SLES: {
         $execPath     = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
-        $path         = $downloadDir
         $oraInstPath  = "/etc"
         $oraInventory = "${oracleBase}/oraInventory"
         Exec { path   => $execPath,
@@ -117,24 +116,25 @@ define oradb::installdb( $version                 = undef,
         }
       }
     }
-
-    if ! defined(File[$path]) {
+    
+    if ! defined(File[$downloadDir]) {
       # check oracle install folder
-      file { $path :
-        path          => $path,
+      file { $downloadDir :
         ensure        => directory,
         recurse       => false,
         replace       => false,
       }
     }
 
+    $path = $downloadDir
+    
     if ( $zipExtract ) {
       # In $downloadDir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
       if $version == '12.1.0.1' {
         # db file 1 installer zip
         file { "${path}/${file}_1of2.zip":
           source      => "${mountPoint}/${file}_1of2.zip",
-          require     => File[$path],
+          require     => File[$downloadDir],
         }
         exec { "extract ${path}/${file}_1of2.zip":
           command     => "unzip -o ${path}/${file}_1of2.zip -d ${path}/${file}",
@@ -157,7 +157,7 @@ define oradb::installdb( $version                 = undef,
         # db file 1 installer zip
         file { "${path}/${file}_1of2.zip":
           source      => "${mountPoint}/${file}_1of2.zip",
-          require     => File[$path],
+          require     => File[$downloadDir],
         }
         exec { "extract ${path}/${file}_1of2.zip":
           command     => "unzip -o ${path}/${file}_1of2.zip -d ${path}/${file}",
@@ -178,7 +178,7 @@ define oradb::installdb( $version                 = undef,
         # db file 1 installer zip
         file { "${path}/${file}_1of7.zip":
           source      => "${mountPoint}/${file}_1of7.zip",
-          require     => File[$path],
+          require     => File[$downloadDir],
         }
         exec { "extract ${path}/${file}_1of7.zip":
           command     => "unzip -o ${path}/${file}_1of7.zip -d ${path}/${file}",
@@ -275,7 +275,7 @@ define oradb::installdb( $version                 = undef,
         }
       } else {
         exec { "install oracle database ${title}":
-          command     => "/bin/sh -c 'unset DISPLAY;${path}/database/runInstaller -silent -waitforcompletion -responseFile ${path}/db_install_${version}.rsp'",
+          command     => "/bin/sh -c 'unset DISPLAY;${path}/${file}/database/runInstaller -silent -waitforcompletion -responseFile ${path}/db_install_${version}.rsp'",
           require     => [File ["${oraInstPath}/oraInst.loc"],File["${path}/db_install_${version}.rsp"]],
           creates     => $oracleHome,
         }
@@ -292,7 +292,7 @@ define oradb::installdb( $version                 = undef,
         }
       } else {
         exec { "install oracle database ${title}":
-          command     => "/bin/sh -c 'unset DISPLAY;${path}/database/runInstaller -silent -waitforcompletion -responseFile ${path}/db_install_${version}.rsp'",
+          command     => "/bin/sh -c 'unset DISPLAY;${path}/${file}/database/runInstaller -silent -waitforcompletion -responseFile ${path}/db_install_${version}.rsp'",
           require     => [File ["${oraInstPath}/oraInst.loc"],File["${path}/db_install_${version}.rsp"]],
           creates     => $oracleHome,
         }
@@ -309,7 +309,7 @@ define oradb::installdb( $version                 = undef,
         }
       } else {
         exec { "install oracle database ${title}":
-          command     => "/bin/sh -c 'unset DISPLAY;${path}/database/runInstaller -silent -waitforcompletion -responseFile ${path}/db_install_${version}.rsp'",
+          command     => "/bin/sh -c 'unset DISPLAY;${path}/${file}/database/runInstaller -silent -waitforcompletion -responseFile ${path}/db_install_${version}.rsp'",
           require     => [File ["${oraInstPath}/oraInst.loc"],File["${path}/db_install_${version}.rsp"]],
           creates     => $oracleHome,
         }
