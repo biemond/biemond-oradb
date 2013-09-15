@@ -122,6 +122,8 @@ The databaseType value should contain only one of these choices.
 - SE     : Standard Edition
 - SEONE  : Standard Edition One
 
+
+
      #$puppetDownloadMntPoint = "puppet:///database/"
      $puppetDownloadMntPoint = "puppet:///modules/oradb/
 
@@ -138,6 +140,7 @@ The databaseType value should contain only one of these choices.
             zipExtract             => true,
             puppetDownloadMntPoint => $puppetDownloadMntPoint,
      }
+
 
 or with zipExtract ( does not download or extract , software is in /install/linuxamd64_12c_database )  
 
