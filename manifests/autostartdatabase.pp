@@ -5,8 +5,7 @@
 define oradb::autostartdatabase( $oracleHome  = undef,
                                  $dbName      = undef,
                                  $user        = 'oracle',
-)
-
+                               )
 {
   case $operatingsystem {
     CentOS, RedHat, OracleLinux, Ubuntu, Debian, SLES: {
@@ -33,10 +32,24 @@ define oradb::autostartdatabase( $oracleHome  = undef,
     require        => File["/etc/init.d/dbora"],
   }
 
-  exec { "chkconfig dbora":
-    command        => "chkconfig --add dbora",
-    require        => File["/etc/init.d/dbora"],
-    user           => 'root',
-    unless         => "chkconfig | /bin/grep 'dbora'",
+  case $operatingsystem {
+    CentOS, RedHat, OracleLinux: {
+
+      exec { "chkconfig dbora":
+        command        => "chkconfig --add dbora",
+        require        => File["/etc/init.d/dbora"],
+        user           => 'root',
+        unless         => "chkconfig | /bin/grep 'dbora'",
+      }
+    }
+    Ubuntu, Debian, SLES:{
+
+      exec { "update-rc.d dbora":
+        command        => "update-rc.d dbora defaults",
+        require        => File["/etc/init.d/dbora"],
+        user           => 'root',
+        unless         => "ls /etc/rc3.d/*dbora | /bin/grep 'dbora'",
+      }      
+    }
   }
 }
