@@ -1,6 +1,6 @@
 {
   "name": "biemond-oradb",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "summary": "Oracle Database 11g / 12 linux",
   "author": "Edwin Biemond",
   "description": "Oracle Database 11g / 12 puppet module",
@@ -9,5 +9,6 @@
   "checksums": {},
   "source": "https://github.com/biemond/puppet/tree/master/modules/oradb",
   "project_page": "https://github.com/biemond/puppet/tree/master/modules/oradb",
-  "license": "GNU General Public License version 3 of the License"
+  "license": "Apache 2.0"
+}ublic License version 3 of the License"
 }
