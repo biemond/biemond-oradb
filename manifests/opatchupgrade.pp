@@ -67,11 +67,10 @@ define oradb::opatchupgrade( $oracleHome              = undef,
   $installedVersion  = opatch_version($oracleHome)
 
   if $installedVersion == $opversion {
-    notify {"oradb::opatchupgrade ${installedVersion} already installed":}
-    $continue        = false
+    $continue = false
   } else {
     notify {"oradb::opatchupgrade ${installedVersion} installed - performing upgrade":}
-    $continue        = true
+    $continue = true
   }
 
   if ( $continue ) {
@@ -104,8 +103,8 @@ define oradb::opatchupgrade( $oracleHome              = undef,
           }
         }
       }
-      default: { 
-        fail("Unrecognized operating system") 
+      default: {
+        fail("Unrecognized operating system")
       }
     }
   }

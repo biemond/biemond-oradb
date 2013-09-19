@@ -54,7 +54,6 @@ define oradb::installdb( $version                 = undef,
     $continue = true
   } else {
     if ( $found ) {
-      notify {"oradb::installdb ${oracleHome} already exists":}
       $continue = false
     } else {
       notify {"oradb::installdb ${oracleHome} does not exists":}
@@ -116,7 +115,7 @@ define oradb::installdb( $version                 = undef,
         }
       }
     }
-    
+
     if ! defined(File[$downloadDir]) {
       # check oracle install folder
       file { $downloadDir :
@@ -127,7 +126,7 @@ define oradb::installdb( $version                 = undef,
     }
 
     $path = $downloadDir
-    
+
     if ( $zipExtract ) {
       # In $downloadDir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
       if $version == '12.1.0.1' {

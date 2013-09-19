@@ -51,14 +51,13 @@ define oradb::opatch( $oracleProductHome       = undef,
   # check if the opatch already is installed
   $found = opatch_exists($oracleProductHome,$patchId)
   if $found == undef {
-    $continue        = true
+    $continue = true
   } else {
     if ( $found ) {
-      notify {"oradb::opatch ${title} ${oracleProductHome} already exists":}
-      $continue      = false
+      $continue = false
     } else {
       notify {"oradb::opatch ${title} ${oracleProductHome} does not exists":}
-      $continue      = true
+      $continue = true
     }
   }
 
