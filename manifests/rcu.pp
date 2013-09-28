@@ -12,7 +12,7 @@
 #                group          => 'dba',
 #                downloadDir    => '/install',
 #                action         => 'create',
-#                dbServer       => 'dbagent1.alfa.local:1521', 
+#                dbServer       => 'dbagent1.alfa.local:1521',
 #                dbService      => 'test.oracle.com',
 #                sysPassword    => 'Welcome01',
 #                schemaPrefix   => 'DEV',
@@ -34,6 +34,7 @@ define oradb::rcu( $rcuFile                 = undef,
                    $schemaPrefix            = undef,
                    $reposPassword           = undef,
                    $puppetDownloadMntPoint  = undef,
+                   $logoutput               = false,
 )
 
 {
@@ -41,11 +42,13 @@ define oradb::rcu( $rcuFile                 = undef,
     CentOS, RedHat, OracleLinux, Ubuntu, Debian, SLES: {
       $execPath           = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
       $path               = $downloadDir
+
       Exec { path         => $execPath,
         user              => $user,
         group             => $group,
-        logoutput         => true,
+        logoutput         => $logoutput,
       }
+
       File {
         ensure            => present,
         mode              => 0775,
@@ -101,7 +104,8 @@ define oradb::rcu( $rcuFile                 = undef,
   exec { "run sqlplus to check for repos ${title}":
     command               => "sqlplus \"sys/${sysPassword}@//${dbServer}/${dbService} as sysdba\" @${path}/rcu_${version}/rcu_checks_${title}.sql",
     require               => File["${path}/rcu_${version}/rcu_checks_${title}.sql"],
-    environment           => ["ORACLE_HOME=${oracleHome}", "LD_LIBRARY_PATH=${oracleHome}/lib"],
+    environment           => ["ORACLE_HOME=${oracleHome}",
+                              "LD_LIBRARY_PATH=${oracleHome}/lib"],
   }
 
   # put rcu software
