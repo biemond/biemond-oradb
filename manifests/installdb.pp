@@ -305,12 +305,14 @@ define oradb::installdb( $version                 = undef,
           command     => "/bin/sh -c 'unset DISPLAY;${path}/${file}/database/runInstaller -silent -ignoreSysPrereqs -ignorePrereq -waitforcompletion -responseFile ${path}/db_install_${version}.rsp'",
           require     => [File ["${oraInstPath}/oraInst.loc"],File["${path}/db_install_${version}.rsp"],Exec["extract ${path}/${file}_1of2.zip"],Exec["extract ${path}/${file}_2of2.zip"]],
           creates     => $oracleHome,
+          timeout     => 3600,
         }
       } else {
         exec { "install oracle database ${title}":
           command     => "/bin/sh -c 'unset DISPLAY;${path}/${file}/database/runInstaller -silent -ignoreSysPrereqs -ignorePrereq -waitforcompletion -responseFile ${path}/db_install_${version}.rsp'",
           require     => [File ["${oraInstPath}/oraInst.loc"],File["${path}/db_install_${version}.rsp"]],
           creates     => $oracleHome,
+          timeout     => 3600,
         }
       }
     }
