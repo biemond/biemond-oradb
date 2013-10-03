@@ -12,6 +12,7 @@ Works with Puppet 2.7 & 3.0
 Version updates
 ---------------
 
+- 0.8.5 timeout = 0 and added -ignoreSysPrereqs -ignorePrereq on installdb
 - 0.8.4 updated license to Apache 2.0
 - 0.8.3 support for extracted oracle software (shared storage) with zipExtract , RCU product value "all"    
 - 0.8.2 OPatch upgrade fix for Offline, option to skip to create user and group    
