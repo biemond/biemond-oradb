@@ -39,9 +39,15 @@ define oradb::net( $oracleHome   = undef,
   }
 
   if ! defined(File["${path}/netca_${version}.rsp"]) {
+    if ! defined(File["${path}"]) {
+      file { "${path}":
+        ensure       => directory,
+      }
+    }
     file { "${path}/netca_${version}.rsp":
       ensure       => present,
       content      => template("oradb/netca_${version}.rsp.erb"),
+      require      => File["${path}"],
     }
   }
 
