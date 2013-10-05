@@ -12,6 +12,7 @@ Works with Puppet 2.7 & 3.0
 Version updates
 ---------------
 
+- 0.8.6 RCU OIM option for Oracle Identity Management
 - 0.8.5 timeout = 0 and added -ignoreSysPrereqs -ignorePrereq on installdb
 - 0.8.4 updated license to Apache 2.0
 - 0.8.3 support for extracted oracle software (shared storage) with zipExtract , RCU product value "all"    
@@ -41,7 +42,7 @@ Oracle Database Features
 - Apply OPatch
 - Create database instances
 - Stop/Start database instances
-- Installs RCU repositoy for Oracle SOA Suite / Webcenter ( 11.1.1.6.0 and 11.1.1.7.0 )
+- Installs RCU repositoy for Oracle SOA Suite / Webcenter ( 11.1.1.6.0 and 11.1.1.7.0 ) / Oracle Identity Management ( 11.1.2.1 )
 
 Some manifests like installdb.pp, opatch.pp or rcusoa.pp supports an alternative mountpoint for the big oracle files.
 When not provided it uses the files location of the oradb puppet module
@@ -408,8 +409,25 @@ Oracle SOA Suite Repository Creation Utility (RCU), product = soasuite|webcenter
                      reposPassword    => 'Welcome02',
     }
 
-
-
+    # needs Oracle Enterprise Edition database
+    oradb::rcu{ 'DEV_1112':
+                     rcuFile                => 'V37476-01.zip',
+                     product                => 'oim',
+                     version                => '11.1.2.1',  
+                     oracleHome             => '/oracle/product/11.2/db',
+                     user                   => 'oracle',
+                     group                  => 'dba',
+                     downloadDir            => '/data/install',
+                     action                 => 'create',
+                     dbServer               => 'oimdb.alfa.local:1521',  
+                     dbService              => 'oim.oracle.com',
+                     sysPassword            => hiera('database_test_sys_password'),
+                     schemaPrefix           => 'DEV',
+                     reposPassword          => hiera('database_test_rcu_dev_password'),
+                     puppetDownloadMntPoint => $puppetDownloadMntPoint,
+                     logoutput              => true, 
+                     require                => Oradb::Dbactions['start oimDb'],
+     }
 
 
 site.pp
@@ -456,7 +474,7 @@ install the following module to set the database user limits parameters
        $install = [ 'binutils.x86_64', 'compat-libstdc++-33.x86_64', 'glibc.x86_64','ksh.x86_64','libaio.x86_64',
                     'libgcc.x86_64', 'libstdc++.x86_64', 'make.x86_64','compat-libcap1.x86_64', 'gcc.x86_64',
                     'gcc-c++.x86_64','glibc-devel.x86_64','libaio-devel.x86_64','libstdc++-devel.x86_64',
-                    'sysstat.x86_64','unixODBC-devel','glibc.i686']
+                    'sysstat.x86_64','unixODBC-devel','glibc.i686','libXext.i686','libXtst.i686']
 
        package { $install:
          ensure  => present,

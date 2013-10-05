@@ -1,7 +1,7 @@
 # == Class: oradb::rcu
 #    rcu for soa suite, webcenter
 #
-#    product = soasuite|webcenter|all
+#    product = soasuite|webcenter|oim|all
 #
 #    oradb::rcu{ 'DEV_PS6':
 #                rcuFile        => 'ofm_rcu_linux_11.1.1.7.0_32_disk1_1of1.zip',
@@ -68,6 +68,9 @@ define oradb::rcu( $rcuFile                 = undef,
     $components           = '-component MDS -component OPSS -component CONTENTSERVER11 -component CONTENTSERVER11SEARCH -component URM -component PORTLET -component WEBCENTER -component ACTIVITIES -component DISCUSSIONS'
     # extra password for DISCUSSIONS and ACTIVITIES
     $componentsPasswords  = [$reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword]
+  } elsif $product == 'oim' {
+    $components           = '-component SOAINFRA -component ORASDPM -component MDS -component OPSS -component BAM -component IAU -component OID -component OIF -component OIM -component OAM -component OAAM'
+    $componentsPasswords  = [$reposPassword, $reposPassword, $reposPassword,$reposPassword,$reposPassword,$reposPassword, $reposPassword, $reposPassword,$reposPassword,$reposPassword, $reposPassword]
   } elsif $product == 'all' {
     $components           = '-component SOAINFRA -component ORASDPM -component MDS -component OPSS -component BAM -component CONTENTSERVER11 -component CONTENTSERVER11SEARCH -component URM -component PORTLET -component WEBCENTER -component ACTIVITIES -component DISCUSSIONS'
     # extra password for DISCUSSIONS and ACTIVITIES
@@ -146,11 +149,15 @@ define oradb::rcu( $rcuFile                 = undef,
       command             => "${path}/rcu_${version}/rcuHome/bin/rcu -silent -createRepository -databaseType ORACLE -connectString ${dbServer}:${dbService} -dbUser SYS -dbRole SYSDBA -schemaPrefix ${schemaPrefix} ${components} -f < ${path}/rcu_${version}/rcu_passwords_${title}.txt",
       require             => [Exec["extract ${rcuFile}"],Exec["run sqlplus to check for repos ${title}"],File["${path}/${rcuFile}"],File["${path}/rcu_${version}/rcu_passwords_${title}.txt"]],
       unless              => "/bin/grep -c found /tmp/check_rcu_${schemaPrefix}.txt",
+      environment         => ["ORACLE_HOME=${oracleHome}",
+                              "SQLPLUS_HOME=${oracleHome}"],
     }
     exec { "install rcu repos ${title} 2":
       command             => "${path}/rcu_${version}/rcuHome/bin/rcu -silent -createRepository -databaseType ORACLE -connectString ${dbServer}:${dbService} -dbUser SYS -dbRole SYSDBA -schemaPrefix ${schemaPrefix} ${components} -f < ${path}/rcu_${version}/rcu_passwords_${title}.txt",
       require             => [Exec["extract ${rcuFile}"],Exec["run sqlplus to check for repos ${title}"],File["${path}/${rcuFile}"],File["${path}/rcu_${version}/rcu_passwords_${title}.txt"]],
       onlyif              => "/bin/grep -c ORA-00942 /tmp/check_rcu_${schemaPrefix}.txt",
+      environment         => ["ORACLE_HOME=${oracleHome}",
+                              "SQLPLUS_HOME=${oracleHome}"],
     }
   } elsif $action == 'delete' {
     exec { "delete rcu repos ${title}":
