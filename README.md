@@ -12,6 +12,7 @@ Works with Puppet 2.7 & 3.0
 Version updates
 ---------------
 
+- 0.8.7 Readme update
 - 0.8.6 RCU OIM option for Oracle Identity Management
 - 0.8.5 timeout = 0 and added -ignoreSysPrereqs -ignorePrereq on installdb
 - 0.8.4 updated license to Apache 2.0
@@ -48,58 +49,56 @@ Some manifests like installdb.pp, opatch.pp or rcusoa.pp supports an alternative
 When not provided it uses the files location of the oradb puppet module
 else you can use $puppetDownloadMntPoint => "/mnt" or "puppet:///modules/xxxx/"
 
-Coming in next release
-
-- Oracle Database 11.2.0.1 Linux Client installation
 
 Files
 -----
-For 11.2.0.3 Download oracle database linux software from http://support.oracle.com
-Patch 10404530: 11.2.0.3.0 PATCH SET FOR ORACLE DATABASE SERVER
-and upload this to the files folder of the oradb puppet module
+- 11.2.0.1 Download oracle database linux software from http://otn.oracle.com
+- 11.2.0.3 Download oracle database linux software from http://support.oracle.com
+- Patch 10404530: 11.2.0.3.0 PATCH SET FOR ORACLE DATABASE SERVER
+- 11.2.0.4 Download oracle database linux software from http://support.oracle.com
+- 12.1.0.1 Download oracle database linux software from http://otn.oracle.com
 
-For 11.2.0.1 Download oracle database linux software from http://otn.oracle.com
+upload these files to the files folder of the oradb puppet module
 
-For 12.1.0.1 Download oracle database linux software from http://otn.oracle.com
 
 # database files of linux 12.1.0.1 ( otn.oracle.com )
-1361028723 Jun 27 23:38 linuxamd64_12c_database_1of2.zip
-1116527103 Jun 27 23:38 linuxamd64_12c_database_2of2.zip
+- 1361028723 Jun 27 23:38 linuxamd64_12c_database_1of2.zip
+- 1116527103 Jun 27 23:38 linuxamd64_12c_database_2of2.zip
 
 # database files of linux 11.2.0.3 ( support.oracle.com )
-1358454646 Mar  9 17:31 p10404530_112030_Linux-x86-64_1of7.zip
-1142195302 Mar  9 17:47 p10404530_112030_Linux-x86-64_2of7.zip
- 979195792 Mar  9 18:01 p10404530_112030_Linux-x86-64_3of7.zip
- 659229728 Mar  9 18:11 p10404530_112030_Linux-x86-64_4of7.zip
- 616473105 Mar  9 18:19 p10404530_112030_Linux-x86-64_5of7.zip
- 479890040 Mar  9 18:26 p10404530_112030_Linux-x86-64_6of7.zip
- 113915106 Mar  9 18:28 p10404530_112030_Linux-x86-64_7of7.zip
+- 1358454646 Mar  9 17:31 p10404530_112030_Linux-x86-64_1of7.zip
+- 1142195302 Mar  9 17:47 p10404530_112030_Linux-x86-64_2of7.zip
+-  979195792 Mar  9 18:01 p10404530_112030_Linux-x86-64_3of7.zip
+-  659229728 Mar  9 18:11 p10404530_112030_Linux-x86-64_4of7.zip
+-  616473105 Mar  9 18:19 p10404530_112030_Linux-x86-64_5of7.zip
+-  479890040 Mar  9 18:26 p10404530_112030_Linux-x86-64_6of7.zip
+-  113915106 Mar  9 18:28 p10404530_112030_Linux-x86-64_7of7.zip
 
 # database files of linux 11.2.0.4 ( support.oracle.com )
-1395582860 Aug 31 16:21 p13390677_112040_Linux-x86-64_1of7.zip
-1151304589 Aug 31 16:22 p13390677_112040_Linux-x86-64_2of7.zip
-1205251894 Aug 31 16:22 p13390677_112040_Linux-x86-64_3of7.zip
- 656026876 Aug 31 16:22 p13390677_112040_Linux-x86-64_4of7.zip
- 599170344 Aug 31 16:23 p13390677_112040_Linux-x86-64_5of7.zip
- 488372844 Aug 31 16:23 p13390677_112040_Linux-x86-64_6of7.zip
- 119521122 Aug 31 16:23 p13390677_112040_Linux-x86-64_7of7.zip
+- 1395582860 Aug 31 16:21 p13390677_112040_Linux-x86-64_1of7.zip
+- 1151304589 Aug 31 16:22 p13390677_112040_Linux-x86-64_2of7.zip
+- 1205251894 Aug 31 16:22 p13390677_112040_Linux-x86-64_3of7.zip
+-  656026876 Aug 31 16:22 p13390677_112040_Linux-x86-64_4of7.zip
+-  599170344 Aug 31 16:23 p13390677_112040_Linux-x86-64_5of7.zip
+-  488372844 Aug 31 16:23 p13390677_112040_Linux-x86-64_6of7.zip
+-  119521122 Aug 31 16:23 p13390677_112040_Linux-x86-64_7of7.zip
 
 # database files of linux 11.2.0.1 ( otn.oracle.com )
- 1239269270 Mar 10 17:05 linux.x64_11gR2_database_1of2.zip
- 1111416131 Mar 10 17:17 linux.x64_11gR2_database_2of2.zip
+- 1239269270 Mar 10 17:05 linux.x64_11gR2_database_1of2.zip
+- 1111416131 Mar 10 17:17 linux.x64_11gR2_database_2of2.zip
 
 # opatch database patch for 11.2.0.3
-  25556377 Mar 10 12:48 p14727310_112030_Linux-x86-64.zip
+- 25556377 Mar 10 12:48 p14727310_112030_Linux-x86-64.zip
 
 # opatch upgrade
-  32551984 Jul  6 18:58 p6880880_112000_Linux-x86-64.zip
+- 32551984 Jul  6 18:58 p6880880_112000_Linux-x86-64.zip
 
 # database client linux 11.2.0.1 ( otn.oracle.com )
- 706187979 Mar 10 16:48 linux.x64_11gR2_client.zip
+- 706187979 Mar 10 16:48 linux.x64_11gR2_client.zip
 
 # rcu linux installer
- 408989041 Mar 17 20:17 ofm_rcu_linux_11.1.1.6.0_disk1_1of1.zip
- 411498103 Apr  1 21:23 ofm_rcu_linux_11.1.1.7.0_32_disk1_1of1.zip
+- 408989041 Mar 17 20:17 ofm_rcu_linux_11.1.1.6.0_disk1_1of1.zip
+- 411498103 Apr  1 21:23 ofm_rcu_linux_11.1.1.7.0_32_disk1_1of1.zip
 
 important support node
 [ID 1441282.1] Requirements for Installing Oracle 11gR2 RDBMS on RHEL6 or OL6 64-bit (x86-64)
@@ -121,16 +120,15 @@ templates.pp
 ------------
 
 The databaseType value should contain only one of these choices.
-- EE     : Enterprise Edition
-- SE     : Standard Edition
-- SEONE  : Standard Edition One
+- EE = Enterprise Edition
+- SE = Standard Edition
+- SEONE = Standard Edition One
 
+normal install
 
-
-     #$puppetDownloadMntPoint = "puppet:///database/"
-     $puppetDownloadMntPoint = "puppet:///modules/oradb/
-
-     oradb::installdb{ '12.1.0.1_Linux-x86-64':
+    $puppetDownloadMntPoint = "puppet:///modules/oradb/"
+    
+    oradb::installdb{ '12.1.0.1_Linux-x86-64':
             version                => '12.1.0.1',
             file                   => 'linuxamd64_12c_database',
             databaseType           => 'SE',
@@ -142,12 +140,11 @@ The databaseType value should contain only one of these choices.
             downloadDir            => '/data/install',
             zipExtract             => true,
             puppetDownloadMntPoint => $puppetDownloadMntPoint,
-     }
-
+    }
 
 or with zipExtract ( does not download or extract , software is in /install/linuxamd64_12c_database )  
 
-     oradb::installdb{ '12.1.0.1_Linux-x86-64':
+    oradb::installdb{ '12.1.0.1_Linux-x86-64':
             version                => '12.1.0.1',
             file                   => 'linuxamd64_12c_database',
             databaseType           => 'SE',
@@ -158,7 +155,7 @@ or with zipExtract ( does not download or extract , software is in /install/linu
             createUser             => true,
             downloadDir            => '/install',
             zipExtract             => false,
-     }
+    }
 
 or
 
@@ -207,65 +204,63 @@ or
             zipExtract   => true,
      }
 
-
 other
 
-	    oradb::opatchupgrade{'112000_opatch_upgrade':
-	      oracleHome             => '/oracle/product/11.2/db',
-	      patchFile              => 'p6880880_112000_Linux-x86-64.zip',
-	      csiNumber              => '11111',
-	      supportId              => 'biemond@gmail.com',
-	      opversion              => '11.2.0.3.4',
-	      user                   => 'oracle',
-	      group                  => 'dba',
-	      downloadDir            => '/install',
-	      puppetDownloadMntPoint => $puppetDownloadMntPoint,
-	      require                =>  Oradb::Installdb['112030_Linux-x86-64'],
-	    }
-
-
-	   # for this example OPatch 14727310
-	   # the OPatch utility must be upgraded ( patch 6880880, see above)
-	   oradb::opatch{'14727310_db_patch':
-	     oracleProductHome      => '/oracle/product/11.2/db',
-	     patchId                => '14727310',
-	     patchFile              => 'p14727310_112030_Linux-x86-64.zip',
-	     user                   => 'oracle',
-	     group                  => 'dba',
-	     downloadDir            => '/install',
-	     ocmrf                  => true,
-	     require                => Oradb::Opatchupgrade['112000_opatch_upgrade'],
-	     puppetDownloadMntPoint => $puppetDownloadMntPoint,
-	   }
-
-       oradb::net{ 'config net8':
+    oradb::opatchupgrade{'112000_opatch_upgrade':
+        oracleHome             => '/oracle/product/11.2/db',
+        patchFile              => 'p6880880_112000_Linux-x86-64.zip',
+        csiNumber              => '11111',
+        supportId              => 'biemond@gmail.com',
+        opversion              => '11.2.0.3.4',
+        user                   => 'oracle',
+        group                  => 'dba',
+        downloadDir            => '/install',
+        puppetDownloadMntPoint => $puppetDownloadMntPoint,
+        require                =>  Oradb::Installdb['112030_Linux-x86-64'],
+    }
+    
+    # for this example OPatch 14727310
+    # the OPatch utility must be upgraded ( patch 6880880, see above)
+    oradb::opatch{'14727310_db_patch':
+       oracleProductHome      => '/oracle/product/11.2/db',
+       patchId                => '14727310',
+       patchFile              => 'p14727310_112030_Linux-x86-64.zip',
+       user                   => 'oracle',
+       group                  => 'dba',
+       downloadDir            => '/install',
+       ocmrf                  => true,
+       require                => Oradb::Opatchupgrade['112000_opatch_upgrade'],
+       puppetDownloadMntPoint => $puppetDownloadMntPoint,
+    }
+    
+    oradb::net{ 'config net8':
             oracleHome   => '/oracle/product/11.2/db',
             version      => '11.2' or "12.1",
             user         => 'oracle',
             group        => 'dba',
             downloadDir  => '/install',
             require      => Oradb::Opatch['14727310_db_patch'],
-       }
-
-       oradb::listener{'stop listener':
+    }
+    
+    oradb::listener{'stop listener':
             oracleBase   => '/oracle',
             oracleHome   => '/oracle/product/11.2/db',
             user         => 'oracle',
             group        => 'dba',
             action       => 'start',
             require      => Oradb::Net['config net8'],
-       }
-
-       oradb::listener{'start listener':
+    }
+    
+    oradb::listener{'start listener':
             oracleBase   => '/oracle',
             oracleHome   => '/oracle/product/11.2/db',
             user         => 'oracle',
             group        => 'dba',
             action       => 'start',
             require      => Oradb::Listener['stop listener'],
-       }
-
-       oradb::database{ 'testDb_Create':
+    }
+    
+    oradb::database{ 'testDb_Create':
                       oracleBase              => '/oracle',
                       oracleHome              => '/oracle/product/11.2/db',
                       version                 => '11.2' or "12.1",
@@ -287,8 +282,8 @@ other
                       memoryTotal             => "800",
                       databaseType            => "MULTIPURPOSE",
                       require                 => Oradb::Listener['start listener'],
-     }
-
+    }
+    
     oradb::dbactions{ 'stop testDb':
                      oracleHome              => '/oracle/product/11.2/db',
                      user                    => 'oracle',
@@ -297,7 +292,7 @@ other
                      dbName                  => 'test',
                      require                 => Oradb::Database['testDb'],
     }
-
+    
     oradb::dbactions{ 'start testDb':
                      oracleHome              => '/oracle/product/11.2/db',
                      user                    => 'oracle',
@@ -306,16 +301,14 @@ other
                      dbName                  => 'test',
                      require                 => Oradb::Dbactions['stop testDb'],
     }
-
-	oradb::autostartdatabase{ 'autostart oracle':
-	                   oracleHome              => '/oracle/product/12.1/db',
-	                   user                    => 'oracle',
-	                   dbName                  => 'test',
-	                   require                 => Oradb::Dbactions['start testDb'],
-	}
-
-
-
+    
+    oradb::autostartdatabase{ 'autostart oracle':
+                     oracleHome              => '/oracle/product/12.1/db',
+                     user                    => 'oracle',
+                     dbName                  => 'test',
+                     require                 => Oradb::Dbactions['start testDb'],
+    }
+    
     oradb::database{ 'testDb_Delete':
                       oracleBase              => '/oracle',
                       oracleHome              => '/oracle/product/11.2/db',
@@ -327,38 +320,42 @@ other
                       sysPassword             => 'Welcome01',
                       require                 => Oradb::Dbactions['start testDb'],
     }
+    
+    case $operatingsystem {
+      CentOS, RedHat, OracleLinux, Ubuntu, Debian: {
+        $mtimeParam = "1"
+      }
+      Solaris: {
+        $mtimeParam = "+1"
+      }
+    }
+    
+    case $operatingsystem {
+      CentOS, RedHat, OracleLinux, Ubuntu, Debian, Solaris: {
+        cron { 'oracle_db_opatch':
+          command => "find /oracle/product/12.1/db/cfgtoollogs/opatch -name 'opatch*.log' -mtime ${mtimeParam} -exec rm {} \\; >> /tmp/opatch_db_purge.log 2>&1",
+          user    => oracle,
+          hour    => 06,
+          minute  => 34,
+        }
+        
+        cron { 'oracle_db_lsinv':
+          command => "find /oracle/product/12.1/db/cfgtoollogs/opatch/lsinv -name 'lsinventory*.txt' -mtime ${mtimeParam} -exec rm {} \\; >> /tmp/opatch_lsinv_db_purge.log 2>&1",
+          user    => oracle,
+          hour    => 06,
+          minute  => 32,
+        }
+      }
+    }
 
-	  case $operatingsystem {
-	    CentOS, RedHat, OracleLinux, Ubuntu, Debian: {
-	      $mtimeParam = "1"
-	    }
-	    Solaris: {
-	      $mtimeParam = "+1"
-	    }
-	  }
+Oracle SOA Suite Repository Creation Utility (RCU)  
 
+product =
+- soasuite
+- webcenter
+- all
 
-	  case $operatingsystem {
-	    CentOS, RedHat, OracleLinux, Ubuntu, Debian, Solaris: {
-			  cron { 'oracle_db_opatch':
-			    command => "find /oracle/product/12.1/db/cfgtoollogs/opatch -name 'opatch*.log' -mtime ${mtimeParam} -exec rm {} \\; >> /tmp/opatch_db_purge.log 2>&1",
-			    user    => oracle,
-			    hour    => 06,
-			    minute  => 34,
-			  }
-
-			  cron { 'oracle_db_lsinv':
-			    command => "find /oracle/product/12.1/db/cfgtoollogs/opatch/lsinv -name 'lsinventory*.txt' -mtime ${mtimeParam} -exec rm {} \\; >> /tmp/opatch_lsinv_db_purge.log 2>&1",
-			    user    => oracle,
-			    hour    => 06,
-			    minute  => 32,
-			  }
-	    }
-	  }
-
-
-
-Oracle SOA Suite Repository Creation Utility (RCU), product = soasuite|webcenter|all
+RCU examples
 
     oradb::rcu{     'DEV_PS6':
                      rcuFile          => 'ofm_rcu_linux_11.1.1.7.0_32_disk1_1of1.zip',
@@ -375,7 +372,7 @@ Oracle SOA Suite Repository Creation Utility (RCU), product = soasuite|webcenter
                      schemaPrefix     => 'DEV',
                      reposPassword    => 'Welcome02',
     }
-
+    
     oradb::rcu{     'DEV2_PS6':
                      rcuFile          => 'ofm_rcu_linux_11.1.1.7.0_32_disk1_1of1.zip',
                      product          => 'webcenter',
@@ -391,8 +388,7 @@ Oracle SOA Suite Repository Creation Utility (RCU), product = soasuite|webcenter
                      schemaPrefix     => 'DEV',
                      reposPassword    => 'Welcome02',
     }
-
-
+    
     oradb::rcu{     'Delete_DEV3_PS5':
                      rcuFile          => 'ofm_rcu_linux_11.1.1.6.0_disk1_1of1.zip',
                      product          => 'soasuite',
@@ -408,7 +404,7 @@ Oracle SOA Suite Repository Creation Utility (RCU), product = soasuite|webcenter
                      schemaPrefix     => 'DEV3',
                      reposPassword    => 'Welcome02',
     }
-
+    
     # needs Oracle Enterprise Edition database
     oradb::rcu{ 'DEV_1112':
                      rcuFile                => 'V37476-01.zip',
@@ -441,25 +437,25 @@ install the following module to set the database user limits parameters
 
 
      node database {
-      sysctl { 'kernel.msgmnb':                 ensure => 'present', permanent => 'yes', value => '65536',}
-	  sysctl { 'kernel.msgmax':                 ensure => 'present', permanent => 'yes', value => '65536',}
-	  sysctl { 'kernel.shmmax':                 ensure => 'present', permanent => 'yes', value => '2588483584',}
-	  sysctl { 'kernel.shmall':                 ensure => 'present', permanent => 'yes', value => '2097152',}
-	  sysctl { 'fs.file-max':                   ensure => 'present', permanent => 'yes', value => '6815744',}
-	  sysctl { 'net.ipv4.tcp_keepalive_time':   ensure => 'present', permanent => 'yes', value => '1800',}
-	  sysctl { 'net.ipv4.tcp_keepalive_intvl':  ensure => 'present', permanent => 'yes', value => '30',}
-	  sysctl { 'net.ipv4.tcp_keepalive_probes': ensure => 'present', permanent => 'yes', value => '5',}
-	  sysctl { 'net.ipv4.tcp_fin_timeout':      ensure => 'present', permanent => 'yes', value => '30',}
-	  sysctl { 'kernel.shmmni':                 ensure => 'present', permanent => 'yes', value => '4096', }
-	  sysctl { 'fs.aio-max-nr':                 ensure => 'present', permanent => 'yes', value => '1048576',}
-	  sysctl { 'kernel.sem':                    ensure => 'present', permanent => 'yes', value => '250 32000 100 128',}
-	  sysctl { 'net.ipv4.ip_local_port_range':  ensure => 'present', permanent => 'yes', value => '9000 65500',}
-	  sysctl { 'net.core.rmem_default':         ensure => 'present', permanent => 'yes', value => '262144',}
-	  sysctl { 'net.core.rmem_max':             ensure => 'present', permanent => 'yes', value => '4194304', }
-	  sysctl { 'net.core.wmem_default':         ensure => 'present', permanent => 'yes', value => '262144',}
-	  sysctl { 'net.core.wmem_max':             ensure => 'present', permanent => 'yes', value => '1048576',}
-
-
+       sysctl { 'kernel.msgmnb':                 ensure => 'present', permanent => 'yes', value => '65536',}
+       sysctl { 'kernel.msgmax':                 ensure => 'present', permanent => 'yes', value => '65536',}
+       sysctl { 'kernel.shmmax':                 ensure => 'present', permanent => 'yes', value => '2588483584',}
+       sysctl { 'kernel.shmall':                 ensure => 'present', permanent => 'yes', value => '2097152',}
+       sysctl { 'fs.file-max':                   ensure => 'present', permanent => 'yes', value => '6815744',}
+       sysctl { 'net.ipv4.tcp_keepalive_time':   ensure => 'present', permanent => 'yes', value => '1800',}
+       sysctl { 'net.ipv4.tcp_keepalive_intvl':  ensure => 'present', permanent => 'yes', value => '30',}
+       sysctl { 'net.ipv4.tcp_keepalive_probes': ensure => 'present', permanent => 'yes', value => '5',}
+       sysctl { 'net.ipv4.tcp_fin_timeout':      ensure => 'present', permanent => 'yes', value => '30',}
+       sysctl { 'kernel.shmmni':                 ensure => 'present', permanent => 'yes', value => '4096', }
+       sysctl { 'fs.aio-max-nr':                 ensure => 'present', permanent => 'yes', value => '1048576',}
+       sysctl { 'kernel.sem':                    ensure => 'present', permanent => 'yes', value => '250 32000 100 128',}
+       sysctl { 'net.ipv4.ip_local_port_range':  ensure => 'present', permanent => 'yes', value => '9000 65500',}
+       sysctl { 'net.core.rmem_default':         ensure => 'present', permanent => 'yes', value => '262144',}
+       sysctl { 'net.core.rmem_max':             ensure => 'present', permanent => 'yes', value => '4194304', }
+       sysctl { 'net.core.wmem_default':         ensure => 'present', permanent => 'yes', value => '262144',}
+       sysctl { 'net.core.wmem_max':             ensure => 'present', permanent => 'yes', value => '1048576',}
+      
+      
        class { 'limits':
          config => {
                     '*'       => { 'nofile'  => { soft => '2048'   , hard => '8192',   },},
@@ -469,18 +465,17 @@ install the following module to set the database user limits parameters
                     },
          use_hiera => false,
        }
-
-
+       
        $install = [ 'binutils.x86_64', 'compat-libstdc++-33.x86_64', 'glibc.x86_64','ksh.x86_64','libaio.x86_64',
                     'libgcc.x86_64', 'libstdc++.x86_64', 'make.x86_64','compat-libcap1.x86_64', 'gcc.x86_64',
                     'gcc-c++.x86_64','glibc-devel.x86_64','libaio-devel.x86_64','libstdc++-devel.x86_64',
                     'sysstat.x86_64','unixODBC-devel','glibc.i686','libXext.i686','libXtst.i686']
-
+       
        package { $install:
          ensure  => present,
        }
-
+     
      }
-
+     
      node 'dbagent1.alfa.local' inherits database {
      }
