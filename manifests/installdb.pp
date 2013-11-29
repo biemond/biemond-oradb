@@ -26,6 +26,7 @@
 #            oracleHome   => '/oracle/product/11.2/db',
 #            createUser   => 'true',
 #            user         => 'oracle',
+#            userBaseDir  => '/localhome',
 #            group        => 'dba',
 #            downloadDir  => '/install',
 #            zipExtract   => true,
@@ -40,6 +41,7 @@ define oradb::installdb( $version                 = undef,
                          $oracleHome              = undef,
                          $createUser              = true,
                          $user                    = 'oracle',
+                         $userBaseDir             = '/home',
                          $group                   = 'dba',
                          $downloadDir             = '/install',
                          $zipExtract              = true,
@@ -108,7 +110,7 @@ define oradb::installdb( $version                 = undef,
           groups      => $group,
           shell       => '/bin/bash',
           password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
-          home        => "/home/${user}",
+          home        => "${userBaseDir}/${user}",
           comment     => "This user ${user} was created by Puppet",
           require     => Group[$group],
           managehome  => true,
@@ -335,8 +337,8 @@ define oradb::installdb( $version                 = undef,
       }
     }
 
-    if ! defined(File["/home/${user}/.bash_profile"]) {
-      file { "/home/${user}/.bash_profile":
+    if ! defined(File["${userBaseDir}/${user}/.bash_profile"]) {
+      file { "${userBaseDir}/${user}/.bash_profile":
         ensure        => present,
         content       => template("oradb/bash_profile.erb"),
       }
