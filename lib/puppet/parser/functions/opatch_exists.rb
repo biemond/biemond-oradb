@@ -7,12 +7,10 @@ module Puppet::Parser::Functions
     oracleHome    = oracleHomeArg.gsub("/","_").gsub("\\","_").gsub("c:","_c").gsub("d:","_d").gsub("e:","_e")
 
     # check the oracle home patches
-    if lookupvar("ora_inst_patches#{oracleHome}") != :undefined
-      all_opatches =  lookupvar("ora_inst_patches#{oracleHome}")
-      unless all_opatches.nil?
-        if all_opatches.include? args[1]
-          return true
-        end
+    all_opatches =  lookupDbVar("ora_inst_patches#{oracleHome}")
+    unless all_opatches == "empty"
+      if all_opatches.include? args[1]
+        return true
       end
     end
 
@@ -20,3 +18,21 @@ module Puppet::Parser::Functions
 
   end
 end
+
+def lookupDbVar(name)
+  #puts "lookup fact "+name
+  if dbVarExists(name)
+    return lookupvar(name).to_s
+  end
+  return "empty"
+end
+
+
+def dbVarExists(name)
+  #puts "lookup fact "+name
+  if lookupvar(name) != :undefined
+    return true
+  end
+  return false 
+end   
+

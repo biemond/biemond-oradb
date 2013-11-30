@@ -1,11 +1,10 @@
 # restart the puppetmaster when changed
 module Puppet::Parser::Functions
   newfunction(:oracle_exists, :type => :rvalue) do |args|
-   if lookupvar('ora_inst_products') != :undefined
 
-    ora = lookupvar('ora_inst_products')
+    ora = lookupDbVar('ora_inst_products')
 
-    if ora.nil?
+    if ora == "empty"
       return false
     else
       software = args[0].strip
@@ -20,10 +19,22 @@ module Puppet::Parser::Functions
 
     return false
 
-   else
-     return false
-   end 
-
   end
 end
 
+def lookupDbVar(name)
+  #puts "lookup fact "+name
+  if dbVarExists(name)
+    return lookupvar(name).to_s
+  end
+  return "empty"
+end
+
+
+def dbVarExists(name)
+  #puts "lookup fact "+name
+  if lookupvar(name) != :undefined
+    return true
+  end
+  return false 
+end   
