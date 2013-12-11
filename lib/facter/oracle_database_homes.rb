@@ -1,17 +1,41 @@
 # oracle_database_homes.rb
 require 'rexml/document' 
+require 'facter'
+
+def get_databaseUser()
+  databaseUser = Facter.value('override_database_user')
+  if databaseUser.nil?
+    puts "database user is oracle"
+  else 
+    puts "database user is " + databaseUser
+    return databaseUser
+  end
+  return "oracle"
+end
+
+def get_suCommand()
+  os = Facter.value(:kernel)
+  if "Linux" == os
+    return "su -l "
+  elsif "SunOS" == os
+    return "su - "
+  end
+  return "su -l "
+end
+
+def get_oraInvPath()
+  os = Facter.value(:kernel)
+  if "Linux" == os
+    return "/etc"
+  elsif "SunOS" == os
+    return "/var/opt"
+  end
+  return "/etc"
+end
 
 def get_opatch_patches(name)
 
-    os = Facter.value(:operatingsystem)
-
-    if ["CentOS", "RedHat","OracleLinux","Ubuntu","Debian","SLES"].include?os
-      output3 = Facter::Util::Resolution.exec("su -l oracle -c \""+name+"/OPatch/opatch lsinventory -patch_id -oh "+name+" -invPtrLoc /etc/oraInst.loc\"")
-    elsif ["Solaris"].include?os
-      output3 = Facter::Util::Resolution.exec("su - oracle -c \""+name+"/OPatch/opatch lsinventory -patch_id -oh "+name+" -invPtrLoc /var/opt/oraInst.loc\"")
-    elsif ["windows"].include?os
-      output3 = Facter::Util::Resolution.exec("C:\\Windows\\System32\\cmd.exe /c "+name+"/OPatch/opatch.bat lsinventory -patch_id -oh " + name)
-    end
+    output3 = Facter::Util::Resolution.exec(get_suCommand()+get_databaseUser()+" -c '"+name+"/OPatch/opatch lsinventory -patch_id -oh "+name+" -invPtrLoc "+get_oraInvPath()+"/oraInst.loc'")
 
     opatches = "Patches;"
     if output3.nil?
@@ -25,18 +49,10 @@ def get_opatch_patches(name)
     return opatches
 end  
 
+
 def get_opatch_version(name)
 
-    os = Facter.value(:operatingsystem)
-
-    if ["CentOS", "RedHat","OracleLinux","Ubuntu","Debian","SLES"].include?os
-      opatchOut = Facter::Util::Resolution.exec("su -l oracle -c \""+name+"/OPatch/opatch version\"")
-    elsif ["Solaris"].include?os
-      opatchOut = Facter::Util::Resolution.exec("su - oracle -c \""+name+"/OPatch/opatch version\"")
-    elsif ["windows"].include?os
-      opatchOut = Facter::Util::Resolution.exec("C:\\Windows\\System32\\cmd.exe /c "+name+"/OPatch/opatch.bat version")
-
-    end
+    opatchOut = Facter::Util::Resolution.exec(get_suCommand()+get_databaseUser()+" -c \""+name+"/OPatch/opatch version\"")
 
     if opatchOut.nil?
       opatchver = "Error;"
@@ -48,11 +64,10 @@ def get_opatch_version(name)
 end
 
 def get_orainst_loc()
-  os = Facter.value(:operatingsystem)
-  if ["CentOS", "RedHat","OracleLinux","Ubuntu","Debian","SLES"].include?os
-    if FileTest.exists?("/etc/oraInst.loc")
+
+    if FileTest.exists?(get_oraInvPath()+"/oraInst.loc")
       str = ""
-      output = File.read("/etc/oraInst.loc")
+      output = File.read(get_oraInvPath()+"/oraInst.loc")
       output.split(/\r?\n/).each do |item|
         if item.match(/^inventory_loc/)
           str = item[14,50]
@@ -62,22 +77,6 @@ def get_orainst_loc()
     else
       return "NotFound"
     end
-  elsif ["Solaris"].include?os
-    if FileTest.exists?("/var/opt/oraInst.loc")
-      str = ""
-      output = File.read("/var/opt/oraInst.loc")
-      output.split(/\r?\n/).each do |item|
-        if item.match(/^inventory_loc/)
-          str = item[14,50]
-        end
-      end
-      return str
-    else
-      return "NotFound"
-    end
-  elsif ["windows"].include?os
-    return "C:/Program Files/Oracle/Inventory"
-  end
 end
 
 
@@ -100,13 +99,13 @@ def get_orainst_products(path)
           else
          	  home = str.gsub("/","_").gsub("\\","_").gsub("c:","_c").gsub("d:","_d").gsub("e:","_e")
          	  output = get_opatch_patches(str)
-            Facter.add("ora_inst_patches#{home}") do
+            Facter.add("oradb_inst_patches#{home}") do
               setcode do
                 output
               end
             end
             opatchver = get_opatch_version(str)
-            Facter.add("ora_inst_opatch#{home}") do
+            Facter.add("oradb_inst_opatch#{home}") do
               setcode do
                 opatchver
               end
@@ -125,7 +124,7 @@ end
 
 # get orainst loc data
 inventory = get_orainst_loc
-Facter.add("ora_inst_loc_data") do
+Facter.add("oradb_inst_loc_data") do
   setcode do
     inventory
   end
@@ -133,7 +132,7 @@ end
 
 # get orainst products
 inventory2 = get_orainst_products(inventory)
-Facter.add("ora_inst_products") do
+Facter.add("oradb_inst_products") do
   setcode do
     inventory2
   end

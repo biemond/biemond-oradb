@@ -7,8 +7,8 @@ define oradb::autostartdatabase( $oracleHome  = undef,
                                  $user        = 'oracle',
                                )
 {
-  case $operatingsystem {
-    CentOS, RedHat, OracleLinux, Ubuntu, Debian, SLES: {
+  case $::kernel {
+    Linux: {
       $execPath    = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
       Exec { path  => $execPath,
         logoutput  => true,
@@ -51,5 +51,8 @@ define oradb::autostartdatabase( $oracleHome  = undef,
         unless         => "ls /etc/rc3.d/*dbora | /bin/grep 'dbora'",
       }      
     }
+    default: {
+      fail("Unrecognized operating system")
+    }    
   }
 }

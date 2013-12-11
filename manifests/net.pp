@@ -17,10 +17,11 @@ define oradb::net( $oracleHome   = undef,
     fail("Unrecognized version")
   }
 
-  case $operatingsystem {
-    CentOS, RedHat, OracleLinux, Ubuntu, Debian, SLES: {
+  case $::kernel {
+    Linux, SunOS:  {
       $execPath    = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
       $path        = $downloadDir
+
       Exec { path  => $execPath,
         user       => $user,
         group      => $group,

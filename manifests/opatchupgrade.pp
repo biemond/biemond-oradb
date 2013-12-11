@@ -30,10 +30,12 @@ define oradb::opatchupgrade( $oracleHome              = undef,
 )
 
 {
-  case $operatingsystem {
-    CentOS, RedHat, OracleLinux, Ubuntu, Debian, SLES: {
+  case $::kernel {
+    Linux, SunOS: {
+
       $execPath      = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
       $patchDir      = "${oracleHome}/OPatch"
+
       Exec { path    => $execPath,
         user         => $user,
         group        => $group,
@@ -83,8 +85,9 @@ define oradb::opatchupgrade( $oracleHome              = undef,
         mode         => 0777,
       }
     }
-    case $operatingsystem {
-      CentOS, RedHat, OracleLinux, Ubuntu, Debian, SLES: {
+
+    case $::kernel {
+      Linux, SunOS: {
         file { "remove_old":
           ensure     => absent,
           recurse    => true,

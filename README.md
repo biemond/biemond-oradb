@@ -5,13 +5,19 @@ created by Edwin Biemond
 [biemond.blogspot.com](http://biemond.blogspot.com)
 [Github homepage](https://github.com/biemond/puppet)
 
-Should work for RedHat, CentOS, Ubuntu, Debian, Suse SLES or OracleLinux
+Should work for Solaris and all Linux version like RedHat, CentOS, Ubuntu, Debian, Suse SLES or OracleLinux
+
+Here you can test the solaris 10 vagrant box with Oracle Database 12.1  
+https://github.com/biemond/biemond-orawls-vagrant-solaris-soa
+
 
 Works with Puppet 2.7 & 3.0
 
 Version updates
 ---------------
 
+- 0.9.0 Solaris Support,Own DB facts, no conflict with orawls or wls
+- 0.8.9 RCU allows existing Temp tablespace
 - 0.8.7 Readme update
 - 0.8.6 RCU OIM option for Oracle Identity Management
 - 0.8.5 timeout = 0 and added -ignoreSysPrereqs -ignorePrereq on installdb
@@ -112,9 +118,9 @@ Contains Oracle Facter which displays the following
 
 ### Example of the Oracle Database Facts
 
-    ora_inst_loc_data /oracle/oraInventory
-    ora_inst_patches_oracle_product_11.2_db Patches;14727310;
-    ora_inst_products /oracle/product/11.2/db;
+    oradb_inst_loc_data /oracle/oraInventory
+    oradb_inst_patches_oracle_product_11.2_db Patches;14727310;
+    oradb_inst_products /oracle/product/11.2/db;
 
 templates.pp
 ------------
@@ -357,6 +363,8 @@ product =
 
 RCU examples
 
+soa suite repository
+
     oradb::rcu{     'DEV_PS6':
                      rcuFile          => 'ofm_rcu_linux_11.1.1.7.0_32_disk1_1of1.zip',
                      product          => 'soasuite',
@@ -372,7 +380,9 @@ RCU examples
                      schemaPrefix     => 'DEV',
                      reposPassword    => 'Welcome02',
     }
-    
+
+webcenter repository with a fixed temp tablespace
+
     oradb::rcu{     'DEV2_PS6':
                      rcuFile          => 'ofm_rcu_linux_11.1.1.7.0_32_disk1_1of1.zip',
                      product          => 'webcenter',
@@ -386,9 +396,12 @@ RCU examples
                      dbService        => 'test.oracle.com',
                      sysPassword      => 'Welcome01',
                      schemaPrefix     => 'DEV',
+                     tempTablespace   => 'TEMP',
                      reposPassword    => 'Welcome02',
     }
-    
+
+delete a repository
+
     oradb::rcu{     'Delete_DEV3_PS5':
                      rcuFile          => 'ofm_rcu_linux_11.1.1.6.0_disk1_1of1.zip',
                      product          => 'soasuite',
@@ -404,8 +417,9 @@ RCU examples
                      schemaPrefix     => 'DEV3',
                      reposPassword    => 'Welcome02',
     }
-    
-    # needs Oracle Enterprise Edition database
+
+OIM, OAM repository, OIM needs an Oracle Enterprise Edition database
+
     oradb::rcu{ 'DEV_1112':
                      rcuFile                => 'V37476-01.zip',
                      product                => 'oim',
@@ -426,8 +440,8 @@ RCU examples
      }
 
 
-site.pp
--------
+Linux kernel, ulimits and required packages
+-------------------------------------------
 
 install the following module to set the database kernel parameters
 *puppet module install fiddyspence-sysctl*
@@ -479,3 +493,174 @@ install the following module to set the database user limits parameters
      
      node 'dbagent1.alfa.local' inherits database {
      }
+
+
+Solaris 10 kernel, ulimits and required packages
+------------------------------------------------
+
+    exec { "create /cdrom/unnamed_cdrom":
+      command => "/usr/bin/mkdir -p /cdrom/unnamed_cdrom",
+      creates => "/cdrom/unnamed_cdrom",
+    }
+    
+    mount { "/cdrom/unnamed_cdrom":
+      device   => "/dev/dsk/c0t1d0s2",
+      fstype   => "hsfs",
+      ensure   => "mounted",
+      options  => "ro",
+      atboot   => true,
+      remounts => false,
+      require  => Exec["create /cdrom/unnamed_cdrom"],
+    }
+    
+    $install = [ 
+                 'SUNWarc','SUNWbtool','SUNWcsl',
+                 'SUNWdtrc','SUNWeu8os','SUNWhea',
+                 'SUNWi1cs', 'SUNWi15cs',
+                 'SUNWlibC','SUNWlibm','SUNWlibms',
+                 'SUNWsprot','SUNWpool','SUNWpoolr',
+                 'SUNWtoo','SUNWxwfnt'
+                ]
+                 
+    package { $install:
+      ensure    => present,
+      adminfile => "/vagrant/pkgadd_response",
+      source    => "/cdrom/unnamed_cdrom/Solaris_10/Product/",
+      require   => [Exec["create /cdrom/unnamed_cdrom"],
+                    Mount["/cdrom/unnamed_cdrom"]
+                   ],  
+    }
+    package { 'SUNWi1of':
+      ensure    => present,
+      adminfile => "/vagrant/pkgadd_response",
+      source    => "/cdrom/unnamed_cdrom/Solaris_10/Product/",
+      require   => Package[$install],  
+    }
+    
+    
+    # pkginfo -i SUNWarc SUNWbtool SUNWhea SUNWlibC SUNWlibm SUNWlibms SUNWsprot SUNWtoo SUNWi1of SUNWi1cs SUNWi15cs SUNWxwfnt SUNWcsl SUNWdtrc
+    # pkgadd -d /cdrom/unnamed_cdrom/Solaris_10/Product/ -r response -a response SUNWarc SUNWbtool SUNWhea SUNWlibC SUNWlibm SUNWlibms SUNWsprot SUNWtoo SUNWi1of SUNWi1cs SUNWi15cs SUNWxwfnt SUNWcsl SUNWdtrc
+    
+    exec { "remove localhost":
+      command => "/usr/bin/sed -e '/'127.0.0.1'/ d' /etc/hosts > /tmp/hosts.tmp && mv /tmp/hosts.tmp /etc/hosts",
+      unless  => "/usr/bin/grep -c ${hostname} /etc/hosts",
+    }
+    
+    exec { "add localhost":
+      command => "/bin/echo '127.0.0.1 localhost ${fqdn} ${hostname}' >>/etc/hosts",
+      unless  => "/usr/bin/grep -c ${hostname} /etc/hosts",
+      require => Exec["remove localhost"],
+    }
+  
+    group { 'dba' :
+      ensure      => present,
+    }
+  
+    user { 'oracle' :
+      ensure      => present,
+      gid         => 'dba',  
+      groups      => 'dba',
+      shell       => '/bin/bash',
+      password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
+      home        => "/export/home/oracle",
+      comment     => "This user ${user} was created by Puppet",
+      require     => Group['dba'],
+      managehome  => true,
+    }
+  
+    $execPath     = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
+  
+    exec { "projadd max-shm-memory":
+      command => "projadd -p 102  -c 'ORADB' -U oracle -G dba  -K 'project.max-shm-memory=(privileged,4G,deny)' ORADB",
+      require => [ User["oracle"],
+                   Package['SUNWi1of'],
+                   Package[$install],
+                 ],
+      unless  => "projects -l | grep -c ORADB",           
+      path    => $execPath,
+    }
+  
+    exec { "projmod max-sem-ids":
+      command     => "projmod -s -K 'project.max-sem-ids=(privileged,100,deny)' ORADB",
+      subscribe   => Exec["projadd max-shm-memory"],
+      require     => Exec["projadd max-shm-memory"],
+      refreshonly => true, 
+      path        => $execPath,
+    }
+  
+    exec { "projmod max-shm-ids":
+      command     => "projmod -s -K 'project.max-shm-ids=(privileged,100,deny)' ORADB",
+      require     => Exec["projmod max-sem-ids"],
+      subscribe   => Exec["projmod max-sem-ids"],
+      refreshonly => true, 
+      path        => $execPath,
+    }
+  
+    exec { "projmod max-sem-nsems":
+      command     => "projmod -s -K 'process.max-sem-nsems=(privileged,256,deny)' ORADB",
+      require     => Exec["projmod max-shm-ids"],
+      subscribe   => Exec["projmod max-shm-ids"],
+      refreshonly => true, 
+      path        => $execPath,
+    }
+  
+    exec { "projmod max-file-descriptor":
+      command     => "projmod -s -K 'process.max-file-descriptor=(basic,65536,deny)' ORADB",
+      require     => Exec["projmod max-sem-nsems"],
+      subscribe   => Exec["projmod max-sem-nsems"],
+      refreshonly => true, 
+      path        => $execPath,
+    }
+  
+    exec { "projmod max-stack-size":
+      command     => "projmod -s -K 'process.max-stack-size=(privileged,32MB,deny)' ORADB",
+      require     => Exec["projmod max-file-descriptor"],
+      subscribe   => Exec["projmod max-file-descriptor"],
+      refreshonly => true, 
+      path        => $execPath,
+    }
+  
+    exec { "usermod oracle":
+      command     => "usermod -K project=ORADB oracle",
+      require     => Exec["projmod max-stack-size"],
+      subscribe   => Exec["projmod max-stack-size"],
+      refreshonly => true, 
+      path        => $execPath,
+    }
+  
+    exec { "ndd 1":
+      command => "ndd -set /dev/tcp tcp_smallest_anon_port 9000",
+      require => Exec["usermod oracle"],
+      path    => $execPath,
+    }
+    exec { "ndd 2":
+      command => "ndd -set /dev/tcp tcp_largest_anon_port 65500",
+      require => Exec["ndd 1"],
+      path    => $execPath,
+    }
+  
+    exec { "ndd 3":
+      command => "ndd -set /dev/udp udp_smallest_anon_port 9000",
+      require => Exec["ndd 2"],
+      path    => $execPath,
+    }
+  
+    exec { "ndd 4":
+      command => "ndd -set /dev/udp udp_largest_anon_port 65500",
+      require => Exec["ndd 3"],
+      path    => $execPath,
+    }    
+  
+    exec { "ulimit -S":
+      command => "ulimit -S -n 4096",
+      require => Exec["ndd 4"],
+      path    => $execPath,
+    }
+  
+    exec { "ulimit -H":
+      command => "ulimit -H -n 65536",
+      require => Exec["ulimit -S"],
+      path    => $execPath,
+    }  
+  
+  

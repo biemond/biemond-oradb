@@ -33,13 +33,14 @@ define oradb::rcu( $rcuFile                 = undef,
                    $sysPassword             = undef,
                    $schemaPrefix            = undef,
                    $reposPassword           = undef,
+                   $tempTablespace          = undef,
                    $puppetDownloadMntPoint  = undef,
                    $logoutput               = false,
 )
-
 {
-  case $operatingsystem {
-    CentOS, RedHat, OracleLinux, Ubuntu, Debian, SLES: {
+  case $::kernel {
+    Linux: {
+
       $execPath           = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
       $path               = $downloadDir
 
@@ -57,7 +58,7 @@ define oradb::rcu( $rcuFile                 = undef,
       }
     }
     default: {
-      fail("Unrecognized operating system")
+      fail("Unrecognized or not supported operating system")
     }
   }
 
@@ -82,7 +83,7 @@ define oradb::rcu( $rcuFile                 = undef,
   if $puppetDownloadMntPoint == undef {
     $mountPoint           = "puppet:///modules/oradb/"
   } else {
-    $mountPoint           =	$puppetDownloadMntPoint
+    $mountPoint           = $puppetDownloadMntPoint
   }
 
   # create the rcu folder
@@ -144,28 +145,49 @@ define oradb::rcu( $rcuFile                 = undef,
     content               => template("oradb/rcu_passwords.txt.erb"),
   }
 
+  $preCommand      = "${path}/rcu_${version}/rcuHome/bin/rcu -silent"
+  $postCommand     = "-databaseType ORACLE -connectString ${dbServer}:${dbService} -dbUser SYS -dbRole SYSDBA -schemaPrefix ${schemaPrefix} ${components} "
+  $passwordCommand = " -f < ${path}/rcu_${version}/rcu_passwords_${title}.txt"
+
+  #optional set the Temp tablespace
+  if $tempTablespace == undef {
+    $createCommand  = "${preCommand} -createRepository ${postCommand} ${passwordCommand}"
+  } else {
+    $createCommand  = "${preCommand} -createRepository ${postCommand} -tempTablespace ${tempTablespace} ${passwordCommand}"
+  }
+  $deleteCommand  = "${preCommand} -dropRepository ${postCommand} ${passwordCommand}"
+
   if $action == 'create' {
     exec { "install rcu repos ${title}":
-      command             => "${path}/rcu_${version}/rcuHome/bin/rcu -silent -createRepository -databaseType ORACLE -connectString ${dbServer}:${dbService} -dbUser SYS -dbRole SYSDBA -schemaPrefix ${schemaPrefix} ${components} -f < ${path}/rcu_${version}/rcu_passwords_${title}.txt",
-      require             => [Exec["extract ${rcuFile}"],Exec["run sqlplus to check for repos ${title}"],File["${path}/${rcuFile}"],File["${path}/rcu_${version}/rcu_passwords_${title}.txt"]],
-      unless              => "/bin/grep -c found /tmp/check_rcu_${schemaPrefix}.txt",
-      environment         => ["ORACLE_HOME=${oracleHome}",
-                              "SQLPLUS_HOME=${oracleHome}"],
+      command     => $createCommand,
+      require     => [Exec["extract ${rcuFile}"],
+                      Exec["run sqlplus to check for repos ${title}"],
+                      File["${path}/${rcuFile}"],
+                      File["${path}/rcu_${version}/rcu_passwords_${title}.txt"]],
+      unless      => "/bin/grep -c found /tmp/check_rcu_${schemaPrefix}.txt",
+      environment => ["ORACLE_HOME=${oracleHome}",
+                      "SQLPLUS_HOME=${oracleHome}"],
       timeout     => 0,
     }
     exec { "install rcu repos ${title} 2":
-      command             => "${path}/rcu_${version}/rcuHome/bin/rcu -silent -createRepository -databaseType ORACLE -connectString ${dbServer}:${dbService} -dbUser SYS -dbRole SYSDBA -schemaPrefix ${schemaPrefix} ${components} -f < ${path}/rcu_${version}/rcu_passwords_${title}.txt",
-      require             => [Exec["extract ${rcuFile}"],Exec["run sqlplus to check for repos ${title}"],File["${path}/${rcuFile}"],File["${path}/rcu_${version}/rcu_passwords_${title}.txt"]],
-      onlyif              => "/bin/grep -c ORA-00942 /tmp/check_rcu_${schemaPrefix}.txt",
-      environment         => ["ORACLE_HOME=${oracleHome}",
-                              "SQLPLUS_HOME=${oracleHome}"],
+      command     => $createCommand,
+      require     => [Exec["extract ${rcuFile}"],
+                      Exec["run sqlplus to check for repos ${title}"],
+                      File["${path}/${rcuFile}"],
+                      File["${path}/rcu_${version}/rcu_passwords_${title}.txt"]],
+      onlyif      => "/bin/grep -c ORA-00942 /tmp/check_rcu_${schemaPrefix}.txt",
+      environment => ["ORACLE_HOME=${oracleHome}",
+                      "SQLPLUS_HOME=${oracleHome}"],
       timeout     => 0,
     }
   } elsif $action == 'delete' {
     exec { "delete rcu repos ${title}":
-      command             => "${path}/rcu_${version}/rcuHome/bin/rcu -silent -dropRepository -databaseType ORACLE -connectString ${dbServer}:${dbService} -dbUser SYS -dbRole SYSDBA -schemaPrefix ${schemaPrefix} ${components} -f < ${path}/rcu_${version}/rcu_passwords_${title}.txt",
-      require             => [Exec["extract ${rcuFile}"],Exec["run sqlplus to check for repos ${title}"],File["${path}/${rcuFile}"],File["${path}/rcu_${version}/rcu_passwords_${title}.txt"]],
-      onlyif              => "/bin/grep -c found /tmp/check_rcu_${schemaPrefix}.txt",
+      command     => $deleteCommand,
+      require     => [Exec["extract ${rcuFile}"],
+                      Exec["run sqlplus to check for repos ${title}"],
+                      File["${path}/${rcuFile}"],
+                      File["${path}/rcu_${version}/rcu_passwords_${title}.txt"]],
+      onlyif      => "/bin/grep -c found /tmp/check_rcu_${schemaPrefix}.txt",
       timeout     => 0,
     }
   }

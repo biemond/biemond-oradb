@@ -60,8 +60,8 @@ define oradb::database( $oracleBase               = undef,
   $continue = true
 
   if ( $continue ) {
-    case $operatingsystem {
-      CentOS, RedHat, OracleLinux, Ubuntu, Debian, SLES: {
+    case $::kernel {
+      Linux,SunOS: {
         $execPath    = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
         $path        = $downloadDir
         Exec { path  => $execPath,

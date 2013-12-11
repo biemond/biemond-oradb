@@ -2,16 +2,12 @@
 module Puppet::Parser::Functions
   newfunction(:oracle_exists, :type => :rvalue) do |args|
 
-    ora = lookupDbVar('ora_inst_products')
+    ora = lookupDbVar('oradb_inst_products')
 
     if ora == "empty"
       return false
     else
       software = args[0].strip
-      os = lookupvar('operatingsystem')
-      if os == "windows"
-        software = software.gsub("/","\\")
-      end 
       if ora.include? software
         return true
       end
@@ -34,7 +30,12 @@ end
 def dbVarExists(name)
   #puts "lookup fact "+name
   if lookupvar(name) != :undefined
-    return true
+    if lookupvar(name).nil?
+      #puts "return false"
+      return false
+    end
+    return true 
   end
+  #puts "not found"
   return false 
 end   

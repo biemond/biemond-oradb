@@ -64,27 +64,35 @@ define oradb::installdb( $version                 = undef,
   }
 
   if ( $continue ) {
-    case $operatingsystem {
-      CentOS, RedHat, OracleLinux, Ubuntu, Debian, SLES: {
-        $execPath     = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
+
+    $execPath     = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
+    $oraInventory = "${oracleBase}/oraInventory"
+
+    case $::kernel {
+      Linux: {
         $oraInstPath  = "/etc"
-        $oraInventory = "${oracleBase}/oraInventory"
-        Exec { path   => $execPath,
-          user        => $user,
-          group       => $group,
-          logoutput   => true,
-        }
-        File {
-          ensure      => present,
-          mode        => 0775,
-          owner       => $user,
-          group       => $group,
-        }
+      }
+      SunOS: {
+        $oraInstPath  = "/var/opt"
       }
       default: {
         fail("Unrecognized operating system")
       }
     }
+
+    Exec { path   => $execPath,
+      user        => $user,
+      group       => $group,
+      logoutput   => true,
+    }
+    File {
+      ensure      => present,
+      mode        => 0775,
+      owner       => $user,
+      group       => $group,
+    }
+
+
 
     if $puppetDownloadMntPoint == undef {
       $mountPoint     = "puppet:///modules/oradb/"

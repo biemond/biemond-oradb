@@ -27,10 +27,11 @@ define oradb::opatch( $oracleProductHome       = undef,
 )
 
 {
-  case $operatingsystem {
-    CentOS, RedHat, OracleLinux, Ubuntu, Debian, SLES: {
+  case $::kernel {
+    Linux, SunOS: {
       $execPath      = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
       $path          = $downloadDir
+
       Exec { path    => $execPath,
         user         => $user,
         group        => $group,
