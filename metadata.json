@@ -1,13 +1,13 @@
 {
   "name": "biemond-oradb",
-  "version": "0.9.1",
-  "summary": "Oracle Database 11g / 12 linux + RCU installer",
+  "version": "0.9.3",
+  "summary": "Oracle Database 11g / 12 linux / solaris + RCU installer",
   "author": "Edwin Biemond",
   "description": "Oracle Database 11g / 12 puppet module  + RCU installer for SOA Suite, WebCenter and OIM or all",
   "dependencies": [],
   "types": [],
   "checksums": {},
-  "source": "https://github.com/biemond/puppet/tree/master/modules/oradb",
-  "project_page": "https://github.com/biemond/puppet/tree/master/modules/oradb",
+  "source": "https://github.com/biemond/biemond-oradb",
+  "project_page": "https://github.com/biemond/biemond-oradb",
   "license": "Apache 2.0"
 }

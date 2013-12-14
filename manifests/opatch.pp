@@ -24,6 +24,7 @@ define oradb::opatch( $oracleProductHome       = undef,
                       $downloadDir             = '/install',
                       $ocmrf                   = true,
                       $puppetDownloadMntPoint  = undef,
+                      $remoteFile              = true,
 )
 
 {
@@ -69,22 +70,31 @@ define oradb::opatch( $oracleProductHome       = undef,
       $mountPoint    =	$puppetDownloadMntPoint
     }
 
-    # the patch used by the opatch
-    if ! defined(File["${path}/${patchFile}"]) {
-      file { "${path}/${patchFile}":
-        source       => "${mountPoint}/${patchFile}",
-      }
+    if $remoteFile == true {
+	    # the patch used by the opatch
+	    if ! defined(File["${path}/${patchFile}"]) {
+	      file { "${path}/${patchFile}":
+	        source       => "${mountPoint}/${patchFile}",
+	      }
+	    }
     }
 
     # opatch apply -silent -oh /oracle/product/11.2/db /install/14389126
     $oPatchCommand   = "opatch apply -silent "
 
-    case $operatingsystem {
-      CentOS, RedHat, OracleLinux, Ubuntu, Debian, SLES: {
-        exec { "extract opatch ${patchFile} ${title}":
-          command    => "unzip -n ${path}/${patchFile} -d ${path}",
-          require    => File ["${path}/${patchFile}"],
-          creates    => "${path}/${patchId}",
+    case $::kernel {
+      Linux, SunOS: {
+        if $remoteFile == true {
+	        exec { "extract opatch ${patchFile} ${title}":
+	          command    => "unzip -n ${path}/${patchFile} -d ${path}",
+	          require    => File ["${path}/${patchFile}"],
+	          creates    => "${path}/${patchId}",
+	        }
+        } else {
+          exec { "extract opatch ${patchFile} ${title}":
+            command    => "unzip -n ${mountPoint}/${patchFile} -d ${path}",
+            creates    => "${path}/${patchId}",
+          }
         }
         if $ocmrf == true {
           exec { "exec opatch ux ocmrf ${title}":

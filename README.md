@@ -39,10 +39,10 @@ Version updates
 Oracle Database Features
 ---------------------------
 
-- Oracle Database 12.1.0.1 Linux installation
-- Oracle Database 11.2.0.4 Linux installation
-- Oracle Database 11.2.0.3 Linux installation
-- Oracle Database 11.2.0.1 Linux installation
+- Oracle Database 12.1.0.1 Linux / Solaris installation
+- Oracle Database 11.2.0.4 Linux / Solaris installation
+- Oracle Database 11.2.0.3 Linux / Solaris installation
+- Oracle Database 11.2.0.1 Linux / Solaris installation
 - Oracle Database Net configuration
 - Oracle Database Listener
 - OPatch upgrade
@@ -54,6 +54,19 @@ Oracle Database Features
 Some manifests like installdb.pp, opatch.pp or rcusoa.pp supports an alternative mountpoint for the big oracle files.
 When not provided it uses the files location of the oradb puppet module
 else you can use $puppetDownloadMntPoint => "/mnt" or "puppet:///modules/xxxx/"
+
+Oracle Big files and alternate download location
+------------------------------------------------
+Some manifests like oradb:installdb, opatch or rcu supports an alternative mountpoint for the big oracle setup/install files.  
+When not provided it uses the files folder located in the orawls puppet module  
+else you can use $source =>
+- "/mnt"
+- "/vagrant"
+- "puppet:///modules/oradb/" (default)
+- "puppet:///database/"  
+
+when the files are also accesiable locally then you can also set $remote_file => false this will not move the files to the download folder, just extract or install 
+
 
 
 Files
