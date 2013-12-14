@@ -117,23 +117,23 @@ define oradb::rcu( $rcuFile                 = undef,
 
   # put rcu software
   if $remoteFile == true {
-	  if ! defined(File["${downloadDir}/${rcuFile}"]) {
-	    file { "${downloadDir}/${rcuFile}":
-	      source => "${mountPoint}/${rcuFile}",
-	    }
-	  }
+    if ! defined(File["${downloadDir}/${rcuFile}"]) {
+      file { "${downloadDir}/${rcuFile}":
+        source => "${mountPoint}/${rcuFile}",
+      }
+    }
   }
-  
+
 
   # unzip rcu software
   if $remoteFile == true {
-	  if ! defined(Exec["extract ${rcuFile}"]) {
-	    exec { "extract ${rcuFile}":
-	      command             => "unzip ${downloadDir}/${rcuFile} -d ${downloadDir}/rcu_${version}",
-	      require             => File ["${downloadDir}/${rcuFile}"],
-	      creates             => "${downloadDir}/rcu_${version}/rcuHome",
-	    }
-	  }
+    if ! defined(Exec["extract ${rcuFile}"]) {
+      exec { "extract ${rcuFile}":
+        command             => "unzip ${downloadDir}/${rcuFile} -d ${downloadDir}/rcu_${version}",
+        require             => File ["${downloadDir}/${rcuFile}"],
+        creates             => "${downloadDir}/rcu_${version}/rcuHome",
+      }
+    }
   } else {
       exec { "extract ${rcuFile}":
         command             => "unzip ${mountPoint}/${rcuFile} -d ${downloadDir}/rcu_${version}",
@@ -176,7 +176,6 @@ define oradb::rcu( $rcuFile                 = undef,
         command     => $createCommand,
         require     => [Exec["extract ${rcuFile}"],
                         Exec["run sqlplus to check for repos ${title}"],
-                        File["${downloadDir}/${rcuFile}"],
                         File["${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"]],
         unless      => "/bin/grep -c found /tmp/check_rcu_${schemaPrefix}.txt",
         timeout     => 0,
@@ -185,7 +184,6 @@ define oradb::rcu( $rcuFile                 = undef,
         command     => $createCommand,
         require     => [Exec["extract ${rcuFile}"],
                         Exec["run sqlplus to check for repos ${title}"],
-                        File["${downloadDir}/${rcuFile}"],
                         File["${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"]],
         onlyif      => "/bin/grep -c ORA-00942 /tmp/check_rcu_${schemaPrefix}.txt",
         timeout     => 0,
@@ -195,7 +193,6 @@ define oradb::rcu( $rcuFile                 = undef,
         command     => $deleteCommand,
         require     => [Exec["extract ${rcuFile}"],
                         Exec["run sqlplus to check for repos ${title}"],
-                        File["${downloadDir}/${rcuFile}"],
                         File["${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"]],
         onlyif      => "/bin/grep -c found /tmp/check_rcu_${schemaPrefix}.txt",
         timeout     => 0,
@@ -207,7 +204,6 @@ define oradb::rcu( $rcuFile                 = undef,
       exec { "install rcu repos ${title}":
         command     => $createCommand,
         require     => [Exec["extract ${rcuFile}"],
-                        File["${downloadDir}/${rcuFile}"],
                         File["${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"]],
         timeout     => 0,
       }
@@ -215,7 +211,6 @@ define oradb::rcu( $rcuFile                 = undef,
       exec { "delete rcu repos ${title}":
         command     => $deleteCommand,
         require     => [Exec["extract ${rcuFile}"],
-                        File["${downloadDir}/${rcuFile}"],
                         File["${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"]],
         timeout     => 0,
       }
