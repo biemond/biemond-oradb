@@ -16,6 +16,7 @@ Works with Puppet 2.7 & 3.0
 Version updates
 ---------------
 
+- 0.9.5 RCU fixes for OIM,OAM
 - 0.9.0 Solaris Support,Own DB facts, no conflict with orawls or wls
 - 0.8.9 RCU allows existing Temp tablespace
 - 0.8.7 Readme update

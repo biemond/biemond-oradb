@@ -5,9 +5,9 @@ require 'facter'
 def get_databaseUser()
   databaseUser = Facter.value('override_database_user')
   if databaseUser.nil?
-    puts "database user is oracle"
+    #puts "database user is oracle"
   else 
-    puts "database user is " + databaseUser
+    #puts "database user is " + databaseUser
     return databaseUser
   end
   return "oracle"

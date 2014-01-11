@@ -70,8 +70,8 @@ define oradb::rcu( $rcuFile                 = undef,
     # extra password for DISCUSSIONS and ACTIVITIES
     $componentsPasswords  = [$reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword]
   } elsif $product == 'oim' {
-    $components           = '-component SOAINFRA -component ORASDPM -component MDS -component OPSS -component BAM -component IAU -component OID -component OIF -component OIM -component OAM -component OAAM'
-    $componentsPasswords  = [$reposPassword, $reposPassword, $reposPassword,$reposPassword,$reposPassword,$reposPassword, $reposPassword, $reposPassword,$reposPassword,$reposPassword, $reposPassword]
+    $components           = '-component SOAINFRA -component ORASDPM -component MDS -component OPSS -component BAM -component IAU -component OIF -component OIM -component OAM -component OAAM'
+    $componentsPasswords  = [$reposPassword, $reposPassword, $reposPassword,$reposPassword,$reposPassword,$reposPassword, $reposPassword, $reposPassword,$reposPassword, $reposPassword]
   } elsif $product == 'all' {
     $components           = '-component SOAINFRA -component ORASDPM -component MDS -component OPSS -component BAM -component CONTENTSERVER11 -component CONTENTSERVER11SEARCH -component URM -component PORTLET -component WEBCENTER -component ACTIVITIES -component DISCUSSIONS'
     # extra password for DISCUSSIONS and ACTIVITIES
@@ -132,12 +132,14 @@ define oradb::rcu( $rcuFile                 = undef,
         command             => "unzip ${downloadDir}/${rcuFile} -d ${downloadDir}/rcu_${version}",
         require             => File ["${downloadDir}/${rcuFile}"],
         creates             => "${downloadDir}/rcu_${version}/rcuHome",
+        logoutput           => false,
       }
     }
   } else {
       exec { "extract ${rcuFile}":
         command             => "unzip ${mountPoint}/${rcuFile} -d ${downloadDir}/rcu_${version}",
         creates             => "${downloadDir}/rcu_${version}/rcuHome",
+        logoutput           => false,
       }
   }
   if ! defined(File["${downloadDir}/rcu_${version}/rcuHome/rcu/log"]) {
@@ -178,6 +180,7 @@ define oradb::rcu( $rcuFile                 = undef,
                         Exec["run sqlplus to check for repos ${title}"],
                         File["${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"]],
         unless      => "/bin/grep -c found /tmp/check_rcu_${schemaPrefix}.txt",
+        environment => ["SQLPLUS_HOME=${oracleHome}",],
         timeout     => 0,
       }
       exec { "install rcu repos ${title} 2":
@@ -185,6 +188,7 @@ define oradb::rcu( $rcuFile                 = undef,
         require     => [Exec["extract ${rcuFile}"],
                         Exec["run sqlplus to check for repos ${title}"],
                         File["${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"]],
+        environment => ["SQLPLUS_HOME=${oracleHome}",],
         onlyif      => "/bin/grep -c ORA-00942 /tmp/check_rcu_${schemaPrefix}.txt",
         timeout     => 0,
       }
@@ -194,6 +198,7 @@ define oradb::rcu( $rcuFile                 = undef,
         require     => [Exec["extract ${rcuFile}"],
                         Exec["run sqlplus to check for repos ${title}"],
                         File["${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"]],
+        environment => ["SQLPLUS_HOME=${oracleHome}",],
         onlyif      => "/bin/grep -c found /tmp/check_rcu_${schemaPrefix}.txt",
         timeout     => 0,
       }
