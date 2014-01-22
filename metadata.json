@@ -1,9 +1,9 @@
 {
   "name": "biemond-oradb",
-  "version": "0.9.4",
-  "summary": "Oracle Database 11g / 12 linux / solaris + RCU installer",
+  "version": "0.9.6",
+  "summary": "Oracle Database 11g / 12 linux / solaris + GoldenGate + RCU installer",
   "author": "Edwin Biemond",
-  "description": "Oracle Database 11g / 12 puppet module  + RCU installer for SOA Suite, WebCenter and OIM or all",
+  "description": "Oracle Database 11g / 12 puppet module, GoldenGate  + RCU installer for SOA Suite, WebCenter and OIM or all",
   "dependencies": [],
   "types": [],
   "checksums": {},

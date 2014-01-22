@@ -1,10 +1,10 @@
 name 'biemond-oradb'
-version '0.9.5'
+version '0.9.6'
 
 author 'Edwin Biemond'
 license 'Apache 2.0'
 project_page 'https://github.com/biemond/biemond-oradb'
 source 'https://github.com/biemond/biemond-oradb'
-summary 'Oracle Database 11g / 12 linux / solaris + RCU installer'
-description 'Oracle Database 11g / 12 puppet module  + RCU installer for SOA Suite, WebCenter and OIM or all'
+summary 'Oracle Database 11g / 12 linux / solaris + GoldenGate + RCU installer'
+description 'Oracle Database 11g / 12 puppet module, GoldenGate  + RCU installer for SOA Suite, WebCenter and OIM or all'
 'Oracle Database 11g / 12 puppet module'
