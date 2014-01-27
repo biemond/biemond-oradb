@@ -16,7 +16,8 @@ Works with Puppet 2.7 & 3.0
 Version updates
 ---------------
 
-- 0.9.6 GoldenGate support
+- 0.9.6 GoldenGate 11.2 support
+- 0.9.6 GoldenGate 12.1.2 support
 - 0.9.5 RCU fixes for OIM,OAM
 - 0.9.0 Solaris Support,Own DB facts, no conflict with orawls or wls
 - 0.8.9 RCU allows existing Temp tablespace
@@ -51,7 +52,7 @@ Oracle Database Features
 - Apply OPatch
 - Create database instances
 - Stop/Start database instances
-- GoldenGate 12.1.2
+- GoldenGate 12.1.2 ,11.2.1
 - Installs RCU repositoy for Oracle SOA Suite / Webcenter ( 11.1.1.6.0 and 11.1.1.7.0 ) / Oracle Identity Management ( 11.1.2.1 )
 
 Some manifests like installdb.pp, opatch.pp or rcusoa.pp supports an alternative mountpoint for the big oracle files.
@@ -124,6 +125,8 @@ upload these files to the files folder of the oradb puppet module
 
 # goldengate for Oracle 11g & Oracle 12c
 - 121200_fbo_ggs_Linux_x64_shiphome.zip
+- ogg112101_fbo_ggs_Linux_x64_ora11g_64bit.zip
+- V38714-01.zip
 
 important support node
 [ID 1441282.1] Requirements for Installing Oracle 11gR2 RDBMS on RHEL6 or OL6 64-bit (x86-64)
@@ -373,7 +376,7 @@ other
       }
     }
 
-Oracle GoldenGate 12.1.2
+Oracle GoldenGate 12.1.2 and 11.2.1 
 
       group { 'dba' :
         ensure      => present,
@@ -423,6 +426,44 @@ Oracle GoldenGate 12.1.2
         group         => hiera('oracle_os_group'),
         require       => Oradb::Goldengate['ggate12.1.2'],
       }
+
+
+
+      file { "/oracle/product/11.2.1" :
+        ensure        => directory,
+        recurse       => false,
+        replace       => false,
+        mode          => 0775,
+        owner         => 'ggate',
+        group         => hiera('oracle_os_group'),
+      }
+
+
+      oradb::goldengate{ 'ggate11.2.1':
+                         version                 => '11.2.1',
+                         file                    => 'ogg112101_fbo_ggs_Linux_x64_ora11g_64bit.zip',
+                         tarFile                 => 'fbo_ggs_Linux_x64_ora11g_64bit.tar',
+                         goldengateHome          => "/oracle/product/11.2.1/ggate",
+                         user                    => hiera('ggate_os_user'),
+                         group                   => hiera('oracle_os_group'),
+                         downloadDir             => '/install',
+                         puppetDownloadMntPoint  =>  hiera('oracle_source'),
+                         require                 => [File["/oracle/product"],File["/oracle/product/11.2.1"]]
+      }
+
+      oradb::goldengate{ 'ggate11.2.1_java':
+                         version                 => '11.2.1',
+                         file                    => 'V38714-01.zip',
+                         tarFile                 => 'ggs_Adapters_Linux_x64.tar',
+                         goldengateHome          => "/oracle/product/11.2.1/ggate_java",
+                         user                    => hiera('ggate_os_user'),
+                         group                   => hiera('oracle_os_group'),
+                         downloadDir             => '/install',
+                         puppetDownloadMntPoint  =>  hiera('oracle_source'),
+                         require                 => [File["/oracle/product"],File["/oracle/product/11.2.1"]]
+      }
+
+
 
 Oracle SOA Suite Repository Creation Utility (RCU)  
 

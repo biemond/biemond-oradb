@@ -1,9 +1,10 @@
 define oradb::goldengate( $version                 = '12.1.2',
                           $file                    = undef,
-                          $databaseType            = 'Oracle',
-                          $databaseVersion         = 'ORA11g',  # 'ORA11g'|'ORA12c'
-                          $databaseHome            = undef,
-                          $oracleBase              = undef,
+                          $tarFile                 = undef,     # only for < 12.1.2
+                          $databaseType            = 'Oracle',  # only for > 12.1.2
+                          $databaseVersion         = 'ORA11g',  # 'ORA11g'|'ORA12c'  only for > 12.1.2
+                          $databaseHome            = undef,     # only for > 12.1.2
+                          $oracleBase              = undef,     # only for > 12.1.2
                           $goldengateHome          = undef,
                           $managerPort             = undef,
                           $user                    = 'ggate',
@@ -13,21 +14,26 @@ define oradb::goldengate( $version                 = '12.1.2',
 )
 {
 
-  # check if the oracle software already exists
-  $found = oracle_exists( $goldengateHome )
+  if ( $version == '12.1.2' ) {
+    # check if the oracle software already exists
+    $found = oracle_exists( $goldengateHome )
 
-  if $found == undef {
-    $continue = true
-  } else {
-    if ( $found ) {
-      $continue = false
-    } else {
-      notify {"oradb::goldengate ${goldengateHome} does not exists":}
+    if $found == undef {
       $continue = true
+    } else {
+      if ( $found ) {
+        $continue = false
+      } else {
+        notify {"oradb::goldengate ${goldengateHome} does not exists":}
+        $continue = true
+      }
     }
+  } else {
+     $continue = false
   }
 
-  if ( $continue ) {
+  # only for 12.1.2
+  if ( $continue == true ) {
 
       $oraInventory = "${oracleBase}/oraInventory"
 
@@ -43,9 +49,7 @@ define oradb::goldengate( $version                 = '12.1.2',
         }
       }
 
-      if ( $version == '12.1.2' ) {
-        $ggateInstallDir = 'fbo_ggs_Linux_x64_shiphome'
-      }
+      $ggateInstallDir = 'fbo_ggs_Linux_x64_shiphome'
       
       file { "${downloadDir}/${file}":
         source      => "${puppetDownloadMntPoint}/${file}",
@@ -91,6 +95,47 @@ define oradb::goldengate( $version                 = '12.1.2',
           group       => $group,
           returns     => [3,0],
       }
+
+  } else {
+      #version is different, use the old way
+      
+      file { "${downloadDir}/${file}":
+        source      => "${puppetDownloadMntPoint}/${file}",
+        owner       => $user,
+        group       => $group,
+      }
+
+      exec { "extract gg ${title}":
+        command     => "unzip -o ${downloadDir}/${file} -d ${downloadDir}",
+        require     => File["${downloadDir}/${file}"],
+        creates     => "${downloadDir}/${tarFile}",
+        timeout     => 0,
+        path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin",
+        user        => $user,
+        group       => $group,
+        logoutput   => true,
+     }
+
+      file { $goldengateHome :
+        ensure        => directory,
+        recurse       => false,
+        replace       => false,
+        mode          => 0775,
+        owner         => $user,
+        group         => $group,
+      }
+
+      exec { "extract tar ${title}":
+        command     => "tar -xf ${downloadDir}/${tarFile} -C ${goldengateHome}",
+        require     => [File[$goldengateHome],Exec["extract gg ${title}"]],
+        creates     => "${goldengateHome}/ggsci",
+        timeout     => 0,
+        path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin",
+        user        => $user,
+        group       => $group,
+        logoutput   => true,
+     }
+
 
   }
 }
