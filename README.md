@@ -10,12 +10,16 @@ Should work for Solaris and all Linux version like RedHat, CentOS, Ubuntu, Debia
 Here you can test the solaris 10 vagrant box with Oracle Database 12.1  
 https://github.com/biemond/biemond-orawls-vagrant-solaris-soa
 
+Here you can test the CentOS 6.5 vagrant box with Oracle Database 11.2.0.4 and GoldenGate 12.1.2  
+https://github.com/biemond/vagrant-wls12.1.2-coherence-goldengate
 
-Works with Puppet 2.7 & 3.0
+
+Should work for Puppet 2.7 & 3.0
 
 Version updates
 ---------------
 
+- 0.9.7 Oracle database 11.2.0.1, 12.1.0.1 client support, refactored installdb,net,goldengate
 - 0.9.6 GoldenGate 11.2 support
 - 0.9.6 GoldenGate 12.1.2 support
 - 0.9.5 RCU fixes for OIM,OAM
@@ -46,13 +50,14 @@ Oracle Database Features
 - Oracle Database 11.2.0.4 Linux / Solaris installation
 - Oracle Database 11.2.0.3 Linux / Solaris installation
 - Oracle Database 11.2.0.1 Linux / Solaris installation
+- Oracle Database Client 12.1.0.1, 11.2.0.1 Linux / Solaris installation
 - Oracle Database Net configuration
 - Oracle Database Listener
 - OPatch upgrade
 - Apply OPatch
 - Create database instances
 - Stop/Start database instances
-- GoldenGate 12.1.2 ,11.2.1
+- GoldenGate 12.1.2, 11.2.1
 - Installs RCU repositoy for Oracle SOA Suite / Webcenter ( 11.1.1.6.0 and 11.1.1.7.0 ) / Oracle Identity Management ( 11.1.2.1 )
 
 Some manifests like installdb.pp, opatch.pp or rcusoa.pp supports an alternative mountpoint for the big oracle files.
@@ -116,8 +121,9 @@ upload these files to the files folder of the oradb puppet module
 # opatch upgrade
 - 32551984 Jul  6 18:58 p6880880_112000_Linux-x86-64.zip
 
-# database client linux 11.2.0.1 ( otn.oracle.com )
-- 706187979 Mar 10 16:48 linux.x64_11gR2_client.zip
+# database client linux  ( otn.oracle.com )
+- linux.x64_11gR2_client.zip ( version 11.2.0.1 )
+- linuxamd64_12c_client.zip  ( version 12.1.0.1 )
 
 # rcu linux installer
 - 408989041 Mar 17 20:17 ofm_rcu_linux_11.1.1.6.0_disk1_1of1.zip
@@ -375,6 +381,40 @@ other
         }
       }
     }
+
+Oracle Database Client 12.1.0.1 and 11.2.0.1 
+
+     oradb::client{ '12.1.0.1_Linux-x86-64':
+            version                => '12.1.0.1',
+            file                   => 'linuxamd64_12c_client.zip',
+            oracleBase             => '/oracle',
+            oracleHome             => '/oracle/product/12.1/client',
+            createUser             => true,
+            user                   => 'oracle',
+            group                  => 'dba',
+            downloadDir            => '/install',
+            remoteFile             => true,
+            puppetDownloadMntPoint => "puppet:///modules/oradb/",
+            logoutput               => true, 
+     }
+
+or 
+
+     oradb::client{ '11.2.0.1_Linux-x86-64':
+            version                => '11.2.0.1',
+            file                   => 'linux.x64_11gR2_client.zip',
+            oracleBase             => '/oracle',
+            oracleHome             => '/oracle/product/11.2/client',
+            createUser             => true,
+            user                   => 'oracle',
+            group                  => 'dba',
+            downloadDir            => '/install',
+            remoteFile             => false,
+            puppetDownloadMntPoint => "/software",
+            logoutput              => true,
+     }
+
+
 
 Oracle GoldenGate 12.1.2 and 11.2.1 
 

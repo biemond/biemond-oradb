@@ -68,18 +68,6 @@ define oradb::installdb( $version                 = undef,
     $execPath     = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
     $oraInventory = "${oracleBase}/oraInventory"
 
-    case $::kernel {
-      Linux: {
-        $oraInstPath  = "/etc"
-      }
-      SunOS: {
-        $oraInstPath  = "/var/opt"
-      }
-      default: {
-        fail("Unrecognized operating system")
-      }
-    }
-
     Exec { path   => $execPath,
       user        => $user,
       group       => $group,
@@ -99,41 +87,17 @@ define oradb::installdb( $version                 = undef,
       $mountPoint     = $puppetDownloadMntPoint
     }
 
-    if ( $createUser ) {
-      # Whether Puppet will manage the group or relying on external methods
-      if ! defined(Group[$group]) {
-        group { $group :
-          ensure      => present,
-        }
-      }
+    oradb::utils::structure{"oracle structure ${version}":
+      oracle_base_home_dir => $oracleBase,
+      ora_inventory_dir    => $oraInventory,
+      os_user              => $user,
+      os_group             => $group,
+      download_dir         => $downloadDir,
+      log_output           => true,
+      user_base_dir        => $userBaseDir,
+      create_user          => $createUser,
     }
 
-    if ( $createUser ) {
-      # Whether Puppet will manage the user or relying on external methods
-      if ! defined(User[$user]) {
-        # http://raftaman.net/?p=1311 for generating password
-        user { $user :
-          ensure      => present,
-          gid         => $group,
-          groups      => $group,
-          shell       => '/bin/bash',
-          password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
-          home        => "${userBaseDir}/${user}",
-          comment     => "This user ${user} was created by Puppet",
-          require     => Group[$group],
-          managehome  => true,
-        }
-      }
-    }
-
-    if ! defined(File[$downloadDir]) {
-      # check oracle install folder
-      file { $downloadDir :
-        ensure        => directory,
-        recurse       => false,
-        replace       => false,
-      }
-    }
 
     $path = $downloadDir
 
@@ -144,7 +108,7 @@ define oradb::installdb( $version                 = undef,
         if $remoteFile == true {
           file { "${path}/${file}_1of2.zip":
             source      => "${mountPoint}/${file}_1of2.zip",
-            require     => File[$downloadDir],
+            require     => Oradb::Utils::Structure["oracle structure ${version}"],
           }
           exec { "extract ${path}/${file}_1of2.zip":
             command     => "unzip -o ${path}/${file}_1of2.zip -d ${path}/${file}",
@@ -169,6 +133,7 @@ define oradb::installdb( $version                 = undef,
           exec { "extract ${path}/${file}_1of2.zip":
             command     => "unzip -o ${mountPoint}/${file}_1of2.zip -d ${path}/${file}",
             creates     => "${path}/${file}/database/install/addLangs.sh",
+            require     => Oradb::Utils::Structure["oracle structure ${version}"],
             timeout     => 0,
           }
           exec { "extract ${path}/${file}_2of2.zip":
@@ -186,7 +151,7 @@ define oradb::installdb( $version                 = undef,
 
           file { "${path}/${file}_1of2.zip":
             source      => "${mountPoint}/${file}_1of2.zip",
-            require     => File[$downloadDir],
+            require     => Oradb::Utils::Structure["oracle structure ${version}"],
           }
           exec { "extract ${path}/${file}_1of2.zip":
             command     => "unzip -o ${path}/${file}_1of2.zip -d ${path}/${file}",
@@ -207,6 +172,7 @@ define oradb::installdb( $version                 = undef,
           exec { "extract ${path}/${file}_1of2.zip":
             command     => "unzip -o ${mountPoint}/${file}_1of2.zip -d ${path}/${file}",
             timeout     => 0,
+            require     => Oradb::Utils::Structure["oracle structure ${version}"],
           }
           exec { "extract ${path}/${file}_2of2.zip":
             command     => "unzip -o ${mountPoint}/${file}_2of2.zip -d ${path}/${file}",
@@ -223,7 +189,7 @@ define oradb::installdb( $version                 = undef,
 
           file { "${path}/${file}_1of7.zip":
             source      => "${mountPoint}/${file}_1of7.zip",
-            require     => File[$downloadDir],
+            require     => Oradb::Utils::Structure["oracle structure ${version}"],
           }
           exec { "extract ${path}/${file}_1of7.zip":
             command     => "unzip -o ${path}/${file}_1of7.zip -d ${path}/${file}",
@@ -294,6 +260,7 @@ define oradb::installdb( $version                 = undef,
           exec { "extract ${path}/${file}_1of7.zip":
             command     => "unzip -o ${mountPoint}/${file}_1of7.zip -d ${path}/${file}",
             timeout     => 0,
+            require     => Oradb::Utils::Structure["oracle structure ${version}"],
           }
           exec { "extract ${path}/${file}_2of7.zip":
             command     => "unzip -o ${mountPoint}/${file}_2of7.zip -d ${path}/${file}",
@@ -330,27 +297,16 @@ define oradb::installdb( $version                 = undef,
       }
     }
 
-    if ! defined(File["${oraInstPath}/oraInst.loc"]) {
-      file { "${oraInstPath}/oraInst.loc":
-        ensure        => present,
-        content       => template("oradb/oraInst.loc.erb"),
-      }
-    }
-
-    if ! defined(File[$oracleBase]) {
-      # check oracle base folder
-      file { $oracleBase :
-        ensure        => directory,
-        recurse       => false,
-        replace       => false,
-      }
+    oradb::utils::orainst{"database orainst ${version}":
+      ora_inventory_dir => $oraInventory,
+      os_group          => $group,
     }
 
     if ! defined(File["${path}/db_install_${version}.rsp"]) {
       file { "${path}/db_install_${version}.rsp":
         ensure        => present,
         content       => template("oradb/db_install_${version}.rsp.erb"),
-        require       => File["${oraInstPath}/oraInst.loc"],
+        require       => Oradb::Utils::Orainst["database orainst ${version}"],
       }
     }
 
@@ -359,7 +315,7 @@ define oradb::installdb( $version                 = undef,
         # In $downloadDir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
         exec { "install oracle database ${title}":
           command     => "/bin/sh -c 'unset DISPLAY;${path}/${file}/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${path}/db_install_${version}.rsp'",
-          require     => [File ["${oraInstPath}/oraInst.loc"],
+          require     => [Oradb::Utils::Orainst["database orainst ${version}"],
                           File["${path}/db_install_${version}.rsp"],
                           Exec["extract ${path}/${file}_1of2.zip"],
                           Exec["extract ${path}/${file}_2of2.zip"]],
@@ -370,7 +326,7 @@ define oradb::installdb( $version                 = undef,
       } else {
         exec { "install oracle database ${title}":
           command     => "/bin/sh -c 'unset DISPLAY;${path}/${file}/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${path}/db_install_${version}.rsp'",
-          require     => [File ["${oraInstPath}/oraInst.loc"],
+          require     => [Oradb::Utils::Orainst["database orainst ${version}"],
                           File["${path}/db_install_${version}.rsp"]],
           creates     => $oracleHome,
           timeout     => 0,
@@ -384,7 +340,7 @@ define oradb::installdb( $version                 = undef,
         # In $downloadDir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
         exec { "install oracle database ${title}":
           command     => "/bin/sh -c 'unset DISPLAY;${path}/${file}/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${path}/db_install_${version}.rsp'",
-          require     => [File ["${oraInstPath}/oraInst.loc"],
+          require     => [Oradb::Utils::Orainst["database orainst ${version}"],
                           File["${path}/db_install_${version}.rsp"],
                           Exec["extract ${path}/${file}_1of7.zip"],
                           Exec["extract ${path}/${file}_2of7.zip"],
@@ -400,7 +356,8 @@ define oradb::installdb( $version                 = undef,
       } else {
         exec { "install oracle database ${title}":
           command     => "/bin/sh -c 'unset DISPLAY;${path}/${file}/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${path}/db_install_${version}.rsp'",
-          require     => [File ["${oraInstPath}/oraInst.loc"],File["${path}/db_install_${version}.rsp"]],
+          require     => [Oradb::Utils::Orainst["database orainst ${version}"],
+                          File["${path}/db_install_${version}.rsp"]],
           creates     => $oracleHome,
           timeout     => 0,
           returns     => [6,0],
@@ -413,7 +370,10 @@ define oradb::installdb( $version                 = undef,
         # In $downloadDir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
         exec { "install oracle database ${title}":
           command     => "/bin/sh -c 'unset DISPLAY;${path}/${file}/database/runInstaller -silent -ignoreSysPrereqs -ignorePrereq -waitforcompletion -responseFile ${path}/db_install_${version}.rsp'",
-          require     => [File ["${oraInstPath}/oraInst.loc"],File["${path}/db_install_${version}.rsp"],Exec["extract ${path}/${file}_1of2.zip"],Exec["extract ${path}/${file}_2of2.zip"] ],
+          require     => [Oradb::Utils::Orainst["database orainst ${version}"],
+                          File["${path}/db_install_${version}.rsp"],
+                          Exec["extract ${path}/${file}_1of2.zip"],
+                          Exec["extract ${path}/${file}_2of2.zip"] ],
           creates     => $oracleHome,
           timeout     => 0,
           returns     => [6,0],
@@ -421,7 +381,8 @@ define oradb::installdb( $version                 = undef,
       } else {
         exec { "install oracle database ${title}":
           command     => "/bin/sh -c 'unset DISPLAY;${path}/${file}/database/runInstaller -silent -ignoreSysPrereqs -ignorePrereq -waitforcompletion -responseFile ${path}/db_install_${version}.rsp'",
-          require     => [File ["${oraInstPath}/oraInst.loc"],File["${path}/db_install_${version}.rsp"]],
+          require     => [Oradb::Utils::Orainst["database orainst ${version}"],
+                          File["${path}/db_install_${version}.rsp"]],
           creates     => $oracleHome,
           timeout     => 0,
           returns     => [6,0],

@@ -35,20 +35,7 @@ define oradb::goldengate( $version                 = '12.1.2',
   # only for 12.1.2
   if ( $continue == true ) {
 
-      $oraInventory = "${oracleBase}/oraInventory"
-
-      case $::kernel {
-        Linux: {
-          $oraInstPath  = "/etc"
-        }
-        SunOS: {
-          $oraInstPath  = "/var/opt"
-        }
-        default: {
-          fail("Unrecognized operating system")
-        }
-      }
-
+      $oraInventory    = "${oracleBase}/oraInventory"
       $ggateInstallDir = 'fbo_ggs_Linux_x64_shiphome'
       
       file { "${downloadDir}/${file}":
@@ -74,17 +61,15 @@ define oradb::goldengate( $version                 = '12.1.2',
         group       => $group,
       }
 
-      if ! defined(File["${oraInstPath}/oraInst.loc"]) {
-        file { "${oraInstPath}/oraInst.loc":
-          ensure        => present,
-          content       => template("oradb/oraInst.loc.erb"),
-        }
-      }
+	    oradb::utils::orainst{"ggate orainst ${version}":
+	      ora_inventory_dir => $oraInventory,
+	      os_group          => $group,
+	    }
       
       exec { "install oracle goldengate":
-          command     => "/bin/sh -c 'unset DISPLAY;${downloadDir}/${ggateInstallDir}/Disk1/runInstaller -silent -waitforcompletion -invPtrLoc ${oraInstPath}/oraInst.loc -responseFile ${downloadDir}/oggcore.rsp'",
+          command     => "/bin/sh -c 'unset DISPLAY;${downloadDir}/${ggateInstallDir}/Disk1/runInstaller -silent -waitforcompletion -responseFile ${downloadDir}/oggcore.rsp'",
           require     => [ File["${downloadDir}/oggcore.rsp"],
-                           File["${oraInstPath}/oraInst.loc"],
+                           Oradb::Utils::Orainst["ggate orainst ${version}"],
                            Exec["extract gg"]
                          ],
           creates     => $goldengateHome,
