@@ -67,6 +67,9 @@ define oradb::database( $oracleBase               = undef,
         Exec { path  => $execPath,
           user       => $user,
           group      => $group,
+		  environment => [
+              "USER=${user}",
+          ],
           logoutput  => true,
         }
         File {

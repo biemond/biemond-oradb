@@ -34,8 +34,8 @@ define oradb::net( $oracleHome   = undef,
     path           => $execPath,
     user           => $user,
     group          => $group,
-	environment => [
-		"USER=${user}",
+    environment => [
+        "USER=${user}",
     ],
     logoutput      => true,
   }
