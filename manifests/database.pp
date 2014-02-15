@@ -36,7 +36,7 @@
 define oradb::database( $oracleBase               = undef,
                         $oracleHome               = undef,
                         $version                  = "11.2",
-						$fullVersion              = "11.2.0.1",
+			$fullVersion              = "11.2.0.1",
                         $user                     = 'oracle',
                         $group                    = 'dba',
                         $downloadDir              = '/install',
