@@ -8,6 +8,8 @@
 #  oradb::database{ 'testDb':
 #                   oracleBase              => '/oracle',
 #                   oracleHome              => '/oracle/product/11.2/db',
+#                   version                 => "11.2",
+#                   fullVersion             => "11.2.0.1", 
 #                   user                    => 'oracle',
 #                   group                   => 'dba',
 #                   downloadDir             => '/install',
@@ -25,6 +27,7 @@
 #                   memoryPercentage        => "40",
 #                   memoryTotal             => "800",
 #                   databaseType            => "MULTIPURPOSE",
+#                   emConfiguration         => "NONE", 
 #                   require                 => Oradb::Listener['start listener'],
 #  }
 #
@@ -33,6 +36,7 @@
 define oradb::database( $oracleBase               = undef,
                         $oracleHome               = undef,
                         $version                  = "11.2",
+						$fullVersion              = "11.2.0.1",
                         $user                     = 'oracle',
                         $group                    = 'dba',
                         $downloadDir              = '/install',
@@ -50,6 +54,7 @@ define oradb::database( $oracleBase               = undef,
                         $memoryPercentage         = "40",
                         $memoryTotal              = "800",
                         $databaseType             = "MULTIPURPOSE",
+						$emConfiguration          = "NONE",
 )
 
 {
@@ -67,7 +72,7 @@ define oradb::database( $oracleBase               = undef,
         Exec { path  => $execPath,
           user       => $user,
           group      => $group,
-		  environment => [
+          environment => [
               "USER=${user}",
           ],
           logoutput  => true,

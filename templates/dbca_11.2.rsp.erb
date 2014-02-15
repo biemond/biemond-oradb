@@ -228,7 +228,12 @@ SYSTEMPASSWORD = "<%= @systemPassword %>"
 # Default value : NONE
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-EMCONFIGURATION = "NONE"
+<% if @fullVersion != "11.2.0.1" %>
+EMCONFIGURATION = "<%= @emConfiguration %>"
+<% else %>
+#EMCONFIGURATION = "<%= @emConfiguration %>"
+<% end %>
+
 
 #-----------------------------------------------------------------------------
 # Name          : DISABLESECURITYCONFIGURATION
