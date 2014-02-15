@@ -27,7 +27,7 @@
 #                   memoryPercentage        => "40",
 #                   memoryTotal             => "800",
 #                   databaseType            => "MULTIPURPOSE",
-#                   emConfiguration         => "NONE", 
+#                   emConfiguration         => "NONE",
 #                   require                 => Oradb::Listener['start listener'],
 #  }
 #
