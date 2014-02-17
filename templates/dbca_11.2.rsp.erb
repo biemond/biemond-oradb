@@ -199,7 +199,6 @@ TEMPLATENAME = "General_Purpose.dbc"
 #-----------------------------------------------------------------------------
 #OBFUSCATEDPASSWORDS = FALSE
 
-
 #-----------------------------------------------------------------------------
 # Name          : SYSPASSWORD
 # Datatype      : String
@@ -228,7 +227,7 @@ SYSTEMPASSWORD = "<%= @systemPassword %>"
 # Default value : NONE
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-EMCONFIGURATION = "NONE"
+EMCONFIGURATION = "<%= @emConfiguration %>"
 
 #-----------------------------------------------------------------------------
 # Name          : DISABLESECURITYCONFIGURATION
@@ -239,7 +238,6 @@ EMCONFIGURATION = "NONE"
 # Mandatory     : No
 #-----------------------------------------------------------------------------
 #DISABLESECURITYCONFIGURATION = "NONE"
-
 
 #-----------------------------------------------------------------------------
 # Name          : SYSMANPASSWORD
@@ -337,8 +335,6 @@ EMCONFIGURATION = "NONE"
 #-----------------------------------------------------------------------------
 #DVACCOUNTMANAGERPASSWORD = ""
 
-
-
 #-----------------------------------------------------------------------------
 # Name          : DATAFILEJARLOCATION 
 # Datatype      : String
@@ -405,7 +401,6 @@ RECOVERYAREADESTINATION="<%= @recoveryAreaDestination %>"
 # Mandatory     : No
 #-----------------------------------------------------------------------------
 #RECOVERYGROUPNAME=RECOVERY
-
 
 #-----------------------------------------------------------------------------
 # Name          : CHARACTERSET
@@ -748,7 +743,6 @@ GDBNAME = "orcl11.us.oracle.com"
 #-----------------------------------------------------------------------------
 #SYSDBAUSERNAME = "sys"
 
-
 #-----------------------------------------------------------------------------
 # Name          : SYSDBAPASSWORD
 # Datatype      : String
@@ -825,8 +819,6 @@ GDBNAME = "orcl11.us.oracle.com"
 #-----------------------------------------------------------------------------
 #DISABLESECURITYCONFIGURATION = "NONE"
 
-
-
 #-----------------------------------------------------------------------------
 # Name          : ENABLESECURITYCONFIGURATION
 # Datatype      : String
@@ -836,7 +828,6 @@ GDBNAME = "orcl11.us.oracle.com"
 # Mandatory     : No
 #-----------------------------------------------------------------------------
 #ENABLESECURITYCONFIGURATION = "true"
-
 
 #-----------------------------------------------------------------------------
 # Name          : EMCONFIGURATION
