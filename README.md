@@ -19,6 +19,7 @@ Should work for Puppet 2.7 & 3.0
 Version updates
 ---------------
 
+- 0.9.9 emConfiguration parameter for Database creation
 - 0.9.7 Oracle database 11.2.0.1, 12.1.0.1 client support, refactored installdb,net,goldengate
 - 0.9.6 GoldenGate 11.2 support
 - 0.9.6 GoldenGate 12.1.2 support
@@ -315,6 +316,7 @@ other
                       memoryPercentage        => "40",
                       memoryTotal             => "800",
                       databaseType            => "MULTIPURPOSE",
+                      emConfiguration         => "NONE",
                       require                 => Oradb::Listener['start listener'],
     }
     

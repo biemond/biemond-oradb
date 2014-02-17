@@ -52,7 +52,7 @@ define oradb::database( $oracleBase               = undef,
                         $memoryPercentage         = "40",
                         $memoryTotal              = "800",
                         $databaseType             = "MULTIPURPOSE",
-                        $emConfiguration          = "NONE",
+                        $emConfiguration          = "NONE",  # CENTRAL|LOCAL|ALL|NONE
 )
 
 {
