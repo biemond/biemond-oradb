@@ -13,12 +13,15 @@ https://github.com/biemond/biemond-orawls-vagrant-solaris-soa
 Here you can test the CentOS 6.5 vagrant box with Oracle Database 11.2.0.4 and GoldenGate 12.1.2  
 https://github.com/biemond/vagrant-wls12.1.2-coherence-goldengate
 
+Example of Opensource Puppet 3.4.3 Puppet master configuration in a vagrant box (https://github.com/biemond/vagrant-puppetmaster) 
+- oradb (oracle database 11.2.0.1 ) with GoldenGate 12.1.2
 
 Should work for Puppet 2.7 & 3.0
 
 Version updates
 ---------------
 
+- 1.0.0 oracle module add-on for user,role and tablespace creation
 - 0.9.9 emConfiguration parameter for Database creation
 - 0.9.7 Oracle database 11.2.0.1, 12.1.0.1 client support, refactored installdb,net,goldengate
 - 0.9.6 GoldenGate 11.2 support
@@ -61,6 +64,12 @@ Oracle Database Features
 - GoldenGate 12.1.2, 11.2.1
 - Installs RCU repositoy for Oracle SOA Suite / Webcenter ( 11.1.1.6.0 and 11.1.1.7.0 ) / Oracle Identity Management ( 11.1.2.1 )
 
+In combination with the oracle module of Bert Hajee (http://forge.puppetlabs.com/hajee/oracle) you can also create
+- create a tablespace
+- create a user with the required grants and quota's
+- create one or more roles
+- create one or more services
+
 Some manifests like installdb.pp, opatch.pp or rcusoa.pp supports an alternative mountpoint for the big oracle files.
 When not provided it uses the files location of the oradb puppet module
 else you can use $puppetDownloadMntPoint => "/mnt" or "puppet:///modules/xxxx/"
@@ -76,8 +85,6 @@ else you can use $source =>
 - "puppet:///database/"  
 
 when the files are also accesiable locally then you can also set $remote_file => false this will not move the files to the download folder, just extract or install 
-
-
 
 Files
 -----
@@ -416,6 +423,37 @@ or
             logoutput              => true,
      }
 
+
+In combination with the oracle puppet module you can create a tablespace,role and oracle user   
+
+    tablespace {'scott_ts':
+      ensure                    => present,
+      size                      => 100M,
+      datafile                  => 'scott_ts.dbf',
+      logging                   => yes,
+      autoextend                => on,
+      next                      => 100M,
+      max_size                  => 12288M,
+      extent_management         => local,
+      segment_space_management  => auto,
+    }
+    
+    role {'apps':
+      ensure    => present,
+    }
+    
+    oracle_user{'scott':
+      temporary_tablespace      => temp,
+      default_tablespace        => 'scott_ts',
+      password                  => 'tiger',
+      grants                    => ['SELECT ANY TABLE',
+                                    'CONNECT',
+                                    'RESOURCE',
+                                    'apps'],
+      quotas                    => { "scott_ts" => 'unlimited'},
+      require                   => [Tablespace['scott_ts'],
+                                    Role['apps']],
+    }
 
 
 Oracle GoldenGate 12.1.2 and 11.2.1 
