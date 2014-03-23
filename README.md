@@ -1,5 +1,8 @@
 Oracle Database Linux puppet module
 ===================================
+[![Build Status](https://travis-ci.org/biemond/biemond-oradb.png)](https://travis-ci.org/biemond/biemond-oradb)
+
+
 
 created by Edwin Biemond
 [biemond.blogspot.com](http://biemond.blogspot.com)
