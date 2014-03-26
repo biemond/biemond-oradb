@@ -115,6 +115,7 @@ define oradb::installdb( $version                 = undef,
             require     => File["${path}/${file}_1of2.zip"],
             creates     => "${path}/${file}/database/install/addLangs.sh",
             timeout     => 0,
+            logoutput   => false,
           }
           # db file 2 installer zip
           file { "${path}/${file}_2of2.zip":
@@ -128,6 +129,7 @@ define oradb::installdb( $version                 = undef,
                            ],
             creates     => "${path}/${file}/database/stage/Components/oracle.rdbms/12.1.0.1.0/1/DataFiles/filegroup19.6.1.jar",
             timeout     => 0,
+            logoutput   => false,
           }
         } else {
           exec { "extract ${path}/${file}_1of2.zip":
@@ -135,12 +137,14 @@ define oradb::installdb( $version                 = undef,
             creates     => "${path}/${file}/database/install/addLangs.sh",
             require     => Oradb::Utils::Structure["oracle structure ${version}"],
             timeout     => 0,
+            logoutput   => false,
           }
           exec { "extract ${path}/${file}_2of2.zip":
             command     => "unzip -o ${mountPoint}/${file}_2of2.zip -d ${path}/${file}",
             require     => Exec["extract ${path}/${file}_1of2.zip"],
             creates     => "${path}/${file}/database/stage/Components/oracle.rdbms/12.1.0.1.0/1/DataFiles/filegroup19.6.1.jar",
             timeout     => 0,
+            logoutput   => false,
           }
         }
       }
@@ -157,6 +161,7 @@ define oradb::installdb( $version                 = undef,
             command     => "unzip -o ${path}/${file}_1of2.zip -d ${path}/${file}",
             require     => File["${path}/${file}_1of2.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
           # db file 2 installer zip
           file { "${path}/${file}_2of2.zip":
@@ -167,17 +172,20 @@ define oradb::installdb( $version                 = undef,
             command     => "unzip -o ${path}/${file}_2of2.zip -d ${path}/${file}",
             require     => File["${path}/${file}_2of2.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
         } else {
           exec { "extract ${path}/${file}_1of2.zip":
             command     => "unzip -o ${mountPoint}/${file}_1of2.zip -d ${path}/${file}",
             timeout     => 0,
             require     => Oradb::Utils::Structure["oracle structure ${version}"],
+            logoutput   => false,
           }
           exec { "extract ${path}/${file}_2of2.zip":
             command     => "unzip -o ${mountPoint}/${file}_2of2.zip -d ${path}/${file}",
             require     => Exec["extract ${path}/${file}_1of2.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
 
         }
@@ -195,6 +203,7 @@ define oradb::installdb( $version                 = undef,
             command     => "unzip -o ${path}/${file}_1of7.zip -d ${path}/${file}",
             require     => File["${path}/${file}_1of7.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
           # db file 2 installer zip
           file { "${path}/${file}_2of7.zip":
@@ -205,6 +214,7 @@ define oradb::installdb( $version                 = undef,
             command     => "unzip -o ${path}/${file}_2of7.zip -d ${path}/${file}",
             require     => File["${path}/${file}_2of7.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
           # db file 3 installer zip
           file { "${path}/${file}_3of7.zip":
@@ -215,6 +225,7 @@ define oradb::installdb( $version                 = undef,
             command     => "unzip -o ${path}/${file}_3of7.zip -d ${path}/${file}",
             require     => File["${path}/${file}_3of7.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
           # db file 4 installer zip
           file { "${path}/${file}_4of7.zip":
@@ -225,6 +236,7 @@ define oradb::installdb( $version                 = undef,
             command     => "unzip -o ${path}/${file}_4of7.zip -d ${path}/${file}",
             require     => File["${path}/${file}_4of7.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
           # db file 5 installer zip
           file { "${path}/${file}_5of7.zip":
@@ -235,6 +247,7 @@ define oradb::installdb( $version                 = undef,
             command     => "unzip -o ${path}/${file}_5of7.zip -d ${path}/${file}",
             require     => File["${path}/${file}_5of7.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
           # db file 6 installer zip
           file { "${path}/${file}_6of7.zip":
@@ -245,6 +258,7 @@ define oradb::installdb( $version                 = undef,
             command     => "unzip -o ${path}/${file}_6of7.zip -d ${path}/${file}",
             require     => File["${path}/${file}_6of7.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
           # db file 7 installer zip
           file { "${path}/${file}_7of7.zip":
@@ -255,42 +269,50 @@ define oradb::installdb( $version                 = undef,
             command     => "unzip -o ${path}/${file}_7of7.zip -d ${path}/${file}",
             require     => File["${path}/${file}_7of7.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
         } else {
           exec { "extract ${path}/${file}_1of7.zip":
             command     => "unzip -o ${mountPoint}/${file}_1of7.zip -d ${path}/${file}",
             timeout     => 0,
             require     => Oradb::Utils::Structure["oracle structure ${version}"],
+            logoutput   => false,
           }
           exec { "extract ${path}/${file}_2of7.zip":
             command     => "unzip -o ${mountPoint}/${file}_2of7.zip -d ${path}/${file}",
             require     => Exec["extract ${path}/${file}_1of7.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
           exec { "extract ${path}/${file}_3of7.zip":
             command     => "unzip -o ${mountPoint}/${file}_3of7.zip -d ${path}/${file}",
             require     => Exec["extract ${path}/${file}_2of7.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
           exec { "extract ${path}/${file}_4of7.zip":
             command     => "unzip -o ${mountPoint}/${file}_4of7.zip -d ${path}/${file}",
             require     => Exec["extract ${path}/${file}_3of7.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
           exec { "extract ${path}/${file}_5of7.zip":
             command     => "unzip -o ${mountPoint}/${file}_5of7.zip -d ${path}/${file}",
             require     => Exec["extract ${path}/${file}_4of7.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
           exec { "extract ${path}/${file}_6of7.zip":
             command     => "unzip -o ${mountPoint}/${file}_6of7.zip -d ${path}/${file}",
             require     => Exec["extract ${path}/${file}_5of7.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
           exec { "extract ${path}/${file}_7of7.zip":
             command     => "unzip -o ${mountPoint}/${file}_7of7.zip -d ${path}/${file}",
             require     => Exec["extract ${path}/${file}_6of7.zip"],
             timeout     => 0,
+            logoutput   => false,
           }
 
         }

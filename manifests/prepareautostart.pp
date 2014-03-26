@@ -8,9 +8,12 @@ class oradb::prepareautostart
   case $::kernel {
     Linux: {
       $execPath    = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
-      Exec { path  => $execPath,
+
+      Exec { 
+        path       => $execPath,
         logoutput  => true,
       }
+
     }
     default: {
       fail("Unrecognized operating system")

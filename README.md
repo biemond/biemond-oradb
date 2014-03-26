@@ -24,6 +24,7 @@ Should work for Puppet 2.7 & 3.0
 Version updates
 ---------------
 
+- 1.0.1 autostart multiple databases, small fixes
 - 1.0.0 oracle module add-on for user,role and tablespace creation
 - 0.9.9 emConfiguration parameter for Database creation
 - 0.9.7 Oracle database 11.2.0.1, 12.1.0.1 client support, refactored installdb,net,goldengate

@@ -67,20 +67,22 @@ define oradb::database( $oracleBase               = undef,
       Linux,SunOS: {
         $execPath    = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
         $path        = $downloadDir
-        Exec { path  => $execPath,
-          user       => $user,
-          group      => $group,
-          environment => [
-              "USER=${user}",
-          ],
-          logoutput  => true,
+
+        Exec { 
+          path        => $execPath,
+          user        => $user,
+          group       => $group,
+          environment => ["USER=${user}",],
+          logoutput   => true,
         }
+
         File {
           ensure     => present,
           mode       => 0775,
           owner      => $user,
           group      => $group,
         }
+
       }
       default: {
         fail("Unrecognized operating system")
