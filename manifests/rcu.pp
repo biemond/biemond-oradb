@@ -90,8 +90,8 @@ define oradb::rcu( $rcuFile                 = undef,
   if ! defined(File["${downloadDir}/rcu_${version}"]) {
     # check rcu install folder
     file { "${downloadDir}/rcu_${version}":
-      path                => "${downloadDir}/rcu_${version}",
       ensure              => directory,
+      path                => "${downloadDir}/rcu_${version}",
       recurse             => false,
       replace             => false,
     }
@@ -145,8 +145,8 @@ define oradb::rcu( $rcuFile                 = undef,
   if ! defined(File["${downloadDir}/rcu_${version}/rcuHome/rcu/log"]) {
     # check rcu log folder
     file { "${downloadDir}/rcu_${version}/rcuHome/rcu/log":
-      path                => "${downloadDir}/rcu_${version}/rcuHome/rcu/log",
       ensure              => directory,
+      path                => "${downloadDir}/rcu_${version}/rcuHome/rcu/log",
       recurse             => false,
       replace             => false,
       require             => Exec ["extract ${rcuFile}"],

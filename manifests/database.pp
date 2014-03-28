@@ -111,14 +111,14 @@ define oradb::database( $oracleBase               = undef,
 
     if $action == 'create' {
       exec { "install oracle database ${title}":
-        command      => "dbca -silent -responseFile $filename",
+        command      => "dbca -silent -responseFile ${filename}",
         require      => File[$filename],
         creates      => "${oracleBase}/admin/${dbName}",
         timeout      => 0,
       }
     } elsif $action == 'delete' {
       exec { "delete oracle database ${title}":
-        command      => "dbca -silent -responseFile $filename",
+        command      => "dbca -silent -responseFile ${filename}",
         require      => File[$filename],
         onlyif       => "ls ${oracleBase}/admin/${dbName}",
         timeout      => 0,

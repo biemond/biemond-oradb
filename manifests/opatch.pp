@@ -67,16 +67,16 @@ define oradb::opatch( $oracleProductHome       = undef,
     if $puppetDownloadMntPoint == undef {
       $mountPoint    = "puppet:///modules/oradb/"
     } else {
-      $mountPoint    =	$puppetDownloadMntPoint
+      $mountPoint    =  $puppetDownloadMntPoint
     }
 
     if $remoteFile == true {
-	    # the patch used by the opatch
-	    if ! defined(File["${path}/${patchFile}"]) {
-	      file { "${path}/${patchFile}":
-	        source       => "${mountPoint}/${patchFile}",
-	      }
-	    }
+      # the patch used by the opatch
+      if ! defined(File["${path}/${patchFile}"]) {
+        file { "${path}/${patchFile}":
+          source       => "${mountPoint}/${patchFile}",
+        }
+      }
     }
 
     # opatch apply -silent -oh /oracle/product/11.2/db /install/14389126
@@ -85,11 +85,11 @@ define oradb::opatch( $oracleProductHome       = undef,
     case $::kernel {
       Linux, SunOS: {
         if $remoteFile == true {
-	        exec { "extract opatch ${patchFile} ${title}":
-	          command    => "unzip -n ${path}/${patchFile} -d ${path}",
-	          require    => File ["${path}/${patchFile}"],
-	          creates    => "${path}/${patchId}",
-	        }
+          exec { "extract opatch ${patchFile} ${title}":
+            command    => "unzip -n ${path}/${patchFile} -d ${path}",
+            require    => File ["${path}/${patchFile}"],
+            creates    => "${path}/${patchId}",
+          }
         } else {
           exec { "extract opatch ${patchFile} ${title}":
             command    => "unzip -n ${mountPoint}/${patchFile} -d ${path}",

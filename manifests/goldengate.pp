@@ -1,3 +1,6 @@
+#
+#
+#
 define oradb::goldengate( $version                 = '12.1.2',
                           $file                    = undef,
                           $tarFile                 = undef,     # only for < 12.1.2
@@ -105,7 +108,7 @@ define oradb::goldengate( $version                 = '12.1.2',
         ensure        => directory,
         recurse       => false,
         replace       => false,
-        mode          => 0775,
+        mode          => '0775',
         owner         => $user,
         group         => $group,
       }

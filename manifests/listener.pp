@@ -19,7 +19,7 @@ define oradb::listener( $oracleBase  = undef,
 )
 
 {
-  $execPath        = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${oracleHome}/bin'
+  $execPath        = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${oracleHome}/bin"
 
   if $action == 'start' {
     exec { "listener start ${title}":

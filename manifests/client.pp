@@ -55,10 +55,10 @@ define oradb::client(    $version                 = undef,
     # db file installer zip
     if $remoteFile == true {
       file { "${downloadDir}/${file}":
+        ensure      => present,
         source      => "${mountPoint}/${file}",
         require     => Oradb::Utils::Structure["oracle structure ${version}"],
-        ensure      => present,
-        mode        => 0775,
+        mode        => '0775',
         owner       => $user,
         group       => $group,
       }
@@ -95,7 +95,7 @@ define oradb::client(    $version                 = undef,
         ensure      => present,
         content     => template("oradb/db_client_${version}.rsp.erb"),
         require     => Oradb::Utils::Orainst["oracle orainst ${version}"],
-        mode        => 0775,
+        mode        => '0775',
         owner       => $user,
         group       => $group,
       }
@@ -129,7 +129,7 @@ define oradb::client(    $version                 = undef,
       ensure       => present,
       content      => template("oradb/netca_client_${version}.rsp.erb"),
       require      => Exec["run root.sh script ${title}"],
-      mode         => 0775,
+      mode         => '0775',
       owner        => $user,
       group        => $group,
     }
@@ -150,7 +150,7 @@ define oradb::client(    $version                 = undef,
       file { "${userBaseDir}/${user}/.bash_profile":
         ensure        => present,
         content       => template("oradb/bash_profile.erb"),
-        mode          => 0775,
+        mode          => '0775',
         owner         => $user,
         group         => $group,
       }

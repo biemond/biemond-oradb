@@ -52,9 +52,9 @@ define oradb::opatchupgrade( $oracleHome              = undef,
   # check install folder
   if ! defined(File[$downloadDir]) {
     file { $downloadDir :
-      mode           => 0777,
-      path           => $downloadDir,
       ensure         => directory,
+      mode           => '0777',
+      path           => $downloadDir,
     }
   }
 
@@ -78,11 +78,11 @@ define oradb::opatchupgrade( $oracleHome              = undef,
   if ( $continue ) {
     if ! defined(File["${downloadDir}/${patchFile}"]) {
       file {"${downloadDir}/${patchFile}":
-        path         => "${downloadDir}/${patchFile}",
         ensure       => present,
+        path         => "${downloadDir}/${patchFile}",
         source       => "${mountDir}/${patchFile}",
         require      => File[$downloadDir],
-        mode         => 0777,
+        mode         => '0777',
       }
     }
 
@@ -100,7 +100,7 @@ define oradb::opatchupgrade( $oracleHome              = undef,
         }
         if $csiNumber != undef and supportId != undef {
           exec { "exec emocmrsp ${opversion}":
-            cwd      => "${patchDir}",
+            cwd      => $patchDir,
             command  => "${patchDir}/ocm/bin/emocmrsp -repeater NONE ${csiNumber} ${supportId}",
             require  => Exec["extract opatch ${patchFile}"],
           }

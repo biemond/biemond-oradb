@@ -68,50 +68,50 @@ define oradb::utils::structure (
 
     # also set permissions on downloadDir
     if !defined(File[$download_dir]) {
-	    # check oracle install folder
-	    file { $download_dir:
-	      ensure  => directory,
-	      recurse => false,
-	      replace => false,
-	      mode    => 0775,
-	      owner   => $os_user,
-	      group   => $os_group,
-	      require => [Exec["create ${download_dir} home directory"],
-	                  User[$os_user],
-	                 ],
-	    }
-	  }
-	
-	  # also set permissions on oracleHome
-	  if !defined(File[$oracle_base_home_dir]) {
-	    file { $oracle_base_home_dir:
-	      ensure  => directory,
-	      recurse => false,
-	      replace => false,
-	      mode    => 0775,
-	      owner   => $os_user,
-	      group   => $os_group,
-	      require => [Exec["create ${oracle_base_home_dir} directory"],
-	                  User[$os_user],
+      # check oracle install folder
+      file { $download_dir:
+        ensure  => directory,
+        recurse => false,
+        replace => false,
+        mode    => '0775',
+        owner   => $os_user,
+        group   => $os_group,
+        require => [Exec["create ${download_dir} home directory"],
+                    User[$os_user],
                    ],
-	    }
-	  }
-	
-	  # also set permissions on oraInventory
-	  if !defined(File[$ora_inventory_dir]) {
-	    file { $ora_inventory_dir:
-	      ensure  => directory,
-	      recurse => false,
-	      replace => false,
-	      mode    => 0775,
-	      owner   => $os_user,
-	      group   => $os_group,
-	      require => [Exec["create ${oracle_base_home_dir} directory"],
-	                  File[$oracle_base_home_dir],
-	                  User[$os_user],
-	                 ],
-	    }
-	  }
+      }
+    }
+  
+    # also set permissions on oracleHome
+    if !defined(File[$oracle_base_home_dir]) {
+      file { $oracle_base_home_dir:
+        ensure  => directory,
+        recurse => false,
+        replace => false,
+        mode    => '0775',
+        owner   => $os_user,
+        group   => $os_group,
+        require => [Exec["create ${oracle_base_home_dir} directory"],
+                    User[$os_user],
+                   ],
+      }
+    }
+  
+    # also set permissions on oraInventory
+    if !defined(File[$ora_inventory_dir]) {
+      file { $ora_inventory_dir:
+        ensure  => directory,
+        recurse => false,
+        replace => false,
+        mode    => '0775',
+        owner   => $os_user,
+        group   => $os_group,
+        require => [Exec["create ${oracle_base_home_dir} directory"],
+                    File[$oracle_base_home_dir],
+                    User[$os_user],
+                   ],
+      }
+    }
   
   } else {
     # also set permissions on downloadDir
@@ -121,7 +121,7 @@ define oradb::utils::structure (
         ensure  => directory,
         recurse => false,
         replace => false,
-        mode    => 0775,
+        mode    => '0775',
         owner   => $os_user,
         group   => $os_group,
         require => [Exec["create ${download_dir} home directory"],
@@ -135,7 +135,7 @@ define oradb::utils::structure (
         ensure  => directory,
         recurse => false,
         replace => false,
-        mode    => 0775,
+        mode    => '0775',
         owner   => $os_user,
         group   => $os_group,
         require => [Exec["create ${oracle_base_home_dir} directory"],
@@ -149,7 +149,7 @@ define oradb::utils::structure (
         ensure  => directory,
         recurse => false,
         replace => false,
-        mode    => 0775,
+        mode    => '0775',
         owner   => $os_user,
         group   => $os_group,
         require => [Exec["create ${oracle_base_home_dir} directory"],
