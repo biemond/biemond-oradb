@@ -40,7 +40,7 @@ define oradb::database( $oracleBase               = undef,
                         $downloadDir              = '/install',
                         $action                   = 'create',
                         $dbName                   = 'orcl',
-                        $dbDomain                 = 'oracle.com',
+                        $dbDomain                 = undef,
                         $sysPassword              = 'Welcome01',
                         $systemPassword           = 'Welcome01',
                         $dataFileDestination      = undef,
@@ -101,7 +101,12 @@ define oradb::database( $oracleBase               = undef,
       fail("Unrecognized database action")
     }
 
-    $globalDbName    = "${dbName}.${dbDomain}"
+    if $dbDomain {
+        $globalDbName = "${dbName}.${dbDomain}"
+    } else {
+        $globalDbName = $dbName
+    }
+
     if ! defined(File[$filename]) {
       file { $filename:
         ensure       => present,
