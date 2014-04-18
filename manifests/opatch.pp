@@ -72,7 +72,7 @@ define oradb::opatch( $oracleProductHome       = undef,
     # the patch used by the opatch
     if ! defined(File["${path}/${patchFile}"]) {
       file { "${path}/${patchFile}":
-        source       => "${mountPoint}/${patchFile}",
+        source => "${mountPoint}/${patchFile}",
       }
     }
   }

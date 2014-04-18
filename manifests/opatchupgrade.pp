@@ -49,15 +49,6 @@ define oradb::opatchupgrade( $oracleHome              = undef,
     }
   }
 
-  # check install folder
-  if ! defined(File[$downloadDir]) {
-    file { $downloadDir :
-      ensure         => directory,
-      mode           => '0777',
-      path           => $downloadDir,
-    }
-  }
-
   # if a mount was not specified then get the install media from the puppet master
   if $puppetDownloadMntPoint == undef {
     $mountDir        = "puppet:///modules/oradb"
