@@ -24,6 +24,7 @@ Should work for Puppet 2.7 & 3.0
 Version updates
 ---------------
 
+- 1.0.2 opatch native types
 - 1.0.1 autostart multiple databases, small fixes
 - 1.0.0 oracle module add-on for user,role and tablespace creation
 - 0.9.9 emConfiguration parameter for Database creation
@@ -257,7 +258,7 @@ other
         patchFile              => 'p6880880_112000_Linux-x86-64.zip',
         csiNumber              => '11111',
         supportId              => 'biemond@gmail.com',
-        opversion              => '11.2.0.3.4',
+        opversion              => '11.2.0.3.6',
         user                   => 'oracle',
         group                  => 'dba',
         downloadDir            => '/install',
