@@ -93,7 +93,7 @@ define oradb::opatch( $oracleProductHome       = undef,
       }
       if $ocmrf == true {
 
-        opatch{ $patchId:
+        db_opatch{ $patchId:
           ensure                  => present,
           os_user                 => $user,
           oracle_product_home_dir => $oracleProductHome,
@@ -105,7 +105,7 @@ define oradb::opatch( $oracleProductHome       = undef,
 
       } else {
 
-        opatch{ $patchId:
+        db_opatch{ $patchId:
           ensure                  => present,
           os_user                 => $user,
           oracle_product_home_dir => $oracleProductHome,

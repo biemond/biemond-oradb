@@ -1,5 +1,5 @@
 module Puppet
-  newtype(:opatch) do
+  newtype(:db_opatch) do
     desc "This is the Oracle Patch process called OPatch"
 
     newproperty(:ensure) do

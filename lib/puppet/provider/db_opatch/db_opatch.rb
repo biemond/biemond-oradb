@@ -1,6 +1,6 @@
 require 'rexml/document' 
 
-Puppet::Type.type(:opatch).provide(:opatch) do
+Puppet::Type.type(:db_opatch).provide(:db_opatch) do
 
   def self.instances
     []
