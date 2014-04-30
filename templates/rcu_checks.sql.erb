@@ -1,7 +1,0 @@
-set term off echo off pages 0 colsep '|' trimspool on
-spool /tmp/check_rcu_<%= @schemaPrefix %>.txt
-select distinct 'found' from system.schema_version_registry where mrc_name ='<%= @schemaPrefix %>';
-grant execute on sys.dbms_job to PUBLIC;
-grant execute on sys.dbms_reputil to PUBLIC;
-spool off
-exit

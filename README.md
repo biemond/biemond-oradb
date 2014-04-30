@@ -24,7 +24,8 @@ Should work for Puppet 2.7 & 3.0
 Version updates
 ---------------
 
-- 1.0.2 opatch native types
+- 1.0.4 db_rcu native type used in rcu.pp
+- 1.0.2 db_opatch native type used in opatch.pp
 - 1.0.1 autostart multiple databases, small fixes
 - 1.0.0 oracle module add-on for user,role and tablespace creation
 - 0.9.9 emConfiguration parameter for Database creation

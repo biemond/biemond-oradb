@@ -41,24 +41,70 @@ define oradb::rcu( $rcuFile                 = undef,
 {
   case $::kernel {
     Linux: {
-
-      $execPath           = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
-
-      Exec { path         => $execPath,
-        user              => $user,
-        group             => $group,
-        logoutput         => $logoutput,
-      }
-
-      File {
-        ensure            => present,
-        mode              => 0775,
-        owner             => $user,
-        group             => $group,
-      }
+      $execPath = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
     }
     default: {
       fail("Unrecognized or not supported operating system")
+    }
+  }
+
+  if $puppetDownloadMntPoint == undef {
+    $mountPoint = "puppet:///modules/oradb/"
+  } else {
+    $mountPoint = $puppetDownloadMntPoint
+  }
+
+  # create the rcu folder
+  if ! defined(File["${downloadDir}/rcu_${version}"]) {
+    # check rcu install folder
+    file { "${downloadDir}/rcu_${version}":
+      ensure  => directory,
+      path    => "${downloadDir}/rcu_${version}",
+      recurse => false,
+      replace => false,
+      mode    => '0775',
+      owner   => $user,
+      group   => $group,
+    }
+  }
+
+  # unzip rcu software
+  if $remoteFile == true {
+    if ! defined(File["${downloadDir}/${rcuFile}"]) {
+      file { "${downloadDir}/${rcuFile}":
+        ensure => present,
+        mode   => '0775',
+        owner  => $user,
+        group  => $group,
+        source => "${mountPoint}/${rcuFile}",
+        before => Exec ["extract ${rcuFile}"],
+      }
+    }
+    $source = $downloadDir
+  } else {
+    $source = $mountPoint
+  }
+
+  exec { "extract ${rcuFile}":
+    command    => "unzip ${source}/${rcuFile} -d ${downloadDir}/rcu_${version}",
+    creates    => "${downloadDir}/rcu_${version}/rcuHome",
+    path       => $execPath,
+    user       => $user,
+    group      => $group,
+    logoutput  => false,
+  }
+
+  if ! defined(File["${downloadDir}/rcu_${version}/rcuHome/rcu/log"]) {
+    # check rcu log folder
+    file { "${downloadDir}/rcu_${version}/rcuHome/rcu/log":
+      ensure  => directory,
+      path    => "${downloadDir}/rcu_${version}/rcuHome/rcu/log",
+      recurse => false,
+      replace => false,
+      require => Exec ["extract ${rcuFile}"],
+      mode    => '0775',
+      owner   => $user,
+      group   => $group,
     }
   }
 
@@ -80,83 +126,13 @@ define oradb::rcu( $rcuFile                 = undef,
     fail("Unrecognized FMW product")
   }
 
-  if $puppetDownloadMntPoint == undef {
-    $mountPoint           = "puppet:///modules/oradb/"
-  } else {
-    $mountPoint           = $puppetDownloadMntPoint
-  }
-
-  # create the rcu folder
-  if ! defined(File["${downloadDir}/rcu_${version}"]) {
-    # check rcu install folder
-    file { "${downloadDir}/rcu_${version}":
-      ensure              => directory,
-      path                => "${downloadDir}/rcu_${version}",
-      recurse             => false,
-      replace             => false,
-    }
-  }
-
-  # only when we have an Oracle home
-  if $oracleHome != undef {
-    # put check_rcu.sql
-    file { "${downloadDir}/rcu_${version}/rcu_checks_${title}.sql":
-      ensure                => present,
-      content               => template("oradb/rcu_checks.sql.erb"),
-      require               => File["${downloadDir}/rcu_${version}"],
-    }
-
-    # run check.sql
-    exec { "run sqlplus to check for repos ${title}":
-      command               => "sqlplus \"sys/${sysPassword}@//${dbServer}/${dbService} as sysdba\" @${downloadDir}/rcu_${version}/rcu_checks_${title}.sql",
-      require               => File["${downloadDir}/rcu_${version}/rcu_checks_${title}.sql"],
-      environment           => ["ORACLE_HOME=${oracleHome}",
-                                "LD_LIBRARY_PATH=${oracleHome}/lib"],
-    }
-  }
-
-  # put rcu software
-  if $remoteFile == true {
-    if ! defined(File["${downloadDir}/${rcuFile}"]) {
-      file { "${downloadDir}/${rcuFile}":
-        source => "${mountPoint}/${rcuFile}",
-      }
-    }
-  }
-
-
-  # unzip rcu software
-  if $remoteFile == true {
-    if ! defined(Exec["extract ${rcuFile}"]) {
-      exec { "extract ${rcuFile}":
-        command             => "unzip ${downloadDir}/${rcuFile} -d ${downloadDir}/rcu_${version}",
-        require             => File ["${downloadDir}/${rcuFile}"],
-        creates             => "${downloadDir}/rcu_${version}/rcuHome",
-        logoutput           => false,
-      }
-    }
-  } else {
-      exec { "extract ${rcuFile}":
-        command             => "unzip ${mountPoint}/${rcuFile} -d ${downloadDir}/rcu_${version}",
-        creates             => "${downloadDir}/rcu_${version}/rcuHome",
-        logoutput           => false,
-      }
-  }
-  if ! defined(File["${downloadDir}/rcu_${version}/rcuHome/rcu/log"]) {
-    # check rcu log folder
-    file { "${downloadDir}/rcu_${version}/rcuHome/rcu/log":
-      ensure              => directory,
-      path                => "${downloadDir}/rcu_${version}/rcuHome/rcu/log",
-      recurse             => false,
-      replace             => false,
-      require             => Exec ["extract ${rcuFile}"],
-    }
-  }
-
   file { "${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt":
-    ensure                => present,
-    require               => Exec ["extract ${rcuFile}"],
-    content               => template("oradb/rcu_passwords.txt.erb"),
+    ensure  => present,
+    require => Exec ["extract ${rcuFile}"],
+    content => template("oradb/rcu_passwords.txt.erb"),
+    mode    => '0775',
+    owner   => $user,
+    group   => $group,
   }
 
   $preCommand      = "${downloadDir}/rcu_${version}/rcuHome/bin/rcu -silent"
@@ -171,55 +147,23 @@ define oradb::rcu( $rcuFile                 = undef,
   }
   $deleteCommand  = "${preCommand} -dropRepository ${postCommand} ${passwordCommand}"
 
-  # do a fast check if it already exists or is removed
-  if $oracleHome != undef {
-    if $action == 'create' {
-      exec { "install rcu repos ${title}":
-        command     => $createCommand,
-        require     => [Exec["extract ${rcuFile}"],
-                        Exec["run sqlplus to check for repos ${title}"],
-                        File["${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"]],
-        unless      => "/bin/grep -c found /tmp/check_rcu_${schemaPrefix}.txt",
-        environment => ["SQLPLUS_HOME=${oracleHome}",],
-        timeout     => 0,
-      }
-      exec { "install rcu repos ${title} 2":
-        command     => $createCommand,
-        require     => [Exec["extract ${rcuFile}"],
-                        Exec["run sqlplus to check for repos ${title}"],
-                        File["${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"]],
-        environment => ["SQLPLUS_HOME=${oracleHome}",],
-        onlyif      => "/bin/grep -c ORA-00942 /tmp/check_rcu_${schemaPrefix}.txt",
-        timeout     => 0,
-      }
-    } elsif $action == 'delete' {
-      exec { "delete rcu repos ${title}":
-        command     => $deleteCommand,
-        require     => [Exec["extract ${rcuFile}"],
-                        Exec["run sqlplus to check for repos ${title}"],
-                        File["${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"]],
-        environment => ["SQLPLUS_HOME=${oracleHome}",],
-        onlyif      => "/bin/grep -c found /tmp/check_rcu_${schemaPrefix}.txt",
-        timeout     => 0,
-      }
-    }
-  } else {
-    # no oracle home, just create or remove it
-    if $action == 'create' {
-      exec { "install rcu repos ${title}":
-        command     => $createCommand,
-        require     => [Exec["extract ${rcuFile}"],
-                        File["${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"]],
-        timeout     => 0,
-      }
-    } elsif $action == 'delete' {
-      exec { "delete rcu repos ${title}":
-        command     => $deleteCommand,
-        require     => [Exec["extract ${rcuFile}"],
-                        File["${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"]],
-        timeout     => 0,
-      }
-    }
+  if $action == 'create' {
+    $statement = $createCommand
+  } 
+  elsif $action == 'delete' {
+    $statement = $deleteCommand
+  } 
+
+  db_rcu{ $schemaPrefix:
+    ensure                  => $action,
+    statement               => $statement,  
+    os_user                 => $user,
+    oracle_home             => $oracleHome,
+    sys_password            => $sysPassword,
+    db_server               => $dbServer,
+    db_service              => $dbService,
+    require                 => [Exec["extract ${rcuFile}"],
+                                File["${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"],],
   }
 
 }
