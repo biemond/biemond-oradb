@@ -39,7 +39,7 @@ ORACLE_HOSTNAME=
 #-------------------------------------------------------------------------------
 # Specify the Unix group to be set for the inventory directory.  
 #-------------------------------------------------------------------------------
-UNIX_GROUP_NAME=<%= @group %>
+UNIX_GROUP_NAME=<%= @group_install %>
 
 #-------------------------------------------------------------------------------
 # Specify the location which holds the inventory files.
@@ -128,7 +128,7 @@ oracle.install.db.DBA_GROUP=<%= @group %>
 # The OPER_GROUP is the OS group which is to be granted OSOPER privileges.
 # The value to be specified for OSOPER group is optional.
 #------------------------------------------------------------------------------
-oracle.install.db.OPER_GROUP=<%= @group %>
+oracle.install.db.OPER_GROUP=<%= @group_oper %>
 
 #------------------------------------------------------------------------------
 # The BACKUPDBA_GROUP is the OS group which is to be granted OSBACKUPDBA privileges.

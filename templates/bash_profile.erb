@@ -1,3 +1,7 @@
+
+
+ORACLE_TERM=xterm; export ORACLE_TERM
+
 LD_LIBRARY_PATH=<%= @oracleHome %>/lib
 ORACLE_BASE=<%= @oracleBase %>
 ORACLE_HOME=<%= @oracleHome %>
@@ -9,3 +13,7 @@ export ORACLE_BASE
 export ORACLE_HOME
 export SQLPLUS_HOME
 export PATH
+
+export TEMP=/tmp 
+export TMPDIR=/tmp
+umask 022
