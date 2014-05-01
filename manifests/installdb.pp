@@ -6,21 +6,23 @@
 # SEONE  : Standard Edition One
 #
 #
-define oradb::installdb( $version                 = undef,
-                         $file                    = undef,
-                         $databaseType            = 'SE',
-                         $oracleBase              = undef,
-                         $oracleHome              = undef,
-                         $createUser              = true,
-                         $user                    = 'oracle',
-                         $userBaseDir             = '/home',
-                         $group                   = 'dba',
-                         $group_install           = 'oinstall',
-                         $group_oper              = 'oper',
-                         $downloadDir             = '/install',
-                         $zipExtract              = true,
-                         $puppetDownloadMntPoint  = undef,
-                         $remoteFile              = true,
+define oradb::installdb( 
+  $version                 = undef,
+  $file                    = undef,
+  $databaseType            = 'SE',
+  $oraInventoryDir         = undef,   
+  $oracleBase              = undef,
+  $oracleHome              = undef,
+  $createUser              = true,
+  $user                    = 'oracle',
+  $userBaseDir             = '/home',
+  $group                   = 'dba',
+  $group_install           = 'oinstall',
+  $group_oper              = 'oper',
+  $downloadDir             = '/install',
+  $zipExtract              = true,
+  $puppetDownloadMntPoint  = undef,
+  $remoteFile              = true,
 )
 {
   # check if the oracle software already exists
@@ -40,12 +42,17 @@ define oradb::installdb( $version                 = undef,
   if ( $continue ) {
 
     $execPath     = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
-    $oraInventory = "${oracleBase}/oraInventory"
 
     if $puppetDownloadMntPoint == undef {
       $mountPoint     = "puppet:///modules/oradb/"
     } else {
       $mountPoint     = $puppetDownloadMntPoint
+    }
+
+    if $oraInventoryDir == undef {
+      $oraInventory = "${oracleBase}/oraInventory"
+    } else {
+      $oraInventory = "${oraInventoryDir}/oraInventory"
     }
 
     oradb::utils::structure{"oracle structure ${version}":
