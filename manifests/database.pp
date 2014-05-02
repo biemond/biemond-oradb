@@ -53,6 +53,11 @@ define oradb::database( $oracleBase               = undef,
                         $memoryTotal              = "800",
                         $databaseType             = "MULTIPURPOSE",
                         $emConfiguration          = "NONE",  # CENTRAL|LOCAL|ALL|NONE
+                        $storageType              = "FS", #FS|CFS|ASM
+                        $asmSnmpPassword          = 'Welcome01',
+                        $asmDiskgroup             = 'DATA',
+                        $recoveryDiskgroup        = undef,
+
 )
 
 {

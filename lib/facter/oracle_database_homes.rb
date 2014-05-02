@@ -35,14 +35,14 @@ end
 
 def get_opatch_version(name)
 
-    opatchOut = Facter::Util::Resolution.exec(get_suCommand()+get_databaseUser()+" -c \""+name+"/OPatch/opatch version\"")
+    opatchOut = Facter::Util::Resolution.exec(name+"/OPatch/opatch version")
 
     if opatchOut.nil?
       opatchver = "Error;"
     else 
       opatchver = opatchOut.split(" ")[2]
     end
-
+    Puppet.debug "oradb opatch #{opatchver}" 
     return opatchver
 end
 

@@ -52,7 +52,7 @@ define oradb::utils::structure (
       # http://raftaman.net/?p=1311 for generating password
       user { $os_user :
         ensure      => present,
-        gid         => $os_group,
+        gid         => $os_group_install,
         groups      => $all_groups,
         shell       => '/bin/bash',
         password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
@@ -157,8 +157,7 @@ define oradb::utils::structure (
         mode    => '0775',
         owner   => $os_user,
         group   => $os_group_install,
-        require => [Exec["create ${oracle_base_home_dir} directory"],
-                   ],
+        require => Exec["create ${oracle_base_home_dir} directory"],
       }
     }
   

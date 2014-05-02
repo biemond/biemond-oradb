@@ -41,9 +41,9 @@ spool off
 exit 
 EOS
     
-    if FileTest.exists?("/tmp/check_rcu_#{prefix}2.txt")
-      File.delete("/tmp/check_rcu_DEV2.txt")
-    end
+    # if FileTest.exists?("/tmp/check_rcu_#{prefix}2.txt")
+    #   File.delete("/tmp/check_rcu_DEV2.txt")
+    # end
 
     tmpFile = Tempfile.new([ "rcuCheck", '.sql' ])
     tmpFile.write(sql)
@@ -53,17 +53,21 @@ EOS
     Puppet.debug "rcu for prefix #{prefix} execute SQL"
     output = `su - #{user} -c 'export ORACLE_HOME=#{oracle_home};LD_LIBRARY_PATH=#{oracle_home}/lib;#{oracle_home}/bin/sqlplus \"sys/#{sys_password}@//#{db_server}/#{db_service} as sysdba\" @#{tmpFile.path}'`
     raise ArgumentError, "Error executing puppet code, #{output}" if $? != 0
-
-    File.open("/tmp/check_rcu_#{prefix}2.txt") do | output|
-      output.each_line do |li|
-        unless li.nil?
-          Puppet.debug "line #{li}" 
-          if ( (li.include? "found") and !(li.include? "select" ))
-            Puppet.debug "found RCU #{prefix}"
-            return prefix
-          end
-        end 
+    
+    if FileTest.exists?("/tmp/check_rcu_#{prefix}2.txt") 
+      File.open("/tmp/check_rcu_#{prefix}2.txt") do | output|
+        output.each_line do |li|
+          unless li.nil?
+            Puppet.debug "line #{li}" 
+            if ( (li.include? "found") and !(li.include? "select" ))
+              Puppet.debug "found RCU #{prefix}"
+              return prefix
+            end
+          end 
+        end
       end
+    else 
+      return "NoOutput"  
     end
     return "NotFound"
   end

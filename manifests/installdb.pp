@@ -156,10 +156,20 @@ define oradb::installdb(
         returns     => [6,0],
         path        => $execPath,
         user        => $user,
-        group       => $group,
+        group       => $group_install,
         logoutput   => true,
         require     => [Oradb::Utils::Orainst["database orainst ${version}"],
                         File["${downloadDir}/db_install_${version}.rsp"]],
+      }
+
+      file { $oracleHome:
+        ensure  => directory,
+        recurse => false,
+        replace => false,
+        mode    => '0775',
+        owner   => $user,
+        group   => $group_install,
+        require => Exec["install oracle database ${title}"],
       }
     }
 

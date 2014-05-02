@@ -2,28 +2,28 @@
 #
 #
 define oradb::installasm(
-	$version                 = undef,
-	$file                    = undef,
-	$gridType                = 'HA_CONFIG',
-	$gridBase                = undef,
-	$gridHome                = undef,
-	$oraInventoryDir         = undef,   
-	$user                    = 'grid',
-	$userBaseDir             = '/home',
-	$group                   = 'asmdba',
-	$group_install           = 'oinstall',
-	$group_oper              = 'asmoper',
-	$group_asm               = 'asmadmin',
-	$sys_asm_password        = 'Welcome01',
-	$asm_monitor_password    = 'Welcome01',
-	$asm_diskgroup           = 'DATA',
-	$disk_discovery_string   = undef,
-	$disk_redundancy         = 'NORMAL',
-	$disks                   = undef,
-	$downloadDir             = '/install',
-	$zipExtract              = true,
-	$puppetDownloadMntPoint  = undef,
-	$remoteFile              = true,
+  $version                 = undef,
+  $file                    = undef,
+  $gridType                = 'HA_CONFIG',
+  $gridBase                = undef,
+  $gridHome                = undef,
+  $oraInventoryDir         = undef,   
+  $user                    = 'grid',
+  $userBaseDir             = '/home',
+  $group                   = 'asmdba',
+  $group_install           = 'oinstall',
+  $group_oper              = 'asmoper',
+  $group_asm               = 'asmadmin',
+  $sys_asm_password        = 'Welcome01',
+  $asm_monitor_password    = 'Welcome01',
+  $asm_diskgroup           = 'DATA',
+  $disk_discovery_string   = undef,
+  $disk_redundancy         = 'NORMAL',
+  $disks                   = undef,
+  $downloadDir             = '/install',
+  $zipExtract              = true,
+  $puppetDownloadMntPoint  = undef,
+  $remoteFile              = true,
 )
 {
   # check if the oracle software already exists
@@ -124,10 +124,20 @@ define oradb::installasm(
       returns     => [6,0],
       path        => $execPath,
       user        => $user,
-      group       => $group,
+      group       => $group_install,
       logoutput   => true,
       require     => [Oradb::Utils::Orainst["grid orainst ${version}"],
                       File["${downloadDir}/grid_install_${version}.rsp"]],
+    }
+
+    file { $gridHome:
+      ensure  => directory,
+      recurse => false,
+      replace => false,
+      mode    => '0775',
+      owner   => $user,
+      group   => $group_install,
+      require => Exec["install oracle grid ${title}"],
     }
 
     if ! defined(File["${userBaseDir}/${user}/.bash_profile"]) {
@@ -149,5 +159,29 @@ define oradb::installasm(
       logoutput => true,
       require   => Exec["install oracle grid ${title}"],
     }
+
+    file { "${downloadDir}/cfgrsp.properties":
+      ensure  => present,
+      content => template("oradb/grid_password.properties.erb"),
+      mode    => '0600',
+      owner   => $user,
+      group   => $group,
+      require => Exec["run root.sh grid script ${title}"],
+    }
+
+    exec { "run configToolAllCommands grid tool ${title}":
+      command   => "${gridHome}/cfgtoollogs/configToolAllCommands RESPONSE_FILE=${downloadDir}/cfgrsp.properties",
+      user      => $user,
+      group     => $group_install,
+      path      => $execPath,
+      provider  => 'shell',
+      cwd       => "${gridHome}/cfgtoollogs",
+      logoutput => true,
+      require   => [File["${downloadDir}/cfgrsp.properties"],
+                    Exec["run root.sh grid script ${title}"],
+                    Exec["install oracle grid ${title}"],
+                   ],
+    }
+
   }
 }

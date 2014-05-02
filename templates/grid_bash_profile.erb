@@ -8,6 +8,9 @@ ORACLE_HOME=<%= @gridHome %>
 SQLPLUS_HOME=<%= @gridHome %>
 PATH=/bin:/usr/local/bin:/usr/bin:/bin:<%= @gridHome %>/bin
 
+export ORACLE_SID=+ASM
+export ORACLE_UNQNAME=+ASM
+
 export LD_LIBRARY_PATH
 export ORACLE_BASE
 export ORACLE_HOME

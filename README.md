@@ -1,8 +1,5 @@
-Oracle Database Linux puppet module
-===================================
+#Oracle Database Linux puppet module
 [![Build Status](https://travis-ci.org/biemond/biemond-oradb.png)](https://travis-ci.org/biemond/biemond-oradb)
-
-
 
 created by Edwin Biemond
 [biemond.blogspot.com](http://biemond.blogspot.com)
@@ -21,9 +18,9 @@ Example of Opensource Puppet 3.4.3 Puppet master configuration in a vagrant box 
 
 Should work for Puppet 2.7 & 3.0
 
-Version updates
----------------
+##Version updates
 
+- 1.0.6 Grid install and ASM support
 - 1.0.5 refactored installdb and support for oinstall groups
 - 1.0.4 db_rcu native type used in rcu.pp
 - 1.0.2 db_opatch native type used in opatch.pp
@@ -33,9 +30,9 @@ Version updates
 - 0.9.7 Oracle database 11.2.0.1, 12.1.0.1 client support, refactored installdb,net,goldengate
 
 
-Oracle Database Features
----------------------------
+##Oracle Database Features
 
+- Oracle Grid 11.2.0.4 Linux / Solaris installation
 - Oracle Database 12.1.0.1 Linux / Solaris installation
 - Oracle Database 11.2.0.4 Linux / Solaris installation
 - Oracle Database 11.2.0.3 Linux / Solaris installation
@@ -43,6 +40,7 @@ Oracle Database Features
 - Oracle Database Client 12.1.0.1,11.2.0.4,11.2.0.1 Linux / Solaris installation
 - Oracle Database Net configuration
 - Oracle Database Listener
+- Oracle ASM
 - OPatch upgrade
 - Apply OPatch
 - Create database instances
@@ -60,8 +58,7 @@ Some manifests like installdb.pp, opatch.pp or rcusoa.pp supports an alternative
 When not provided it uses the files location of the oradb puppet module
 else you can use $puppetDownloadMntPoint => "/mnt" or "puppet:///modules/xxxx/"
 
-Oracle Big files and alternate download location
-------------------------------------------------
+##Oracle Big files and alternate download location
 Some manifests like oradb:installdb, opatch or rcu supports an alternative mountpoint for the big oracle setup/install files.  
 When not provided it uses the files folder located in the orawls puppet module  
 else you can use $source =>
@@ -72,7 +69,7 @@ else you can use $source =>
 
 when the files are also accesiable locally then you can also set $remote_file => false this will not move the files to the download folder, just extract or install 
 
-Files
+##Files
 -----
 - 11.2.0.1 Download oracle database linux software from http://otn.oracle.com
 - 11.2.0.3 Download oracle database linux software from http://support.oracle.com
@@ -134,8 +131,7 @@ important support node
 [ID 1441282.1] Requirements for Installing Oracle 11gR2 RDBMS on RHEL6 or OL6 64-bit (x86-64)
 
 
-Oracle Database Facter
--------------------
+##Oracle Database Facter
 Contains Oracle Facter which displays the following
 - Oracle Software
 - Opatch patches
@@ -146,15 +142,14 @@ Contains Oracle Facter which displays the following
     oradb_inst_patches_oracle_product_11.2_db Patches;14727310;
     oradb_inst_products /oracle/product/11.2/db;
 
-templates.pp
-------------
+##templates.pp
 
 The databaseType value should contain only one of these choices.
 - EE = Enterprise Edition
 - SE = Standard Edition
 - SEONE = Standard Edition One
 
-normal install
+## database install
 
     $puppetDownloadMntPoint = "puppet:///modules/oradb/"
     
@@ -389,7 +384,8 @@ other
       }
     }
 
-Oracle Database Client 12.1.0.1 and 11.2.0.1 
+
+## Oracle Database Client
 
      oradb::client{ '12.1.0.1_Linux-x86-64':
             version                => '12.1.0.1',
@@ -423,7 +419,115 @@ or
             logoutput              => true,
      }
 
+##Grid install with ASM 
 
+      $all_groups = ['oinstall','dba' ,'oper','asmdba','asmadmin','asmoper']
+
+      group { $all_groups :
+        ensure      => present,
+      }
+
+      user { 'oracle' :
+        ensure      => present,
+        uid         => 500,
+        gid         => 'oinstall',  
+        groups      => ['oinstall','dba','oper','asmdba'],
+        shell       => '/bin/bash',
+        password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
+        home        => "/home/oracle",
+        comment     => "This user oracle was created by Puppet",
+        require     => Group[$all_groups],
+        managehome  => true,
+      }
+
+      user { 'grid' :
+        ensure      => present,
+        uid         => 501,
+        gid         => 'oinstall',  
+        groups      => ['oinstall','dba','asmadmin','asmdba','asmoper'],
+        shell       => '/bin/bash',
+        password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
+        home        => "/home/grid",
+        comment     => "This user grid was created by Puppet",
+        require     => Group[$all_groups],
+        managehome  => true,
+      }
+
+      oradb::installasm{ '11.2_linux-x64':
+        version                => '11.2.0.4',
+        file                   => 'p13390677_112040_Linux-x86-64_3of7.zip',
+        gridType               => 'HA_CONFIG',
+        gridBase               => hiera('grid_base_dir'),
+        gridHome               => hiera('grid_home_dir'),
+        oraInventoryDir        => hiera('oraInventory_dir'),
+        userBaseDir            => '/home',
+        user                   => hiera('grid_os_user'),
+        group                  => 'asmdba',
+        group_install          => 'oinstall',
+        group_oper             => 'asmoper',
+        group_asm              => 'asmadmin',
+        sys_asm_password       => 'Welcome01',
+        asm_monitor_password   => 'Welcome01',
+        asm_diskgroup          => 'DATA',
+        disk_discovery_string  => "/nfs_client/asm*",
+        disks                  => "/nfs_client/asm_sda_nfs_b1,/nfs_client/asm_sda_nfs_b2",
+        # disk_discovery_string  => "ORCL:*",
+        # disks                  => "ORCL:DISK1,ORCL:DISK2",
+        disk_redundancy        => "EXTERNAL",
+        downloadDir            => hiera('oracle_download_dir'),
+        remoteFile             => false,
+        puppetDownloadMntPoint => hiera('oracle_source'),  
+      }
+
+      oradb::installdb{ '11.2_linux-x64':
+        version                => '11.2.0.4',
+        file                   => 'p13390677_112040_Linux-x86-64',
+        databaseType           => 'EE',
+        oraInventoryDir        => hiera('oraInventory_dir'),
+        oracleBase             => hiera('oracle_base_dir'),
+        oracleHome             => hiera('oracle_home_dir'),
+        userBaseDir            => '/home',
+        createUser             => false,
+        user                   => hiera('oracle_os_user'),
+        group                  => 'dba',
+        group_install          => 'oinstall',
+        group_oper             => 'oper',
+        downloadDir            => hiera('oracle_download_dir'),
+        remoteFile             => false,
+        puppetDownloadMntPoint => hiera('oracle_source'),
+        require                => Oradb::Installasm['11.2_linux-x64'],  
+      }
+
+      oradb::database{ 'oraDb': 
+        oracleBase              => hiera('oracle_base_dir'),
+        oracleHome              => hiera('oracle_home_dir'),
+        version                 => '11.2',
+        user                    => hiera('oracle_os_user'),
+        group                   => hiera('oracle_os_group'),
+        downloadDir             => hiera('oracle_download_dir'),
+        action                  => 'create',
+        dbName                  => hiera('oracle_database_name'),
+        dbDomain                => hiera('oracle_database_domain_name'),
+        sysPassword             => hiera('oracle_database_sys_password'),
+        systemPassword          => hiera('oracle_database_system_password'),
+        characterSet            => "AL32UTF8",
+        nationalCharacterSet    => "UTF8",
+        initParams              => "open_cursors=1000,processes=600,job_queue_processes=4",
+        sampleSchema            => 'FALSE',
+        memoryPercentage        => "40",
+        memoryTotal             => "800",
+        databaseType            => "MULTIPURPOSE",                         
+        storageType             => "ASM",
+        asmSnmpPassword         => 'Welcome01',
+        asmDiskgroup            => 'DATA',
+        recoveryDiskgroup       => undef,
+        recoveryAreaDestination => 'DATA',
+        require                 => Oradb::Installdb['11.2_linux-x64'],
+      }
+
+
+
+##Database configuration
 In combination with the oracle puppet module you can create a tablespace,role and oracle user   
 
     tablespace {'scott_ts':
@@ -456,7 +560,7 @@ In combination with the oracle puppet module you can create a tablespace,role an
     }
 
 
-Oracle GoldenGate 12.1.2 and 11.2.1 
+##Oracle GoldenGate 12.1.2 and 11.2.1 
 
 
       $groups = ['oinstall','dba']
@@ -550,7 +654,7 @@ Oracle GoldenGate 12.1.2 and 11.2.1
 
 
 
-Oracle SOA Suite Repository Creation Utility (RCU)  
+##Oracle SOA Suite Repository Creation Utility (RCU)  
 
 product =
 - soasuite
@@ -636,8 +740,7 @@ OIM, OAM repository, OIM needs an Oracle Enterprise Edition database
      }
 
 
-Linux kernel, ulimits and required packages
--------------------------------------------
+##Linux kernel, ulimits and required packages
 
 install the following module to set the database kernel parameters
 *puppet module install fiddyspence-sysctl*
@@ -704,8 +807,7 @@ install the following module to set the database user limits parameters
 
 
 
-Solaris 10 kernel, ulimits and required packages
-------------------------------------------------
+##Solaris 10 kernel, ulimits and required packages
 
     exec { "create /cdrom/unnamed_cdrom":
       command => "/usr/bin/mkdir -p /cdrom/unnamed_cdrom",

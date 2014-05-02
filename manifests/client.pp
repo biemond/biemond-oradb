@@ -108,7 +108,7 @@ define oradb::client(
       returns     => [6,0],
       path        => $execPath,
       user        => $user,
-      group       => $group,
+      group       => $group_install,
       logoutput   => $logoutput,
     }
 

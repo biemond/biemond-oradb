@@ -373,7 +373,7 @@ RECOVERYAREADESTINATION="<%= @recoveryAreaDestination %>"
 # Default value : FS
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-#STORAGETYPE=FS
+STORAGETYPE=<%= @storageType %>
 
 #-----------------------------------------------------------------------------
 # Name          : DISKGROUPNAME
@@ -382,7 +382,7 @@ RECOVERYAREADESTINATION="<%= @recoveryAreaDestination %>"
 # Default value : DATA
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-#DISKGROUPNAME=DATA
+DISKGROUPNAME=<%= @asmDiskgroup %>
 
 #-----------------------------------------------------------------------------
 # Name          : ASMSNMP_PASSWORD
@@ -391,7 +391,7 @@ RECOVERYAREADESTINATION="<%= @recoveryAreaDestination %>"
 # Default value : None
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-#ASMSNMP_PASSWORD=""
+ASMSNMP_PASSWORD=<%= @asmSnmpPassword %>
 
 #-----------------------------------------------------------------------------
 # Name          : RECOVERYGROUPNAME
@@ -400,7 +400,7 @@ RECOVERYAREADESTINATION="<%= @recoveryAreaDestination %>"
 # Default value : RECOVERY
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-#RECOVERYGROUPNAME=RECOVERY
+RECOVERYGROUPNAME=<%= @recoveryDiskgroup %>
 
 #-----------------------------------------------------------------------------
 # Name          : CHARACTERSET
