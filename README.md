@@ -77,52 +77,52 @@ when the files are also accesiable locally then you can also set $remote_file =>
 - 11.2.0.4 Download oracle database linux software from http://support.oracle.com
 - 12.1.0.1 Download oracle database linux software from http://otn.oracle.com
 
-upload these files to the files folder of the oradb puppet module
+optional upload these files to the files folder of the oradb puppet module
 
 
-# database files of linux 12.1.0.1 ( otn.oracle.com )
+##database files of linux 12.1.0.1 ( otn.oracle.com )
 - 1361028723 Jun 27 23:38 linuxamd64_12c_database_1of2.zip
 - 1116527103 Jun 27 23:38 linuxamd64_12c_database_2of2.zip
 
-# database files of linux 11.2.0.3 ( support.oracle.com )
+###database files of linux 11.2.0.3 ( support.oracle.com )
 - 1358454646 Mar  9 17:31 p10404530_112030_Linux-x86-64_1of7.zip
 - 1142195302 Mar  9 17:47 p10404530_112030_Linux-x86-64_2of7.zip
 
-# grid
+###grid
 -  979195792 Mar  9 18:01 p10404530_112030_Linux-x86-64_3of7.zip
 
-# client
+###client
 -  659229728 Mar  9 18:11 p10404530_112030_Linux-x86-64_4of7.zip
 
-# database files of linux 11.2.0.4 ( support.oracle.com )
+##database files of linux 11.2.0.4 ( support.oracle.com )
 - 1395582860 Aug 31 16:21 p13390677_112040_Linux-x86-64_1of7.zip
 - 1151304589 Aug 31 16:22 p13390677_112040_Linux-x86-64_2of7.zip
 
-# grid 
+###grid 
 - 1205251894 Aug 31 16:22 p13390677_112040_Linux-x86-64_3of7.zip
 
-# client
+###client
 -  656026876 Aug 31 16:22 p13390677_112040_Linux-x86-64_4of7.zip
 
-# database files of linux 11.2.0.1 ( otn.oracle.com )
+##database files of linux 11.2.0.1 ( otn.oracle.com )
 - 1239269270 Mar 10 17:05 linux.x64_11gR2_database_1of2.zip
 - 1111416131 Mar 10 17:17 linux.x64_11gR2_database_2of2.zip
 
-# opatch database patch for 11.2.0.3
+##opatch database patch for 11.2.0.3
 - 25556377 Mar 10 12:48 p14727310_112030_Linux-x86-64.zip
 
-# opatch upgrade
+##opatch upgrade
 - 32551984 Jul  6 18:58 p6880880_112000_Linux-x86-64.zip
 
-# database client linux  ( otn.oracle.com )
+##database client linux  ( otn.oracle.com )
 - linux.x64_11gR2_client.zip ( version 11.2.0.1 )
 - linuxamd64_12c_client.zip  ( version 12.1.0.1 )
 
-# rcu linux installer
+##rcu linux installer
 - 408989041 Mar 17 20:17 ofm_rcu_linux_11.1.1.6.0_disk1_1of1.zip
 - 411498103 Apr  1 21:23 ofm_rcu_linux_11.1.1.7.0_32_disk1_1of1.zip
 
-# goldengate for Oracle 11g & Oracle 12c
+##goldengate for Oracle 11g & Oracle 12c
 - 121200_fbo_ggs_Linux_x64_shiphome.zip
 - ogg112101_fbo_ggs_Linux_x64_ora11g_64bit.zip
 - V38714-01.zip
@@ -384,41 +384,6 @@ other
       }
     }
 
-
-## Oracle Database Client
-
-     oradb::client{ '12.1.0.1_Linux-x86-64':
-            version                => '12.1.0.1',
-            file                   => 'linuxamd64_12c_client.zip',
-            oracleBase             => '/oracle',
-            oracleHome             => '/oracle/product/12.1/client',
-            createUser             => true,
-            user                   => 'oracle',
-            group                  => 'dba',
-            group_install          => 'oinstall',
-            downloadDir            => '/install',
-            remoteFile             => true,
-            puppetDownloadMntPoint => "puppet:///modules/oradb/",
-            logoutput               => true, 
-     }
-
-or 
-
-     oradb::client{ '11.2.0.1_Linux-x86-64':
-            version                => '11.2.0.1',
-            file                   => 'linux.x64_11gR2_client.zip',
-            oracleBase             => '/oracle',
-            oracleHome             => '/oracle/product/11.2/client',
-            createUser             => true,
-            user                   => 'oracle',
-            group                  => 'dba',
-            group_install          => 'oinstall',
-            downloadDir            => '/install',
-            remoteFile             => false,
-            puppetDownloadMntPoint => "/software",
-            logoutput              => true,
-     }
-
 ##Grid install with ASM 
 
       $all_groups = ['oinstall','dba' ,'oper','asmdba','asmadmin','asmoper']
@@ -525,6 +490,39 @@ or
         require                 => Oradb::Installdb['11.2_linux-x64'],
       }
 
+## Oracle Database Client
+
+     oradb::client{ '12.1.0.1_Linux-x86-64':
+            version                => '12.1.0.1',
+            file                   => 'linuxamd64_12c_client.zip',
+            oracleBase             => '/oracle',
+            oracleHome             => '/oracle/product/12.1/client',
+            createUser             => true,
+            user                   => 'oracle',
+            group                  => 'dba',
+            group_install          => 'oinstall',
+            downloadDir            => '/install',
+            remoteFile             => true,
+            puppetDownloadMntPoint => "puppet:///modules/oradb/",
+            logoutput               => true, 
+     }
+
+or 
+
+     oradb::client{ '11.2.0.1_Linux-x86-64':
+            version                => '11.2.0.1',
+            file                   => 'linux.x64_11gR2_client.zip',
+            oracleBase             => '/oracle',
+            oracleHome             => '/oracle/product/11.2/client',
+            createUser             => true,
+            user                   => 'oracle',
+            group                  => 'dba',
+            group_install          => 'oinstall',
+            downloadDir            => '/install',
+            remoteFile             => false,
+            puppetDownloadMntPoint => "/software",
+            logoutput              => true,
+     }
 
 
 ##Database configuration

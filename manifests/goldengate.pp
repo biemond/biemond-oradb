@@ -81,7 +81,7 @@ define oradb::goldengate( $version                 = '12.1.2',
           path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin",
           logoutput   => true,
           user        => $user,
-          group       => $group,
+          group       => $group_install,
           returns     => [3,0],
       }
 
