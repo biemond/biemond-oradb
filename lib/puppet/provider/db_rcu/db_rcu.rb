@@ -12,10 +12,10 @@ Puppet::Type.type(:db_rcu).provide(:db_rcu) do
     statement   = resource[:statement]
     oracle_home = resource[:oracle_home]
 
-    environment = ["SQLPLUS_HOME=#{oracle_home}"]
+    environment = "SQLPLUS_HOME=#{oracle_home}"
     Puppet.debug "rcu statement: #{statement}"
 
-    output = execute statement, :failonfail => true ,:uid => user,:custom_environment => environment
+    output = execute statement, :failonfail => true ,:uid => user, :custom_environment => environment
     Puppet.info "RCU result: #{output}"
 
   end

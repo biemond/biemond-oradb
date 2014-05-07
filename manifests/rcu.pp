@@ -27,7 +27,7 @@ define oradb::rcu( $rcuFile                 = undef,
                    $user                    = 'oracle',
                    $group                   = 'dba',
                    $downloadDir             = '/install',
-                   $action                  = 'create',
+                   $action                  = 'create',  # delete or create
                    $dbServer                = undef,
                    $dbService               = undef,
                    $sysPassword             = undef,
@@ -135,7 +135,11 @@ define oradb::rcu( $rcuFile                 = undef,
     group   => $group,
   }
 
-  $preCommand      = "${downloadDir}/rcu_${version}/rcuHome/bin/rcu -silent"
+  if ( $oracleHome != undef ) {
+    $preCommand    = "export SQLPLUS_HOME=${oracleHome};${downloadDir}/rcu_${version}/rcuHome/bin/rcu -silent"
+  } else {
+    $preCommand    = "${downloadDir}/rcu_${version}/rcuHome/bin/rcu -silent"
+  }
   $postCommand     = "-databaseType ORACLE -connectString ${dbServer}:${dbService} -dbUser SYS -dbRole SYSDBA -schemaPrefix ${schemaPrefix} ${components} "
   $passwordCommand = " -f < ${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"
 
