@@ -61,10 +61,37 @@ define oradb::database( $oracleBase               = undef,
 )
 
 {
-  if $version == "11.2" or $version == "12.1" {
-  } else {
+  if (!( $version == "11.2" or $version == "12.1")) {
     fail("Unrecognized version")
   }
+
+  if $action == 'create' {
+    $operationType = 'createDatabase'
+  } elsif $action == 'delete' {
+    $operationType = 'deleteDatabase'
+  } else {
+    fail("Unrecognized database action")
+  }
+
+  if (!( $databaseType == "MULTIPURPOSE" or 
+         $databaseType == "DATA_WAREHOUSING" or
+         $databaseType == "OLTP")) {
+    fail("Unrecognized databaseType")
+  }
+
+  if (!( $emConfiguration == "NONE" or 
+         $emConfiguration == "CENTRAL" or
+         $emConfiguration == "LOCAL" or 
+         $emConfiguration == "ALL")) {
+    fail("Unrecognized emConfiguration")
+  }
+
+  if (!( $storageType == "FS" or 
+         $storageType == "CFS" or
+         $storageType == "ASM" )) {
+    fail("Unrecognized storageType")
+  }
+
   $continue = true
 
   if ( $continue ) {
@@ -97,14 +124,6 @@ define oradb::database( $oracleBase               = undef,
     $sanitized_title = regsubst($title, "[^a-zA-Z0-9.-]", "_", "G")
 
     $filename = "${path}/database_${sanitized_title}.rsp"
-
-    if $action == 'create' {
-      $operationType = 'createDatabase'
-    } elsif $action == 'delete' {
-      $operationType = 'deleteDatabase'
-    } else {
-      fail("Unrecognized database action")
-    }
 
     if $dbDomain {
         $globalDbName = "${dbName}.${dbDomain}"

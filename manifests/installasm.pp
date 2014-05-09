@@ -26,6 +26,19 @@ define oradb::installasm(
   $remoteFile              = true,
 )
 {
+
+  if (!( $version == '11.2.0.4')){
+    fail("Unrecognized database grid install version, use 11.2.0.4")
+  }
+
+  if ( !($::kernel == 'Linux' or $::kernel == 'SunOS')){
+    fail("Unrecognized operating system, please use it on a Linux or SunOS host")
+  }
+
+  if ( !($gridType == 'CRS_CONFIG' or $gridType == 'HA_CONFIG' or $gridType == 'UPGRADE' or $gridType == 'CRS_SWONLY')){
+    fail("Unrecognized database grid type, please use CRS_CONFIG|HA_CONFIG|UPGRADE|CRS_SWONLY")
+  }
+
   # check if the oracle software already exists
   $found = oracle_exists( $gridHome )
 
