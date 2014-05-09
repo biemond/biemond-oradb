@@ -25,6 +25,20 @@ define oradb::installdb(
   $remoteFile              = true,
 )
 {
+
+  if (!( $version == '11.2.0.1' or $version == '12.1.0.1' or
+         $version == '11.2.0.3' or $version == '11.2.0.4')){
+    fail("Unrecognized database install version, use 11.2.0.1|11.2.0.3|11.2.0.4|12.1.0.1")
+  }
+
+  if ( !($::kernel == 'Linux' or $::kernel == 'SunOS')){
+    fail("Unrecognized operating system, please use it on a Linux or SunOS host")
+  }
+
+  if ( !($databaseType == 'EE' or $databaseType == 'SE' or $databaseType == 'SEONE')){
+    fail("Unrecognized database type, please use EE|SE|SEONE")
+  }
+
   # check if the oracle software already exists
   $found = oracle_exists( $oracleHome )
 
