@@ -241,11 +241,15 @@ or
 
 other
 
+For opatchupgrade you need to provide the Oracle support csiNumber and supportId and need to be online. Or leave them empty but it needs the Expect rpm to emulate OCM
+
     oradb::opatchupgrade{'112000_opatch_upgrade':
         oracleHome             => '/oracle/product/11.2/db',
         patchFile              => 'p6880880_112000_Linux-x86-64.zip',
-        csiNumber              => '11111',
-        supportId              => 'biemond@gmail.com',
+      #  csiNumber              => '11111',
+      #  supportId              => 'biemond@gmail.com',
+        csiNumber              => undef,
+        supportId              => undef,
         opversion              => '11.2.0.3.6',
         user                   => 'oracle',
         group                  => 'dba',

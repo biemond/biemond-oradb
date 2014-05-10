@@ -28,34 +28,14 @@ define oradb::opatch( $oracleProductHome       = undef,
 )
 
 {
-  case $::kernel {
-    'Linux', 'SunOS': {
-      $execPath      = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
-      $path          = $downloadDir
-
-      Exec { path    => $execPath,
-        user         => $user,
-        group        => $group,
-        logoutput    => true,
-      }
-      File {
-        ensure       => present,
-        mode         => 0775,
-        owner        => $user,
-        group        => $group,
-      }
-    }
-    default: {
-      fail("Unrecognized operating system")
-    }
-  }
+  $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
 
   case $::kernel {
     'Linux': {
-      $oraInstPath        = "/etc"
+      $oraInstPath = "/etc"
     }
     'SunOS': {
-      $oraInstPath        = "/var/opt"
+      $oraInstPath = "/var/opt"
     }
     default: {
         fail("Unrecognized operating system ${::kernel}, please use it on a Linux host")
@@ -63,16 +43,20 @@ define oradb::opatch( $oracleProductHome       = undef,
   }
 
   if $puppetDownloadMntPoint == undef {
-    $mountPoint    = "puppet:///modules/oradb/"
+    $mountPoint = "puppet:///modules/oradb/"
   } else {
-    $mountPoint    =  $puppetDownloadMntPoint
+    $mountPoint =  $puppetDownloadMntPoint
   }
 
   if $remoteFile == true {
     # the patch used by the opatch
-    if ! defined(File["${path}/${patchFile}"]) {
-      file { "${path}/${patchFile}":
+    if ! defined(File["${downloadDir}/${patchFile}"]) {
+      file { "${downloadDir}/${patchFile}":
+        ensure => present,
         source => "${mountPoint}/${patchFile}",
+        mode   => '0775',
+        owner  => $user,
+        group  => $group,
       }
     }
   }
@@ -81,14 +65,22 @@ define oradb::opatch( $oracleProductHome       = undef,
     'Linux', 'SunOS': {
       if $remoteFile == true {
         exec { "extract opatch ${patchFile} ${title}":
-          command    => "unzip -n ${path}/${patchFile} -d ${path}",
-          require    => File ["${path}/${patchFile}"],
-          creates    => "${path}/${patchId}",
+          command    => "unzip -n ${downloadDir}/${patchFile} -d ${downloadDir}",
+          require    => File ["${downloadDir}/${patchFile}"],
+          creates    => "${downloadDir}/${patchId}",
+          path       => $execPath,
+          user       => $user,
+          group      => $group,
+          logoutput  => false,
         }
       } else {
         exec { "extract opatch ${patchFile} ${title}":
-          command    => "unzip -n ${mountPoint}/${patchFile} -d ${path}",
-          creates    => "${path}/${patchId}",
+          command    => "unzip -n ${mountPoint}/${patchFile} -d ${downloadDir}",
+          creates    => "${downloadDir}/${patchId}",
+          path       => $execPath,
+          user       => $user,
+          group      => $group,
+          logoutput  => false,
         }
       }
       if $ocmrf == true {
@@ -98,7 +90,7 @@ define oradb::opatch( $oracleProductHome       = undef,
           os_user                 => $user,
           oracle_product_home_dir => $oracleProductHome,
           orainst_dir             => $oraInstPath,
-          extracted_patch_dir     => "${path}/${patchId}",
+          extracted_patch_dir     => "${downloadDir}/${patchId}",
           ocmrf_file              => "${oracleProductHome}/OPatch/ocm.rsp", 
           require                 => Exec["extract opatch ${patchFile} ${title}"],
         }
@@ -110,7 +102,7 @@ define oradb::opatch( $oracleProductHome       = undef,
           os_user                 => $user,
           oracle_product_home_dir => $oracleProductHome,
           orainst_dir             => $oraInstPath,
-          extracted_patch_dir     => "${path}/${patchId}",
+          extracted_patch_dir     => "${downloadDir}/${patchId}",
           require                 => Exec["extract opatch ${patchFile} ${title}"],
         }
 

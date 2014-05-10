@@ -1,0 +1,19 @@
+#!/usr/bin/ksh
+
+EMOCMRSP=<%= @patchDir %>/ocm/bin/emocmrsp
+
+/usr/bin/expect - <<EOF
+spawn $EMOCMRSP -no_banner
+expect {
+  "Email address/User Name:"
+  {
+    send "\n"
+    exp_continue
+  }
+  "Do you wish to remain uninformed of security issues*"
+  {
+    send "Y\n"
+    exp_continue
+  }
+}
+EOF
