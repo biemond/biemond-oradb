@@ -1,6 +1,6 @@
 {
   "name": "biemond-oradb",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "summary": "Oracle Database 11g / 12 linux / solaris + GoldenGate + RCU installer",
   "author": "Edwin Biemond",
   "description": "Oracle Database 11g / 12 puppet module, GoldenGate  + RCU installer for SOA Suite, WebCenter and OIM or all",

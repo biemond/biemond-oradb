@@ -20,6 +20,7 @@ Should work for Puppet 2.7 & 3.0
 
 ##Version updates
 
+- 1.0.7 Added unit tests and OPatch upgrade support without OCM registration
 - 1.0.6 Grid install and ASM support
 - 1.0.5 refactored installdb and support for oinstall groups
 - 1.0.4 db_rcu native type used in rcu.pp
