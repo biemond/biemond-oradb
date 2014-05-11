@@ -8,12 +8,6 @@ class oradb::prepareautostart
   case $::kernel {
     Linux: {
       $execPath    = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
-
-      Exec { 
-        path       => $execPath,
-        logoutput  => true,
-      }
-
     }
     default: {
       fail("Unrecognized operating system")
@@ -22,7 +16,7 @@ class oradb::prepareautostart
   
   file { "/etc/init.d/dbora" :
     ensure         => present,
-    mode           => "0755",
+    mode           => '0755',
     owner          => 'root',
     content        => template("oradb/dbora.erb"),
   }
@@ -35,6 +29,8 @@ class oradb::prepareautostart
         require        => File["/etc/init.d/dbora"],
         user           => 'root',
         unless         => "chkconfig | /bin/grep 'dbora'",
+        path           => $execPath,
+        logoutput      => true,
       }
     }
     Ubuntu, Debian, SLES:{
@@ -44,6 +40,8 @@ class oradb::prepareautostart
         require        => File["/etc/init.d/dbora"],
         user           => 'root',
         unless         => "ls /etc/rc3.d/*dbora | /bin/grep 'dbora'",
+        path           => $execPath,
+        logoutput      => true,
       }      
     }
     default: {

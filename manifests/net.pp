@@ -17,7 +17,7 @@ define oradb::net( $oracleHome   = undef,
     fail("Unrecognized version")
   }
 
-  $execPath    = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
+  $execPath = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
 
   file { "${downloadDir}/netca_${version}.rsp":
       ensure       => present,

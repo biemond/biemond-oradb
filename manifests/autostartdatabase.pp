@@ -12,12 +12,6 @@ define oradb::autostartdatabase( $oracleHome  = undef,
   case $::kernel {
     Linux: {
       $execPath    = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
-
-      Exec { 
-        path       => $execPath,
-        logoutput  => true,
-      }
-
     }
     default: {
       fail("Unrecognized operating system")
@@ -28,6 +22,8 @@ define oradb::autostartdatabase( $oracleHome  = undef,
     command        => "sed -i -e's/:N/:Y/g' /etc/oratab",
     unless         => "/bin/grep '^${dbName}:${oracleHome}:Y' /etc/oratab",
     require        => File["/etc/init.d/dbora"],
+    path           => $execPath,
+    logoutput      => true,
   }
 
 }

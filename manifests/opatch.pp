@@ -35,7 +35,7 @@ define oradb::opatch( $oracleProductHome       = undef,
       $oraInstPath = "/etc"
     }
     'SunOS': {
-      $oraInstPath = "/var/opt"
+      $oraInstPath = "/var/opt/oracle"
     }
     default: {
         fail("Unrecognized operating system ${::kernel}, please use it on a Linux host")

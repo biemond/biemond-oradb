@@ -110,7 +110,7 @@ define oradb::database( $oracleBase               = undef,
 
         File {
           ensure     => present,
-          mode       => 0775,
+          mode       => '0775',
           owner      => $user,
           group      => $group,
         }
