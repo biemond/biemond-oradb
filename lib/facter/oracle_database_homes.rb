@@ -28,7 +28,7 @@ def get_oraInvPath()
   if "Linux" == os
     return "/etc"
   elsif "SunOS" == os
-    return "/var/opt"
+    return "/var/opt/oracle"
   end
   return "/etc"
 end
