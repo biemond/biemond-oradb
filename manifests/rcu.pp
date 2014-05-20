@@ -40,7 +40,7 @@ define oradb::rcu( $rcuFile                 = undef,
 )
 {
   case $::kernel {
-    Linux: {
+    'Linux': {
       $execPath = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
     }
     default: {

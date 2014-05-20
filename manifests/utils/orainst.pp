@@ -11,10 +11,10 @@ define oradb::utils::orainst
 )
 {
   case $::kernel {
-    Linux: {
+    'Linux': {
       $oraInstPath        = "/etc"
     }
-    SunOS: {
+    'SunOS': {
       $oraInstPath        = "/var/opt/oracle"
       if !defined(File[$oraInstPath]) {
         file { $oraInstPath:
