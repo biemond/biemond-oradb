@@ -96,7 +96,7 @@ define oradb::database( $oracleBase               = undef,
 
   if ( $continue ) {
     case $::kernel {
-      Linux,SunOS: {
+      'Linux', 'SunOS': {
         $execPath    = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
         $path        = $downloadDir
 

@@ -23,7 +23,7 @@ define oradb::dbactions( $oracleHome  = undef,
 
 {
   case $::kernel {
-    Linux, SunOS: {
+    'Linux', 'SunOS': {
       $execPath    = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
       Exec { path  => $execPath,
         user       => $user,
