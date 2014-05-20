@@ -64,7 +64,7 @@ define oradb::opatchupgrade( $oracleHome              = undef,
     }
 
     case $::kernel {
-      Linux, SunOS: {
+      'Linux', 'SunOS': {
         file { "remove_old":
           ensure     => absent,
           recurse    => true,

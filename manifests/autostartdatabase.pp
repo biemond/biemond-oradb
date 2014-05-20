@@ -10,7 +10,7 @@ define oradb::autostartdatabase( $oracleHome  = undef,
   include oradb::prepareautostart
 
   case $::kernel {
-    Linux: {
+    'Linux': {
       $execPath    = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
     }
     default: {
