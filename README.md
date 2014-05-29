@@ -262,6 +262,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
     # for this example OPatch 14727310
     # the OPatch utility must be upgraded ( patch 6880880, see above)
     oradb::opatch{'14727310_db_patch':
+       ensure                 => 'present',
        oracleProductHome      => '/oracle/product/11.2/db',
        patchId                => '14727310',
        patchFile              => 'p14727310_112030_Linux-x86-64.zip',

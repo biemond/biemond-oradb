@@ -1,4 +1,3 @@
-require 'rexml/document' 
 
 Puppet::Type.type(:db_opatch).provide(:db_opatch) do
 
@@ -13,19 +12,18 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
     extracted_patch_dir     = resource[:extracted_patch_dir]
     ocmrf_file              = resource[:ocmrf_file]
 
-    if action == :present
-      opatchAction = "-install"
-    else 
-      opatchAction = "-remove"
-    end 
-
     unless ocmrf_file.nil?
       ocmrf = " -ocmrf "+ocmrf_file
     else
       ocmrf = ""
     end
 
-    command = oracle_product_home_dir+"/OPatch/opatch apply -silent "+ ocmrf +" -oh "+oracle_product_home_dir+" "+extracted_patch_dir
+    if action == :present
+      command = "#{oracle_product_home_dir}/OPatch/opatch apply -silent #{ocmrf} -oh #{oracle_product_home_dir} #{extracted_patch_dir}"
+    else 
+      command = "#{oracle_product_home_dir}/OPatch/opatch rollback -id #{patchName} -silent -oh #{oracle_product_home_dir}"
+    end 
+
     Puppet.debug "opatch action: #{action} with command #{command}"
 
     output = execute command, :failonfail => true ,:uid => user

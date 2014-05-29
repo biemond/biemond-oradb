@@ -16,7 +16,8 @@
 #  }
 #
 #
-define oradb::opatch( $oracleProductHome       = undef,
+define oradb::opatch( $ensure                  = 'present',  #present|absent
+                      $oracleProductHome       = undef,
                       $patchId                 = undef,
                       $patchFile               = undef,
                       $user                    = 'oracle',
@@ -48,62 +49,66 @@ define oradb::opatch( $oracleProductHome       = undef,
     $mountPoint =  $puppetDownloadMntPoint
   }
 
-  if $remoteFile == true {
-    # the patch used by the opatch
-    if ! defined(File["${downloadDir}/${patchFile}"]) {
-      file { "${downloadDir}/${patchFile}":
-        ensure => present,
-        source => "${mountPoint}/${patchFile}",
-        mode   => '0775',
-        owner  => $user,
-        group  => $group,
+  if $ensure == "present" {
+    if $remoteFile == true {
+      # the patch used by the opatch
+      if ! defined(File["${downloadDir}/${patchFile}"]) {
+        file { "${downloadDir}/${patchFile}":
+          ensure => present,
+          source => "${mountPoint}/${patchFile}",
+          mode   => '0775',
+          owner  => $user,
+          group  => $group,
+        }
       }
     }
   }
 
   case $::kernel {
     'Linux', 'SunOS': {
-      if $remoteFile == true {
-        exec { "extract opatch ${patchFile} ${title}":
-          command    => "unzip -n ${downloadDir}/${patchFile} -d ${downloadDir}",
-          require    => File ["${downloadDir}/${patchFile}"],
-          creates    => "${downloadDir}/${patchId}",
-          path       => $execPath,
-          user       => $user,
-          group      => $group,
-          logoutput  => false,
-        }
-      } else {
-        exec { "extract opatch ${patchFile} ${title}":
-          command    => "unzip -n ${mountPoint}/${patchFile} -d ${downloadDir}",
-          creates    => "${downloadDir}/${patchId}",
-          path       => $execPath,
-          user       => $user,
-          group      => $group,
-          logoutput  => false,
+      if $ensure == "present" {
+        if $remoteFile == true {
+          exec { "extract opatch ${patchFile} ${title}":
+            command    => "unzip -n ${downloadDir}/${patchFile} -d ${downloadDir}",
+            require    => File ["${downloadDir}/${patchFile}"],
+            creates    => "${downloadDir}/${patchId}",
+            path       => $execPath,
+            user       => $user,
+            group      => $group,
+            logoutput  => false,
+            before     => Db_opatch[$patchId],
+          }
+        } else {
+          exec { "extract opatch ${patchFile} ${title}":
+            command    => "unzip -n ${mountPoint}/${patchFile} -d ${downloadDir}",
+            creates    => "${downloadDir}/${patchId}",
+            path       => $execPath,
+            user       => $user,
+            group      => $group,
+            logoutput  => false,
+            before     => Db_opatch[$patchId],
+          }
         }
       }
       if $ocmrf == true {
 
         db_opatch{ $patchId:
-          ensure                  => present,
+          ensure                  => $ensure,
           os_user                 => $user,
           oracle_product_home_dir => $oracleProductHome,
           orainst_dir             => $oraInstPath,
           extracted_patch_dir     => "${downloadDir}/${patchId}",
           ocmrf_file              => "${oracleProductHome}/OPatch/ocm.rsp", 
-          require                 => Exec["extract opatch ${patchFile} ${title}"],
         }
 
       } else {
 
         db_opatch{ $patchId:
-          ensure                  => present,
+          ensure                  => $ensure,
           os_user                 => $user,
           oracle_product_home_dir => $oracleProductHome,
           orainst_dir             => $oraInstPath,
           extracted_patch_dir     => "${downloadDir}/${patchId}",
-          require                 => Exec["extract opatch ${patchFile} ${title}"],
         }
 
       }
