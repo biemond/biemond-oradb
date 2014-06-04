@@ -25,9 +25,21 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
     end 
 
     Puppet.debug "opatch action: #{action} with command #{command}"
+    output = `su - #{user} -c '#{command}'`
+    #output = execute command, :failonfail => true ,:uid => user
+    Puppet.info "opatch result: #{output}"
 
-    output = execute command, :failonfail => true ,:uid => user
-    Puppet.debug "opatch result: #{output}"
+    result = false
+    output.each_line do |li|
+      unless li.nil?
+        if li.include? "OPatch completed"
+          result = true
+        end
+      end 
+    end
+    if result == false
+      fail(output)
+    end 
 
   end
 
@@ -41,7 +53,8 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
     command  = oracle_product_home_dir+"/OPatch/opatch lsinventory -patch_id -oh "+oracle_product_home_dir+" -invPtrLoc "+orainst_dir+"/oraInst.loc"
     Puppet.debug "opatch_status for patch #{patchName} command: #{command}"
 
-    output = execute command, :failonfail => true ,:uid => user
+    output = `su - #{user} -c '#{command}'`
+    #output = execute command, :failonfail => true ,:uid => user
     output.each_line do |li|
       opatch = li[5, li.index(':')-5 ].strip + ";" if (li['Patch'] and li[': applied on'] )
       unless opatch.nil?

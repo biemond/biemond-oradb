@@ -15,8 +15,22 @@ Puppet::Type.type(:db_rcu).provide(:db_rcu) do
     environment = "SQLPLUS_HOME=#{oracle_home}"
     Puppet.debug "rcu statement: #{statement}"
 
-    output = execute statement, :failonfail => true ,:uid => user, :custom_environment => environment
+    output = `su - #{user} -c '#{statement}'`
+    #output = execute statement, :failonfail => true ,:uid => user, :custom_environment => environment
     Puppet.info "RCU result: #{output}"
+    result = false
+    output.each_line do |li|
+      unless li.nil?
+        if li.include? "Operation Completed"
+          result = true
+        end
+      end 
+    end
+    if result == false
+      fail(output)
+    end 
+
+
 
   end
 
