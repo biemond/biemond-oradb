@@ -13,6 +13,8 @@ define oradb::installdb(
   $oraInventoryDir         = undef,   
   $oracleBase              = undef,
   $oracleHome              = undef,
+  $eeOptionsSelection      = false,
+  $eeOptionalComponents    = undef, # 'oracle.rdbms.partitioning:11.2.0.4.0,oracle.oraolap:11.2.0.4.0,oracle.rdbms.dm:11.2.0.4.0,oracle.rdbms.dv:11.2.0.4.0,oracle.rdbms.lbac:11.2.0.4.0,oracle.rdbms.rat:11.2.0.4.0'
   $createUser              = true,
   $user                    = 'oracle',
   $userBaseDir             = '/home',

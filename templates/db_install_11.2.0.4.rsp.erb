@@ -98,7 +98,7 @@ oracle.install.db.InstallEdition=<%= @databaseType %>
 #         are considered for install.
 # false : Value for 'optionalComponents' is not considered.
 #------------------------------------------------------------------------------
-oracle.install.db.EEOptionsSelection=false
+oracle.install.db.EEOptionsSelection=<%= @eeOptionsSelection %>
 
 #------------------------------------------------------------------------------
 # This variable is considered only if 'EEOptionsSelection' is set to true. 
@@ -117,7 +117,8 @@ oracle.install.db.EEOptionsSelection=false
 #              oracle.rdbms.partitioning:11.2.0.4.0 - Oracle Partitioning
 #              oracle.rdbms.rat:11.2.0.4.0 - Oracle Real Application Testing
 #------------------------------------------------------------------------------
-oracle.install.db.optionalComponents=oracle.rdbms.partitioning:11.2.0.4.0,oracle.oraolap:11.2.0.4.0,oracle.rdbms.dm:11.2.0.4.0,oracle.rdbms.dv:11.2.0.4.0,oracle.rdbms.lbac:11.2.0.4.0,oracle.rdbms.rat:11.2.0.4.0
+#oracle.install.db.optionalComponents=oracle.rdbms.partitioning:11.2.0.4.0,oracle.oraolap:11.2.0.4.0,oracle.rdbms.dm:11.2.0.4.0,oracle.rdbms.dv:11.2.0.4.0,oracle.rdbms.lbac:11.2.0.4.0,oracle.rdbms.rat:11.2.0.4.0
+oracle.install.db.optionalComponents=<%= @eeOptionalComponents %>
 
 ###############################################################################
 #                                                                             #
