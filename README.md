@@ -20,7 +20,7 @@ Should work for Puppet 2.7 & 3.0
 
 ##Version updates
 
-- 1.0.9 11.2 EE install options
+- 1.0.9 11.2 EE install options, rcu & opatch fix for puppet <= 3.2
 - 1.0.8 RCU & Opatch fixes in combination with ruby 1.9.3
 - 1.0.7 Added unit tests and OPatch upgrade support without OCM registration
 - 1.0.6 Grid install and ASM support

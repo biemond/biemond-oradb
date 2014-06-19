@@ -1,5 +1,5 @@
 name 'biemond-oradb'
-version '1.0.8'
+version '1.0.9'
 
 author 'Edwin Biemond'
 license 'Apache 2.0'
