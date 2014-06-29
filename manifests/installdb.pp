@@ -16,6 +16,7 @@ define oradb::installdb(
   $eeOptionsSelection      = false,
   $eeOptionalComponents    = undef, # 'oracle.rdbms.partitioning:11.2.0.4.0,oracle.oraolap:11.2.0.4.0,oracle.rdbms.dm:11.2.0.4.0,oracle.rdbms.dv:11.2.0.4.0,oracle.rdbms.lbac:11.2.0.4.0,oracle.rdbms.rat:11.2.0.4.0'
   $createUser              = true,
+  $bashProfile             = true,
   $user                    = 'oracle',
   $userBaseDir             = '/home',
   $group                   = 'dba',
@@ -189,14 +190,16 @@ define oradb::installdb(
       }
     }
 
-    if ! defined(File["${userBaseDir}/${user}/.bash_profile"]) {
-      file { "${userBaseDir}/${user}/.bash_profile":
-        ensure  => present,
-        content => template("oradb/bash_profile.erb"),
-        mode    => '0775',
-        owner   => $user,
-        group   => $group,
-        require => Oradb::Utils::Structure["oracle structure ${version}"],
+    if ( $bashProfile == true ) {
+      if ! defined(File["${userBaseDir}/${user}/.bash_profile"]) {
+        file { "${userBaseDir}/${user}/.bash_profile":
+          ensure  => present,
+          content => template("oradb/bash_profile.erb"),
+          mode    => '0775',
+          owner   => $user,
+          group   => $group,
+          require => Oradb::Utils::Structure["oracle structure ${version}"],
+        }
       }
     }
 
