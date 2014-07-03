@@ -55,6 +55,7 @@ define oradb::database( $oracleBase               = undef,
                         $emConfiguration          = "NONE",  # CENTRAL|LOCAL|ALL|NONE
                         $storageType              = "FS", #FS|CFS|ASM
                         $asmSnmpPassword          = 'Welcome01',
+                        $dbSnmpPassword           = 'Welcome01',
                         $asmDiskgroup             = 'DATA',
                         $recoveryDiskgroup        = undef,
 
