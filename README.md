@@ -18,6 +18,7 @@ Should work for Puppet 2.7 & 3.0
 
 ##Version updates
 
+- 1.0.11 database client fix with remote file, set DBSNMPPASSWORD on a database
 - 1.0.10 oraInst.loc bug fix, option to skip installdb bash profile
 - 1.0.9 11.2 EE install options
 - 1.0.8 RCU & Opatch fixes in combination with ruby 1.9.3

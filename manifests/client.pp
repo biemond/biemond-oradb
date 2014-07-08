@@ -62,7 +62,7 @@ define oradb::client(
         ensure      => present,
         source      => "${mountPoint}/${file}",
         require     => Oradb::Utils::Structure["oracle structure ${version}"],
-        before      => "extract ${downloadDir}/${file}",
+        before      => Exec["extract ${downloadDir}/${file}"],
         mode        => '0775',
         owner       => $user,
         group       => $group,
