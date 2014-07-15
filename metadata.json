@@ -1,158 +1,86 @@
 {
   "author": "Edwin Biemond",
-  "checksums": {
-    "manifests/dbactions.pp": "e6ab025df333a1cd5e9ed6849ada1695",
-    "templates/grid_bash_profile.erb": "0a61da3f7086589d39d14129dc44d004",
-    "templates/db_client_11.2.0.4.rsp.erb": "bb227e77a8fa5fbac4aa2a9c5f90ec5c",
-    "lib/puppet/type/db_rcu.rb": "d75e91a79d2be64bb62c6b7fa145d11c",
-    "lib/puppet/parser/functions/opatch_version.rb": "9ca51041da9666c1265d0340c6fca664",
-    "manifests/client.pp": "3ec6c81fc653ccf1878311568301abea",
-    "templates/dbca_11.2.rsp.erb": "69934917ad209048acbab29b20046b4a",
-    "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
-    "templates/ocm.rsp.erb": "db46e9c074e51ab261f7bfeb30f34150",
-    "templates/rcu_passwords.txt.erb": "f7ca7a0a3838dc9de3e591b5462db3a7",
-    "manifests/init.pp": "bf0de126abaa1c2003ca31f292efd7e1",
-    "manifests/prepareautostart.pp": "51521676208dc6842d28814392bc4b49",
-    "lib/facter/oracle_database_homes.rb": "1108f5ff9b538bb4e6372d3736e52575",
-    "templates/db_client_12.1.0.1.rsp.erb": "554dc8aff847696f301f215cf161903d",
-    "lib/puppet/type/db_opatch.rb": "928cd0517bc9fa2f9808c3fddbb273c5",
-    "README.md": "34d76fa5b88b29853827619325fd62bc",
-    "Rakefile": "2402c5a7f46549db992a576a97cf8527",
-    "templates/grid_password.properties.erb": "8fd2291304e9d28d4dd68e2e8e26d329",
-    "templates/dbora.erb": "11c3131748faf16206b667229a0ff205",
-    "manifests/opatch.pp": "cf4c44373144a2f3cd9fa8f0c36ef7c6",
-    "lib/puppet/parser/functions/oracle_exists.rb": "4a971d4cecb38e513e25e38d2bad6fd3",
-    "templates/bash_profile.erb": "609c60bfc47eb874c145628c5f191e2d",
-    "manifests/installasm.pp": "44677fd30c37bbae0b862d7e428fd0fe",
-    "manifests/utils/structure.pp": "7d503226c1c46db8979c6ae02d951484",
-    "templates/dbca_12.1.rsp.erb": "d0f5963e5479aac2613ef90c40eb963a",
-    "spec/defines/installdb_params_spec.rb": "3c6c2020099ac749a7f15ad7f70776f2",
-    "spec/defines/database_params_spec.rb": "8b22e0bcbc83bda5e44a46be2a86cfdf",
-    ".fixtures.yml": "207ad6d438a74ecd6907a2360946bac0",
-    "lib/puppet/provider/db_rcu/db_rcu.rb": "9d8ecd5f31493366974f86fbb9a19515",
-    "manifests/utils/orainst.pp": "3c3e17b9ab8484655a74df0f669dd067",
-    "templates/db_install_11.2.0.1.rsp.erb": "f2385892b51ab6b796696dcbe47ca8e5",
-    "templates/oggcore_12.1.2.rsp.erb": "1f10d808652fdcf0948263275a455ba1",
-    "templates/netca_12.1.rsp.erb": "f03ab883287747c2a49be6fe6c07699d",
-    ".travis.yml": "ddff74bd7a1571231b6c0e99791b67cc",
-    "manifests/opatchupgrade.pp": "99d9df79a50513da672214be33421be3",
-    "spec/spec_helper.rb": "3ea886dd135e120afa31e0aab12e85b0",
-    "manifests/rcu.pp": "26cd6174bd64d7a8da32069b5f83c2f3",
-    "templates/netca_11.2.rsp.erb": "cd8bff624b0830b2002eaae98f4caa8a",
-    "manifests/database.pp": "ccadbca81726afc1f337d08b59eb0b4c",
-    "templates/db_client_11.2.0.1.rsp.erb": "c26eec484c9da48d23299b23ab281713",
-    "manifests/autostartdatabase.pp": "47c2dd1adf7d976b8a2d9a526c6e5c21",
-    "lib/puppet/provider/db_opatch/db_opatch.rb": "c3fb734ba712374b9d4ff26f4a030d1f",
-    "templates/grid_install_11.2.0.4.rsp.erb": "65cf0952b6d956fa745266ed78debfb9",
-    "Gemfile": "b2d24beed3a09eb6becf9f6cbff04dc6",
-    "templates/netca_client_11.2.0.4.rsp.erb": "0c59257034259adef35e9305dde3c9b3",
-    "templates/db_install_11.2.0.3.rsp.erb": "9c83acb9f3e540e923dd7948bf5fa3c4",
-    "templates/db_install_12.1.0.1.rsp.erb": "a5781330d79eb205ae3bcbf88125e399",
-    "templates/db_install_11.2.0.4.rsp.erb": "84e4a55b7351c1c4b9d66e552ce9f7be",
-    "templates/oraInst.loc.erb": "64d7aec6dcef00643ac9efe079b42e19",
-    "spec/defines/installasm_params_spec.rb": "db1b0d1db78068b02b083eef1e348050",
-    "Modulefile": "a87d060e9f3140d75458afdf0505b050",
-    "templates/netca_client_12.1.0.1.rsp.erb": "b8be6874ffe841908f6ce2636dc1c508",
-    "manifests/net.pp": "cd1696f2b4ffa1da68d05cc070fda39a",
-    "manifests/listener.pp": "8bf4f77dd17fee6b24af153cb4d14502",
-    "License": "da7d8b642432b13765207d2c382a6555",
-    "spec/defines/installdb_remote_spec.rb": "3633675c5a931e66b11fedd36600fd51",
-    "manifests/installdb.pp": "b2176c3a640ccd45dbe9241be93f7711",
-    "templates/netca_client_11.2.0.1.rsp.erb": "e71a5fe96b2818153bb24072afce4605",
-    "manifests/goldengate.pp": "17b493884f113bda4837c69db88f474b"
-  },
   "dependencies": [],
-  "description": "Oracle Database 11g / 12 puppet module, GoldenGate  + RCU installer for SOA Suite, WebCenter and OIM or all",
+  "description": "Oracle Database 11.2 / 12 puppet module, GoldenGate  + RCU installer for SOA Suite, WebCenter and OIM or all",
   "license": "Apache 2.0",
   "name": "biemond-oradb",
   "project_page": "https://github.com/biemond/biemond-oradb",
   "source": "https://github.com/biemond/biemond-oradb",
-  "summary": "Oracle Database 11g / 12 linux / solaris + GoldenGate + RCU installer",
-  "types": [
+  "summary": "Oracle Database 11.2 / 12 linux / solaris + GoldenGate + RCU installer",
+  "tags": ["database", "12c", "oracle","11.2", "goldengate", "rcu","fmw", "fusion"],
+  "operatingsystem_support": [
     {
-      "properties": [
-        {
-          "name": "ensure",
-          "doc": "Whether a patch should be applied."
-        }
-      ],
-      "parameters": [
-        {
-          "name": "name",
-          "doc": "        The name of the OPatch.\n"
-        },
-        {
-          "name": "os_user",
-          "doc": "        The weblogic operating system user.\n"
-        },
-        {
-          "name": "oracle_product_home_dir",
-          "doc": "        The oracle prodcut home folder.\n"
-        },
-        {
-          "name": "orainst_dir",
-          "doc": "        The orainst folder.\n"
-        },
-        {
-          "name": "extracted_patch_dir",
-          "doc": "        The extracted patch folder.\n"
-        },
-        {
-          "name": "ocmrf_file",
-          "doc": "        The ocmrf file.\n"
-        }
-      ],
-      "providers": [
-        {
-          "name": "db_opatch"
-        }
-      ],
-      "name": "db_opatch"
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "4",
+        "5",
+        "6",
+        "7"
+      ]
     },
     {
-      "properties": [
-        {
-          "name": "ensure",
-          "doc": "Whether a Repository should be created."
-        }
-      ],
-      "parameters": [
-        {
-          "name": "name",
-          "doc": "        The prefix of the RCU.\n"
-        },
-        {
-          "name": "os_user",
-          "doc": "        The weblogic operating system user.\n"
-        },
-        {
-          "name": "oracle_home",
-          "doc": "        The oracle database home folder.\n"
-        },
-        {
-          "name": "sys_password",
-          "doc": "        The sys password for the RCU check/install.\n"
-        },
-        {
-          "name": "db_server",
-          "doc": "        The database server for the RCU check/install.\n"
-        },
-        {
-          "name": "db_service",
-          "doc": "        The database service for the RCU check/install.\n"
-        },
-        {
-          "name": "statement",
-          "doc": "        The RCU statement.\n"
-        }
-      ],
-      "providers": [
-        {
-          "name": "db_rcu"
-        }
-      ],
-      "name": "db_rcu"
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "4",
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "4",
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "4",
+        "5",
+        "6"
+      ]
+    },
+    {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "11 SP1"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "10.04",
+        "12.04"
+      ]
+    },
+    {
+      "operatingsystem": "Solaris",
+      "operatingsystemrelease": [
+        "10",
+        "11"
+      ]
     }
   ],
-  "version": "1.0.11"
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": ">=2.7.20"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": ">=2.7.20"
+    }
+  ],
+  "version": "1.0.12"
 }
