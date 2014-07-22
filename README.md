@@ -17,7 +17,7 @@ Example of Opensource Puppet 3.4.3 Puppet master configuration in a vagrant box 
 Should work for Puppet 2.7 & 3.0
 
 ##Version updates
-- 1.0.12 Oracle Database & Client 12.1.0.2 Support
+- 1.0.13 Oracle Database & Client 12.1.0.2 Support
 - 1.0.11 database client fix with remote file, set DBSNMPPASSWORD on a database
 - 1.0.10 oraInst.loc bug fix, option to skip installdb bash profile
 - 1.0.9 11.2 EE install options
