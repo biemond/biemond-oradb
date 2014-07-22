@@ -4,24 +4,13 @@
 # action        =  stop|start
 #
 #
-#  oradb::dbactions{ 'stop testDb':
-#                   oracleHome  => '/oracle/product/11.2/db',
-#                   user        => 'oracle',
-#                   group       => 'dba',
-#                   action      => 'stop',
-#                   dbName      => 'test',
-#  }
-#
-#
-#
-define oradb::dbactions( $oracleHome  = undef,
-                         $user        = 'oracle',
-                         $group       = 'dba',
-                         $action      = 'start',
-                         $dbName      = 'orcl',
-)
-
-{
+define oradb::dbactions(
+  $oracleHome  = undef,
+  $user        = 'oracle',
+  $group       = 'dba',
+  $action      = 'start',
+  $dbName      = 'orcl',
+){
   case $::kernel {
     'Linux', 'SunOS': {
       $execPath    = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
@@ -38,7 +27,7 @@ define oradb::dbactions( $oracleHome  = undef,
       }
     }
     default: {
-      fail("Unrecognized operating system")
+      fail('Unrecognized operating system')
     }
   }
 

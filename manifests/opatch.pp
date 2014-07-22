@@ -16,16 +16,17 @@
 #  }
 #
 #
-define oradb::opatch( $ensure                  = 'present',  #present|absent
-                      $oracleProductHome       = undef,
-                      $patchId                 = undef,
-                      $patchFile               = undef,
-                      $user                    = 'oracle',
-                      $group                   = 'dba',
-                      $downloadDir             = '/install',
-                      $ocmrf                   = false,
-                      $puppetDownloadMntPoint  = undef,
-                      $remoteFile              = true,
+define oradb::opatch(
+  $ensure                  = 'present',  #present|absent
+  $oracleProductHome       = undef,
+  $patchId                 = undef,
+  $patchFile               = undef,
+  $user                    = 'oracle',
+  $group                   = 'dba',
+  $downloadDir             = '/install',
+  $ocmrf                   = false,
+  $puppetDownloadMntPoint  = undef,
+  $remoteFile              = true,
 )
 
 {
@@ -33,10 +34,10 @@ define oradb::opatch( $ensure                  = 'present',  #present|absent
 
   case $::kernel {
     'Linux': {
-      $oraInstPath = "/etc"
+      $oraInstPath = '/etc'
     }
     'SunOS': {
-      $oraInstPath = "/var/opt/oracle"
+      $oraInstPath = '/var/opt/oracle'
     }
     default: {
         fail("Unrecognized operating system ${::kernel}, please use it on a Linux host")
@@ -44,12 +45,12 @@ define oradb::opatch( $ensure                  = 'present',  #present|absent
   }
 
   if $puppetDownloadMntPoint == undef {
-    $mountPoint = "puppet:///modules/oradb/"
+    $mountPoint = 'puppet:///modules/oradb/'
   } else {
     $mountPoint =  $puppetDownloadMntPoint
   }
 
-  if $ensure == "present" {
+  if $ensure == 'present' {
     if $remoteFile == true {
       # the patch used by the opatch
       if ! defined(File["${downloadDir}/${patchFile}"]) {
@@ -66,7 +67,7 @@ define oradb::opatch( $ensure                  = 'present',  #present|absent
 
   case $::kernel {
     'Linux', 'SunOS': {
-      if $ensure == "present" {
+      if $ensure == 'present' {
         if $remoteFile == true {
           exec { "extract opatch ${patchFile} ${title}":
             command    => "unzip -n ${downloadDir}/${patchFile} -d ${downloadDir}",
@@ -98,7 +99,7 @@ define oradb::opatch( $ensure                  = 'present',  #present|absent
           oracle_product_home_dir => $oracleProductHome,
           orainst_dir             => $oraInstPath,
           extracted_patch_dir     => "${downloadDir}/${patchId}",
-          ocmrf_file              => "${oracleProductHome}/OPatch/ocm.rsp", 
+          ocmrf_file              => "${oracleProductHome}/OPatch/ocm.rsp",
         }
 
       } else {
@@ -114,7 +115,7 @@ define oradb::opatch( $ensure                  = 'present',  #present|absent
       }
     }
     default: {
-      fail("Unrecognized operating system")
+      fail('Unrecognized operating system')
     }
   }
 }

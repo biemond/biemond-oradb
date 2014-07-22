@@ -17,7 +17,7 @@ Example of Opensource Puppet 3.4.3 Puppet master configuration in a vagrant box 
 Should work for Puppet 2.7 & 3.0
 
 ##Version updates
-
+- 1.0.12 Oracle Database & Client 12.1.0.2 Support
 - 1.0.11 database client fix with remote file, set DBSNMPPASSWORD on a database
 - 1.0.10 oraInst.loc bug fix, option to skip installdb bash profile
 - 1.0.9 11.2 EE install options
@@ -36,11 +36,9 @@ Should work for Puppet 2.7 & 3.0
 ##Oracle Database Features
 
 - Oracle Grid 11.2.0.4 Linux / Solaris installation
-- Oracle Database 12.1.0.1 Linux / Solaris installation
-- Oracle Database 11.2.0.4 Linux / Solaris installation
-- Oracle Database 11.2.0.3 Linux / Solaris installation
-- Oracle Database 11.2.0.1 Linux / Solaris installation
-- Oracle Database Client 12.1.0.1,11.2.0.4,11.2.0.1 Linux / Solaris installation
+- Oracle Database 12.1.0.1,12.1.0.2 Linux / Solaris installation
+- Oracle Database 11.2.0.1,11.2.0.3,11.2.0.4 Linux / Solaris installation
+- Oracle Database Client 12.1.0.1,12.1.0.2,11.2.0.4,11.2.0.1 Linux / Solaris installation
 - Oracle Database Net configuration
 - Oracle Database Listener
 - Oracle ASM
@@ -79,9 +77,13 @@ when the files are also accesiable locally then you can also set $remote_file =>
 - Patch 10404530: 11.2.0.3.0 PATCH SET FOR ORACLE DATABASE SERVER
 - 11.2.0.4 Download oracle database linux software from http://support.oracle.com
 - 12.1.0.1 Download oracle database linux software from http://otn.oracle.com
+- 12.1.0.2 Download oracle database linux software from http://edelivery.oracle.com
 
 optional upload these files to the files folder of the oradb puppet module
 
+##database files of linux 12.1.0.2 ( edelivery.oracle.com )
+- 1673544724 Jul 22 19:18 V46095-01_1of2.zip
+- 1014530602 Jul 22 19:16 V46095-01_2of2.zip
 
 ##database files of linux 12.1.0.1 ( otn.oracle.com )
 - 1361028723 Jun 27 23:38 linuxamd64_12c_database_1of2.zip
@@ -156,9 +158,9 @@ The databaseType value should contain only one of these choices.
 
     $puppetDownloadMntPoint = "puppet:///modules/oradb/"
     
-    oradb::installdb{ '12.1.0.1_Linux-x86-64':
-      version                => '12.1.0.1',
-      file                   => 'linuxamd64_12c_database',
+    oradb::installdb{ '12.1.0.2_Linux-x86-64':
+      version                => '12.1.0.2',
+      file                   => 'V46095-01',
       databaseType           => 'SE',
       oracleBase             => '/oracle',
       oracleHome             => '/oracle/product/12.1/db',

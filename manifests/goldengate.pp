@@ -15,8 +15,7 @@ define oradb::goldengate( $version                 = '12.1.2',
                           $group_install           = 'oinstall',
                           $downloadDir             = '/install',
                           $puppetDownloadMntPoint  = undef,
-)
-{
+){
 
   if ( $version == '12.1.2' ) {
     # check if the oracle software already exists
@@ -33,7 +32,7 @@ define oradb::goldengate( $version                 = '12.1.2',
       }
     }
   } else {
-     $continue = false
+    $continue = false
   }
 
   # only for 12.1.2
@@ -41,23 +40,23 @@ define oradb::goldengate( $version                 = '12.1.2',
 
       $oraInventory    = "${oracleBase}/oraInventory"
       $ggateInstallDir = 'fbo_ggs_Linux_x64_shiphome'
-      
+
       file { "${downloadDir}/${file}":
         source      => "${puppetDownloadMntPoint}/${file}",
         owner       => $user,
         group       => $group,
       }
 
-      exec { "extract gg":
+      exec { 'extract gg':
         command     => "unzip -o ${downloadDir}/${file} -d ${downloadDir}",
         require     => File["${downloadDir}/${file}"],
         creates     => "${downloadDir}/${ggateInstallDir}",
         timeout     => 0,
-        path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin",
+        path        => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin',
         user        => $user,
         group       => $group,
         logoutput   => true,
-     }
+      }
 
       file { "${downloadDir}/oggcore.rsp":
         content     => template("oradb/oggcore_${version}.rsp.erb"),
@@ -69,16 +68,13 @@ define oradb::goldengate( $version                 = '12.1.2',
         ora_inventory_dir => $oraInventory,
         os_group          => $group_install,
       }
-      
-      exec { "install oracle goldengate":
+
+      exec { 'install oracle goldengate':
           command     => "/bin/sh -c 'unset DISPLAY;${downloadDir}/${ggateInstallDir}/Disk1/runInstaller -silent -waitforcompletion -responseFile ${downloadDir}/oggcore.rsp'",
-          require     => [ File["${downloadDir}/oggcore.rsp"],
-                           Oradb::Utils::Orainst["ggate orainst ${version}"],
-                           Exec["extract gg"]
-                         ],
+          require     => [ File["${downloadDir}/oggcore.rsp"],Oradb::Utils::Orainst["ggate orainst ${version}"],Exec['extract gg'],],
           creates     => $goldengateHome,
           timeout     => 0,
-          path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin",
+          path        => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin',
           logoutput   => true,
           user        => $user,
           group       => $group_install,
@@ -87,7 +83,6 @@ define oradb::goldengate( $version                 = '12.1.2',
 
   } else {
       #version is different, use the old way
-      
       file { "${downloadDir}/${file}":
         source      => "${puppetDownloadMntPoint}/${file}",
         owner       => $user,
@@ -99,11 +94,11 @@ define oradb::goldengate( $version                 = '12.1.2',
         require     => File["${downloadDir}/${file}"],
         creates     => "${downloadDir}/${tarFile}",
         timeout     => 0,
-        path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin",
+        path        => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin',
         user        => $user,
         group       => $group,
         logoutput   => true,
-     }
+      }
 
       file { $goldengateHome :
         ensure        => directory,
@@ -119,12 +114,10 @@ define oradb::goldengate( $version                 = '12.1.2',
         require     => [File[$goldengateHome],Exec["extract gg ${title}"]],
         creates     => "${goldengateHome}/ggsci",
         timeout     => 0,
-        path        => "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin",
+        path        => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin',
         user        => $user,
         group       => $group,
         logoutput   => true,
-     }
-
-
+      }
   }
 }

@@ -1,7 +1,7 @@
 # == Class: oradb::client
 #
 #
-define oradb::client(    
+define oradb::client(
   $version                 = undef,
   $file                    = undef,
   $oracleBase              = undef,
@@ -33,11 +33,11 @@ define oradb::client(
 
   if ( $continue ) {
 
-    $execPath     = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
+    $execPath     = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
     $oraInventory = "${oracleBase}/oraInventory"
 
     if $puppetDownloadMntPoint == undef {
-      $mountPoint     = "puppet:///modules/oradb/"
+      $mountPoint     = 'puppet:///modules/oradb/'
     } else {
       $mountPoint     = $puppetDownloadMntPoint
     }
@@ -132,9 +132,7 @@ define oradb::client(
 
     exec { "install oracle net ${title}":
       command        => "${oracleHome}/bin/netca /silent /responsefile ${downloadDir}/netca_client_${version}.rsp",
-      require        => [File["${downloadDir}/netca_client_${version}.rsp"],
-                         Exec["run root.sh script ${title}"],
-                        ],
+      require        => [File["${downloadDir}/netca_client_${version}.rsp"],Exec["run root.sh script ${title}"],],
       creates        => "${oracleHome}/network/admin/sqlnet.ora",
       path           => $execPath,
       user           => $user,
@@ -145,7 +143,7 @@ define oradb::client(
     if ! defined(File["${userBaseDir}/${user}/.bash_profile"]) {
       file { "${userBaseDir}/${user}/.bash_profile":
         ensure        => present,
-        content       => template("oradb/bash_profile.erb"),
+        content       => template('oradb/bash_profile.erb'),
         mode          => '0775',
         owner         => $user,
         group         => $group,

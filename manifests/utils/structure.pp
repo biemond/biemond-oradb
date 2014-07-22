@@ -16,7 +16,7 @@ define oradb::utils::structure (
   $user_base_dir        = undef,
   $create_user          = true, ) {
 
-  $exec_path = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
+  $exec_path = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
 
   Exec {
     logoutput => $log_output,
@@ -27,26 +27,26 @@ define oradb::utils::structure (
     if ! defined(Group[$os_group]) {
       group { $os_group :
         ensure      => present,
-        before      => User[$os_user],  
+        before      => User[$os_user],
       }
     }
     if ! defined(Group[$os_group_install]) {
       group { $os_group_install :
         ensure      => present,
-        before      => User[$os_user],  
+        before      => User[$os_user],
       }
     }
     if ( $os_group_oper != undef ){
       if ! defined(Group[$os_group_oper]) {
         group { $os_group_oper :
           ensure      => present,
-          before      => User[$os_user],  
+          before      => User[$os_user],
         }
       }
       $all_groups = [$os_group,$os_group_install,$os_group_oper ]
     } else {
       $all_groups = [$os_group,$os_group_install]
-    } 
+    }
     # Whether Puppet will manage the user or relying on external methods
     if ! defined(User[$os_user]) {
       # http://raftaman.net/?p=1311 for generating password
@@ -62,7 +62,6 @@ define oradb::utils::structure (
       }
     }
   }
-
 
   # create all folders
   if !defined(Exec["create ${oracle_base_home_dir} directory"]) {
@@ -97,10 +96,9 @@ define oradb::utils::structure (
         group   => $os_group_install,
         require => [Exec["create ${download_dir} home directory"],
                     User[$os_user],
-                   ],
+                    ],
       }
     }
-  
     # also set permissions on oracleHome
     if !defined(File[$oracle_base_home_dir]) {
       file { $oracle_base_home_dir:
@@ -112,10 +110,9 @@ define oradb::utils::structure (
         group   => $os_group_install,
         require => [Exec["create ${oracle_base_home_dir} directory"],
                     User[$os_user],
-                   ],
+                    ],
       }
     }
-  
     # also set permissions on oraInventory
     if !defined(File[$ora_inventory_dir]) {
       file { $ora_inventory_dir:
@@ -128,10 +125,10 @@ define oradb::utils::structure (
         require => [Exec["create ${oracle_base_home_dir} directory"],
                     File[$oracle_base_home_dir],
                     User[$os_user],
-                   ],
+                    ],
       }
     }
-  
+
   } else {
     # also set permissions on downloadDir
     if !defined(File[$download_dir]) {
@@ -143,11 +140,10 @@ define oradb::utils::structure (
         mode    => '0775',
         owner   => $os_user,
         group   => $os_group_install,
-        require => [Exec["create ${download_dir} home directory"],
-                   ],
+        require => [Exec["create ${download_dir} home directory"],],
       }
     }
-  
+
     # also set permissions on oracleHome
     if !defined(File[$oracle_base_home_dir]) {
       file { $oracle_base_home_dir:
@@ -160,7 +156,7 @@ define oradb::utils::structure (
         require => Exec["create ${oracle_base_home_dir} directory"],
       }
     }
-  
+
     # also set permissions on oraInventory
     if !defined(File[$ora_inventory_dir]) {
       file { $ora_inventory_dir:
@@ -172,9 +168,8 @@ define oradb::utils::structure (
         group   => $os_group_install,
         require => [Exec["create ${oracle_base_home_dir} directory"],
                     File[$oracle_base_home_dir],
-                   ],
+                    ],
       }
-    }    
+    }
   }
 }
-

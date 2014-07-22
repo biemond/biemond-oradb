@@ -6,11 +6,11 @@
 # SEONE  : Standard Edition One
 #
 #
-define oradb::installdb( 
+define oradb::installdb(
   $version                 = undef,
   $file                    = undef,
   $databaseType            = 'SE',
-  $oraInventoryDir         = undef,   
+  $oraInventoryDir         = undef,
   $oracleBase              = undef,
   $oracleHome              = undef,
   $eeOptionsSelection      = false,
@@ -29,17 +29,16 @@ define oradb::installdb(
 )
 {
 
-  if (!( $version == '11.2.0.1' or $version == '12.1.0.1' or
-         $version == '11.2.0.3' or $version == '11.2.0.4')){
-    fail("Unrecognized database install version, use 11.2.0.1|11.2.0.3|11.2.0.4|12.1.0.1")
+  if (!( $version in ['11.2.0.1','12.1.0.1','12.1.0.2','11.2.0.3','11.2.0.4'])){
+    fail('Unrecognized database install version, use 11.2.0.1|11.2.0.3|11.2.0.4|12.1.0.1|12.1.0.1')
   }
 
-  if ( !($::kernel == 'Linux' or $::kernel == 'SunOS')){
-    fail("Unrecognized operating system, please use it on a Linux or SunOS host")
+  if ( !($::kernel in ['Linux','SunOS'])){
+    fail('Unrecognized operating system, please use it on a Linux or SunOS host')
   }
 
-  if ( !($databaseType == 'EE' or $databaseType == 'SE' or $databaseType == 'SEONE')){
-    fail("Unrecognized database type, please use EE|SE|SEONE")
+  if ( !($databaseType in ['EE','SE','SEONE'])){
+    fail('Unrecognized database type, please use EE|SE|SEONE')
   }
 
   # check if the oracle software already exists
@@ -58,10 +57,10 @@ define oradb::installdb(
 
   if ( $continue ) {
 
-    $execPath     = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
+    $execPath     = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
 
     if $puppetDownloadMntPoint == undef {
-      $mountPoint     = "puppet:///modules/oradb/"
+      $mountPoint     = 'puppet:///modules/oradb/'
     } else {
       $mountPoint     = $puppetDownloadMntPoint
     }
@@ -88,12 +87,12 @@ define oradb::installdb(
     if ( $zipExtract ) {
       # In $downloadDir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
 
-      if ( $version == '11.2.0.1' or $version == '12.1.0.1' ) {
+      if ( $version in ['11.2.0.1','12.1.0.1','12.1.0.2']) {
         $file1 =  "${file}_1of2.zip"
         $file2 =  "${file}_2of2.zip"
-      } 
+      }
 
-      if ( $version == '11.2.0.3' or $version == '11.2.0.4' ) {
+      if ( $version in ['11.2.0.3','11.2.0.4']) {
         $file1 =  "${file}_1of7.zip"
         $file2 =  "${file}_2of7.zip"
       }
@@ -162,10 +161,7 @@ define oradb::installdb(
       }
     }
 
-    if ( $version == '11.2.0.1' or 
-         $version == '12.1.0.1' or 
-         $version == '11.2.0.3' or 
-         $version == '11.2.0.4' ) {
+    if ( $version in ['11.2.0.1','12.1.0.1','12.1.0.2','11.2.0.3','11.2.0.4']){
       exec { "install oracle database ${title}":
         command     => "/bin/sh -c 'unset DISPLAY;${downloadDir}/${file}/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${downloadDir}/db_install_${version}.rsp'",
         creates     => $oracleHome,
@@ -194,7 +190,7 @@ define oradb::installdb(
       if ! defined(File["${userBaseDir}/${user}/.bash_profile"]) {
         file { "${userBaseDir}/${user}/.bash_profile":
           ensure  => present,
-          content => template("oradb/bash_profile.erb"),
+          content => template('oradb/bash_profile.erb'),
           mode    => '0775',
           owner   => $user,
           group   => $group,

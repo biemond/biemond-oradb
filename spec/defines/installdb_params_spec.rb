@@ -26,7 +26,7 @@ describe 'oradb::installdb', :type => :define do
 
     it do
       expect { should contain_notify("oradb::installdb /oracle/product/10.2/db does not exists")
-             }.to raise_error(Puppet::Error, /Unrecognized database install version, use 11.2.0.1|11.2.0.3|11.2.0.4|12.1.0.1/)
+             }.to raise_error(Puppet::Error, /Unrecognized database install version, use 11.2.0.1|11.2.0.3|11.2.0.4|12.1.0.1|12.1.0.1/)
     end       
  
   end

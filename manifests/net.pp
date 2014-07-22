@@ -4,17 +4,16 @@
 #
 #
 #
-define oradb::net( $oracleHome   = undef,
-                   $version      = "11.2",
-                   $user         = 'oracle',
-                   $group        = 'dba',
-                   $downloadDir  = '/install',
-)
-
-{
-  if $version == "11.2" or $version == "12.1" {
+define oradb::net(
+  $oracleHome   = undef,
+  $version      = '11.2',
+  $user         = 'oracle',
+  $group        = 'dba',
+  $downloadDir  = '/install',
+){
+  if $version in ['11.2','12.1'] {
   } else {
-    fail("Unrecognized version")
+    fail('Unrecognized version')
   }
 
   $execPath = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
