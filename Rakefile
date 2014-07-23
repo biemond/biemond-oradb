@@ -3,7 +3,13 @@ require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 require 'puppet-syntax/tasks/puppet-syntax'
 require 'pathname'
+require 'ci/reporter/rake/rspec'
 
+desc "Run the tests"
+RSpec::Core::RakeTask.new(:test) do |t|
+  t.rspec_opts = ['--color', '-f d']
+  t.pattern = 'spec/*/*_spec.rb'
+end
 
 
 PuppetLint.configuration.send("disable_80chars")
@@ -38,3 +44,21 @@ PuppetLint.configuration.send("disable_2sp_soft_tabs")
 # PuppetLint.configuration.send("disable_file_mode")
 # PuppetLint.configuration.send("disable_ensure_not_symlink_target")
 #--no-unquoted_node_name
+
+exclude_paths = [
+  "pkg/**/*",
+  "vendor/**/*",
+  "spec/**/*",
+]
+PuppetLint.configuration.ignore_paths = exclude_paths
+PuppetSyntax.exclude_paths = exclude_paths
+
+desc "Run syntax, lint, and spec tests."
+task :default => [
+	:spec_prep,
+	:syntax,
+	:test,
+	:lint,
+	:spec_clean
+]
+

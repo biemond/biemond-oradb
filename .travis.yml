@@ -6,15 +6,15 @@ bundler_args: --without development
 before_install:
   -  gem update --system 2.1.11
 script:
-  - bundle exec rake spec
   - bundle exec rake syntax
   - bundle exec rake lint
+  - bundle exec rake ci:setup:rspec spec
 notifications:
   email:
     - biemond@gmail.com
 env:
   - PUPPET_VERSION=2.7.24
-  - PUPPET_VERSION=3.2.4
+  - PUPPET_VERSION=3.1.1
   - PUPPET_VERSION=3.3.2
-  - PUPPET_VERSION=3.4.1
-  - PUPPET_VERSION=3.6.2  
+  - PUPPET_VERSION=3.4.3
+  - PUPPET_VERSION=3.6.2    
