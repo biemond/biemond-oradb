@@ -5,21 +5,6 @@
 	<projects>
 	</projects>
 	<buildSpec>
-		<buildCommand>
-			<name>com.puppetlabs.geppetto.pp.dsl.ui.modulefileBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
-			<name>com.puppetlabs.geppetto.pp.dsl.ui.modulefileBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
-			<name>org.eclipse.xtext.ui.shared.xtextBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>com.puppetlabs.geppetto.pp.dsl.ui.puppetNature</nature>
