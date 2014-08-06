@@ -42,7 +42,7 @@ define oradb::client(
       $mountPoint     = $puppetDownloadMntPoint
     }
 
-    oradb::utils::structure{"oracle structure ${version}":
+    oradb::utils::dbstructure{"oracle structure ${version}":
       oracle_base_home_dir => $oracleBase,
       ora_inventory_dir    => $oraInventory,
       os_user              => $user,
@@ -61,7 +61,7 @@ define oradb::client(
       file { "${downloadDir}/${file}":
         ensure      => present,
         source      => "${mountPoint}/${file}",
-        require     => Oradb::Utils::Structure["oracle structure ${version}"],
+        require     => Oradb::Utils::Dbstructure["oracle structure ${version}"],
         before      => Exec["extract ${downloadDir}/${file}"],
         mode        => '0775',
         owner       => $user,
@@ -73,7 +73,7 @@ define oradb::client(
     }
     exec { "extract ${downloadDir}/${file}":
       command     => "unzip -o ${source}/${file} -d ${downloadDir}/client_${version}",
-      require     => Oradb::Utils::Structure["oracle structure ${version}"],
+      require     => Oradb::Utils::Dbstructure["oracle structure ${version}"],
       timeout     => 0,
       path        => $execPath,
       user        => $user,
@@ -81,7 +81,7 @@ define oradb::client(
       logoutput   => false,
     }
 
-    oradb::utils::orainst{"oracle orainst ${version}":
+    oradb::utils::dborainst{"oracle orainst ${version}":
       ora_inventory_dir => $oraInventory,
       os_group          => $group_install,
     }
@@ -90,7 +90,7 @@ define oradb::client(
       file { "${downloadDir}/db_client_${version}.rsp":
         ensure      => present,
         content     => template("oradb/db_client_${version}.rsp.erb"),
-        require     => Oradb::Utils::Orainst["oracle orainst ${version}"],
+        require     => Oradb::Utils::Dborainst["oracle orainst ${version}"],
         mode        => '0775',
         owner       => $user,
         group       => $group,
@@ -100,7 +100,7 @@ define oradb::client(
     # In $downloadDir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
     exec { "install oracle client ${title}":
       command     => "/bin/sh -c 'unset DISPLAY;${downloadDir}/client_${version}/client/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${downloadDir}/db_client_${version}.rsp'",
-      require     => [Oradb::Utils::Orainst["oracle orainst ${version}"],
+      require     => [Oradb::Utils::Dborainst["oracle orainst ${version}"],
                       File["${downloadDir}/db_client_${version}.rsp"],
                       Exec["extract ${downloadDir}/${file}"]],
       creates     => $oracleHome,

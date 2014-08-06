@@ -71,7 +71,7 @@ define oradb::installdb(
       $oraInventory = "${oraInventoryDir}/oraInventory"
     }
 
-    oradb::utils::structure{"oracle structure ${version}":
+    oradb::utils::dbstructure{"oracle structure ${version}":
       oracle_base_home_dir => $oracleBase,
       ora_inventory_dir    => $oraInventory,
       os_user              => $user,
@@ -105,7 +105,7 @@ define oradb::installdb(
           mode        => '0775',
           owner       => $user,
           group       => $group,
-          require     => Oradb::Utils::Structure["oracle structure ${version}"],
+          require     => Oradb::Utils::Dbstructure["oracle structure ${version}"],
           before      => Exec["extract ${downloadDir}/${file1}"],
         }
         # db file 2 installer zip
@@ -130,7 +130,7 @@ define oradb::installdb(
         path        => $execPath,
         user        => $user,
         group       => $group,
-        require     => Oradb::Utils::Structure["oracle structure ${version}"],
+        require     => Oradb::Utils::Dbstructure["oracle structure ${version}"],
         before      => Exec["install oracle database ${title}"],
       }
       exec { "extract ${downloadDir}/${file2}":
@@ -145,7 +145,7 @@ define oradb::installdb(
       }
     }
 
-    oradb::utils::orainst{"database orainst ${version}":
+    oradb::utils::dborainst{"database orainst ${version}":
       ora_inventory_dir => $oraInventory,
       os_group          => $group_install,
     }
@@ -157,7 +157,7 @@ define oradb::installdb(
         mode          => '0775',
         owner         => $user,
         group         => $group,
-        require       => Oradb::Utils::Orainst["database orainst ${version}"],
+        require       => Oradb::Utils::Dborainst["database orainst ${version}"],
       }
     }
 
@@ -171,7 +171,7 @@ define oradb::installdb(
         user        => $user,
         group       => $group_install,
         logoutput   => true,
-        require     => [Oradb::Utils::Orainst["database orainst ${version}"],
+        require     => [Oradb::Utils::Dborainst["database orainst ${version}"],
                         File["${downloadDir}/db_install_${version}.rsp"]],
       }
 
@@ -194,7 +194,7 @@ define oradb::installdb(
           mode    => '0775',
           owner   => $user,
           group   => $group,
-          require => Oradb::Utils::Structure["oracle structure ${version}"],
+          require => Oradb::Utils::Dbstructure["oracle structure ${version}"],
         }
       }
     }

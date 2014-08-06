@@ -64,14 +64,14 @@ define oradb::goldengate( $version                 = '12.1.2',
         group       => $group,
       }
 
-      oradb::utils::orainst{"ggate orainst ${version}":
+      oradb::utils::dborainst{"ggate orainst ${version}":
         ora_inventory_dir => $oraInventory,
         os_group          => $group_install,
       }
 
       exec { 'install oracle goldengate':
           command     => "/bin/sh -c 'unset DISPLAY;${downloadDir}/${ggateInstallDir}/Disk1/runInstaller -silent -waitforcompletion -responseFile ${downloadDir}/oggcore.rsp'",
-          require     => [ File["${downloadDir}/oggcore.rsp"],Oradb::Utils::Orainst["ggate orainst ${version}"],Exec['extract gg'],],
+          require     => [ File["${downloadDir}/oggcore.rsp"],Oradb::Utils::Dborainst["ggate orainst ${version}"],Exec['extract gg'],],
           creates     => $goldengateHome,
           timeout     => 0,
           path        => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin',

@@ -69,7 +69,7 @@ define oradb::installasm(
       $mountPoint     = $puppetDownloadMntPoint
     }
 
-    oradb::utils::structure{"grid structure ${version}":
+    oradb::utils::dbstructure{"grid structure ${version}":
       oracle_base_home_dir => $gridBase,
       ora_inventory_dir    => $oraInventory,
       os_user              => $user,
@@ -93,7 +93,7 @@ define oradb::installasm(
           mode        => '0775',
           owner       => $user,
           group       => $group,
-          require     => Oradb::Utils::Structure["grid structure ${version}"],
+          require     => Oradb::Utils::Dbstructure["grid structure ${version}"],
           before      => Exec["extract ${downloadDir}/${file}"],
         }
         $source = $downloadDir
@@ -109,12 +109,12 @@ define oradb::installasm(
         user        => $user,
         group       => $group,
         creates     => "${downloadDir}/grid_${version}",
-        require     => Oradb::Utils::Structure["grid structure ${version}"],
+        require     => Oradb::Utils::Dbstructure["grid structure ${version}"],
         before      => Exec["install oracle grid ${title}"],
       }
     }
 
-    oradb::utils::orainst{"grid orainst ${version}":
+    oradb::utils::dborainst{"grid orainst ${version}":
       ora_inventory_dir => $oraInventory,
       os_group          => $group_install,
     }
@@ -126,7 +126,7 @@ define oradb::installasm(
         mode          => '0775',
         owner         => $user,
         group         => $group,
-        require       => Oradb::Utils::Orainst["grid orainst ${version}"],
+        require       => Oradb::Utils::Dborainst["grid orainst ${version}"],
       }
     }
 
@@ -139,7 +139,7 @@ define oradb::installasm(
       user        => $user,
       group       => $group_install,
       logoutput   => true,
-      require     => [Oradb::Utils::Orainst["grid orainst ${version}"],
+      require     => [Oradb::Utils::Dborainst["grid orainst ${version}"],
                       File["${downloadDir}/grid_install_${version}.rsp"]],
     }
 
@@ -160,7 +160,7 @@ define oradb::installasm(
         mode    => '0775',
         owner   => $user,
         group   => $group,
-        require => Oradb::Utils::Structure["grid structure ${version}"],
+        require => Oradb::Utils::Dbstructure["grid structure ${version}"],
       }
     }
 

@@ -28,7 +28,7 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb utils structure" do
       it do 
-        should contain_oradb__utils__structure("oracle structure 12.1.0.1").with({
+        should contain_oradb__utils__dbstructure("oracle structure 12.1.0.1").with({
               'oracle_base_home_dir'  => '/oracle',
               'ora_inventory_dir'     => '/oracle/oraInventory',
               'os_user'               => 'oracle',
@@ -43,7 +43,7 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb orainst" do
       it do 
-        should contain_oradb__utils__orainst('database orainst 12.1.0.1').with({
+        should contain_oradb__utils__dborainst('database orainst 12.1.0.1').with({
              'ora_inventory_dir'  => '/oracle/oraInventory',
              'os_group'           => 'oinstall',
            })
@@ -52,7 +52,7 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb response file" do
       it do 
-        should contain_file("/install/db_install_12.1.0.1.rsp").that_requires('Oradb::Utils::Orainst[database orainst 12.1.0.1]')
+        should contain_file("/install/db_install_12.1.0.1.rsp").that_requires('Oradb::Utils::Dborainst[database orainst 12.1.0.1]')
       end
     end
 
@@ -60,7 +60,7 @@ describe 'oradb::installdb', :type => :define do
       it { 
            should contain_file("/install/linuxamd64_12c_database_1of2.zip").with({
              'source'  => '/software/linuxamd64_12c_database_1of2.zip',
-           }).that_comes_before('Exec[extract /install/linuxamd64_12c_database_1of2.zip]').that_requires('Oradb::Utils::Structure[oracle structure 12.1.0.1]')    
+           }).that_comes_before('Exec[extract /install/linuxamd64_12c_database_1of2.zip]').that_requires('Oradb::Utils::Dbstructure[oracle structure 12.1.0.1]')    
          }  
     end
 
@@ -68,7 +68,7 @@ describe 'oradb::installdb', :type => :define do
       it { 
            should contain_exec("extract /install/linuxamd64_12c_database_1of2.zip").with({
              'command'  => 'unzip -o /install/linuxamd64_12c_database_1of2.zip -d /install/linuxamd64_12c_database',
-           }).that_requires('Oradb::Utils::Structure[oracle structure 12.1.0.1]')  
+           }).that_requires('Oradb::Utils::Dbstructure[oracle structure 12.1.0.1]')  
          }  
     end
 
@@ -94,7 +94,7 @@ describe 'oradb::installdb', :type => :define do
              'command'  => "/bin/sh -c 'unset DISPLAY;/install/linuxamd64_12c_database/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile /install/db_install_12.1.0.1.rsp'",
              'creates'  => "/oracle/product/12.1/db/dbs",
              'group'    => 'oinstall',
-           }).that_requires('Oradb::Utils::Orainst[database orainst 12.1.0.1]').that_requires('File[/install/db_install_12.1.0.1.rsp]')   
+           }).that_requires('Oradb::Utils::Dborainst[database orainst 12.1.0.1]').that_requires('File[/install/db_install_12.1.0.1.rsp]')   
          }  
     end
 
@@ -113,7 +113,7 @@ describe 'oradb::installdb', :type => :define do
         should contain_file("/home/oracle/.bash_profile").with({
              'owner'   => 'oracle',
              'group'   => 'dba',
-           }).that_requires('Oradb::Utils::Structure[oracle structure 12.1.0.1]')     
+           }).that_requires('Oradb::Utils::Dbstructure[oracle structure 12.1.0.1]')     
       end
     end
 
@@ -154,7 +154,7 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb utils structure" do
       it do 
-        should contain_oradb__utils__structure("oracle structure 11.2.0.4").with({
+        should contain_oradb__utils__dbstructure("oracle structure 11.2.0.4").with({
               'oracle_base_home_dir'  => '/oracle',
               'ora_inventory_dir'     => '/oracle/oraInventory',
               'os_user'               => 'oracle',
@@ -169,7 +169,7 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb orainst" do
       it do 
-        should contain_oradb__utils__orainst('database orainst 11.2.0.4').with({
+        should contain_oradb__utils__dborainst('database orainst 11.2.0.4').with({
              'ora_inventory_dir'  => '/oracle/oraInventory',
              'os_group'           => 'oinstall',
            })
@@ -178,7 +178,7 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb response file" do
       it do 
-        should contain_file("/install/db_install_11.2.0.4.rsp").that_requires('Oradb::Utils::Orainst[database orainst 11.2.0.4]')
+        should contain_file("/install/db_install_11.2.0.4.rsp").that_requires('Oradb::Utils::Dborainst[database orainst 11.2.0.4]')
       end
     end
 
@@ -186,7 +186,7 @@ describe 'oradb::installdb', :type => :define do
       it { 
            should contain_exec("extract /install/p13390677_112040_Linux-x86-64_1of7.zip").with({
              'command'  => 'unzip -o /software/p13390677_112040_Linux-x86-64_1of7.zip -d /install/p13390677_112040_Linux-x86-64',
-           }).that_requires('Oradb::Utils::Structure[oracle structure 11.2.0.4]')  
+           }).that_requires('Oradb::Utils::Dbstructure[oracle structure 11.2.0.4]')  
          }  
     end
 
@@ -204,7 +204,7 @@ describe 'oradb::installdb', :type => :define do
              'command'  => "/bin/sh -c 'unset DISPLAY;/install/p13390677_112040_Linux-x86-64/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile /install/db_install_11.2.0.4.rsp'",
              'creates'  => "/oracle/product/11.2/db/dbs",
              'group'    => 'oinstall',
-           }).that_requires('Oradb::Utils::Orainst[database orainst 11.2.0.4]').that_requires('File[/install/db_install_11.2.0.4.rsp]')   
+           }).that_requires('Oradb::Utils::Dborainst[database orainst 11.2.0.4]').that_requires('File[/install/db_install_11.2.0.4.rsp]')   
          }  
     end
 
@@ -223,7 +223,7 @@ describe 'oradb::installdb', :type => :define do
         should contain_file("/home/oracle/.bash_profile").with({
              'owner'   => 'oracle',
              'group'   => 'dba',
-           }).that_requires('Oradb::Utils::Structure[oracle structure 11.2.0.4]')     
+           }).that_requires('Oradb::Utils::Dbstructure[oracle structure 11.2.0.4]')     
       end
     end
 
@@ -262,7 +262,7 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb utils structure" do
       it do 
-        should contain_oradb__utils__structure("oracle structure 11.2.0.3").with({
+        should contain_oradb__utils__dbstructure("oracle structure 11.2.0.3").with({
               'oracle_base_home_dir'  => '/oracle',
               'ora_inventory_dir'     => '/oracle/oraInventory',
               'os_user'               => 'oracle',
@@ -277,7 +277,7 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb orainst" do
       it do 
-        should contain_oradb__utils__orainst('database orainst 11.2.0.3').with({
+        should contain_oradb__utils__dborainst('database orainst 11.2.0.3').with({
              'ora_inventory_dir'  => '/oracle/oraInventory',
              'os_group'           => 'oinstall',
            })
@@ -286,7 +286,7 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb response file" do
       it do 
-        should contain_file("/mnt/db_install_11.2.0.3.rsp").that_requires('Oradb::Utils::Orainst[database orainst 11.2.0.3]')
+        should contain_file("/mnt/db_install_11.2.0.3.rsp").that_requires('Oradb::Utils::Dborainst[database orainst 11.2.0.3]')
       end
     end
 
@@ -296,7 +296,7 @@ describe 'oradb::installdb', :type => :define do
              'command'  => "/bin/sh -c 'unset DISPLAY;/mnt/p10404530_112030_Linux-x86-64/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile /mnt/db_install_11.2.0.3.rsp'",
              'creates'  => "/oracle/product/11.2/db/dbs",
              'group'    => 'oinstall',
-           }).that_requires('Oradb::Utils::Orainst[database orainst 11.2.0.3]').that_requires('File[/mnt/db_install_11.2.0.3.rsp]')   
+           }).that_requires('Oradb::Utils::Dborainst[database orainst 11.2.0.3]').that_requires('File[/mnt/db_install_11.2.0.3.rsp]')   
          }  
     end
 
@@ -315,7 +315,7 @@ describe 'oradb::installdb', :type => :define do
         should contain_file("/home/oracle/.bash_profile").with({
              'owner'   => 'oracle',
              'group'   => 'dba',
-           }).that_requires('Oradb::Utils::Structure[oracle structure 11.2.0.3]')     
+           }).that_requires('Oradb::Utils::Dbstructure[oracle structure 11.2.0.3]')     
       end
     end
 
