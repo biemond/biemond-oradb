@@ -85,13 +85,15 @@ define oradb::rcu(
     $source = $mountPoint
   }
 
-  exec { "extract ${rcuFile}":
-    command    => "unzip ${source}/${rcuFile} -d ${downloadDir}/rcu_${version}",
-    creates    => "${downloadDir}/rcu_${version}/rcuHome",
-    path       => $execPath,
-    user       => $user,
-    group      => $group,
-    logoutput  => false,
+  if ! defined(Exec["extract ${rcuFile}"]) {
+    exec { "extract ${rcuFile}":
+      command    => "unzip ${source}/${rcuFile} -d ${downloadDir}/rcu_${version}",
+      creates    => "${downloadDir}/rcu_${version}/rcuHome",
+      path       => $execPath,
+      user       => $user,
+      group      => $group,
+      logoutput  => false,
+    }
   }
 
   if ! defined(File["${downloadDir}/rcu_${version}/rcuHome/rcu/log"]) {
