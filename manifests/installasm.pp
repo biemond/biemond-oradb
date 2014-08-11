@@ -27,6 +27,10 @@ define oradb::installasm(
 )
 {
 
+  $file_without_ext = regsubst($file, '(.+?)(\.zip*$|$)', '\1')
+  notify {"oradb::installasm file without extension ${$file_without_ext} ":}
+
+
   if (!( $version == '11.2.0.4')){
     fail('Unrecognized database grid install version, use 11.2.0.4')
   }
@@ -102,13 +106,13 @@ define oradb::installasm(
       }
 
       exec { "extract ${downloadDir}/${file}":
-        command     => "unzip -o ${source}/${file} -d ${downloadDir}/grid_${version}",
+        command     => "unzip -o ${source}/${file} -d ${downloadDir}/${file_without_ext}",
         timeout     => 0,
         logoutput   => false,
         path        => $execPath,
         user        => $user,
         group       => $group,
-        creates     => "${downloadDir}/grid_${version}",
+        creates     => "${downloadDir}/${file_without_ext}",
         require     => Oradb::Utils::Dbstructure["grid structure ${version}"],
         before      => Exec["install oracle grid ${title}"],
       }
@@ -131,7 +135,7 @@ define oradb::installasm(
     }
 
     exec { "install oracle grid ${title}":
-      command     => "/bin/sh -c 'unset DISPLAY;${downloadDir}/grid_${version}/grid/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${downloadDir}/grid_install_${version}.rsp'",
+      command     => "/bin/sh -c 'unset DISPLAY;${downloadDir}/${file_without_ext}/grid/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${downloadDir}/grid_install_${version}.rsp'",
       creates     => $gridHome,
       timeout     => 0,
       returns     => [6,0],

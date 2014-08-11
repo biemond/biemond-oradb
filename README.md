@@ -17,7 +17,7 @@ Example of Opensource Puppet 3.4.3 Puppet master configuration in a vagrant box 
 Should work for Puppet 2.7 & 3.0
 
 ##Version updates
-- 1.0.15 RCU fix for multiple FMW Repositories 
+- 1.0.15 RCU fix for multiple FMW Repositories, installasm fix with zipExtract = false 
 - 1.0.14 Rename some internal manifest to avoid a conflict with orawls
 - 1.0.13 Oracle Database & Client 12.1.0.2 Support
 - 1.0.11 database client fix with remote file, set DBSNMPPASSWORD on a database
