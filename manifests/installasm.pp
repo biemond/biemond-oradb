@@ -176,28 +176,40 @@ define oradb::installasm(
       logoutput => true,
       require   => Exec["install oracle grid ${title}"],
     }
-
-    file { "${downloadDir}/cfgrsp.properties":
-      ensure  => present,
-      content => template('oradb/grid_password.properties.erb'),
-      mode    => '0600',
-      owner   => $user,
-      group   => $group,
-      require => Exec["run root.sh grid script ${title}"],
+    
+    if ( $gridType == 'CRS_SWONLY' ) {
+      exec { "Configuring Grid Infrastructure for a Stand-Alone Server": 
+        command   => "${gridHome}/perl/bin/perl -I${gridHome}/perl/lib -I${gridHome}/crs/install ${gridHome}/crs/install/roothas.pl",
+        user      => 'root',
+        group     => 'root',
+        path      => $execPath,
+        logoutput => true,
+        require   => Exec["run root.sh grid script ${title}"],
+      }
     }
+    else {
+      file { "${downloadDir}/cfgrsp.properties":
+        ensure  => present,
+        content => template('oradb/grid_password.properties.erb'),
+        mode    => '0600',
+        owner   => $user,
+        group   => $group,
+        require => Exec["run root.sh grid script ${title}"],
+      }
 
-    exec { "run configToolAllCommands grid tool ${title}":
-      command   => "${gridHome}/cfgtoollogs/configToolAllCommands RESPONSE_FILE=${downloadDir}/cfgrsp.properties",
-      user      => $user,
-      group     => $group_install,
-      path      => $execPath,
-      provider  => 'shell',
-      cwd       => "${gridHome}/cfgtoollogs",
-      logoutput => true,
-      require   => [File["${downloadDir}/cfgrsp.properties"],
-                    Exec["run root.sh grid script ${title}"],
-                    Exec["install oracle grid ${title}"],
-                    ],
+      exec { "run configToolAllCommands grid tool ${title}":
+        command   => "${gridHome}/cfgtoollogs/configToolAllCommands RESPONSE_FILE=${downloadDir}/cfgrsp.properties",
+        user      => $user,
+        group     => $group_install,
+        path      => $execPath,
+        provider  => 'shell',
+        cwd       => "${gridHome}/cfgtoollogs",
+        logoutput => true,
+        require   => [File["${downloadDir}/cfgrsp.properties"],
+                      Exec["run root.sh grid script ${title}"],
+                      Exec["install oracle grid ${title}"],
+                      ],
+      }
     }
 
   }
