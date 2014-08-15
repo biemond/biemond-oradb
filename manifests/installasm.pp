@@ -4,7 +4,7 @@
 define oradb::installasm(
   $version                 = undef,
   $file                    = undef,
-  $gridType                = 'HA_CONFIG',
+  $gridType                = 'HA_CONFIG', #CRS_CONFIG|HA_CONFIG|UPGRADE|CRS_SWONLY
   $gridBase                = undef,
   $gridHome                = undef,
   $oraInventoryDir         = undef,
@@ -176,9 +176,9 @@ define oradb::installasm(
       logoutput => true,
       require   => Exec["install oracle grid ${title}"],
     }
-    
+
     if ( $gridType == 'CRS_SWONLY' ) {
-      exec { "Configuring Grid Infrastructure for a Stand-Alone Server": 
+      exec { 'Configuring Grid Infrastructure for a Stand-Alone Server':
         command   => "${gridHome}/perl/bin/perl -I${gridHome}/perl/lib -I${gridHome}/crs/install ${gridHome}/crs/install/roothas.pl",
         user      => 'root',
         group     => 'root',
@@ -186,8 +186,7 @@ define oradb::installasm(
         logoutput => true,
         require   => Exec["run root.sh grid script ${title}"],
       }
-    }
-    else {
+    } else {
       file { "${downloadDir}/cfgrsp.properties":
         ensure  => present,
         content => template('oradb/grid_password.properties.erb'),
