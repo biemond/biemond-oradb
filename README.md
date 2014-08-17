@@ -17,7 +17,7 @@ Example of Opensource Puppet 3.4.3 Puppet master configuration in a vagrant box 
 Should work for Puppet 2.7 & 3.0
 
 ##Version updates
-- 1.0.16 installasm fix for Oracle Restart fix
+- 1.0.16 asm/grid for 12.1.0.1 & installasm fix for Oracle Restart fix
 - 1.0.15 RCU fix for multiple FMW Repositories, installasm fix with zipExtract = false 
 - 1.0.14 Rename some internal manifest to avoid a conflict with orawls
 - 1.0.13 Oracle Database & Client 12.1.0.2 Support
@@ -38,7 +38,7 @@ Should work for Puppet 2.7 & 3.0
 
 ##Oracle Database Features
 
-- Oracle Grid 11.2.0.4 Linux / Solaris installation
+- Oracle Grid 11.2.0.4, 12.1.0.1 Linux / Solaris installation
 - Oracle Database 12.1.0.1,12.1.0.2 Linux / Solaris installation
 - Oracle Database 11.2.0.1,11.2.0.3,11.2.0.4 Linux / Solaris installation
 - Oracle Database Client 12.1.0.1,12.1.0.2,11.2.0.4,11.2.0.1 Linux / Solaris installation
@@ -362,6 +362,10 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
         require     => Group[$all_groups],
         managehome  => true,
       }
+
+      // oradb::installasm{ '12.1_linux-x64':
+      //  version                => '12.1.0.1',
+      //  file                   => 'linuxamd64_12c_grid',
 
       oradb::installasm{ '11.2_linux-x64':
         version                => '11.2.0.4',

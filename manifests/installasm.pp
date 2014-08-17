@@ -28,11 +28,11 @@ define oradb::installasm(
 {
 
   $file_without_ext = regsubst($file, '(.+?)(\.zip*$|$)', '\1')
-  notify {"oradb::installasm file without extension ${$file_without_ext} ":}
+  #notify {"oradb::installasm file without extension ${$file_without_ext} ":}
 
 
-  if (!( $version == '11.2.0.4')){
-    fail('Unrecognized database grid install version, use 11.2.0.4')
+  if (!( $version in ['11.2.0.4','12.1.0.1'] )){
+    fail('Unrecognized database grid install version, use 11.2.0.4 or 12.1.0.1')
   }
 
   if ( !($::kernel in ['Linux','SunOS'])){
@@ -89,24 +89,45 @@ define oradb::installasm(
     if ( $zipExtract ) {
       # In $downloadDir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
 
+      if ( $version == '12.1.0.1') {
+        $file1 =  "${file}_1of2.zip"
+        $file2 =  "${file}_2of2.zip"
+      }
+      if ( $version  == '11.2.0.4' ) {
+        $file1 =  $file
+      }
+
       if $remoteFile == true {
 
-        file { "${downloadDir}/${file}":
+        file { "${downloadDir}/${file1}":
           ensure      => present,
-          source      => "${mountPoint}/${file}",
+          source      => "${mountPoint}/${file1}",
           mode        => '0775',
           owner       => $user,
           group       => $group,
           require     => Oradb::Utils::Dbstructure["grid structure ${version}"],
-          before      => Exec["extract ${downloadDir}/${file}"],
+          before      => Exec["extract ${downloadDir}/${file1}"],
         }
+
+        if ( $version == '12.1.0.1' ) {
+          file { "${downloadDir}/${file2}":
+            ensure      => present,
+            source      => "${mountPoint}/${file2}",
+            mode        => '0775',
+            owner       => $user,
+            group       => $group,
+            require     => File["${downloadDir}/${file1}"],
+            before      => Exec["extract ${downloadDir}/${file2}"]
+          }
+        }
+
         $source = $downloadDir
       } else {
         $source = $mountPoint
       }
 
-      exec { "extract ${downloadDir}/${file}":
-        command     => "unzip -o ${source}/${file} -d ${downloadDir}/${file_without_ext}",
+      exec { "extract ${downloadDir}/${file1}":
+        command     => "unzip -o ${source}/${file1} -d ${downloadDir}/${file_without_ext}",
         timeout     => 0,
         logoutput   => false,
         path        => $execPath,
@@ -115,6 +136,18 @@ define oradb::installasm(
         creates     => "${downloadDir}/${file_without_ext}",
         require     => Oradb::Utils::Dbstructure["grid structure ${version}"],
         before      => Exec["install oracle grid ${title}"],
+      }
+      if ( $version == '12.1.0.1' ) {
+        exec { "extract ${downloadDir}/${file2}":
+          command     => "unzip -o ${source}/${file2} -d ${downloadDir}/${file_without_ext}",
+          timeout     => 0,
+          logoutput   => false,
+          path        => $execPath,
+          user        => $user,
+          group       => $group,
+          require     => Exec["extract ${downloadDir}/${file1}"],
+          before      => Exec["install oracle grid ${title}"],
+        }
       }
     }
 
