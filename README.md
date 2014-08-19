@@ -787,22 +787,24 @@ install the following module to set the database user limits parameters
     
     # pkginfo -i SUNWarc SUNWbtool SUNWhea SUNWlibC SUNWlibm SUNWlibms SUNWsprot SUNWtoo SUNWi1of SUNWi1cs SUNWi15cs SUNWxwfnt SUNWcsl SUNWdtrc
     # pkgadd -d /cdrom/unnamed_cdrom/Solaris_10/Product/ -r response -a response SUNWarc SUNWbtool SUNWhea SUNWlibC SUNWlibm SUNWlibms SUNWsprot SUNWtoo SUNWi1of SUNWi1cs SUNWi15cs SUNWxwfnt SUNWcsl SUNWdtrc
-  
-    $groups = ['oinstall','dba' ,'oper' ]
 
-    group { $groups :
+
+    $all_groups = ['oinstall','dba' ,'oper']
+
+    group { $all_groups :
       ensure      => present,
-    }  
+    }
 
     user { 'oracle' :
       ensure      => present,
-      gid         => 'dba',  
-      groups      => 'dba',
+      uid         => 500,
+      gid         => 'oinstall',  
+      groups      => ['oinstall','dba','oper'],
       shell       => '/bin/bash',
       password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
-      home        => "/export/home/oracle",
-      comment     => "This user ${user} was created by Puppet",
-      require     => Group[$groups],
+      home        => "/home/oracle",
+      comment     => "This user oracle was created by Puppet",
+      require     => Group[$all_groups],
       managehome  => true,
     }
   
