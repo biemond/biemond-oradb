@@ -26,6 +26,7 @@ define oradb::installdb(
   $zipExtract              = true,
   $puppetDownloadMntPoint  = undef,
   $remoteFile              = true,
+  $cluster_nodes           = undef,
 )
 {
 

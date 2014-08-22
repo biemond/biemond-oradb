@@ -95,6 +95,12 @@ define oradb::database(
         $globalDbName = $dbName
     }
 
+    if $cluster_nodes { # We are a RAC node
+      $sid_name = "${dbName}1"
+    } else {
+      $sid_name = "${dbName}"
+    }
+
     if ! defined(File[$filename]) {
       file { $filename:
         ensure       => present,

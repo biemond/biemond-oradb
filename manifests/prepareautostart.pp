@@ -33,7 +33,7 @@ class oradb::prepareautostart
         logoutput      => true,
       }
     }
-    'Ubuntu', 'Debian', 'SLES': {
+    'Ubuntu', 'Debian', 'SLES':{
 
       exec { 'update-rc.d dbora':
         command        => 'update-rc.d dbora defaults',

@@ -24,12 +24,26 @@ define oradb::installasm(
   $zipExtract              = true,
   $puppetDownloadMntPoint  = undef,
   $remoteFile              = true,
+  $cluster_name            = undef,
+  $scan_name               = undef,
+  $scan_port               = undef,
+  $cluster_nodes           = undef,
+  $network_interface_list  = undef,
+  $storage_option          = undef,
 )
 {
 
   $file_without_ext = regsubst($file, '(.+?)(\.zip*$|$)', '\1')
   #notify {"oradb::installasm file without extension ${$file_without_ext} ":}
 
+  if($cluster_name){ # We've got a RAC cluster. Check the cluster specific parameters
+    unless is_string($scan_name) {fail('You must specify scan_name if cluster_name is defined') }
+    unless is_integer($scan_port) {fail('You must specify scan_port if cluster_name is defined') }
+    unless is_string($cluster_nodes) {fail('You must specify cluster_nodes if cluster_name is defined') }
+    unless is_string($network_interface_list) {fail('You must specify network_interface_list if cluster_name is defined') }
+    unless is_string($storage_option) {fail('You must specify storage_option if cluster_name is defined') }
+    unless $storage_option in ['ASM_STORAGE', 'FILE_SYSTEM_STORAGE'] {fail "storage_option must be either ASM_STORAGE of FILE_SYSTEM_STORAGE"}
+  }
 
   if (!( $version in ['11.2.0.4','12.1.0.1'] )){
     fail('Unrecognized database grid install version, use 11.2.0.4 or 12.1.0.1')
@@ -202,6 +216,7 @@ define oradb::installasm(
     }
 
     exec { "run root.sh grid script ${title}":
+      timeout   => 0,
       command   => "${gridHome}/root.sh",
       user      => 'root',
       group     => 'root',
@@ -230,6 +245,7 @@ define oradb::installasm(
       }
 
       exec { "run configToolAllCommands grid tool ${title}":
+        timeout   => 0, # This can sometimes take a long time
         command   => "${gridHome}/cfgtoollogs/configToolAllCommands RESPONSE_FILE=${downloadDir}/cfgrsp.properties",
         user      => $user,
         group     => $group_install,
