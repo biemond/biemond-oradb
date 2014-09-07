@@ -1,4 +1,4 @@
-#Oracle Database puppet module
+# Oracle Database puppet module
 [![Build Status](https://travis-ci.org/biemond/biemond-oradb.png)](https://travis-ci.org/biemond/biemond-oradb)
 
 created by Edwin Biemond
@@ -16,27 +16,7 @@ Example of Opensource Puppet 3.4.3 Puppet master configuration in a vagrant box 
 
 Should work for Puppet 2.7 & 3.0
 
-##Version updates
-- 1.0.16 asm/grid for 12.1.0.1 & installasm fix for Oracle Restart fix, 11.2.0.1 rsp template fix
-- 1.0.15 RCU fix for multiple FMW Repositories, installasm fix with zipExtract = false 
-- 1.0.14 Rename some internal manifest to avoid a conflict with orawls
-- 1.0.13 Oracle Database & Client 12.1.0.2 Support
-- 1.0.11 database client fix with remote file, set DBSNMPPASSWORD on a database
-- 1.0.10 oraInst.loc bug fix, option to skip installdb bash profile
-- 1.0.9 11.2 EE install options
-- 1.0.8 RCU & Opatch fixes in combination with ruby 1.9.3
-- 1.0.7 Added unit tests and OPatch upgrade support without OCM registration
-- 1.0.6 Grid install and ASM support
-- 1.0.5 refactored installdb and support for oinstall groups
-- 1.0.4 db_rcu native type used in rcu.pp
-- 1.0.2 db_opatch native type used in opatch.pp
-- 1.0.1 autostart multiple databases, small fixes
-- 1.0.0 oracle module add-on for user,role and tablespace creation
-- 0.9.9 emConfiguration parameter for Database creation
-- 0.9.7 Oracle database 11.2.0.1, 12.1.0.1 client support, refactored installdb,net,goldengate
-
-
-##Oracle Database Features
+## Oracle Database Features
 
 - Oracle Grid 11.2.0.4, 12.1.0.1 Linux / Solaris installation
 - Oracle Database 12.1.0.1,12.1.0.2 Linux / Solaris installation
@@ -62,7 +42,7 @@ Some manifests like installdb.pp, opatch.pp or rcusoa.pp supports an alternative
 When not provided it uses the files location of the oradb puppet module
 else you can use $puppetDownloadMntPoint => "/mnt" or "puppet:///modules/xxxx/"
 
-##Oracle Big files and alternate download location
+## Oracle Big files and alternate download location
 Some manifests like oradb:installdb, opatch or rcu supports an alternative mountpoint for the big oracle setup/install files.  
 When not provided it uses the files folder located in the orawls puppet module  
 else you can use $source =>
@@ -73,19 +53,14 @@ else you can use $source =>
 
 when the files are also locally accessible then you can also set $remote_file => false this will not move the files to the download folder, just extract or install 
 
-##Oracle Database Facter
-Contains Oracle Facter which displays the following
-- Oracle Software
-- Opatch patches
-
-##templates.pp
+## templates.pp
 
 The databaseType value should contain only one of these choices.
 - EE = Enterprise Edition
 - SE = Standard Edition
 - SEONE = Standard Edition One
 
-## database install
+## Database install
 
     $puppetDownloadMntPoint = "puppet:///modules/oradb/"
     
@@ -329,7 +304,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
       }
     }
 
-##Grid install with ASM 
+## Grid install with ASM 
 
       $all_groups = ['oinstall','dba' ,'oper','asmdba','asmadmin','asmoper']
 
@@ -474,7 +449,7 @@ or
     }
 
 
-##Database configuration
+## Database configuration
 In combination with the oracle puppet module you can create a tablespace,role and oracle user   
 
     tablespace {'scott_ts':
@@ -507,7 +482,7 @@ In combination with the oracle puppet module you can create a tablespace,role an
     }
 
 
-##Oracle GoldenGate 12.1.2 and 11.2.1 
+## Oracle GoldenGate 12.1.2 and 11.2.1 
 
 
       $groups = ['oinstall','dba']
@@ -596,7 +571,7 @@ In combination with the oracle puppet module you can create a tablespace,role an
         require                 => [File["/oracle/product"],File["/oracle/product/11.2.1"]]
       }
 
-##Oracle SOA Suite Repository Creation Utility (RCU)  
+## Oracle SOA Suite Repository Creation Utility (RCU)  
 
 product =
 - soasuite
@@ -682,7 +657,7 @@ OIM, OAM repository, OIM needs an Oracle Enterprise Edition database
      }
 
 
-##Linux kernel, ulimits and required packages
+## Linux kernel, ulimits and required packages
 
 install the following module to set the database kernel parameters
 *puppet module install fiddyspence-sysctl*
@@ -743,7 +718,7 @@ install the following module to set the database user limits parameters
         ensure  => present,
       }
 
-##Solaris 10 kernel, ulimits and required packages
+## Solaris 10 kernel, ulimits and required packages
 
     exec { "create /cdrom/unnamed_cdrom":
       command => "/usr/bin/mkdir -p /cdrom/unnamed_cdrom",
