@@ -1,5 +1,7 @@
 # Version updates
 
+## 1.0.17
+
 ## 1.0.16
 - cleanup readme
 - asm/grid for 12.1.0.1 & installasm fix for Oracle Restart fix, 11.2.0.1 rsp template fix
