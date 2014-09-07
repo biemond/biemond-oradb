@@ -22,7 +22,7 @@ class oradb::prepareautostart
   }
 
   case $::operatingsystem {
-    CentOS, RedHat, OracleLinux: {
+    'CentOS', 'RedHat', 'OracleLinux': {
 
       exec { 'chkconfig dbora':
         command        => 'chkconfig --add dbora',
@@ -33,7 +33,7 @@ class oradb::prepareautostart
         logoutput      => true,
       }
     }
-    Ubuntu, Debian, SLES:{
+    'Ubuntu', 'Debian', 'SLES': {
 
       exec { 'update-rc.d dbora':
         command        => 'update-rc.d dbora defaults',

@@ -1,6 +1,7 @@
 # Version updates
 
 ## 1.0.17
+- Fix for puppet 3.7 and more strict parsing
 
 ## 1.0.16
 - cleanup readme
