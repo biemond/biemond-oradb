@@ -202,7 +202,7 @@ GDBNAME = "<%= @globalDbName %>"
 # Default value : <db_name> specified in GDBNAME
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-SID = "<%= @dbName %>"
+SID = "<%= @sid_name %>"
 
 #-----------------------------------------------------------------------------
 # Name          : CREATEASCONTAINERDATABASE 
@@ -243,7 +243,7 @@ SID = "<%= @dbName %>"
 # Default value : None
 # Mandatory     : No (Yes for RAC database-centric database )
 #-----------------------------------------------------------------------------
-#NODELIST=
+NODELIST=<%= @cluster_nodes %>
 
 #-----------------------------------------------------------------------------
 # Name          : TEMPLATENAME

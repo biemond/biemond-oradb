@@ -152,12 +152,12 @@ oracle.install.asm.OSASM=<%= @group_asm %>
 #-------------------------------------------------------------------------------
 # Specify a name for SCAN
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.gpnp.scanName=
+oracle.install.crs.config.gpnp.scanName=<%= @scan_name %>
 
 #-------------------------------------------------------------------------------
 # Specify a unused port number for SCAN service
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.gpnp.scanPort=
+oracle.install.crs.config.gpnp.scanPort=<%= @scan_port %>
 
 ################################################################################
 #                                                                              #
@@ -171,7 +171,7 @@ oracle.install.crs.config.gpnp.scanPort=
 # any combination of lower and uppercase alphabets (A - Z), (0 - 9), hyphen(-)
 # and underscore(_).
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.clusterName=
+oracle.install.crs.config.clusterName=<%= @cluster_name %>
 
 #-------------------------------------------------------------------------------
 # Specify 'true' if you would like to configure Grid Naming Service(GNS), else
@@ -207,7 +207,7 @@ oracle.install.crs.config.autoConfigureClusterNodeVIP=
 #
 # Example: oracle.install.crs.config.clusterNodes=node1:node1-vip,node2:node2-vip
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.clusterNodes=
+oracle.install.crs.config.clusterNodes=<%= @cluster_nodes %>
 
 #-------------------------------------------------------------------------------
 # The value should be a comma separated strings where each string is as shown below
@@ -218,7 +218,7 @@ oracle.install.crs.config.clusterNodes=
 # For example: eth0:140.87.24.0:1,eth1:10.2.1.0:2,eth2:140.87.52.0:3
 #
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.networkInterfaceList=
+oracle.install.crs.config.networkInterfaceList=<%= @network_interface_list %>
 
 ################################################################################
 #                                                                              #
@@ -232,7 +232,7 @@ oracle.install.crs.config.networkInterfaceList=
 #   - ASM_STORAGE
 #   - FILE_SYSTEM_STORAGE 
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.storageOption=
+oracle.install.crs.config.storageOption=<%= @storage_option %>
 
 #-------------------------------------------------------------------------------
 # THIS PROPERTY NEEDS TO BE FILLED ONLY IN CASE OF WINDOWS INSTALL. 
