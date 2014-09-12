@@ -25,6 +25,7 @@ Should work for Puppet 2.7 & 3.0
 - Oracle Database Net configuration
 - Oracle Database Listener
 - Oracle ASM
+- Oracle RAC
 - OPatch upgrade
 - Apply OPatch
 - Create database instances

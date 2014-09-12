@@ -2,6 +2,7 @@
 
 ## 1.0.17
 - Fix for puppet 3.7 and more strict parsing
+- RAC installation parameters for database, installasm, installdb 
 
 ## 1.0.16
 - cleanup readme
