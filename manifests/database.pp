@@ -31,6 +31,7 @@ define oradb::database(
   $dbSnmpPassword           = 'Welcome01',
   $asmDiskgroup             = 'DATA',
   $recoveryDiskgroup        = undef,
+  $cluster_nodes            = undef,
 ){
   if (!( $version in ['11.2','12.1'])) {
     fail('Unrecognized version')
