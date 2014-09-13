@@ -253,6 +253,7 @@ define oradb::installasm(
         provider  => 'shell',
         cwd       => "${gridHome}/cfgtoollogs",
         logoutput => true,
+        returns   => [0,3], # when a scan adress is not defined in the DNS, it fails, buut we can continue
         require   => [File["${downloadDir}/cfgrsp.properties"],
                       Exec["run root.sh grid script ${title}"],
                       Exec["install oracle grid ${title}"],
