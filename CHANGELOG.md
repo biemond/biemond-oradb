@@ -1,9 +1,11 @@
 # Version updates
 
+## 1.0.18
+
 ## 1.0.17
 - Fix for puppet 3.7 and more strict parsing
 - OPatch also checks for OPatch succeeded
-- RAC installation parameters for database, installasm, installdb 
+- RAC installation parameters for database, installasm, installdb
 
 ## 1.0.16
 - cleanup readme
