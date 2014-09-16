@@ -32,7 +32,7 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
     result = false
     output.each_line do |li|
       unless li.nil?
-        if li.include? "OPatch completed"
+        if li.include? "OPatch completed" or li.include? "OPatch succeeded"
           result = true
         end
       end 
