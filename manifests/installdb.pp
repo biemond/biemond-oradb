@@ -101,23 +101,23 @@ define oradb::installdb(
       if $remoteFile == true {
 
         file { "${downloadDir}/${file1}":
-          ensure      => present,
-          source      => "${mountPoint}/${file1}",
-          mode        => '0775',
-          owner       => $user,
-          group       => $group,
-          require     => Oradb::Utils::Dbstructure["oracle structure ${version}"],
-          before      => Exec["extract ${downloadDir}/${file1}"],
+          ensure  => present,
+          source  => "${mountPoint}/${file1}",
+          mode    => '0775',
+          owner   => $user,
+          group   => $group,
+          require => Oradb::Utils::Dbstructure["oracle structure ${version}"],
+          before  => Exec["extract ${downloadDir}/${file1}"],
         }
         # db file 2 installer zip
         file { "${downloadDir}/${file2}":
-          ensure      => present,
-          source      => "${mountPoint}/${file2}",
-          mode        => '0775',
-          owner       => $user,
-          group       => $group,
-          require     => File["${downloadDir}/${file1}"],
-          before      => Exec["extract ${downloadDir}/${file2}"]
+          ensure  => present,
+          source  => "${mountPoint}/${file2}",
+          mode    => '0775',
+          owner   => $user,
+          group   => $group,
+          require => File["${downloadDir}/${file1}"],
+          before  => Exec["extract ${downloadDir}/${file2}"]
         }
         $source = $downloadDir
       } else {
@@ -125,24 +125,24 @@ define oradb::installdb(
       }
 
       exec { "extract ${downloadDir}/${file1}":
-        command     => "unzip -o ${source}/${file1} -d ${downloadDir}/${file}",
-        timeout     => 0,
-        logoutput   => false,
-        path        => $execPath,
-        user        => $user,
-        group       => $group,
-        require     => Oradb::Utils::Dbstructure["oracle structure ${version}"],
-        before      => Exec["install oracle database ${title}"],
+        command   => "unzip -o ${source}/${file1} -d ${downloadDir}/${file}",
+        timeout   => 0,
+        logoutput => false,
+        path      => $execPath,
+        user      => $user,
+        group     => $group,
+        require   => Oradb::Utils::Dbstructure["oracle structure ${version}"],
+        before    => Exec["install oracle database ${title}"],
       }
       exec { "extract ${downloadDir}/${file2}":
-        command     => "unzip -o ${source}/${file2} -d ${downloadDir}/${file}",
-        timeout     => 0,
-        logoutput   => false,
-        path        => $execPath,
-        user        => $user,
-        group       => $group,
-        require     => Exec["extract ${downloadDir}/${file1}"],
-        before      => Exec["install oracle database ${title}"],
+        command   => "unzip -o ${source}/${file2} -d ${downloadDir}/${file}",
+        timeout   => 0,
+        logoutput => false,
+        path      => $execPath,
+        user      => $user,
+        group     => $group,
+        require   => Exec["extract ${downloadDir}/${file1}"],
+        before    => Exec["install oracle database ${title}"],
       }
     }
 
@@ -153,27 +153,27 @@ define oradb::installdb(
 
     if ! defined(File["${downloadDir}/db_install_${version}.rsp"]) {
       file { "${downloadDir}/db_install_${version}.rsp":
-        ensure        => present,
-        content       => template("oradb/db_install_${version}.rsp.erb"),
-        mode          => '0775',
-        owner         => $user,
-        group         => $group,
-        require       => Oradb::Utils::Dborainst["database orainst ${version}"],
+        ensure  => present,
+        content => template("oradb/db_install_${version}.rsp.erb"),
+        mode    => '0775',
+        owner   => $user,
+        group   => $group,
+        require => Oradb::Utils::Dborainst["database orainst ${version}"],
       }
     }
 
     if ( $version in ['11.2.0.1','12.1.0.1','12.1.0.2','11.2.0.3','11.2.0.4']){
       exec { "install oracle database ${title}":
-        command     => "/bin/sh -c 'unset DISPLAY;${downloadDir}/${file}/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${downloadDir}/db_install_${version}.rsp'",
-        creates     => "${oracleHome}/dbs",
-        timeout     => 0,
-        returns     => [6,0],
-        path        => $execPath,
-        user        => $user,
-        group       => $group_install,
-        logoutput   => true,
-        require     => [Oradb::Utils::Dborainst["database orainst ${version}"],
-                        File["${downloadDir}/db_install_${version}.rsp"]],
+        command   => "/bin/sh -c 'unset DISPLAY;${downloadDir}/${file}/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${downloadDir}/db_install_${version}.rsp'",
+        creates   => "${oracleHome}/dbs",
+        timeout   => 0,
+        returns   => [6,0],
+        path      => $execPath,
+        user      => $user,
+        group     => $group_install,
+        logoutput => true,
+        require   => [Oradb::Utils::Dborainst["database orainst ${version}"],
+                      File["${downloadDir}/db_install_${version}.rsp"]],
       }
 
       file { $oracleHome:

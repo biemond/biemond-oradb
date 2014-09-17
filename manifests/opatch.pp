@@ -70,24 +70,24 @@ define oradb::opatch(
       if $ensure == 'present' {
         if $remoteFile == true {
           exec { "extract opatch ${patchFile} ${title}":
-            command    => "unzip -n ${downloadDir}/${patchFile} -d ${downloadDir}",
-            require    => File["${downloadDir}/${patchFile}"],
-            creates    => "${downloadDir}/${patchId}",
-            path       => $execPath,
-            user       => $user,
-            group      => $group,
-            logoutput  => false,
-            before     => Db_opatch[$patchId],
+            command   => "unzip -n ${downloadDir}/${patchFile} -d ${downloadDir}",
+            require   => File["${downloadDir}/${patchFile}"],
+            creates   => "${downloadDir}/${patchId}",
+            path      => $execPath,
+            user      => $user,
+            group     => $group,
+            logoutput => false,
+            before    => Db_opatch[$patchId],
           }
         } else {
           exec { "extract opatch ${patchFile} ${title}":
-            command    => "unzip -n ${mountPoint}/${patchFile} -d ${downloadDir}",
-            creates    => "${downloadDir}/${patchId}",
-            path       => $execPath,
-            user       => $user,
-            group      => $group,
-            logoutput  => false,
-            before     => Db_opatch[$patchId],
+            command   => "unzip -n ${mountPoint}/${patchFile} -d ${downloadDir}",
+            creates   => "${downloadDir}/${patchId}",
+            path      => $execPath,
+            user      => $user,
+            group     => $group,
+            logoutput => false,
+            before    => Db_opatch[$patchId],
           }
         }
       }

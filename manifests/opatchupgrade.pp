@@ -18,7 +18,7 @@
 #   }
 #
 #
-define oradb::opatchupgrade( 
+define oradb::opatchupgrade(
   $oracleHome              = undef,
   $patchFile               = undef,
   $csiNumber               = undef,
@@ -53,30 +53,30 @@ define oradb::opatchupgrade(
 
     if ! defined(File["${downloadDir}/${patchFile}"]) {
       file {"${downloadDir}/${patchFile}":
-        ensure       => present,
-        path         => "${downloadDir}/${patchFile}",
-        source       => "${mountDir}/${patchFile}",
-        mode         => '0775',
-        owner        => $user,
-        group        => $group,
+        ensure => present,
+        path   => "${downloadDir}/${patchFile}",
+        source => "${mountDir}/${patchFile}",
+        mode   => '0775',
+        owner  => $user,
+        group  => $group,
       }
     }
 
     case $::kernel {
       'Linux', 'SunOS': {
         file { 'remove_old':
-          ensure     => absent,
-          recurse    => true,
-          path       => $patchDir,
-          force      => true,
+          ensure  => absent,
+          recurse => true,
+          path    => $patchDir,
+          force   => true,
         } ->
         exec { "extract opatch ${patchFile}":
-          command    => "unzip -n ${downloadDir}/${patchFile} -d ${oracleHome}",
-          require    => File["${downloadDir}/${patchFile}"],
-          path       => $execPath,
-          user       => $user,
-          group      => $group,
-          logoutput  => false,
+          command   => "unzip -n ${downloadDir}/${patchFile} -d ${oracleHome}",
+          require   => File["${downloadDir}/${patchFile}"],
+          path      => $execPath,
+          user      => $user,
+          group     => $group,
+          logoutput => false,
         }
 
         if ( $csiNumber != undef and supportId != undef ) {
@@ -96,11 +96,11 @@ define oradb::opatchupgrade(
           }
 
           file { "${downloadDir}/opatch_upgrade_${opversion}.ksh":
-            ensure        => present,
-            content       => template('oradb/ocm.rsp.erb'),
-            mode          => '0775',
-            owner         => $user,
-            group         => $group,
+            ensure  => present,
+            content => template('oradb/ocm.rsp.erb'),
+            mode    => '0775',
+            owner   => $user,
+            group   => $group,
           }
 
           exec { "ksh ${downloadDir}/opatch_upgrade_${opversion}.ksh":

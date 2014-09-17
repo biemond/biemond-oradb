@@ -42,7 +42,7 @@ define oradb::installasm(
     unless is_string($cluster_nodes) {fail('You must specify cluster_nodes if cluster_name is defined') }
     unless is_string($network_interface_list) {fail('You must specify network_interface_list if cluster_name is defined') }
     unless is_string($storage_option) {fail('You must specify storage_option if cluster_name is defined') }
-    unless $storage_option in ['ASM_STORAGE', 'FILE_SYSTEM_STORAGE'] {fail "storage_option must be either ASM_STORAGE of FILE_SYSTEM_STORAGE"}
+    unless $storage_option in ['ASM_STORAGE', 'FILE_SYSTEM_STORAGE'] {fail 'storage_option must be either ASM_STORAGE of FILE_SYSTEM_STORAGE'}
   }
 
   if (!( $version in ['11.2.0.4','12.1.0.1'] )){
@@ -114,24 +114,24 @@ define oradb::installasm(
       if $remoteFile == true {
 
         file { "${downloadDir}/${file1}":
-          ensure      => present,
-          source      => "${mountPoint}/${file1}",
-          mode        => '0775',
-          owner       => $user,
-          group       => $group,
-          require     => Oradb::Utils::Dbstructure["grid structure ${version}"],
-          before      => Exec["extract ${downloadDir}/${file1}"],
+          ensure  => present,
+          source  => "${mountPoint}/${file1}",
+          mode    => '0775',
+          owner   => $user,
+          group   => $group,
+          require => Oradb::Utils::Dbstructure["grid structure ${version}"],
+          before  => Exec["extract ${downloadDir}/${file1}"],
         }
 
         if ( $version == '12.1.0.1' ) {
           file { "${downloadDir}/${file2}":
-            ensure      => present,
-            source      => "${mountPoint}/${file2}",
-            mode        => '0775',
-            owner       => $user,
-            group       => $group,
-            require     => File["${downloadDir}/${file1}"],
-            before      => Exec["extract ${downloadDir}/${file2}"]
+            ensure  => present,
+            source  => "${mountPoint}/${file2}",
+            mode    => '0775',
+            owner   => $user,
+            group   => $group,
+            require => File["${downloadDir}/${file1}"],
+            before  => Exec["extract ${downloadDir}/${file2}"]
           }
         }
 
@@ -141,26 +141,26 @@ define oradb::installasm(
       }
 
       exec { "extract ${downloadDir}/${file1}":
-        command     => "unzip -o ${source}/${file1} -d ${downloadDir}/${file_without_ext}",
-        timeout     => 0,
-        logoutput   => false,
-        path        => $execPath,
-        user        => $user,
-        group       => $group,
-        creates     => "${downloadDir}/${file_without_ext}",
-        require     => Oradb::Utils::Dbstructure["grid structure ${version}"],
-        before      => Exec["install oracle grid ${title}"],
+        command   => "unzip -o ${source}/${file1} -d ${downloadDir}/${file_without_ext}",
+        timeout   => 0,
+        logoutput => false,
+        path      => $execPath,
+        user      => $user,
+        group     => $group,
+        creates   => "${downloadDir}/${file_without_ext}",
+        require   => Oradb::Utils::Dbstructure["grid structure ${version}"],
+        before    => Exec["install oracle grid ${title}"],
       }
       if ( $version == '12.1.0.1' ) {
         exec { "extract ${downloadDir}/${file2}":
-          command     => "unzip -o ${source}/${file2} -d ${downloadDir}/${file_without_ext}",
-          timeout     => 0,
-          logoutput   => false,
-          path        => $execPath,
-          user        => $user,
-          group       => $group,
-          require     => Exec["extract ${downloadDir}/${file1}"],
-          before      => Exec["install oracle grid ${title}"],
+          command   => "unzip -o ${source}/${file2} -d ${downloadDir}/${file_without_ext}",
+          timeout   => 0,
+          logoutput => false,
+          path      => $execPath,
+          user      => $user,
+          group     => $group,
+          require   => Exec["extract ${downloadDir}/${file1}"],
+          before    => Exec["install oracle grid ${title}"],
         }
       }
     }
@@ -172,26 +172,26 @@ define oradb::installasm(
 
     if ! defined(File["${downloadDir}/grid_install_${version}.rsp"]) {
       file { "${downloadDir}/grid_install_${version}.rsp":
-        ensure        => present,
-        content       => template("oradb/grid_install_${version}.rsp.erb"),
-        mode          => '0775',
-        owner         => $user,
-        group         => $group,
-        require       => Oradb::Utils::Dborainst["grid orainst ${version}"],
+        ensure  => present,
+        content => template("oradb/grid_install_${version}.rsp.erb"),
+        mode    => '0775',
+        owner   => $user,
+        group   => $group,
+        require => Oradb::Utils::Dborainst["grid orainst ${version}"],
       }
     }
 
     exec { "install oracle grid ${title}":
-      command     => "/bin/sh -c 'unset DISPLAY;${downloadDir}/${file_without_ext}/grid/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${downloadDir}/grid_install_${version}.rsp'",
-      creates     => $gridHome,
-      timeout     => 0,
-      returns     => [6,0],
-      path        => $execPath,
-      user        => $user,
-      group       => $group_install,
-      logoutput   => true,
-      require     => [Oradb::Utils::Dborainst["grid orainst ${version}"],
-                      File["${downloadDir}/grid_install_${version}.rsp"]],
+      command   => "/bin/sh -c 'unset DISPLAY;${downloadDir}/${file_without_ext}/grid/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${downloadDir}/grid_install_${version}.rsp'",
+      creates   => $gridHome,
+      timeout   => 0,
+      returns   => [6,0],
+      path      => $execPath,
+      user      => $user,
+      group     => $group_install,
+      logoutput => true,
+      require   => [Oradb::Utils::Dborainst["grid orainst ${version}"],
+                    File["${downloadDir}/grid_install_${version}.rsp"]],
     }
 
     file { $gridHome:

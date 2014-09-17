@@ -26,21 +26,21 @@ define oradb::utils::dbstructure (
     # Whether Puppet will manage the group or relying on external methods
     if ! defined(Group[$os_group]) {
       group { $os_group :
-        ensure      => present,
-        before      => User[$os_user],
+        ensure => present,
+        before => User[$os_user],
       }
     }
     if ! defined(Group[$os_group_install]) {
       group { $os_group_install :
-        ensure      => present,
-        before      => User[$os_user],
+        ensure => present,
+        before => User[$os_user],
       }
     }
     if ( $os_group_oper != undef ){
       if ! defined(Group[$os_group_oper]) {
         group { $os_group_oper :
-          ensure      => present,
-          before      => User[$os_user],
+          ensure => present,
+          before => User[$os_user],
         }
       }
       $all_groups = [$os_group,$os_group_install,$os_group_oper ]
@@ -51,14 +51,14 @@ define oradb::utils::dbstructure (
     if ! defined(User[$os_user]) {
       # http://raftaman.net/?p=1311 for generating password
       user { $os_user :
-        ensure      => present,
-        gid         => $os_group_install,
-        groups      => $all_groups,
-        shell       => '/bin/bash',
-        password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
-        home        => "${user_base_dir}/${os_user}",
-        comment     => "This user ${os_user} was created by Puppet",
-        managehome  => true,
+        ensure     => present,
+        gid        => $os_group_install,
+        groups     => $all_groups,
+        shell      => '/bin/bash',
+        password   => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
+        home       => "${user_base_dir}/${os_user}",
+        comment    => "This user ${os_user} was created by Puppet",
+        managehome => true,
       }
     }
   }

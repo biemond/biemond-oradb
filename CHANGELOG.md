@@ -1,6 +1,8 @@
 # Version updates
 
 ## 1.0.18
+- Puppet Lint fixes
+- Rubocop fixes
 
 ## 1.0.17
 - Fix for puppet 3.7 and more strict parsing

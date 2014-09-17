@@ -19,11 +19,11 @@ define oradb::autostartdatabase(
   }
 
   exec { "set dbora ${dbName}:${oracleHome}":
-    command        => "sed -i -e's/:N/:Y/g' /etc/oratab",
-    unless         => "/bin/grep '^${dbName}:${oracleHome}:Y' /etc/oratab",
-    require        => File['/etc/init.d/dbora'],
-    path           => $execPath,
-    logoutput      => true,
+    command   => "sed -i -e's/:N/:Y/g' /etc/oratab",
+    unless    => "/bin/grep '^${dbName}:${oracleHome}:Y' /etc/oratab",
+    require   => File['/etc/init.d/dbora'],
+    path      => $execPath,
+    logoutput => true,
   }
 
 }

@@ -17,8 +17,8 @@ define oradb::utils::dborainst
       $oraInstPath = '/var/opt/oracle'
       if !defined(File[$oraInstPath]) {
         file { $oraInstPath:
-          ensure  => directory,
-          before  => File["${oraInstPath}/oraInst.loc"],
+          ensure => directory,
+          before => File["${oraInstPath}/oraInst.loc"],
         }
       }
     }
