@@ -72,7 +72,7 @@ define oradb::opatchupgrade(
         } ->
         exec { "extract opatch ${patchFile}":
           command    => "unzip -n ${downloadDir}/${patchFile} -d ${oracleHome}",
-          require    => File ["${downloadDir}/${patchFile}"],
+          require    => File["${downloadDir}/${patchFile}"],
           path       => $execPath,
           user       => $user,
           group      => $group,
