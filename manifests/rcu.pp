@@ -77,7 +77,7 @@ define oradb::rcu(
         owner  => $user,
         group  => $group,
         source => "${mountPoint}/${rcuFile}",
-        before => Exec ["extract ${rcuFile}"],
+        before => Exec["extract ${rcuFile}"],
       }
     }
     $source = $downloadDir
@@ -103,7 +103,7 @@ define oradb::rcu(
       path    => "${downloadDir}/rcu_${version}/rcuHome/rcu/log",
       recurse => false,
       replace => false,
-      require => Exec ["extract ${rcuFile}"],
+      require => Exec["extract ${rcuFile}"],
       mode    => '0775',
       owner   => $user,
       group   => $group,
@@ -130,7 +130,7 @@ define oradb::rcu(
 
   file { "${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt":
     ensure  => present,
-    require => Exec ["extract ${rcuFile}"],
+    require => Exec["extract ${rcuFile}"],
     content => template('oradb/rcu_passwords.txt.erb'),
     mode    => '0775',
     owner   => $user,

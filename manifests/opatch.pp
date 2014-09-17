@@ -71,7 +71,7 @@ define oradb::opatch(
         if $remoteFile == true {
           exec { "extract opatch ${patchFile} ${title}":
             command    => "unzip -n ${downloadDir}/${patchFile} -d ${downloadDir}",
-            require    => File ["${downloadDir}/${patchFile}"],
+            require    => File["${downloadDir}/${patchFile}"],
             creates    => "${downloadDir}/${patchId}",
             path       => $execPath,
             user       => $user,
