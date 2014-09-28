@@ -155,13 +155,13 @@ oracle.install.asm.OSASM=<%= @group_asm %>
 #-------------------------------------------------------------------------------
 # Specify a name for SCAN
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.gpnp.scanName=
+oracle.install.crs.config.gpnp.scanName=<%= @scan_name %>
 
 #-------------------------------------------------------------------------------
 # Specify a unused port number for SCAN service
 #-------------------------------------------------------------------------------
 
-oracle.install.crs.config.gpnp.scanPort=
+oracle.install.crs.config.gpnp.scanPort=<%= @scan_port %>
 
 ################################################################################
 #                                                                              #
@@ -182,7 +182,7 @@ oracle.install.crs.config.ClusterType=
 # any combination of lower and uppercase alphabets (A - Z), (0 - 9), hyphen(-)
 # and underscore(_).
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.clusterName=
+oracle.install.crs.config.clusterName=<%= @cluster_name %>
 
 #-------------------------------------------------------------------------------
 # Specify 'true' if you would like to configure Grid Naming Service(GNS), else
@@ -242,7 +242,7 @@ oracle.install.crs.config.gpnp.gnsVIPAddress=
 #
 #
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.clusterNodes=
+oracle.install.crs.config.clusterNodes=<%= @cluster_nodes %>
 
 #-------------------------------------------------------------------------------
 # The value should be a comma separated strings where each string is as shown below
@@ -258,7 +258,7 @@ oracle.install.crs.config.clusterNodes=
 # For example: eth0:140.87.24.0:1,eth1:10.2.1.0:2,eth2:140.87.52.0:3
 #
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.networkInterfaceList=
+oracle.install.crs.config.networkInterfaceList=<%= @network_interface_list %>
 
 #-------------------------------------------------------------------------------
 # Specify 'true' if you would like to configure Management Database Option, else
@@ -280,7 +280,7 @@ oracle.install.crs.managementdb.configure=
 #   - FILE_SYSTEM_STORAGE
 # If configuring a Flex Cluster, FLEX_ASM_STORAGE is the only allowed value 
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.storageOption=
+oracle.install.crs.config.storageOption=<%= @storage_option %>
 
 #-------------------------------------------------------------------------------
 # These properties are applicable only if FILE_SYSTEM_STORAGE is chosen for 
