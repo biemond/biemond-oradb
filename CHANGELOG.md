@@ -3,6 +3,7 @@
 ## 1.0.18
 - Puppet Lint fixes
 - Rubocop fixes
+- 12.1 Template fix for Oracle RAC
 
 ## 1.0.17
 - Fix for puppet 3.7 and more strict parsing
