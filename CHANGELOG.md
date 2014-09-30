@@ -1,5 +1,7 @@
 # Version updates
 
+## 1.0.19
+
 ## 1.0.18
 - Puppet Lint fixes
 - Rubocop fixes
