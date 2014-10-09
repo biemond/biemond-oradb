@@ -70,5 +70,17 @@ module Puppet
       EOT
     end
 
+    newparam(:clusterware) do
+      desc <<-EOT
+        clusterware bundle patch
+      EOT
+    end
+
+    newparam(:bundle_sub_patch_id) do
+      desc <<-EOT
+        One of the Sub patch number of the bundle patch
+      EOT
+    end
+
   end
 end

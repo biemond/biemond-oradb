@@ -21,6 +21,8 @@ define oradb::opatch(
   $oracleProductHome       = undef,
   $patchId                 = undef,
   $patchFile               = undef,
+  $clusterWare             = false,
+  $bundleSubPatchId        = undef,
   $user                    = 'oracle',
   $group                   = 'dba',
   $downloadDir             = '/install',
@@ -100,6 +102,8 @@ define oradb::opatch(
           orainst_dir             => $oraInstPath,
           extracted_patch_dir     => "${downloadDir}/${patchId}",
           ocmrf_file              => "${oracleProductHome}/OPatch/ocm.rsp",
+          bundle_sub_patch_id     => $bundleSubPatchId,
+          clusterware             => $clusterWare,
         }
 
       } else {
@@ -110,6 +114,8 @@ define oradb::opatch(
           oracle_product_home_dir => $oracleProductHome,
           orainst_dir             => $oraInstPath,
           extracted_patch_dir     => "${downloadDir}/${patchId}",
+          bundle_sub_patch_id     => $bundleSubPatchId,
+          clusterware             => $clusterWare,
         }
 
       }

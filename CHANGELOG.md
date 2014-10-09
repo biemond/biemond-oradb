@@ -1,6 +1,7 @@
 # Version updates
 
 ## 1.0.19
+- OPatch support for clusterware (GRID)
 
 ## 1.0.18
 - Puppet Lint fixes

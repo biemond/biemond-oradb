@@ -11,6 +11,9 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
     oracle_product_home_dir = resource[:oracle_product_home_dir]
     extracted_patch_dir     = resource[:extracted_patch_dir]
     ocmrf_file              = resource[:ocmrf_file]
+    clusterware             = resource[:clusterware]
+
+    Puppet.debug "clusterware result: #{clusterware}"
 
     unless ocmrf_file.nil?
       ocmrf = ' -ocmrf ' + ocmrf_file
@@ -18,21 +21,33 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
       ocmrf = ''
     end
 
-    if action == :present
-      command = "#{oracle_product_home_dir}/OPatch/opatch apply -silent #{ocmrf} -oh #{oracle_product_home_dir} #{extracted_patch_dir}"
+    if clusterware == false
+      if action == :present
+        command = "#{oracle_product_home_dir}/OPatch/opatch apply -silent #{ocmrf} -oh #{oracle_product_home_dir} #{extracted_patch_dir}"
+      else
+        command = "#{oracle_product_home_dir}/OPatch/opatch rollback -id #{patchName} -silent -oh #{oracle_product_home_dir}"
+      end
     else
-      command = "#{oracle_product_home_dir}/OPatch/opatch rollback -id #{patchName} -silent -oh #{oracle_product_home_dir}"
+      if action == :present
+        command = "#{oracle_product_home_dir}/OPatch/opatch auto #{extracted_patch_dir} #{ocmrf} -oh #{oracle_product_home_dir}"
+      else
+        command = "#{oracle_product_home_dir}/OPatch/opatch auto -rollback #{extracted_patch_dir} #{ocmrf} -oh #{oracle_product_home_dir}"
+      end
     end
 
     Puppet.debug "opatch action: #{action} with command #{command}"
-    output = `su - #{user} -c '#{command}'`
+    if clusterware == true
+      output = `su -c '#{command}'`
+    else
+      output = `su - #{user} -c '#{command}'`
+    end
     # output = execute command, :failonfail => true ,:uid => user
     Puppet.info "opatch result: #{output}"
 
     result = false
     output.each_line do |li|
       unless li.nil?
-        if li.include? 'OPatch completed' or li.include? 'OPatch succeeded'
+        if li.include? 'OPatch completed' or li.include? 'OPatch succeeded' or li.include? 'opatch auto succeeded'
           result = true
         end
       end
@@ -45,6 +60,14 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
     patchName               = resource[:name]
     oracle_product_home_dir = resource[:oracle_product_home_dir]
     orainst_dir             = resource[:orainst_dir]
+    bundle_sub_patch_id     = resource[:bundle_sub_patch_id]
+    clusterware             = resource[:clusterware]
+
+    if clusterware == true
+      patchId = bundle_sub_patch_id
+    else
+      patchId = patchName
+    end
 
     command  = oracle_product_home_dir + '/OPatch/opatch lsinventory -patch_id -oh ' + oracle_product_home_dir + ' -invPtrLoc ' + orainst_dir + '/oraInst.loc'
     Puppet.debug "opatch_status for patch #{patchName} command: #{command}"
@@ -55,9 +78,9 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
       opatch = li[5, li.index(':')-5 ].strip + ';' if (li['Patch'] and li[': applied on'])
       unless opatch.nil?
         Puppet.debug "line #{opatch}"
-        if opatch.include? patchName
+        if opatch.include? patchId
           Puppet.debug 'found patch'
-          return patchName
+          return patchId
         end
       end
     end
@@ -74,7 +97,17 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
 
   def status
     output  = opatch_status
-    patchId = resource[:name]
+
+    patchName               = resource[:name]
+    bundle_sub_patch_id     = resource[:bundle_sub_patch_id]
+    clusterware             = resource[:clusterware]
+
+    if clusterware == true
+      patchId = bundle_sub_patch_id
+    else
+      patchId = patchName
+    end
+
     Puppet.debug "opatch_status output #{output} for patchId #{patchId}"
     if output == patchId
       return :present

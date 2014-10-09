@@ -11,7 +11,7 @@ Here you can test the solaris 10 vagrant box with Oracle Database 12.1 [solaris 
 
 Here you can test the CentOS 6.5 vagrant box with Oracle Database 11.2.0.4 and GoldenGate 12.1.2 [coherence goldengate vagrant box]( https://github.com/biemond/vagrant-wls12.1.2-coherence-goldengate)
 
-Example of Opensource Puppet 3.4.3 Puppet master configuration in a vagrant box [puppet master](https://github.com/biemond/vagrant-puppetmaster) 
+Example of Opensource Puppet 3.4.3 Puppet master configuration in a vagrant box [puppet master](https://github.com/biemond/vagrant-puppetmaster)
 - oradb (oracle database 11.2.0.1 ) with GoldenGate 12.1.2
 
 Should work for Puppet 2.7 & 3.0
@@ -27,32 +27,37 @@ Should work for Puppet 2.7 & 3.0
 - Oracle ASM
 - Oracle RAC
 - OPatch upgrade
-- Apply OPatch
+- Apply OPatch also for Clusterware
 - Create database instances
 - Stop/Start database instances
 - GoldenGate 12.1.2, 11.2.1
 - Installs RCU repositoy for Oracle SOA Suite / Webcenter ( 11.1.1.6.0 and 11.1.1.7.0 ) / Oracle Identity Management ( 11.1.2.1 )
 
-In combination with the oracle module of Bert Hajee (http://forge.puppetlabs.com/hajee/oracle) you can also create
+## Oracle RAC
+In combination with the [ora_rac](https://forge.puppetlabs.com/hajee/ora_rac) module of Bert Hajee (https://forge.puppetlabs.com/hajee/ora_rac)
+
+## Oracle Database types
+In combination with the [oracle](http://forge.puppetlabs.com/hajee/oracle) module of Bert Hajee (http://forge.puppetlabs.com/hajee/oracle) you can also create
 - create a tablespace
 - create a user with the required grants and quota's
 - create one or more roles
 - create one or more services
+
 
 Some manifests like installdb.pp, opatch.pp or rcusoa.pp supports an alternative mountpoint for the big oracle files.
 When not provided it uses the files location of the oradb puppet module
 else you can use $puppetDownloadMntPoint => "/mnt" or "puppet:///modules/xxxx/"
 
 ## Oracle Big files and alternate download location
-Some manifests like oradb:installdb, opatch or rcu supports an alternative mountpoint for the big oracle setup/install files.  
-When not provided it uses the files folder located in the orawls puppet module  
+Some manifests like oradb:installdb, opatch or rcu supports an alternative mountpoint for the big oracle setup/install files.
+When not provided it uses the files folder located in the orawls puppet module
 else you can use $source =>
 - "/mnt"
 - "/vagrant"
 - "puppet:///modules/oradb/" (default)
-- "puppet:///database/"  
+- "puppet:///database/"
 
-when the files are also locally accessible then you can also set $remote_file => false this will not move the files to the download folder, just extract or install 
+when the files are also locally accessible then you can also set $remote_file => false this will not move the files to the download folder, just extract or install
 
 ## templates.pp
 
@@ -64,7 +69,7 @@ The databaseType value should contain only one of these choices.
 ## Database install
 
     $puppetDownloadMntPoint = "puppet:///modules/oradb/"
-    
+
     oradb::installdb{ '12.1.0.2_Linux-x86-64':
       version                => '12.1.0.2',
       file                   => 'V46095-01',
@@ -82,7 +87,7 @@ The databaseType value should contain only one of these choices.
       puppetDownloadMntPoint => $puppetDownloadMntPoint,
     }
 
-or with zipExtract ( does not download or extract , software is in /install/linuxamd64_12c_database )  
+or with zipExtract ( does not download or extract , software is in /install/linuxamd64_12c_database )
 
     oradb::installdb{ '12.1.0.1_Linux-x86-64':
       version                => '12.1.0.1',
@@ -173,7 +178,9 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
       puppetDownloadMntPoint => $puppetDownloadMntPoint,
       require                =>  Oradb::Installdb['112030_Linux-x86-64'],
     }
-    
+
+Opatch
+
     # for this example OPatch 14727310
     # the OPatch utility must be upgraded ( patch 6880880, see above)
     oradb::opatch{'14727310_db_patch':
@@ -188,7 +195,26 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
       require                => Oradb::Opatchupgrade['112000_opatch_upgrade'],
       puppetDownloadMntPoint => $puppetDownloadMntPoint,
     }
-    
+
+or for clusterware (GRID)
+
+    oradb::opatch{'18706472_grid_patch':
+      ensure                 => 'present',
+      oracleProductHome      => hiera('grid_home_dir'),
+      patchId                => '18706472',
+      patchFile              => 'p18706472_112040_Linux-x86-64.zip',
+      clusterWare            => true,
+      bundleSubPatchId       => '18522515',
+      user                   => hiera('grid_os_user'),
+      group                  => 'oinstall',
+      downloadDir            => hiera('oracle_download_dir'),
+      ocmrf                  => true,
+      require                => Oradb::Opatchupgrade['112000_opatch_upgrade'],
+      puppetDownloadMntPoint => hiera('oracle_source'),
+    }
+
+Oracle net
+
     oradb::net{ 'config net8':
       oracleHome   => '/oracle/product/11.2/db',
       version      => '11.2' or "12.1",
@@ -197,7 +223,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
       downloadDir  => '/install',
       require      => Oradb::Opatch['14727310_db_patch'],
     }
-    
+
     oradb::listener{'stop listener':
       oracleBase   => '/oracle',
       oracleHome   => '/oracle/product/11.2/db',
@@ -206,7 +232,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
       action       => 'start',
       require      => Oradb::Net['config net8'],
     }
-    
+
     oradb::listener{'start listener':
       oracleBase   => '/oracle',
       oracleHome   => '/oracle/product/11.2/db',
@@ -215,7 +241,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
       action       => 'start',
       require      => Oradb::Listener['stop listener'],
     }
-    
+
     oradb::database{ 'testDb_Create':
       oracleBase              => '/oracle',
       oracleHome              => '/oracle/product/11.2/db',
@@ -240,7 +266,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
       emConfiguration         => "NONE",
       require                 => Oradb::Listener['start listener'],
     }
-    
+
     oradb::dbactions{ 'stop testDb':
       oracleHome              => '/oracle/product/11.2/db',
       user                    => 'oracle',
@@ -249,7 +275,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
       dbName                  => 'test',
       require                 => Oradb::Database['testDb'],
     }
-    
+
     oradb::dbactions{ 'start testDb':
       oracleHome              => '/oracle/product/11.2/db',
       user                    => 'oracle',
@@ -258,14 +284,14 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
       dbName                  => 'test',
       require                 => Oradb::Dbactions['stop testDb'],
     }
-    
+
     oradb::autostartdatabase{ 'autostart oracle':
       oracleHome              => '/oracle/product/12.1/db',
       user                    => 'oracle',
       dbName                  => 'test',
       require                 => Oradb::Dbactions['start testDb'],
     }
-    
+
     oradb::database{ 'testDb_Delete':
       oracleBase              => '/oracle',
       oracleHome              => '/oracle/product/11.2/db',
@@ -277,7 +303,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
       sysPassword             => 'Welcome01',
       require                 => Oradb::Dbactions['start testDb'],
     }
-    
+
     case $operatingsystem {
       CentOS, RedHat, OracleLinux, Ubuntu, Debian: {
         $mtimeParam = "1"
@@ -286,7 +312,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
         $mtimeParam = "+1"
       }
     }
-    
+
     case $operatingsystem {
       CentOS, RedHat, OracleLinux, Ubuntu, Debian, Solaris: {
         cron { 'oracle_db_opatch':
@@ -295,7 +321,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
           hour    => 06,
           minute  => 34,
         }
-        
+
         cron { 'oracle_db_lsinv':
           command => "find /oracle/product/12.1/db/cfgtoollogs/opatch/lsinv -name 'lsinventory*.txt' -mtime ${mtimeParam} -exec rm {} \\; >> /tmp/opatch_lsinv_db_purge.log 2>&1",
           user    => oracle,
@@ -305,7 +331,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
       }
     }
 
-## Grid install with ASM 
+## Grid install with ASM
 
       $all_groups = ['oinstall','dba' ,'oper','asmdba','asmadmin','asmoper']
 
@@ -316,7 +342,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
       user { 'oracle' :
         ensure      => present,
         uid         => 500,
-        gid         => 'oinstall',  
+        gid         => 'oinstall',
         groups      => ['oinstall','dba','oper','asmdba'],
         shell       => '/bin/bash',
         password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
@@ -329,7 +355,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
       user { 'grid' :
         ensure      => present,
         uid         => 501,
-        gid         => 'oinstall',  
+        gid         => 'oinstall',
         groups      => ['oinstall','dba','asmadmin','asmdba','asmoper'],
         shell       => '/bin/bash',
         password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
@@ -366,7 +392,37 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
         disk_redundancy        => "EXTERNAL",
         downloadDir            => hiera('oracle_download_dir'),
         remoteFile             => false,
-        puppetDownloadMntPoint => hiera('oracle_source'),  
+        puppetDownloadMntPoint => hiera('oracle_source'),
+      }
+
+      oradb::opatchupgrade{'112000_opatch_upgrade_asm':
+          oracleHome             => hiera('grid_home_dir'),
+          patchFile              => 'p6880880_112000_Linux-x86-64.zip',
+          # csiNumber              => '172409',
+          # supportId              => 'biemond@gmail.com',
+          csiNumber              => undef,
+          supportId              => undef,
+          opversion              => '11.2.0.3.6',
+          user                   => hiera('grid_os_user'),
+          group                  => 'oinstall',
+          downloadDir            => hiera('oracle_download_dir'),
+          puppetDownloadMntPoint => hiera('oracle_source'),
+          require                => Oradb::Installasm['db_linux-x64'],
+      }
+
+      oradb::opatch{'18706472_grid_patch':
+        ensure                 => 'present',
+        oracleProductHome      => hiera('grid_home_dir'),
+        patchId                => '18706472',
+        patchFile              => 'p18706472_112040_Linux-x86-64.zip',
+        clusterWare            => true,
+        bundleSubPatchId       => '18522515',
+        user                   => hiera('grid_os_user'),
+        group                  => 'oinstall',
+        downloadDir            => hiera('oracle_download_dir'),
+        ocmrf                  => true,
+        require                => Oradb::Opatchupgrade['112000_opatch_upgrade_asm'],
+        puppetDownloadMntPoint => hiera('oracle_source'),
       }
 
       oradb::installdb{ '11.2_linux-x64':
@@ -385,10 +441,10 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
         downloadDir            => hiera('oracle_download_dir'),
         remoteFile             => false,
         puppetDownloadMntPoint => hiera('oracle_source'),
-        require                => Oradb::Installasm['11.2_linux-x64'],  
+        require                => Oradb::Opatch['18706472_grid_patch'],
       }
 
-      oradb::database{ 'oraDb': 
+      oradb::database{ 'oraDb':
         oracleBase              => hiera('oracle_base_dir'),
         oracleHome              => hiera('oracle_home_dir'),
         version                 => '11.2',
@@ -406,7 +462,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
         sampleSchema            => 'FALSE',
         memoryPercentage        => "40",
         memoryTotal             => "800",
-        databaseType            => "MULTIPURPOSE",                         
+        databaseType            => "MULTIPURPOSE",
         storageType             => "ASM",
         asmSnmpPassword         => 'Welcome01',
         asmDiskgroup            => 'DATA',
@@ -429,10 +485,10 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
       downloadDir            => '/install',
       remoteFile             => true,
       puppetDownloadMntPoint => "puppet:///modules/oradb/",
-      logoutput               => true, 
+      logoutput               => true,
     }
 
-or 
+or
 
     oradb::client{ '11.2.0.1_Linux-x86-64':
       version                => '11.2.0.1',
@@ -451,7 +507,7 @@ or
 
 
 ## Database configuration
-In combination with the oracle puppet module from hajee you can create/change a database init parameter, tablespace,role or an oracle user   
+In combination with the oracle puppet module from hajee you can create/change a database init parameter, tablespace,role or an oracle user
 
 
     init_param{'processes':
@@ -478,11 +534,11 @@ In combination with the oracle puppet module from hajee you can create/change a 
       extent_management         => local,
       segment_space_management  => auto,
     }
-    
+
     role {'apps':
       ensure    => present,
     }
-    
+
     oracle_user{'scott':
       temporary_tablespace      => temp,
       default_tablespace        => 'scott_ts',
@@ -497,7 +553,7 @@ In combination with the oracle puppet module from hajee you can create/change a 
     }
 
 
-## Oracle GoldenGate 12.1.2 and 11.2.1 
+## Oracle GoldenGate 12.1.2 and 11.2.1
 
 
       $groups = ['oinstall','dba']
@@ -506,10 +562,10 @@ In combination with the oracle puppet module from hajee you can create/change a 
         ensure      => present,
         before      => User['ggate'],
       }
-    
+
       user { 'ggate' :
         ensure      => present,
-        gid         => 'dba',  
+        gid         => 'dba',
         groups      => $groups,
         shell       => '/bin/bash',
         password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
@@ -586,7 +642,7 @@ In combination with the oracle puppet module from hajee you can create/change a 
         require                 => [File["/oracle/product"],File["/oracle/product/11.2.1"]]
       }
 
-## Oracle SOA Suite Repository Creation Utility (RCU)  
+## Oracle SOA Suite Repository Creation Utility (RCU)
 
 product =
 - soasuite
@@ -655,19 +711,19 @@ OIM, OAM repository, OIM needs an Oracle Enterprise Edition database
     oradb::rcu{'DEV_1112':
       rcuFile                => 'V37476-01.zip',
       product                => 'oim',
-      version                => '11.1.2.1',  
+      version                => '11.1.2.1',
       oracleHome             => '/oracle/product/11.2/db',
       user                   => 'oracle',
       group                  => 'dba',
       downloadDir            => '/data/install',
       action                 => 'create',
-      dbServer               => 'oimdb.alfa.local:1521',  
+      dbServer               => 'oimdb.alfa.local:1521',
       dbService              => 'oim.oracle.com',
       sysPassword            => hiera('database_test_sys_password'),
       schemaPrefix           => 'DEV',
       reposPassword          => hiera('database_test_rcu_dev_password'),
       puppetDownloadMntPoint => $puppetDownloadMntPoint,
-      logoutput              => true, 
+      logoutput              => true,
       require                => Oradb::Dbactions['start oimDb'],
      }
 
@@ -686,7 +742,7 @@ install the following module to set the database user limits parameters
 
       user { 'oracle' :
         ensure      => present,
-        gid         => 'dba',  
+        gid         => 'dba',
         groups      => 'dba',
         shell       => '/bin/bash',
         password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
@@ -713,7 +769,7 @@ install the following module to set the database user limits parameters
        sysctl { 'net.core.rmem_max':             ensure => 'present', permanent => 'yes', value => '4194304', }
        sysctl { 'net.core.wmem_default':         ensure => 'present', permanent => 'yes', value => '262144',}
        sysctl { 'net.core.wmem_max':             ensure => 'present', permanent => 'yes', value => '1048576',}
-      
+
        class { 'limits':
          config => {
                     '*'       => { 'nofile'  => { soft => '2048'   , hard => '8192',   },},
@@ -723,12 +779,12 @@ install the following module to set the database user limits parameters
                     },
          use_hiera => false,
        }
-       
+
       $install = [ 'binutils.x86_64', 'compat-libstdc++-33.x86_64', 'glibc.x86_64','ksh.x86_64','libaio.x86_64',
                     'libgcc.x86_64', 'libstdc++.x86_64', 'make.x86_64','compat-libcap1.x86_64', 'gcc.x86_64',
                     'gcc-c++.x86_64','glibc-devel.x86_64','libaio-devel.x86_64','libstdc++-devel.x86_64',
                     'sysstat.x86_64','unixODBC-devel','glibc.i686','libXext.i686','libXtst.i686']
-       
+
       package { $install:
         ensure  => present,
       }
@@ -739,7 +795,7 @@ install the following module to set the database user limits parameters
       command => "/usr/bin/mkdir -p /cdrom/unnamed_cdrom",
       creates => "/cdrom/unnamed_cdrom",
     }
-    
+
     mount { "/cdrom/unnamed_cdrom":
       device   => "/dev/dsk/c0t1d0s2",
       fstype   => "hsfs",
@@ -749,8 +805,8 @@ install the following module to set the database user limits parameters
       remounts => false,
       require  => Exec["create /cdrom/unnamed_cdrom"],
     }
-    
-    $install = [ 
+
+    $install = [
                  'SUNWarc','SUNWbtool','SUNWcsl',
                  'SUNWdtrc','SUNWeu8os','SUNWhea',
                  'SUNWi1cs', 'SUNWi15cs',
@@ -758,23 +814,23 @@ install the following module to set the database user limits parameters
                  'SUNWsprot','SUNWpool','SUNWpoolr',
                  'SUNWtoo','SUNWxwfnt'
                 ]
-                 
+
     package { $install:
       ensure    => present,
       adminfile => "/vagrant/pkgadd_response",
       source    => "/cdrom/unnamed_cdrom/Solaris_10/Product/",
       require   => [Exec["create /cdrom/unnamed_cdrom"],
                     Mount["/cdrom/unnamed_cdrom"]
-                   ],  
+                   ],
     }
     package { 'SUNWi1of':
       ensure    => present,
       adminfile => "/vagrant/pkgadd_response",
       source    => "/cdrom/unnamed_cdrom/Solaris_10/Product/",
-      require   => Package[$install],  
+      require   => Package[$install],
     }
-    
-    
+
+
     # pkginfo -i SUNWarc SUNWbtool SUNWhea SUNWlibC SUNWlibm SUNWlibms SUNWsprot SUNWtoo SUNWi1of SUNWi1cs SUNWi15cs SUNWxwfnt SUNWcsl SUNWdtrc
     # pkgadd -d /cdrom/unnamed_cdrom/Solaris_10/Product/ -r response -a response SUNWarc SUNWbtool SUNWhea SUNWlibC SUNWlibm SUNWlibms SUNWsprot SUNWtoo SUNWi1of SUNWi1cs SUNWi15cs SUNWxwfnt SUNWcsl SUNWdtrc
 
@@ -788,7 +844,7 @@ install the following module to set the database user limits parameters
     user { 'oracle' :
       ensure      => present,
       uid         => 500,
-      gid         => 'oinstall',  
+      gid         => 'oinstall',
       groups      => ['oinstall','dba','oper'],
       shell       => '/bin/bash',
       password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
@@ -797,67 +853,67 @@ install the following module to set the database user limits parameters
       require     => Group[$all_groups],
       managehome  => true,
     }
-  
+
     $execPath     = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
-  
+
     exec { "projadd max-shm-memory":
       command => "projadd -p 102  -c 'ORADB' -U oracle -G dba  -K 'project.max-shm-memory=(privileged,4G,deny)' ORADB",
       require => [ User["oracle"],
                    Package['SUNWi1of'],
                    Package[$install],
                  ],
-      unless  => "projects -l | grep -c ORADB",           
+      unless  => "projects -l | grep -c ORADB",
       path    => $execPath,
     }
-  
+
     exec { "projmod max-sem-ids":
       command     => "projmod -s -K 'project.max-sem-ids=(privileged,100,deny)' ORADB",
       subscribe   => Exec["projadd max-shm-memory"],
       require     => Exec["projadd max-shm-memory"],
-      refreshonly => true, 
+      refreshonly => true,
       path        => $execPath,
     }
-  
+
     exec { "projmod max-shm-ids":
       command     => "projmod -s -K 'project.max-shm-ids=(privileged,100,deny)' ORADB",
       require     => Exec["projmod max-sem-ids"],
       subscribe   => Exec["projmod max-sem-ids"],
-      refreshonly => true, 
+      refreshonly => true,
       path        => $execPath,
     }
-  
+
     exec { "projmod max-sem-nsems":
       command     => "projmod -s -K 'process.max-sem-nsems=(privileged,256,deny)' ORADB",
       require     => Exec["projmod max-shm-ids"],
       subscribe   => Exec["projmod max-shm-ids"],
-      refreshonly => true, 
+      refreshonly => true,
       path        => $execPath,
     }
-  
+
     exec { "projmod max-file-descriptor":
       command     => "projmod -s -K 'process.max-file-descriptor=(basic,65536,deny)' ORADB",
       require     => Exec["projmod max-sem-nsems"],
       subscribe   => Exec["projmod max-sem-nsems"],
-      refreshonly => true, 
+      refreshonly => true,
       path        => $execPath,
     }
-  
+
     exec { "projmod max-stack-size":
       command     => "projmod -s -K 'process.max-stack-size=(privileged,32MB,deny)' ORADB",
       require     => Exec["projmod max-file-descriptor"],
       subscribe   => Exec["projmod max-file-descriptor"],
-      refreshonly => true, 
+      refreshonly => true,
       path        => $execPath,
     }
-  
+
     exec { "usermod oracle":
       command     => "usermod -K project=ORADB oracle",
       require     => Exec["projmod max-stack-size"],
       subscribe   => Exec["projmod max-stack-size"],
-      refreshonly => true, 
+      refreshonly => true,
       path        => $execPath,
     }
-  
+
     exec { "ndd 1":
       command => "ndd -set /dev/tcp tcp_smallest_anon_port 9000",
       require => Exec["usermod oracle"],
@@ -868,28 +924,27 @@ install the following module to set the database user limits parameters
       require => Exec["ndd 1"],
       path    => $execPath,
     }
-  
+
     exec { "ndd 3":
       command => "ndd -set /dev/udp udp_smallest_anon_port 9000",
       require => Exec["ndd 2"],
       path    => $execPath,
     }
-  
+
     exec { "ndd 4":
       command => "ndd -set /dev/udp udp_largest_anon_port 65500",
       require => Exec["ndd 3"],
       path    => $execPath,
-    }    
-  
+    }
+
     exec { "ulimit -S":
       command => "ulimit -S -n 4096",
       require => Exec["ndd 4"],
       path    => $execPath,
     }
-  
+
     exec { "ulimit -H":
       command => "ulimit -H -n 65536",
       require => Exec["ulimit -S"],
       path    => $execPath,
-    }  
-  
+    }
