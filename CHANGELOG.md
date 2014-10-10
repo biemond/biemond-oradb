@@ -1,5 +1,7 @@
 # Version updates
 
+## 1.0.20
+
 ## 1.0.19
 - OPatch support for clusterware (GRID)
 - Opatchupgrade now works for grid & database on the same node
