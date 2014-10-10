@@ -45,7 +45,7 @@ define oradb::opatchupgrade(
   if $installedVersion == $opversion {
     $continue = false
   } else {
-    notify {"oradb::opatchupgrade ${installedVersion} installed - performing upgrade":}
+    notify {"oradb::opatchupgrade ${title} ${installedVersion} installed - performing upgrade":}
     $continue = true
   }
 
