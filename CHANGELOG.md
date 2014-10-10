@@ -2,6 +2,7 @@
 
 ## 1.0.19
 - OPatch support for clusterware (GRID)
+- Opatchupgrade now works for grid & database on the same node
 
 ## 1.0.18
 - Puppet Lint fixes

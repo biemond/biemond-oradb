@@ -64,13 +64,12 @@ define oradb::opatchupgrade(
 
     case $::kernel {
       'Linux', 'SunOS': {
-        file { 'remove_old':
+        file { $patchDir:
           ensure  => absent,
           recurse => true,
-          path    => $patchDir,
           force   => true,
         } ->
-        exec { "extract opatch ${patchFile}":
+        exec { "extract opatch ${title} ${patchFile}":
           command   => "unzip -n ${downloadDir}/${patchFile} -d ${oracleHome}",
           require   => File["${downloadDir}/${patchFile}"],
           path      => $execPath,
@@ -80,7 +79,7 @@ define oradb::opatchupgrade(
         }
 
         if ( $csiNumber != undef and supportId != undef ) {
-          exec { "exec emocmrsp ${opversion}":
+          exec { "exec emocmrsp ${title} ${opversion}":
             cwd       => $patchDir,
             command   => "${patchDir}/ocm/bin/emocmrsp -repeater NONE ${csiNumber} ${supportId}",
             require   => Exec["extract opatch ${patchFile}"],
@@ -91,11 +90,13 @@ define oradb::opatchupgrade(
           }
         } else {
 
-          package { 'expect':
-            ensure  => present,
+          if ! defined(Package['expect']) {
+            package { 'expect':
+              ensure  => present,
+            }
           }
 
-          file { "${downloadDir}/opatch_upgrade_${opversion}.ksh":
+          file { "${downloadDir}/opatch_upgrade_${title}_${opversion}.ksh":
             ensure  => present,
             content => template('oradb/ocm.rsp.erb'),
             mode    => '0775',
@@ -103,10 +104,10 @@ define oradb::opatchupgrade(
             group   => $group,
           }
 
-          exec { "ksh ${downloadDir}/opatch_upgrade_${opversion}.ksh":
+          exec { "ksh ${downloadDir}/opatch_upgrade_${title}_${opversion}.ksh":
             cwd       => $patchDir,
-            require   => [File["${downloadDir}/opatch_upgrade_${opversion}.ksh"],
-                          Exec["extract opatch ${patchFile}"],
+            require   => [File["${downloadDir}/opatch_upgrade_${title}_${opversion}.ksh"],
+                          Exec["extract opatch ${title} ${patchFile}"],
                           Package['expect'],],
             path      => $execPath,
             user      => $user,
