@@ -86,7 +86,7 @@ LISTENER_NAMES={"LISTENER"}
 # The possible values for listener protocols are:
 # "TCP;1521","TCPS;2484","NMP;ORAPIPE","IPC;IPCKEY","VI;1521" 
 # A typical install sets only "TCP;1521" 
-LISTENER_PROTOCOLS={"TCP;1521"}
+LISTENER_PROTOCOLS={"TCP;<%= @dbPort %>"}
 
 #LISTENER_START;String;name of the listener to start, in double quotes
 LISTENER_START=""LISTENER""
@@ -126,7 +126,7 @@ NSN_SERVICE={"PLSExtProc"}
 # The possible values for net service name protocol parameters are:
 # "TCP;HOSTNAME;1521","TCPS;HOSTNAME;2484","NMP;COMPUTERNAME;ORAPIPE","VI;HOSTNAME;1521","IPC;IPCKEY"  
 # A typical install sets parameters to "IPC;EXTPROC"
-NSN_PROTOCOLS={"TCP;HOSTNAME;1521"}
+NSN_PROTOCOLS={"TCP;HOSTNAME;<%= @dbPort %>"}
 
 #SERVICEUSERPASSWORD;String;Windows service user password
 # If the oracle home is installed as secure user, supply the password

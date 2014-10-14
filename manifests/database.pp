@@ -14,6 +14,7 @@ define oradb::database(
   $action                   = 'create',
   $dbName                   = 'orcl',
   $dbDomain                 = undef,
+  $dbPort                   = '1521',
   $sysPassword              = 'Welcome01',
   $systemPassword           = 'Welcome01',
   $dataFileDestination      = undef,

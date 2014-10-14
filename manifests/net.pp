@@ -6,6 +6,7 @@ define oradb::net(
   $user         = 'oracle',
   $group        = 'dba',
   $downloadDir  = '/install',
+  $dbPort       = '1521',
 ){
   if $version in ['11.2','12.1'] {
   } else {
