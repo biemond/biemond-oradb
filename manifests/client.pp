@@ -6,6 +6,7 @@ define oradb::client(
   $file                    = undef,
   $oracleBase              = undef,
   $oracleHome              = undef,
+  $dbPort                  = '1521',
   $createUser              = true,
   $user                    = 'oracle',
   $userBaseDir             = '/home',
