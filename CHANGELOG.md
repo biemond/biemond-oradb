@@ -1,6 +1,7 @@
 # Version updates
 
 ## 1.0.20
+- Be able to change the default listener port 1521 in net.pp & database.pp
 
 ## 1.0.19
 - OPatch support for clusterware (GRID)

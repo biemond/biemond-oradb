@@ -221,6 +221,7 @@ Oracle net
       user         => 'oracle',
       group        => 'dba',
       downloadDir  => '/install',
+      dbPort       => '1521', #optional
       require      => Oradb::Opatch['14727310_db_patch'],
     }
 
@@ -252,6 +253,7 @@ Oracle net
       action                  => 'create',
       dbName                  => 'test',
       dbDomain                => 'oracle.com',
+      dbPort                  => '1521', #optional
       sysPassword             => 'Welcome01',
       systemPassword          => 'Welcome01',
       dataFileDestination     => "/oracle/oradata",
