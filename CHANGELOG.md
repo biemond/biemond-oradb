@@ -2,6 +2,7 @@
 
 ## 1.0.20
 - Be able to change the default listener port 1521 in net.pp & database.pp
+- Opatch fix to apply same the patch twice on different oracle homes
 
 ## 1.0.19
 - OPatch support for clusterware (GRID)

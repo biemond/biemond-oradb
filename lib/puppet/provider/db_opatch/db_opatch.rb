@@ -7,7 +7,7 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
 
   def opatch(action)
     user                    = resource[:os_user]
-    patchName               = resource[:name]
+    patchName               = resource[:patch_id]
     oracle_product_home_dir = resource[:oracle_product_home_dir]
     extracted_patch_dir     = resource[:extracted_patch_dir]
     ocmrf_file              = resource[:ocmrf_file]
@@ -57,7 +57,7 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
 
   def opatch_status
     user                    = resource[:os_user]
-    patchName               = resource[:name]
+    patchName               = resource[:patch_id]
     oracle_product_home_dir = resource[:oracle_product_home_dir]
     orainst_dir             = resource[:orainst_dir]
     bundle_sub_patch_id     = resource[:bundle_sub_patch_id]
@@ -98,7 +98,7 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
   def status
     output  = opatch_status
 
-    patchName               = resource[:name]
+    patchName               = resource[:patch_id]
     bundle_sub_patch_id     = resource[:bundle_sub_patch_id]
     clusterware             = resource[:clusterware]
 
