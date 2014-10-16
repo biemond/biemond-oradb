@@ -12,6 +12,7 @@ define oradb::database(
   $group                    = 'dba',
   $downloadDir              = '/install',
   $action                   = 'create',
+  $template                 = undef,
   $dbName                   = 'orcl',
   $dbDomain                 = undef,
   $sysPassword              = 'Welcome01',
@@ -90,9 +91,25 @@ define oradb::database(
       }
     }
 
+    if ( $template ) {
+      $templatename = "${path}/${template}.dbt"
+      file { $templatename:
+        ensure  => present,
+        content => template("oradb/${template}.dbt.erb"),
+        mode    => '0775',
+        owner   => $user,
+        group   => $group,
+      }
+    }
+
     if $action == 'create' {
+      if ( $template ) {
+        $command = "dbca -silent -createDatabase -templateName ${templatename} -gdbname ${dbName} -responseFile NO_VALUE -sysPassword ${sysPassword} -systemPassword ${systemPassword}"
+      } else {
+        $command = "dbca -silent -responseFile ${filename}"
+      }
       exec { "install oracle database ${title}":
-        command     => "dbca -silent -responseFile ${filename}",
+        command     => $command,
         require     => File[$filename],
         creates     => "${oracleBase}/admin/${dbName}",
         timeout     => 0,
