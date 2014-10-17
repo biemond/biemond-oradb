@@ -77,9 +77,9 @@ define oradb::database(
     $filename = "${path}/database_${sanitized_title}.rsp"
 
     if $dbDomain {
-        $globalDbName = "${dbName}.${dbDomain}"
+      $globalDbName = "${dbName}.${dbDomain}"
     } else {
-        $globalDbName = $dbName
+      $globalDbName = $dbName
     }
 
     if ! defined(File[$filename]) {
@@ -89,17 +89,19 @@ define oradb::database(
         mode    => '0775',
         owner   => $user,
         group   => $group,
+        before  => Exec["oracle database ${title}"],
       }
     }
 
     if ( $template ) {
-      $templatename = "${path}/${template}.dbt"
+      $templatename = "${path}/${template}_${sanitized_title}.dbt"
       file { $templatename:
         ensure  => present,
         content => template("oradb/${template}.dbt.erb"),
         mode    => '0775',
         owner   => $user,
         group   => $group,
+        before  => Exec["oracle database ${title}"],
       }
     }
 
@@ -109,9 +111,8 @@ define oradb::database(
       } else {
         $command = "dbca -silent -responseFile ${filename}"
       }
-      exec { "install oracle database ${title}":
+      exec { "oracle database ${title}":
         command     => $command,
-        require     => File[$filename],
         creates     => "${oracleBase}/admin/${dbName}",
         timeout     => 0,
         path        => $execPath,
@@ -121,9 +122,8 @@ define oradb::database(
         logoutput   => true,
       }
     } elsif $action == 'delete' {
-      exec { "delete oracle database ${title}":
+      exec { "oracle database ${title}":
         command     => "dbca -silent -responseFile ${filename}",
-        require     => File[$filename],
         onlyif      => "ls ${oracleBase}/admin/${dbName}",
         timeout     => 0,
         path        => $execPath,
