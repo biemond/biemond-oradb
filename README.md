@@ -21,6 +21,7 @@ Should work for Puppet 2.7 & 3.0
 - Oracle Grid 11.2.0.4, 12.1.0.1 Linux / Solaris installation
 - Oracle Database 12.1.0.1,12.1.0.2 Linux / Solaris installation
 - Oracle Database 11.2.0.1,11.2.0.3,11.2.0.4 Linux / Solaris installation
+- Oracle Database Instance 11.2 & 12.1 or provide your own db template
 - Oracle Database Client 12.1.0.1,12.1.0.2,11.2.0.4,11.2.0.1 Linux / Solaris installation
 - Oracle Database Net configuration
 - Oracle Database Listener
@@ -42,6 +43,7 @@ In combination with the [oracle](http://forge.puppetlabs.com/hajee/oracle) modul
 - create a user with the required grants and quota's
 - create one or more roles
 - create one or more services
+- change a database init parameter
 
 
 Some manifests like installdb.pp, opatch.pp or rcusoa.pp supports an alternative mountpoint for the big oracle files.
@@ -160,7 +162,7 @@ or
       zipExtract    => true,
      }
 
-other
+Patching
 
 For opatchupgrade you need to provide the Oracle support csiNumber and supportId and need to be online. Or leave them empty but it needs the Expect rpm to emulate OCM
 
@@ -225,6 +227,8 @@ Oracle net
       require      => Oradb::Opatch['14727310_db_patch'],
     }
 
+Listener
+
     oradb::listener{'stop listener':
       oracleBase   => '/oracle',
       oracleHome   => '/oracle/product/11.2/db',
@@ -242,6 +246,8 @@ Oracle net
       action       => 'start',
       require      => Oradb::Listener['stop listener'],
     }
+
+Database instance
 
     oradb::database{ 'testDb_Create':
       oracleBase              => '/oracle',
@@ -269,6 +275,51 @@ Oracle net
       require                 => Oradb::Listener['start listener'],
     }
 
+or based on your own template
+
+Add your template to the template dir of the oradb module, the template must be have the following extension dbtemplate.dbt.erb
+Click here for an [12.1 db instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate.dbt.erb)
+
+    oradb::database{ 'testDb_Create':
+      oracleBase              => '/oracle',
+      oracleHome              => '/oracle/product/12.1/db',
+      version                 => '12.1',
+      user                    => 'oracle',
+      group                   => 'dba',
+      template                => 'dbtemplate', #  this will use dbtemplate.dbt.erb example template
+      downloadDir             => '/install',
+      action                  => 'create',
+      dbName                  => 'test',
+      dbDomain                => 'oracle.com',
+      dbPort                  => '1521',
+      sysPassword             => 'Welcome01',
+      systemPassword          => 'Welcome01',
+      dataFileDestination     => "/oracle/oradata",
+      recoveryAreaDestination => "/oracle/flash_recovery_area",
+      characterSet            => "AL32UTF8",
+      nationalCharacterSet    => "UTF8",
+      memoryPercentage        => "40",
+      memoryTotal             => "800",
+      require                 => Oradb::Listener['start listener'],
+    }
+
+or delete a database
+
+    oradb::database{ 'testDb_Delete':
+      oracleBase              => '/oracle',
+      oracleHome              => '/oracle/product/11.2/db',
+      user                    => 'oracle',
+      group                   => 'dba',
+      downloadDir             => '/install',
+      action                  => 'delete',
+      dbName                  => 'test',
+      sysPassword             => 'Welcome01',
+      require                 => Oradb::Dbactions['start testDb'],
+    }
+
+
+Database instance actions
+
     oradb::dbactions{ 'stop testDb':
       oracleHome              => '/oracle/product/11.2/db',
       user                    => 'oracle',
@@ -294,44 +345,7 @@ Oracle net
       require                 => Oradb::Dbactions['start testDb'],
     }
 
-    oradb::database{ 'testDb_Delete':
-      oracleBase              => '/oracle',
-      oracleHome              => '/oracle/product/11.2/db',
-      user                    => 'oracle',
-      group                   => 'dba',
-      downloadDir             => '/install',
-      action                  => 'delete',
-      dbName                  => 'test',
-      sysPassword             => 'Welcome01',
-      require                 => Oradb::Dbactions['start testDb'],
-    }
 
-    case $operatingsystem {
-      CentOS, RedHat, OracleLinux, Ubuntu, Debian: {
-        $mtimeParam = "1"
-      }
-      Solaris: {
-        $mtimeParam = "+1"
-      }
-    }
-
-    case $operatingsystem {
-      CentOS, RedHat, OracleLinux, Ubuntu, Debian, Solaris: {
-        cron { 'oracle_db_opatch':
-          command => "find /oracle/product/12.1/db/cfgtoollogs/opatch -name 'opatch*.log' -mtime ${mtimeParam} -exec rm {} \\; >> /tmp/opatch_db_purge.log 2>&1",
-          user    => oracle,
-          hour    => 06,
-          minute  => 34,
-        }
-
-        cron { 'oracle_db_lsinv':
-          command => "find /oracle/product/12.1/db/cfgtoollogs/opatch/lsinv -name 'lsinventory*.txt' -mtime ${mtimeParam} -exec rm {} \\; >> /tmp/opatch_lsinv_db_purge.log 2>&1",
-          user    => oracle,
-          hour    => 06,
-          minute  => 32,
-        }
-      }
-    }
 
 ## Grid install with ASM
 
@@ -554,6 +568,10 @@ In combination with the oracle puppet module from hajee you can create/change a 
                                     Role['apps']],
     }
 
+    init_param{'sid/parameter/instance':
+      ensure  => present,
+      value   => 'the_value'
+    }
 
 ## Oracle GoldenGate 12.1.2 and 11.2.1
 

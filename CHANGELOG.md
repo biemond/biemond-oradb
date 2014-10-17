@@ -1,6 +1,7 @@
 # Version updates
 
 ## 1.0.20
+- Create a Database instance based on a template
 - Be able to change the default listener port 1521 in net.pp & database.pp
 - Opatch fix to apply same the patch twice on different oracle homes
 
