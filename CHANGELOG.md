@@ -1,6 +1,7 @@
 # Version updates
 
 ## 1.0.21
+- fix for windows/unix linefeed when oradb is used in combination with vagrant on a windows host
 
 ## 1.0.20
 - Create a Database instance based on a template
