@@ -1,7 +1,11 @@
 # Version updates
 
+## 1.0.22
+
 ## 1.0.21
 - fix for windows/unix linefeed when oradb is used in combination with vagrant on a windows host
+- opatch check bug when run it twice
+- Add a tnsnames entry support
 
 ## 1.0.20
 - Create a Database instance based on a template
