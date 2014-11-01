@@ -97,6 +97,7 @@ define oradb::opatch(
 
         db_opatch{ "${patchId} ${title}":
           ensure                  => $ensure,
+          patch_id                => $patchId,
           os_user                 => $user,
           oracle_product_home_dir => $oracleProductHome,
           orainst_dir             => $oraInstPath,
@@ -110,6 +111,7 @@ define oradb::opatch(
 
         db_opatch{ "${patchId} ${title}":
           ensure                  => $ensure,
+          patch_id                => $patchId,
           os_user                 => $user,
           oracle_product_home_dir => $oracleProductHome,
           orainst_dir             => $oraInstPath,

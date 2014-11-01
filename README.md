@@ -25,6 +25,7 @@ Should work for Puppet 2.7 & 3.0
 - Oracle Database Client 12.1.0.1,12.1.0.2,11.2.0.4,11.2.0.1 Linux / Solaris installation
 - Oracle Database Net configuration
 - Oracle Database Listener
+- Tnsnames entry
 - Oracle ASM
 - Oracle RAC
 - OPatch upgrade
@@ -345,6 +346,28 @@ Database instance actions
       require                 => Oradb::Dbactions['start testDb'],
     }
 
+Tnsnames.ora
+
+    oradb::tnsnames{'orcl':
+      oracleHome         => '/oracle/product/11.2/db',
+      user               => 'oracle',
+      group              => 'dba',
+      host               => 'soadb.example.nl',
+      connectServiceName => 'soarepos.example.nl',
+      require            => Oradb::Dbactions['start oraDb'],
+    }
+
+    oradb::tnsnames{'test':
+      oracleHome         => '/oracle/product/11.2/db',
+      user               => 'oracle',
+      group              => 'dba',
+      host               => 'soadb.example.nl',
+      port               => 1525,
+      protocol           => 'TCP',
+      connectServiceName => 'soarepos.example.nl',
+      connectServer      => 'DEDICATED',
+      require            => Oradb::Dbactions['start oraDb'],
+    }
 
 
 ## Grid install with ASM

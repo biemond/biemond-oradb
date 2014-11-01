@@ -69,10 +69,13 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
       patchId = patchName
     end
 
+    Puppet.debug "search for patchid #{patchId}"
+
     command  = oracle_product_home_dir + '/OPatch/opatch lsinventory -patch_id -oh ' + oracle_product_home_dir + ' -invPtrLoc ' + orainst_dir + '/oraInst.loc'
     Puppet.debug "opatch_status for patch #{patchName} command: #{command}"
 
     output = `su - #{user} -c '#{command}'`
+    Puppet.debug "#{output}"
     # output = execute command, :failonfail => true ,:uid => user
     output.each_line do |li|
       opatch = li[5, li.index(':')-5 ].strip + ';' if (li['Patch'] and li[': applied on'])
