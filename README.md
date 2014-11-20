@@ -406,6 +406,79 @@ Tnsnames.ora
         managehome  => true,
       }
 
+      ####### NFS example
+
+      file { '/nfs_server_data':
+        ensure  => directory,
+        recurse => false,
+        replace => false,
+        mode    => '0775',
+        owner   => 'grid',
+        group   => 'asmadmin',
+        require =>  User['grid'],
+      }
+
+      class { 'nfs::server':
+        package => latest,
+        service => running,
+        enable  => true,
+      }
+
+      nfs::export { '/nfs_server_data':
+        options => [ 'rw', 'sync', 'no_wdelay','insecure_locks','no_root_squash' ],
+        clients => [ "*" ],
+        require => File['/nfs_server_data']
+      }
+
+      file { '/nfs_client':
+        ensure  => directory,
+        recurse => false,
+        replace => false,
+        mode    => '0775',
+        owner   => 'grid',
+        group   => 'asmadmin',
+        require =>  User['grid'],
+      }
+
+      mounts { 'Mount point for NFS data':
+        ensure => present,
+        source => 'soadbasm:/nfs_server_data',
+        dest   => '/nfs_client',
+        type   => 'nfs',
+        opts   => 'rw,bg,hard,nointr,tcp,vers=3,timeo=600,rsize=32768,wsize=32768,actimeo=0  0 0',
+      }
+
+      exec { "/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b1 bs=1M count=7520":
+        user      => 'grid',
+        group     => 'asmadmin',
+        logoutput => true,
+        unless    => "/usr/bin/test -f /nfs_client/asm_sda_nfs_b1",
+        require   => Mounts['Mount point for NFS data'],
+      }
+      exec { "/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b2 bs=1M count=7520":
+        user      => 'grid',
+        group     => 'asmadmin',
+        logoutput => true,
+        unless    => "/usr/bin/test -f /nfs_client/asm_sda_nfs_b2",
+        require   => [Mounts['Mount point for NFS data'],
+                      Exec["/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b1 bs=1M count=7520"]],
+      }
+
+      exec { "/bin/chown grid:asmadmin /nfs_client/*":
+        user      => 'root',
+        group     => 'root',
+        logoutput => true,
+        require   => Exec["/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b2 bs=1M count=7520"],
+      }
+      exec { "/bin/chmod 664 /nfs_client/*":
+        user      => 'root',
+        group     => 'root',
+        logoutput => true,
+        require   => Exec["/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b2 bs=1M count=7520"],
+      }
+      ###### end of NFS example
+
+
       // oradb::installasm{ '12.1_linux-x64':
       //  version                => '12.1.0.1',
       //  file                   => 'linuxamd64_12c_grid',
