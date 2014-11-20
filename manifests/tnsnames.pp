@@ -5,9 +5,9 @@ define oradb::tnsnames(
   $oracleHome         = undef,
   $user               = 'oracle',
   $group              = 'dba',
-  $host               = undef,
-  $port               = 1521,
-  $protocol           = 'TCP',
+  $server             = {myserver => { host => undef, port => '1521', protocol => 'TCP' }},
+  $loadbalance        = 'ON',
+  $failover           = 'ON',
   $connectServiceName = undef,
   $connectServer      = 'DEDICATED',
 )
