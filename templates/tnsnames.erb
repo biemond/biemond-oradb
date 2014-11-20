@@ -1,9 +1,21 @@
 
 <%= @title %> =
   (DESCRIPTION =
-    (ADDRESS = (PROTOCOL = <%= @protocol %>)(HOST = <%= @host %>)(PORT = <%= @port %>))
+  <%- if @server.length == 1 -%>
+  <%- @server.each_pair do |key, server| -%>
+    (ADDRESS = (PROTOCOL = <%= server['protocol'] %>)(HOST = <%= server['host'] %>)(PORT = <%= server['port'] %>))
+  <%- end -%>
+  <%- else -%>
+    (ADDRESS_LIST=
+     (LOAD_BALANCE = <%= @loadbalance %>)
+     (FAILOVER = <%= @failover %>)
+     <%- @server.each_pair do |key, server| -%>
+     (ADDRESS = (PROTOCOL = <%= server['protocol'] %>)(HOST = <%= server['host'] %>)(PORT = <%= server['port'] %>))
+     <%- end -%>
+    )
+  <%- end -%>
     (CONNECT_DATA =
-      (SERVER = <%= @connectServiceName %>)
+      (SERVER = <%= @connectServer %>)
       (SERVICE_NAME = <%= @connectServiceName %>)
     )
   )
