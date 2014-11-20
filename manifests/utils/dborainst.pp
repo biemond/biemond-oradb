@@ -19,8 +19,12 @@ define oradb::utils::dborainst
         file { $oraInstPath:
           ensure => directory,
           before => File["${oraInstPath}/oraInst.loc"],
+          mode   => '0755',
         }
       }
+    }
+    default: {
+        fail("Unrecognized operating system ${::kernel}, please use it on a Linux host")
     }
   }
 
@@ -28,6 +32,7 @@ define oradb::utils::dborainst
     file { "${oraInstPath}/oraInst.loc":
       ensure  => present,
       content => template('oradb/oraInst.loc.erb'),
+      mode    => '0755',
     }
   }
 }
