@@ -2,6 +2,7 @@
 
 ## 1.0.22
 - changed oraInst.loc permissions to 0755
+- Tnsnames change so it supports a TNS balanced configuration
 
 ## 1.0.21
 - fix for windows/unix linefeed when oradb is used in combination with vagrant on a windows host
