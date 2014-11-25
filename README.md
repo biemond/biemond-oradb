@@ -71,6 +71,44 @@ The databaseType value should contain only one of these choices.
 - SE = Standard Edition
 - SEONE = Standard Edition One
 
+## Installation, Disk or memory issues
+
+    # hiera
+    hosts:
+      'emdb.example.com':
+        ip:                "10.10.10.15"
+        host_aliases:      'emdb'
+      'localhost':
+        ip:                "127.0.0.1"
+        host_aliases:      'localhost.localdomain,localhost4,localhost4.localdomain4'
+
+    $host_instances = hiera('hosts', {})
+    create_resources('host',$host_instances)
+
+    # disable the firewall
+    service { iptables:
+      enable    => false,
+      ensure    => false,
+      hasstatus => true,
+    }
+
+    # set the swap ,forge puppet module petems-swap_file
+    class { 'swap_file':
+      swapfile     => '/var/swap.1',
+      swapfilesize => '8192000000'
+    }
+
+    # set the tmpfs
+    mount { '/dev/shm':
+      ensure      => present,
+      atboot      => true,
+      device      => 'tmpfs',
+      fstype      => 'tmpfs',
+      options     => 'size=3500m',
+    }
+
+see this chapter "Linux kernel, ulimits and required packages" for more important information
+
 ## Database install
 
     $puppetDownloadMntPoint = "puppet:///modules/oradb/"
@@ -632,7 +670,6 @@ In combination with the oracle puppet module from hajee you can create/change a 
       ensure  => present,
       value   => '2',
       scope   => both,
-      require => init_param['processes'],
     }
 
     tablespace {'scott_ts':
