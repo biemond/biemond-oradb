@@ -1,5 +1,7 @@
 # Version updates
 
+## 1.0.23
+
 ## 1.0.22
 - db_control puppet resource type, start or stop an instance or subscribe to changes like init_param
 - Tnsnames change so it supports a TNS balanced configuration
