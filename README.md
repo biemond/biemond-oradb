@@ -361,6 +361,21 @@ or delete a database
 
 Database instance actions
 
+    db_control{'emrepos start':
+      ensure                  => 'running', #running|start|abort|stop
+      instance_name           => 'test',
+      oracle_product_home_dir => '/oracle/product/11.2/db',
+      os_user                 => 'oracle',
+    }
+
+    db_control{'emrepos stop':
+      ensure                  => 'stop', #running|start|abort|stop
+      instance_name           => 'test',
+      oracle_product_home_dir => '/oracle/product/11.2/db',
+      os_user                 => 'oracle',
+    }
+
+    # the old way
     oradb::dbactions{ 'stop testDb':
       oracleHome              => '/oracle/product/11.2/db',
       user                    => 'oracle',
@@ -377,6 +392,16 @@ Database instance actions
       action                  => 'start',
       dbName                  => 'test',
       require                 => Oradb::Dbactions['stop testDb'],
+    }
+
+    # subscribe to changes
+    db_control{'emrepos restart':
+      ensure                  => 'running', #running|start|abort|stop
+      instance_name           => 'test',
+      oracle_product_home_dir => '/oracle/product/11.2/db',
+      os_user                 => 'oracle',
+      refreshonly             => true,
+      subscribe               => Init_param['emrepos/memory_target'],
     }
 
     oradb::autostartdatabase{ 'autostart oracle':
@@ -671,6 +696,45 @@ In combination with the oracle puppet module from hajee you can create/change a 
       value   => '2',
       scope   => both,
     }
+
+    init_param{'test/memory_target':
+      ensure  => present,
+      value   => '2800M',
+      scope   => spfile,
+      require => [Init_param['test/sga_target'],
+                  Init_param['test/shared_pool_size'],
+                  Init_param['test/sga_target'],
+                  Init_param['test/pga_aggregate_target'],]
+    }
+
+    init_param{'test/sga_target':
+      ensure  => present,
+      value   => '1200M',
+      scope   => spfile,
+    }
+
+    init_param{'test/shared_pool_size':
+      ensure  => present,
+      value   => '600M',
+      scope   => spfile,
+    }
+
+    init_param{'test/pga_aggregate_target':
+      ensure  => present,
+      value   => '1G',
+      scope   => spfile,
+    }
+
+    # subscribe to changes
+    db_control{'test restart':
+      ensure                  => 'running', #running|start|abort|stop
+      instance_name           => 'test',
+      oracle_product_home_dir => '/oracle/product/11.2/db',
+      os_user                 => 'oracle',
+      refreshonly             => true,
+      subscribe               => Init_param['test/memory_target'],
+    }
+
 
     tablespace {'scott_ts':
       ensure                    => present,

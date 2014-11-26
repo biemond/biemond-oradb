@@ -1,8 +1,9 @@
 # Version updates
 
 ## 1.0.22
-- changed oraInst.loc permissions to 0755
+- db_control puppet resource type, start or stop an instance or subscribe to changes like init_param
 - Tnsnames change so it supports a TNS balanced configuration
+- changed oraInst.loc permissions to 0755
 
 ## 1.0.21
 - fix for windows/unix linefeed when oradb is used in combination with vagrant on a windows host
