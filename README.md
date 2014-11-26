@@ -33,7 +33,7 @@ Should work for Puppet 2.7 & 3.0
 - OPatch upgrade
 - Apply OPatch also for Clusterware
 - Create database instances
-- Stop/Start database instances
+- Stop/Start database instances with db_control puppet resource type
 - GoldenGate 12.1.2, 11.2.1
 - Installs RCU repositoy for Oracle SOA Suite / Webcenter ( 11.1.1.6.0 and 11.1.1.7.0 ) / Oracle Identity Management ( 11.1.2.1 )
 
