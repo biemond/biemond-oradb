@@ -6,14 +6,10 @@ created by Edwin Biemond
 [Github homepage](https://github.com/biemond/puppet)
 
 Should work on Docker, for Solaris and on all Linux version like RedHat, CentOS, Ubuntu, Debian, Suse SLES or OracleLinux
-
-Docker image of Oracle Database 12.1 SE [Docker Oracle Database 12.1.0.1](https://github.com/biemond/docker-database-puppet)
-
-Here you can test the CentOS 6.5 vagrant box with Oracle Database 12.1 and Enterprise Manager 12.1.0.4 [Enterprise vagrant box](https://github.com/biemond/biemond-em-12c)
-
-Here you can test the solaris 10 vagrant box with Oracle Database 12.1 [solaris vagrant box](https://github.com/biemond/biemond-orawls-vagrant-solaris-soa)
-
-Here you can test the CentOS 6.5 vagrant box with Oracle Database 11.2.0.4 and GoldenGate 12.1.2 [coherence goldengate vagrant box]( https://github.com/biemond/vagrant-wls12.1.2-coherence-goldengate)
+- Docker image of Oracle Database 12.1 SE [Docker Oracle Database 12.1.0.1](https://github.com/biemond/docker-database-puppet)
+- CentOS 6.5 vagrant box with Oracle Database 12.1 and Enterprise Manager 12.1.0.4 [Enterprise vagrant box](https://github.com/biemond/biemond-em-12c)
+- Solaris 10 vagrant box with Oracle Database 12.1 [solaris 10 vagrant box](https://github.com/biemond/biemond-orawls-vagrant-solaris-soa)
+- CentOS 6.5 vagrant box with Oracle Database 11.2.0.4 and GoldenGate 12.1.2 [coherence goldengate vagrant box]( https://github.com/biemond/vagrant-wls12.1.2-coherence-goldengate)
 
 Example of Opensource Puppet 3.4.3 Puppet master configuration in a vagrant box [puppet master](https://github.com/biemond/vagrant-puppetmaster)
 - oradb (oracle database 11.2.0.1 ) with GoldenGate 12.1.2

@@ -195,6 +195,7 @@ define oradb::installem(
         path      => $execPath,
         user      => $user,
         group     => $group,
+        cwd       => $oracle_base_dir,
         logoutput => true,
         require   => [Oradb::Utils::Dborainst["em orainst ${version}"],
                       File["${download_dir}/em_install_${version}.rsp"],
@@ -217,6 +218,7 @@ define oradb::installem(
       user      => 'root',
       group     => 'root',
       path      => $execPath,
+      cwd       => $oracle_base_dir,
       logoutput => true,
       require   => Exec["install oracle em ${title}"],
     }

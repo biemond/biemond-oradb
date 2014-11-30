@@ -38,13 +38,14 @@ EOF"
   end
 
   def instance_status
-    name           = resource[:instance_name]
+    name = resource[:instance_name]
 
-    if :kernel == 'SunOS'
-      command  = "/usr/ucb/ps wwxa | grep -v grep | /bin/grep 'ora_smon_#{name}'"
-    else
-      command  = "/bin/ps -ef | grep -v grep | /bin/grep 'ora_smon_#{name}'"
-    end
+    kernel = Facter.value(:kernel)
+
+    ps_bin = (kernel != 'SunOS' || (kernel == 'SunOS' && Facter.value(:kernelrelease) == '5.11')) ? '/bin/ps' : '/usr/ucb/ps'
+    ps_arg = kernel == 'SunOS' ? 'awwx' : '-ef'
+
+    command  = "#{ps_bin} #{ps_arg} | /bin/grep -v grep | /bin/grep 'ora_smon_#{name}'"
 
     Puppet.debug "instance_status #{command}"
     output = `#{command}`

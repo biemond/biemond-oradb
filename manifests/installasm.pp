@@ -189,6 +189,7 @@ define oradb::installasm(
       path      => $execPath,
       user      => $user,
       group     => $group_install,
+      cwd       => $gridBase,
       logoutput => true,
       require   => [Oradb::Utils::Dborainst["grid orainst ${version}"],
                     File["${downloadDir}/grid_install_${version}.rsp"]],
@@ -222,6 +223,7 @@ define oradb::installasm(
       user      => 'root',
       group     => 'root',
       path      => $execPath,
+      cwd       => $gridBase,
       logoutput => true,
       require   => Exec["install oracle grid ${title}"],
     }
@@ -232,6 +234,7 @@ define oradb::installasm(
         user      => 'root',
         group     => 'root',
         path      => $execPath,
+        cwd       => $gridBase,
         logoutput => true,
         require   => Exec["run root.sh grid script ${title}"],
       }
