@@ -720,55 +720,68 @@ or
 ## Database configuration
 In combination with the oracle puppet module from hajee you can create/change a database init parameter, tablespace,role or an oracle user
 
-
-    init_param{'processes':
-      ensure  => present,
-      value   => '800',
-      scope   => spfile,
+    init_param { 'SPFILE/OPEN_CURSORS:emrepos':
+      ensure => 'present',
+      value  => '600',
     }
 
-    init_param{'job_queue_processes':
-      ensure  => present,
-      value   => '2',
-      scope   => both,
+    init_param { 'SPFILE/processes:emrepos':
+      ensure => 'present',
+      value  => '1000',
     }
 
-    init_param{'test/memory_target':
+    init_param{'SPFILE/job_queue_processes:emrepos':
       ensure  => present,
-      value   => '2800M',
-      scope   => spfile,
-      require => [Init_param['test/sga_target'],
-                  Init_param['test/shared_pool_size'],
-                  Init_param['test/sga_target'],
-                  Init_param['test/pga_aggregate_target'],]
+      value   => '20',
     }
 
-    init_param{'test/sga_target':
+    init_param{'SPFILE/session_cached_cursors:emrepos':
       ensure  => present,
-      value   => '1200M',
-      scope   => spfile,
+      value   => '200',
     }
 
-    init_param{'test/shared_pool_size':
+    init_param{'SPFILE/db_securefile:emrepos':
       ensure  => present,
-      value   => '600M',
-      scope   => spfile,
+      value   => 'PERMITTED',
     }
 
-    init_param{'test/pga_aggregate_target':
+    init_param{'SPFILE/memory_target:emrepos':
       ensure  => present,
-      value   => '1G',
-      scope   => spfile,
+      value   => '3000M',
     }
 
-    # subscribe to changes
-    db_control{'test restart':
+    init_param { 'SPFILE/PGA_AGGREGATE_TARGET:emrepos':
+      ensure => 'present',
+      value  => '1G',
+      require => Init_param['SPFILE/memory_target:emrepos'],
+    }
+
+    init_param { 'SPFILE/SGA_TARGET:emrepos':
+      ensure => 'present',
+      value  => '1200M',
+      require => Init_param['SPFILE/memory_target:emrepos'],
+    }
+    init_param { 'SPFILE/SHARED_POOL_SIZE:emrepos':
+      ensure => 'present',
+      value  => '600M',
+      require => Init_param['SPFILE/memory_target:emrepos'],
+    }
+
+    db_control{'emrepos restart':
       ensure                  => 'running', #running|start|abort|stop
-      instance_name           => 'test',
-      oracle_product_home_dir => '/oracle/product/11.2/db',
-      os_user                 => 'oracle',
+      instance_name           => hiera('oracle_database_name'),
+      oracle_product_home_dir => hiera('oracle_home_dir'),
+      os_user                 => hiera('oracle_os_user'),
       refreshonly             => true,
-      subscribe               => Init_param['test/memory_target'],
+      subscribe               => [Init_param['SPFILE/OPEN_CURSORS:emrepos'],
+                                  Init_param['SPFILE/processes:emrepos'],
+                                  Init_param['SPFILE/job_queue_processes:emrepos'],
+                                  Init_param['SPFILE/session_cached_cursors:emrepos'],
+                                  Init_param['SPFILE/db_securefile:emrepos'],
+                                  Init_param['SPFILE/SGA_TARGET:emrepos'],
+                                  Init_param['SPFILE/SHARED_POOL_SIZE:emrepos'],
+                                  Init_param['SPFILE/PGA_AGGREGATE_TARGET:emrepos'],
+                                  Init_param['SPFILE/memory_target:emrepos'],],
     }
 
 
