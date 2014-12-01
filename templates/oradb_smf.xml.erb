@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<!DOCTYPE service_bundle
+  SYSTEM '/usr/share/lib/xml/dtd/service_bundle.dtd.1'>
+<service_bundle type="manifest" name="application/oracledatabase">
+    <service version="1" type="service" name="application/oracledatabase">
+
+        <dependency name="filesystem" grouping="require_all" restart_on="none" type="service">
+            <service_fmri value="svc:/system/filesystem/local" />
+        </dependency>
+
+        <dependency restart_on="none" type="service"
+            name="multi_user_dependency" grouping="require_all">
+            <service_fmri value="svc:/milestone/multi-user"/>
+        </dependency>
+
+        <exec_method type="method" name="start" exec="<%= @dboraLocation %>/dbora %m" timeout_seconds="500" />
+        <exec_method type="method" name="stop" exec="<%= @dboraLocation %>/dbora %m" timeout_seconds="500" />
+        <exec_method type="method" name="restart" exec="<%= @dboraLocation %>/dbora %m" timeout_seconds="500" />
+
+        <instance enabled="true" name="default"/>
+        <template>
+            <common_name>
+                <loctext xml:lang="C">Oracle Database</loctext>
+            </common_name>
+            <description>
+                <loctext xml:lang="C">Oracle Database</loctext>
+            </description>
+        </template>
+    </service>
+</service_bundle>

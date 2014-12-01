@@ -1056,7 +1056,7 @@ install the following module to set the database user limits parameters
         ensure  => present,
       }
 
-## Solaris 10/11 kernel, ulimits and required packages
+## Solaris 10 kernel, ulimits and required packages
 
     exec { "create /cdrom/unnamed_cdrom":
       command => "/usr/bin/mkdir -p /cdrom/unnamed_cdrom",
@@ -1097,11 +1097,6 @@ install the following module to set the database user limits parameters
       require   => Package[$install],
     }
 
-    ##### Needed by solaris 11
-    package { ['shell/ksh', 'developer/assembler']:
-      ensure => present,
-    }
-    #####
 
     # pkginfo -i SUNWarc SUNWbtool SUNWhea SUNWlibC SUNWlibm SUNWlibms SUNWsprot SUNWtoo SUNWi1of SUNWi1cs SUNWi15cs SUNWxwfnt SUNWcsl SUNWdtrc
     # pkgadd -d /cdrom/unnamed_cdrom/Solaris_10/Product/ -r response -a response SUNWarc SUNWbtool SUNWhea SUNWlibC SUNWlibm SUNWlibms SUNWsprot SUNWtoo SUNWi1of SUNWi1cs SUNWi15cs SUNWxwfnt SUNWcsl SUNWdtrc
@@ -1218,5 +1213,114 @@ install the following module to set the database user limits parameters
     exec { "ulimit -H":
       command => "ulimit -H -n 65536",
       require => Exec["ulimit -S"],
+      path    => $execPath,
+    }
+
+## Solaris 11 kernel, ulimits and required packages
+
+    package { ['shell/ksh', 'developer/assembler']:
+      ensure => present,
+    }
+
+    $install  = "pkg:/group/prerequisite/oracle/oracle-rdbms-server-12-1-preinstall"
+
+    package { $install:
+      ensure  => present,
+    }
+
+    $groups = ['oinstall','dba' ,'oper' ]
+
+    group { $groups :
+      ensure      => present,
+    }
+
+    user { 'oracle' :
+      ensure      => present,
+      uid         => 500,
+      gid         => 'dba',
+      groups      => $groups,
+      shell       => '/bin/bash',
+      password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
+      home        => "/export/home/oracle",
+      comment     => "This user oracle was created by Puppet",
+      require     => Group[$groups],
+      managehome  => true,
+    }
+
+    $execPath     = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
+
+    exec { "projadd group.dba":
+      command => "projadd -U oracle -G dba -p 104 group.dba",
+      require => User["oracle"],
+      unless  => "projects -l | grep -c group.dba",
+      path    => $execPath,
+    }
+
+    exec { "usermod oracle":
+      command => "usermod -K project=group.dba oracle",
+      require => [User["oracle"],Exec["projadd group.dba"],],
+      path    => $execPath,
+    }
+
+    exec { "projmod max-shm-memory":
+      command => "projmod -sK 'project.max-shm-memory=(privileged,4G,deny)' group.dba",
+      require => [User["oracle"],Exec["projadd group.dba"],],
+      path    => $execPath,
+    }
+
+    exec { "projmod max-sem-ids":
+      command     => "projmod -sK 'project.max-sem-ids=(privileged,100,deny)' group.dba",
+      require     => Exec["projadd group.dba"],
+      path        => $execPath,
+    }
+
+    exec { "projmod max-shm-ids":
+      command     => "projmod -s -K 'project.max-shm-ids=(privileged,100,deny)' group.dba",
+      require     => Exec["projadd group.dba"],
+      path        => $execPath,
+    }
+
+    exec { "projmod max-sem-nsems":
+      command     => "projmod -sK 'process.max-sem-nsems=(privileged,256,deny)' group.dba",
+      require     => Exec["projadd group.dba"],
+      path        => $execPath,
+    }
+
+    exec { "projmod max-file-descriptor":
+      command     => "projmod -sK 'process.max-file-descriptor=(basic,65536,deny)' group.dba",
+      require     => Exec["projadd group.dba"],
+      path        => $execPath,
+    }
+
+    exec { "projmod max-stack-size":
+      command     => "projmod -sK 'process.max-stack-size=(privileged,32MB,deny)' group.dba",
+      require     => Exec["projadd group.dba"],
+      path        => $execPath,
+    }
+
+    exec { "ipadm smallest_anon_port tcp":
+      command     => "ipadm set-prop -p smallest_anon_port=9000 tcp",
+      path        => $execPath,
+    }
+    exec { "ipadm smallest_anon_port udp":
+      command     => "ipadm set-prop -p smallest_anon_port=9000 udp",
+      path        => $execPath,
+    }
+    exec { "ipadm largest_anon_port tcp":
+      command     => "ipadm set-prop -p largest_anon_port=65500 tcp",
+      path        => $execPath,
+    }
+    exec { "ipadm largest_anon_port udp":
+      command     => "ipadm set-prop -p largest_anon_port=65500 udp",
+      path        => $execPath,
+    }
+
+    exec { "ulimit -S":
+      command => "ulimit -S -n 4096",
+      path    => $execPath,
+    }
+
+    exec { "ulimit -H":
+      command => "ulimit -H -n 65536",
       path    => $execPath,
     }

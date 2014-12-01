@@ -1,0 +1,27 @@
+#!/bin/sh
+ORA_HOME=<%= @oracleHome %>
+ORA_OWNER=<%= @user %>
+
+export ORA_HOME
+export ORA_OWNER
+ 
+if [ ! -f $ORA_HOME/bin/dbstart -o ! -d $ORA_HOME ]
+then
+    echo "The Oracle Startup file (dbstart) was not found"
+    exit
+fi
+ 
+case "$1" in
+    'start')
+    # start Oracle databases
+    su $ORA_OWNER -c "$ORA_HOME/bin/dbstart $ORA_HOME"
+;;
+    'stop')
+    # stop Oracle databases
+    su $ORA_OWNER -c "$ORA_HOME/bin/dbshut $ORA_HOME"
+;;
+    'restart')
+    su $ORA_OWNER -c "$ORA_HOME/bin/dbshut $ORA_HOME"
+    su $ORA_OWNER -c "$ORA_HOME/bin/dbstart $ORA_HOME"
+;;
+esac

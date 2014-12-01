@@ -9,19 +9,28 @@ define oradb::autostartdatabase(
 ){
   include oradb::prepareautostart
 
+  $execPath    = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
+
   case $::kernel {
     'Linux': {
-      $execPath    = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
+      $oraTab = '/etc/oratab'
+      $dboraLocation = '/etc/init.d'
+      $sedCommand = "sed -i -e's/:N/:Y/g' ${oraTab}"
+    }
+    'SunOS': {
+      $oraTab = '/var/opt/oracle/oratab'
+      $dboraLocation = '/etc'
+      $sedCommand = "sed -e's/:N/:Y/g' ${oraTab} > /tmp/oratab.tmp && mv /tmp/oratab.tmp ${oraTab}"
     }
     default: {
-      fail('Unrecognized operating system')
+      fail('Unrecognized operating system, please use it on a Linux or SunOS host')
     }
   }
 
   exec { "set dbora ${dbName}:${oracleHome}":
-    command   => "sed -i -e's/:N/:Y/g' /etc/oratab",
-    unless    => "/bin/grep '^${dbName}:${oracleHome}:Y' /etc/oratab",
-    require   => File['/etc/init.d/dbora'],
+    command   => $sedCommand,
+    unless    => "/bin/grep '^${dbName}:${oracleHome}:Y' ${oraTab}",
+    require   => File["${dboraLocation}/dbora"],
     path      => $execPath,
     logoutput => true,
   }
