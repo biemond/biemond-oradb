@@ -1,5 +1,7 @@
 # Version updates
 
+## 1.0.24
+
 ## 1.0.23
 - Enterprise Manager 12.1.0.4 server installation support
 - Support for Solaris 11.2
