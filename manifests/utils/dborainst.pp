@@ -15,6 +15,7 @@ define oradb::utils::dborainst
     }
     'SunOS': {
       $oraInstPath = '/var/opt/oracle'
+      # just to be sure , create the base dir
       if !defined(File[$oraInstPath]) {
         file { $oraInstPath:
           ensure => directory,

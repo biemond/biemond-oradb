@@ -66,7 +66,7 @@ define oradb::installem(
       $oraInventory = "${ora_inventory_dir}/oraInventory"
     }
 
-    oradb::utils::dbstructure{"oracle structure ${version}":
+    oradb::utils::dbstructure{"oracle em structure ${version}":
       oracle_base_home_dir => $oracle_base_dir,
       ora_inventory_dir    => $oraInventory,
       os_user              => $user,
@@ -219,7 +219,7 @@ define oradb::installem(
       group     => 'root',
       path      => $execPath,
       cwd       => $oracle_base_dir,
-      logoutput => true,
+      logoutput => $log_output,
       require   => Exec["install oracle em ${title}"],
     }
   }
