@@ -13,58 +13,16 @@ OMS_HOST=10.10.10.25
 OMS_PORT=7802
 AGENT_PORT=1830
 EM_UPLOAD_PORT=4903
-VERSION=12.1.0.4.0
 
 /oracle/product/12.1/agent/core/12.1.0.4.0/root.sh
-To execute the configuration scripts:
-1. Open a terminal window
-2. Log in as "root"
-3. Run the scripts
 
 /oracle/product/12.1/agent/core/12.1.0.4.0/bin/emctl status agent
 /oracle/product/12.1/agent/core/12.1.0.4.0/bin/emctl upload agent
 /oracle/product/12.1/agent/core/12.1.0.4.0/bin/emctl listplugins agent -type all
 
 
-
-emcli
-
-wget --no-check-certificate
-https://<your_em_host:port>/em/public_lib_download/emcli/kit/emclikit.jar
-
-setenv JAVA_HOME /usr/local/packages/j2sdk1.6.0_43
-
-$JAVA_HOME/bin/java -jar emclikit.jar -install_dir=<em_cli_home_dir>
-
-
-advanced
-
-wget --no-check-certificate
-https://<your_em_host:port>/em/
-public_lib_download/emcli/kit/emcliadvancedkit.jar
-
-setenv JAVA_HOME /usr/local/packages/j2sdk1.6.0_43
-
-$JAVA_HOME/bin/java -jar emcliadvancedkit.jar -install_dir=<em_cli_home_dir>
-
-<emcli_install_location>/emcli login -username=sysman
-<emcli_install_location>/emcli sync
-<emcli_install_location>/emcli get_supported_platforms
-
-./emcli get_agentimage -destination=/tmp/agentImage -platform="Linux x86-64" -version=12.1.0.4.0
-
-unzip /tmp/agentImage/12.1.0.4.0_AgentCore_226.zip -d /tmp/agtImg
-
-
-<software_extract_location>/agent.rsp
-OMS_HOST=example.com
-EM_UPLOAD_PORT=14511
-AGENT_REGISTRATION_PASSWORD=abc123
-AGENT_PORT=1832
-
-<software_extract_location>/agentDeploy.sh AGENT_BASE_DIR=<absolute_path_to_agentbasedir> RESPONSE_FILE=<software_extract_location>/agent.rsp
-
-
 unzip 12.1.0.4.0_AgentCore_226_Linux_x64.zip
-agentDeploy.sh AGENT_BASE_DIR=/opt/oracle/product/12.1.0/agent OMS_HOST=xxxxxxx  EM_UPLOAD_PORT=4901 AGENT_INSTANCE_HOME=/opt/oracle/product/12.1.0/agent/agent_inst AGENT_REGISTRATION_PASSWORD=xxxx AGENT_PORT=1830
+
+
+./agentDeploy.sh AGENT_BASE_DIR=/oracle/product/12.1/agent2 OMS_HOST=10.10.10.25 EM_UPLOAD_PORT=4903 AGENT_INSTANCE_HOME=/oracle/product/12.1/agent2/agent_inst AGENT_REGISTRATION_PASSWORD=Welcome01 AGENT_PORT=1832
 

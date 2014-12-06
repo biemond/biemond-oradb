@@ -740,6 +740,22 @@ or
       log_output                  => true,
     }
 
+    oradb::installem_agent{ 'em12104_agent2':
+      version                     => '12.1.0.4',
+      source                      => '/var/tmp/install/agent.zip',
+      install_type                => 'agentDeploy',
+      oracle_base_dir             => '/oracle',
+      agent_base_dir              => '/oracle/product/12.1/agent2',
+      agent_instance_home_dir     => '/oracle/product/12.1/agent2/agent_inst',
+      agent_registration_password => 'Welcome01',
+      agent_port                  => 1832,
+      oms_host                    => '10.10.10.25',
+      em_upload_port              => 4903,
+      user                        => 'oracle',
+      group                       => 'dba',
+      download_dir                => '/var/tmp/install',
+      log_output                  => true,
+    }
 
 ## Database configuration
 In combination with the oracle puppet module from hajee you can create/change a database init parameter, tablespace,role or an oracle user
