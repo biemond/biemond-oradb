@@ -98,7 +98,7 @@ define oradb::installem(
           mode    => '0775',
           owner   => $user,
           group   => $group,
-          require => Oradb::Utils::Dbstructure["oracle structure ${version}"],
+          require => Oradb::Utils::Dbstructure["oracle em structure ${version}"],
           before  => Exec["extract ${download_dir}/${file1}"],
         }
         # db file 2 installer zip
@@ -134,7 +134,7 @@ define oradb::installem(
         path      => $execPath,
         user      => $user,
         group     => $group,
-        require   => Oradb::Utils::Dbstructure["oracle structure ${version}"],
+        require   => Oradb::Utils::Dbstructure["oracle em structure ${version}"],
         # before    => Exec["install oracle em ${title}"],
       }
       exec { "extract ${download_dir}/${file2}":
