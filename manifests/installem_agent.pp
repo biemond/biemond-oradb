@@ -5,6 +5,7 @@ define oradb::installem_agent(
   $version                     = '12.1.0.4',
   $install_type                = 'agentPull', #'agentPull'|'agentDeploy'
   $install_version             = '12.1.0.4.0',
+  $install_platform            = 'Linux x86-64',
   $source                      = undef, # 'https://<OMS_HOST>:<OMS_PORT>/em/install/getAgentImage'|'/tmp/12.1.0.4.0_AgentCore_226_Linux_x64.zip'
   $ora_inventory_dir           = undef,
   $oracle_base_dir             = undef,
@@ -71,9 +72,6 @@ define oradb::installem_agent(
       os_group          => $group,
     }
 
-    # check PLATFORM="Linux x86-64"
-    $platform = 'Linux x86-64'
-
     unless is_string($agent_base_dir) {fail('You must specify agent_base_dir') }
     unless is_string($sysman_user) {fail('You must specify sysman_user') }
     unless is_string($sysman_password) {fail('You must specify sysman_password') }
@@ -111,9 +109,11 @@ define oradb::installem_agent(
         ensure  => present,
         content => template('oradb/em_agent_pull.properties.erb'),
         mode    => '0755',
+        owner   => $user,
+        group   => $group,
       }
 
-      $command = "${download_dir}/AgentPull.sh PLATFORM=${platform} AGENT_BASE_DIR=${agent_base_dir} AGENT_REGISTRATION_PASSWORD=${agent_registration_password} LOGIN_USER=${sysman_user} LOGIN_PASSWORD=${sysman_password} RSPFILE_LOC=${download_dir}/em_agent.properties"
+      $command = "${download_dir}/AgentPull.sh LOGIN_USER=${sysman_user} LOGIN_PASSWORD=${sysman_password} PLATFORM=\"${install_platform}\" AGENT_BASE_DIR=${agent_base_dir} AGENT_REGISTRATION_PASSWORD=${agent_registration_password} RSPFILE_LOC=${download_dir}/em_agent.properties"
 
       exec { "agentPull execute ${title}":
         command   => $command,

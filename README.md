@@ -36,6 +36,7 @@ Should work for Puppet 2.7 & 3.0
 
 ## Enterprise Manager
 - Enterprise Manager Server 12.1.0.4 12c cloud installation / configuration
+- Agent installation via AgentPull.sh
 
 ## GoldenGate
 - GoldenGate 12.1.2, 11.2.1
@@ -717,6 +718,28 @@ or
       remote_file                 => false,
       log_output                  => true,
     }
+
+    oradb::installem_agent{ 'em12104_agent':
+      version                     => '12.1.0.4',
+      source                      => 'https://10.10.10.25:7802/em/install/getAgentImage',
+      install_type                => 'agentPull',
+      install_platform            => 'Linux x86-64',
+      oracle_base_dir             => '/oracle',
+      agent_base_dir              => '/oracle/product/12.1/agent',
+      agent_instance_home_dir     => '/oracle/product/12.1/agent/agent_inst',
+      sysman_user                 => 'sysman',
+      sysman_password             => 'Welcome01',
+      agent_registration_password => 'Welcome01',
+      agent_port                  => 1830,
+      oms_host                    => '10.10.10.25',
+      oms_port                    => 7802,
+      em_upload_port              => 4903,
+      user                        => 'oracle',
+      group                       => 'dba',
+      download_dir                => '/var/tmp/install',
+      log_output                  => true,
+    }
+
 
 ## Database configuration
 In combination with the oracle puppet module from hajee you can create/change a database init parameter, tablespace,role or an oracle user
