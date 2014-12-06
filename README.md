@@ -36,7 +36,7 @@ Should work for Puppet 2.7 & 3.0
 
 ## Enterprise Manager
 - Enterprise Manager Server 12.1.0.4 12c cloud installation / configuration
-- Agent installation via AgentPull.sh
+- Agent installation via AgentPull.sh & AgentDeploy.sh
 
 ## GoldenGate
 - GoldenGate 12.1.2, 11.2.1
