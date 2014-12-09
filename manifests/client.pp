@@ -68,9 +68,9 @@ define oradb::client(
         owner   => $user,
         group   => $group,
       }
-        $source = $downloadDir
+      $source = $downloadDir
     } else {
-        $source = $mountPoint
+      $source = $mountPoint
     }
     exec { "extract ${downloadDir}/${file}":
       command   => "unzip -o ${source}/${file} -d ${downloadDir}/client_${version}",
@@ -149,6 +149,25 @@ define oradb::client(
         mode    => '0775',
         owner   => $user,
         group   => $group,
+      }
+    }
+
+    # cleanup
+    exec { "remove oracle client extract folder ${title}":
+      command => "rm -rf ${downloadDir}/client_${version}",
+      user    => 'root',
+      group   => 'root',
+      path    => $execPath,
+      require => Exec["install oracle net ${title}"],
+    }
+
+    if ( $remoteFile == true ){
+      exec { "remove oracle client file ${file} ${title}":
+        command => "rm -rf ${downloadDir}/${file}",
+        user    => 'root',
+        group   => 'root',
+        path    => $execPath,
+        require => Exec["install oracle net ${title}"],
       }
     }
 

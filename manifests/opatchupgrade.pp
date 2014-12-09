@@ -115,6 +115,7 @@ define oradb::opatchupgrade(
             logoutput => true,
           }
         }
+
       }
       default: {
         fail('Unrecognized operating system')

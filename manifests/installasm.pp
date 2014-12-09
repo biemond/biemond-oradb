@@ -228,6 +228,37 @@ define oradb::installasm(
       require   => Exec["install oracle grid ${title}"],
     }
 
+    # cleanup
+    if ( $zipExtract ) {
+      exec { "remove oracle asm extract folder ${title}":
+        command => "rm -rf ${downloadDir}/${file_without_ext}",
+        user    => 'root',
+        group   => 'root',
+        path    => $execPath,
+        require => Exec["install oracle grid ${title}"],
+      }
+
+      if ( $remoteFile == true ){
+        if ( $version == '12.1.0.1') {
+          exec { "remove oracle asm file2 ${file2} ${title}":
+            command => "rm -rf ${downloadDir}/${file2}",
+            user    => 'root',
+            group   => 'root',
+            path    => $execPath,
+            require => Exec["install oracle grid ${title}"],
+          }
+        }
+
+        exec { "remove oracle asm file1 ${file1} ${title}":
+          command => "rm -rf ${downloadDir}/${file1}",
+          user    => 'root',
+          group   => 'root',
+          path    => $execPath,
+          require => Exec["install oracle grid ${title}"],
+        }
+      }
+    }
+
     if ( $gridType == 'CRS_SWONLY' ) {
       exec { 'Configuring Grid Infrastructure for a Stand-Alone Server':
         command   => "${gridHome}/perl/bin/perl -I${gridHome}/perl/lib -I${gridHome}/crs/install ${gridHome}/crs/install/roothas.pl",

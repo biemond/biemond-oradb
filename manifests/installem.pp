@@ -222,5 +222,43 @@ define oradb::installem(
       logoutput => $log_output,
       require   => Exec["install oracle em ${title}"],
     }
+
+    # cleanup
+    if ( $zip_extract ) {
+      exec { "remove oracle em extract folder ${title}":
+        command => "rm -rf ${download_dir}/${file}",
+        user    => 'root',
+        group   => 'root',
+        path    => $execPath,
+        require => [Exec["install oracle em ${title}"],
+                    Exec["run root.sh script ${title}"],],
+      }
+
+      if ( $remote_file == true ){
+        exec { "remove oracle em file1 ${file1} ${title}":
+          command => "rm -rf ${download_dir}/${file1}",
+          user    => 'root',
+          group   => 'root',
+          path    => $execPath,
+          require => Exec["install oracle em ${title}"],
+        }
+        exec { "remove oracle em file2 ${file2} ${title}":
+          command => "rm -rf ${download_dir}/${file2}",
+          user    => 'root',
+          group   => 'root',
+          path    => $execPath,
+          require => Exec["install oracle em ${title}"],
+        }
+        exec { "remove oracle em file3 ${file3} ${title}":
+          command => "rm -rf ${download_dir}/${file3}",
+          user    => 'root',
+          group   => 'root',
+          path    => $execPath,
+          require => Exec["install oracle em ${title}"],
+        }
+
+      }
+    }
+
   }
 }
