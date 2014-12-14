@@ -1,5 +1,7 @@
 # Version updates
 
+## 1.0.25
+
 ## 1.0.24
 - Enterprise Manager agent install with AgentPull & AgentDeploy
 - Cleanup install zip files and extracted installation folder in installdb, installasm, installem and client
