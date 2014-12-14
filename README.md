@@ -760,104 +760,55 @@ or
 ## Database configuration
 In combination with the oracle puppet module from hajee you can create/change a database init parameter, tablespace,role or an oracle user
 
-    init_param { 'SPFILE/OPEN_CURSORS:emrepos':
-      ensure => 'present',
-      value  => '600',
-    }
-
-    init_param { 'SPFILE/processes:emrepos':
+    ora_init_param{'SPFILE/processes@soarepos':
       ensure => 'present',
       value  => '1000',
     }
 
-    init_param{'SPFILE/job_queue_processes:emrepos':
+    ora_init_param{'SPFILE/job_queue_processes@soarepos':
       ensure  => present,
-      value   => '20',
+      value   => '4',
     }
 
-    init_param{'SPFILE/session_cached_cursors:emrepos':
-      ensure  => present,
-      value   => '200',
-    }
-
-    init_param{'SPFILE/db_securefile:emrepos':
-      ensure  => present,
-      value   => 'PERMITTED',
-    }
-
-    init_param{'SPFILE/memory_target:emrepos':
-      ensure  => present,
-      value   => '3000M',
-    }
-
-    init_param { 'SPFILE/PGA_AGGREGATE_TARGET:emrepos':
-      ensure => 'present',
-      value  => '1G',
-      require => Init_param['SPFILE/memory_target:emrepos'],
-    }
-
-    init_param { 'SPFILE/SGA_TARGET:emrepos':
-      ensure => 'present',
-      value  => '1200M',
-      require => Init_param['SPFILE/memory_target:emrepos'],
-    }
-    init_param { 'SPFILE/SHARED_POOL_SIZE:emrepos':
-      ensure => 'present',
-      value  => '600M',
-      require => Init_param['SPFILE/memory_target:emrepos'],
-    }
-
-    db_control{'emrepos restart':
+    db_control{'soarepos restart':
       ensure                  => 'running', #running|start|abort|stop
       instance_name           => hiera('oracle_database_name'),
       oracle_product_home_dir => hiera('oracle_home_dir'),
       os_user                 => hiera('oracle_os_user'),
       refreshonly             => true,
-      subscribe               => [Init_param['SPFILE/OPEN_CURSORS:emrepos'],
-                                  Init_param['SPFILE/processes:emrepos'],
-                                  Init_param['SPFILE/job_queue_processes:emrepos'],
-                                  Init_param['SPFILE/session_cached_cursors:emrepos'],
-                                  Init_param['SPFILE/db_securefile:emrepos'],
-                                  Init_param['SPFILE/SGA_TARGET:emrepos'],
-                                  Init_param['SPFILE/SHARED_POOL_SIZE:emrepos'],
-                                  Init_param['SPFILE/PGA_AGGREGATE_TARGET:emrepos'],
-                                  Init_param['SPFILE/memory_target:emrepos'],],
+      subscribe               => [Ora_init_param['SPFILE/processes@soarepos'],
+                                  Ora_init_param['SPFILE/job_queue_processes@soarepos'],],
     }
 
-
-    tablespace {'scott_ts':
+    ora_tablespace {'JMS_TS@soarepos':
       ensure                    => present,
+      datafile                  => 'jms_ts.dbf',
       size                      => 100M,
-      datafile                  => 'scott_ts.dbf',
       logging                   => yes,
       autoextend                => on,
       next                      => 100M,
-      max_size                  => 12288M,
+      max_size                  => 1G,
       extent_management         => local,
       segment_space_management  => auto,
     }
 
-    role {'apps':
+    ora_role {'APPS@soarepos':
       ensure    => present,
     }
 
-    oracle_user{'scott':
+    ora_user{'JMS@soarepos':
+      ensure                    => present,
       temporary_tablespace      => temp,
-      default_tablespace        => 'scott_ts',
-      password                  => 'tiger',
-      grants                    => ['SELECT ANY TABLE',
-                                    'CONNECT',
-                                    'RESOURCE',
-                                    'apps'],
-      quotas                    => { "scott_ts" => 'unlimited'},
-      require                   => [Tablespace['scott_ts'],
-                                    Role['apps']],
+      default_tablespace        => 'JMS_TS',
+      password                  => 'jms',
+      require                   => [Ora_tablespace['JMS_TS@soarepos'],
+                                    Ora_role['APPS@soarepos']],
+      grants                    => ['SELECT ANY TABLE', 'CONNECT', 'CREATE TABLE', 'CREATE TRIGGER','APPS'],
+      quotas                    => {
+                                      "JMS_TS"  => 'unlimited'
+                                    },
     }
 
-    init_param{'sid/parameter/instance':
-      ensure  => present,
-      value   => 'the_value'
-    }
 
 ## Oracle GoldenGate 12.1.2 and 11.2.1
 
