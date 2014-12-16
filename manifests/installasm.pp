@@ -37,11 +37,11 @@ define oradb::installasm(
   #notify {"oradb::installasm file without extension ${$file_without_ext} ":}
 
   if($cluster_name){ # We've got a RAC cluster. Check the cluster specific parameters
-    unless is_string($scan_name) {fail('You must specify scan_name if cluster_name is defined') }
-    unless is_integer($scan_port) {fail('You must specify scan_port if cluster_name is defined') }
-    unless is_string($cluster_nodes) {fail('You must specify cluster_nodes if cluster_name is defined') }
-    unless is_string($network_interface_list) {fail('You must specify network_interface_list if cluster_name is defined') }
-    unless is_string($storage_option) {fail('You must specify storage_option if cluster_name is defined') }
+    if ( $scan_name == undef or is_string($scan_name) == false) {fail('You must specify scan_name if cluster_name is defined') }
+    if ( $scan_port == undef or is_integer($scan_port) == false) {fail('You must specify scan_port if cluster_name is defined') }
+    if ( $cluster_nodes == undef or is_string($cluster_nodes) == false) {fail('You must specify cluster_nodes if cluster_name is defined') }
+    if ( $network_interface_list == undef or is_string($network_interface_list) == false) {fail('You must specify network_interface_list if cluster_name is defined') }
+    if ( $storage_option == undef or is_string($storage_option) == false) {fail('You must specify storage_option if cluster_name is defined') }
     unless $storage_option in ['ASM_STORAGE', 'FILE_SYSTEM_STORAGE'] {fail 'storage_option must be either ASM_STORAGE of FILE_SYSTEM_STORAGE'}
   }
 
@@ -56,6 +56,14 @@ define oradb::installasm(
   if ( !($gridType in ['CRS_CONFIG','HA_CONFIG','UPGRADE','CRS_SWONLY'])){
     fail('Unrecognized database grid type, please use CRS_CONFIG|HA_CONFIG|UPGRADE|CRS_SWONLY')
   }
+
+  if ( $gridBase == undef or is_string($gridBase) == false) {fail('You must specify an gridBase') }
+  if ( $gridHome == undef or is_string($gridHome) == false) {fail('You must specify an gridHome') }
+
+  if ( $gridBase in $gridHome == false ){
+    fail('gridHome folder should be under the gridBase folder')
+  }
+
 
   # check if the oracle software already exists
   $found = oracle_exists( $gridHome )

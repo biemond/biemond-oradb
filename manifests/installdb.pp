@@ -42,6 +42,13 @@ define oradb::installdb(
     fail('Unrecognized database type, please use EE|SE|SEONE')
   }
 
+  if ( $oracleBase == undef or is_string($oracleBase) == false) {fail('You must specify an oracleBase') }
+  if ( $oracleHome == undef or is_string($oracleHome) == false) {fail('You must specify an oracleHome') }
+
+  if ( $oracleBase in $oracleHome == false ){
+    fail('oracleHome folder should be under the oracleBase folder')
+  }
+
   # check if the oracle software already exists
   $found = oracle_exists( $oracleHome )
 

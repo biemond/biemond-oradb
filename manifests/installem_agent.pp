@@ -73,13 +73,13 @@ define oradb::installem_agent(
       os_group          => $group,
     }
 
-    unless is_string($source) {fail('You must specify source') }
-    unless is_string($agent_base_dir) {fail('You must specify agent_base_dir') }
-    unless is_string($sysman_user) {fail('You must specify sysman_user') }
-    unless is_string($sysman_password) {fail('You must specify sysman_password') }
-    unless is_string($oracle_base_dir) {fail('You must specify oracle_base_dir') }
-    unless is_string($agent_registration_password) {fail('You must specify agent_registration_password') }
-    unless is_integer($em_upload_port) {fail('You must specify em_upload_port') }
+    if ( $source == undef or is_string($source) == false) {fail('You must specify source') }
+    if ( $agent_base_dir == undef or is_string($agent_base_dir) == false) {fail('You must specify agent_base_dir') }
+    if ( $sysman_user == undef or is_string($sysman_user) == false) {fail('You must specify sysman_user') }
+    if ( $sysman_password == undef or is_string($sysman_password) == false) {fail('You must specify sysman_password') }
+    if ( $oracle_base_dir == undef or is_string($oracle_base_dir) == false) {fail('You must specify oracle_base_dir') }
+    if ( $agent_registration_password == undef or is_string($agent_registration_password) == false) {fail('You must specify agent_registration_password') }
+    if ( $em_upload_port == undef or is_string($em_upload_port) == false) {fail('You must specify em_upload_port') }
 
     # chmod +x /tmp/AgentPull.sh
     if ( $install_type  == 'agentPull') {
