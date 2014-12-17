@@ -236,19 +236,17 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
 
 Opatch
 
-    # for this example OPatch 14727310
-    # the OPatch utility must be upgraded ( patch 6880880, see above)
-    oradb::opatch{'14727310_db_patch':
+    oradb::opatch{'19121551_db_patch':
       ensure                 => 'present',
-      oracleProductHome      => '/oracle/product/11.2/db',
-      patchId                => '14727310',
-      patchFile              => 'p14727310_112030_Linux-x86-64.zip',
-      user                   => 'oracle',
-      group                  => 'dba',
-      downloadDir            => '/install',
+      oracleProductHome      => hiera('oracle_home_dir'),
+      patchId                => '19121551',
+      patchFile              => 'p19121551_112040_Linux-x86-64.zip',
+      user                   => hiera('oracle_os_user'),
+      group                  => 'oinstall',
+      downloadDir            => hiera('oracle_download_dir'),
       ocmrf                  => true,
-      require                => Oradb::Opatchupgrade['112000_opatch_upgrade'],
-      puppetDownloadMntPoint => $puppetDownloadMntPoint,
+      require                => Oradb::Opatchupgrade['112000_opatch_upgrade_db'],
+      puppetDownloadMntPoint => hiera('oracle_source'),
     }
 
 or for clusterware (GRID)
@@ -282,6 +280,23 @@ or for clusterware (GRID)
       downloadDir            => hiera('oracle_download_dir'),
       ocmrf                  => true,
       require                => Oradb::Opatchupgrade['112000_opatch_upgrade_asm'],
+      puppetDownloadMntPoint => hiera('oracle_source'),
+    }
+
+    # same patch but then for the oracle db home 
+    oradb::opatch{'19791420_db_patch':
+      ensure                 => 'present',
+      oracleProductHome      => hiera('oracle_home_dir'),
+      patchId                => '19791420',
+      patchFile              => 'p19791420_112040_Linux-x86-64.zip',
+      clusterWare            => false,
+      bundleSubPatchId       => '19282021', # sub patchid of bundle patch ( else I can't detect it)
+      bundleSubFolder        => '19282021', # optional subfolder inside the patch zip
+      user                   => hiera('oracle_os_user'),
+      group                  => 'oinstall',
+      downloadDir            => hiera('oracle_download_dir'),
+      ocmrf                  => true,
+      require                => Oradb::Opatch['19121551_db_patch'],
       puppetDownloadMntPoint => hiera('oracle_source'),
     }
 
