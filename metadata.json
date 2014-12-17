@@ -13,8 +13,8 @@
   "name": "biemond-oradb",
   "project_page": "https://github.com/biemond/biemond-oradb",
   "source": "https://github.com/biemond/biemond-oradb",
-  "summary": "Oracle Database 11.2 / 12 linux / solaris + GoldenGate + RCU installer",
-  "tags": ["database", "12c", "oracle","11.2", "goldengate", "rcu","fmw", "fusion"],
+  "summary": "Oracle Database 11.2 / 12.1 linux / solaris, Enterprise Manager 12c, GoldenGate, 11g RCU installer",
+  "tags": ["database", "12c","12.1", "oracle","11g","11gR2", "goldengate", "rcu","fmw", "fusion","enterprise manager"],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
