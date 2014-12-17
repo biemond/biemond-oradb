@@ -152,7 +152,7 @@ define oradb::installem_agent(
         }
       }
 
-      exec { "extract ${download_dir}/${file1}":
+      exec { "extract ${source} ${title}":
         command   => "unzip -o ${source} -d ${download_dir}/em_agent_${version}",
         timeout   => 0,
         logoutput => false,
@@ -176,7 +176,7 @@ define oradb::installem_agent(
         path      => $execPath,
         user      => $user,
         group     => $group,
-        require   => [Exec["extract ${download_dir}/${file1}"],
+        require   => [Exec["extract ${source} ${title}"],
                       Oradb::Utils::Dbstructure["oracle em agent structure ${version}"],
                       Oradb::Utils::Dborainst["em agent orainst ${version}"],],
       }
