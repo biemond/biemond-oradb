@@ -63,7 +63,7 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
     bundle_sub_patch_id     = resource[:bundle_sub_patch_id]
     clusterware             = resource[:clusterware]
 
-    if clusterware == true
+    unless bundle_sub_patch_id.nil?
       patchId = bundle_sub_patch_id
     else
       patchId = patchName
@@ -105,7 +105,7 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
     bundle_sub_patch_id     = resource[:bundle_sub_patch_id]
     clusterware             = resource[:clusterware]
 
-    if clusterware == true
+    unless bundle_sub_patch_id.nil?
       patchId = bundle_sub_patch_id
     else
       patchId = patchName
