@@ -2,6 +2,7 @@
 
 ## 1.0.25
 - added extra parameter validation to installdb, installasm and installem_agent
+- opatch fix for opatch bundle zip files which has subfolders in the zip
 
 ## 1.0.24
 - Enterprise Manager agent install with AgentPull & AgentDeploy

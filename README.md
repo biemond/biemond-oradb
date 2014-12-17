@@ -259,12 +259,29 @@ or for clusterware (GRID)
       patchId                => '18706472',
       patchFile              => 'p18706472_112040_Linux-x86-64.zip',
       clusterWare            => true,
-      bundleSubPatchId       => '18522515',
+      bundleSubPatchId       => '18522515',  sub patchid of bundle patch ( else I can't detect it if it is already applied)
       user                   => hiera('grid_os_user'),
       group                  => 'oinstall',
       downloadDir            => hiera('oracle_download_dir'),
       ocmrf                  => true,
       require                => Oradb::Opatchupgrade['112000_opatch_upgrade'],
+      puppetDownloadMntPoint => hiera('oracle_source'),
+    }
+
+    # this zip contains 2 patches, one bundle and a normal one. we want to apply the bundle and need to use bundleSubFolder
+    oradb::opatch{'19791420_grid_patch':
+      ensure                 => 'present',
+      oracleProductHome      => hiera('grid_home_dir'),
+      patchId                => '19791420',
+      patchFile              => 'p19791420_112040_Linux-x86-64.zip',
+      clusterWare            => true,
+      bundleSubPatchId       => '19121552', # sub patchid of bundle patch ( else I can't detect it if it is already applied)
+      bundleSubFolder        => '19380115', # optional subfolder inside the patch zip
+      user                   => hiera('grid_os_user'),
+      group                  => 'oinstall',
+      downloadDir            => hiera('oracle_download_dir'),
+      ocmrf                  => true,
+      require                => Oradb::Opatchupgrade['112000_opatch_upgrade_asm'],
       puppetDownloadMntPoint => hiera('oracle_source'),
     }
 
