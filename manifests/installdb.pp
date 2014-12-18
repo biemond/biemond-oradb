@@ -169,30 +169,19 @@ define oradb::installdb(
       }
     }
 
-    if ( $version in ['11.2.0.1','12.1.0.1','12.1.0.2','11.2.0.3','11.2.0.4']){
-      exec { "install oracle database ${title}":
-        command   => "/bin/sh -c 'unset DISPLAY;${downloadDir}/${file}/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${downloadDir}/db_install_${version}.rsp'",
-        creates   => "${oracleHome}/dbs",
-        timeout   => 0,
-        returns   => [6,0],
-        path      => $execPath,
-        user      => $user,
-        group     => $group_install,
-        cwd       => $oracleBase,
-        logoutput => true,
-        require   => [Oradb::Utils::Dborainst["database orainst ${version}"],
+    exec { "install oracle database ${title}":
+      command     => "/bin/sh -c 'unset DISPLAY;${downloadDir}/${file}/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${downloadDir}/db_install_${version}.rsp'",
+      creates     => "${oracleHome}/dbs",
+      environment => ["USER=${user}","LOGNAME=${user}"],
+      timeout     => 0,
+      returns     => [6,0],
+      path        => $execPath,
+      user        => $user,
+      group       => $group_install,
+      cwd         => $oracleBase,
+      logoutput   => true,
+      require     => [Oradb::Utils::Dborainst["database orainst ${version}"],
                       File["${downloadDir}/db_install_${version}.rsp"]],
-      }
-
-      file { $oracleHome:
-        ensure  => directory,
-        recurse => false,
-        replace => false,
-        mode    => '0775',
-        owner   => $user,
-        group   => $group_install,
-        require => Exec["install oracle database ${title}"],
-      }
     }
 
     if ( $bashProfile == true ) {
@@ -217,6 +206,16 @@ define oradb::installdb(
       cwd       => $oracleBase,
       logoutput => true,
       require   => Exec["install oracle database ${title}"],
+    }
+
+    file { $oracleHome:
+      ensure  => directory,
+      recurse => false,
+      replace => false,
+      mode    => '0775',
+      owner   => $user,
+      group   => $group_install,
+      require => Exec["install oracle database ${title}","run root.sh script ${title}"],
     }
 
     # cleanup
