@@ -219,6 +219,7 @@ Patching
 
 For opatchupgrade you need to provide the Oracle support csiNumber and supportId and need to be online. Or leave them empty but it needs the Expect rpm to emulate OCM
 
+    # use this on a Grid or Database home
     oradb::opatchupgrade{'112000_opatch_upgrade':
       oracleHome             => '/oracle/product/11.2/db',
       patchFile              => 'p6880880_112000_Linux-x86-64.zip',
@@ -236,6 +237,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
 
 Opatch
 
+    # october 2014 11.2.0.4.4 patch 
     oradb::opatch{'19121551_db_patch':
       ensure                 => 'present',
       oracleProductHome      => hiera('oracle_home_dir'),
@@ -249,7 +251,7 @@ Opatch
       puppetDownloadMntPoint => hiera('oracle_source'),
     }
 
-or for clusterware (GRID)
+or for clusterware aka opatch auto
 
     oradb::opatch{'18706472_grid_patch':
       ensure                 => 'present',
@@ -266,7 +268,8 @@ or for clusterware (GRID)
       puppetDownloadMntPoint => hiera('oracle_source'),
     }
 
-    # this zip contains 2 patches, one bundle and a normal one. we want to apply the bundle and need to use bundleSubFolder
+    # this 19791420 patch contains 2 patches (in different sub folders), one bundle and a normal one. 
+    # we want to apply the bundle and need to provide the right value for bundleSubFolder
     oradb::opatch{'19791420_grid_patch':
       ensure                 => 'present',
       oracleProductHome      => hiera('grid_home_dir'),
@@ -283,7 +286,26 @@ or for clusterware (GRID)
       puppetDownloadMntPoint => hiera('oracle_source'),
     }
 
-    # same patch but then for the oracle db home 
+    # the same patch applied with opatch auto to an oracle database home, this time we need to use the 19121551 as bundleSubPatchId
+    # this is the october 2014  11.2.0.4.4 patch
+    oradb::opatch{'19791420_grid_patch':
+      ensure                 => 'present',
+      oracleProductHome      => hiera('oracle_home_dir'),
+      patchId                => '19791420',
+      patchFile              => 'p19791420_112040_Linux-x86-64.zip',
+      clusterWare            => true,
+      bundleSubPatchId       => '19121551', # sub patchid of bundle patch ( else I can't detect it if it is already applied)
+      bundleSubFolder        => '19380115', # optional subfolder inside the patch zip
+      user                   => hiera('grid_os_user'),
+      group                  => 'oinstall',
+      downloadDir            => hiera('oracle_download_dir'),
+      ocmrf                  => true,
+      require                => Oradb::Opatchupgrade['112000_opatch_upgrade_asm'],
+      puppetDownloadMntPoint => hiera('oracle_source'),
+    }
+
+    # same patch 19791420 but then for the oracle db home, this patch requires the bundle patch of 19791420 or 
+    # 19121551 october 2014  11.2.0.4.4 patch
     oradb::opatch{'19791420_db_patch':
       ensure                 => 'present',
       oracleProductHome      => hiera('oracle_home_dir'),
