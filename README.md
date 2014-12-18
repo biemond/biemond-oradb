@@ -606,13 +606,9 @@ Tnsnames.ora
       ###### end of NFS example
 
 
-      // oradb::installasm{ '12.1_linux-x64':
-      //  version                => '12.1.0.1',
-      //  file                   => 'linuxamd64_12c_grid',
-
-      oradb::installasm{ '11.2_linux-x64':
-        version                => '11.2.0.4',
-        file                   => 'p13390677_112040_Linux-x86-64_3of7.zip',
+      oradb::installasm{ 'db_linux-x64':
+        version                => hiera('db_version'),
+        file                   => hiera('asm_file'),
         gridType               => 'HA_CONFIG',
         gridBase               => hiera('grid_base_dir'),
         gridHome               => hiera('grid_home_dir'),
@@ -639,8 +635,6 @@ Tnsnames.ora
       oradb::opatchupgrade{'112000_opatch_upgrade_asm':
           oracleHome             => hiera('grid_home_dir'),
           patchFile              => 'p6880880_112000_Linux-x86-64.zip',
-          # csiNumber              => '172409',
-          # supportId              => 'biemond@gmail.com',
           csiNumber              => undef,
           supportId              => undef,
           opversion              => '11.2.0.3.6',
@@ -651,13 +645,14 @@ Tnsnames.ora
           require                => Oradb::Installasm['db_linux-x64'],
       }
 
-      oradb::opatch{'18706472_grid_patch':
+      oradb::opatch{'19791420_grid_patch':
         ensure                 => 'present',
         oracleProductHome      => hiera('grid_home_dir'),
-        patchId                => '18706472',
-        patchFile              => 'p18706472_112040_Linux-x86-64.zip',
+        patchId                => '19791420',
+        patchFile              => 'p19791420_112040_Linux-x86-64.zip',
         clusterWare            => true,
-        bundleSubPatchId       => '18522515',
+        bundleSubPatchId       => '19121552', # sub patchid of bundle patch ( else I can't detect it)
+        bundleSubFolder        => '19380115', # optional subfolder inside the patch zip
         user                   => hiera('grid_os_user'),
         group                  => 'oinstall',
         downloadDir            => hiera('oracle_download_dir'),
@@ -666,9 +661,9 @@ Tnsnames.ora
         puppetDownloadMntPoint => hiera('oracle_source'),
       }
 
-      oradb::installdb{ '11.2_linux-x64':
-        version                => '11.2.0.4',
-        file                   => 'p13390677_112040_Linux-x86-64',
+      oradb::installdb{ 'db_linux-x64':
+        version                => hiera('db_version'),
+        file                   => hiera('db_file'),
         databaseType           => 'EE',
         oraInventoryDir        => hiera('oraInventory_dir'),
         oracleBase             => hiera('oracle_base_dir'),
@@ -682,13 +677,59 @@ Tnsnames.ora
         downloadDir            => hiera('oracle_download_dir'),
         remoteFile             => false,
         puppetDownloadMntPoint => hiera('oracle_source'),
-        require                => Oradb::Opatch['18706472_grid_patch'],
+        # require                => Oradb::Opatch['18706472_grid_patch'],
+        require                => Oradb::Opatch['19791420_grid_patch'],
+      }
+
+      oradb::opatchupgrade{'112000_opatch_upgrade_db':
+          oracleHome             => hiera('oracle_home_dir'),
+          patchFile              => 'p6880880_112000_Linux-x86-64.zip',
+          csiNumber              => undef,
+          supportId              => undef,
+          opversion              => '11.2.0.3.6',
+          user                   => hiera('oracle_os_user'),
+          group                  => hiera('oracle_os_group'),
+          downloadDir            => hiera('oracle_download_dir'),
+          puppetDownloadMntPoint => hiera('oracle_source'),
+          require                => Oradb::Installdb['db_linux-x64'],
+      }
+
+      oradb::opatch{'19791420_db_patch':
+        ensure                 => 'present',
+        oracleProductHome      => hiera('oracle_home_dir'),
+        patchId                => '19791420',
+        patchFile              => 'p19791420_112040_Linux-x86-64.zip',
+        clusterWare            => true,
+        bundleSubPatchId       => '19121551', #,'19121552', # sub patchid of bundle patch ( else I can't detect it)
+        bundleSubFolder        => '19380115', # optional subfolder inside the patch zip
+        user                   => hiera('oracle_os_user'),
+        group                  => 'oinstall',
+        downloadDir            => hiera('oracle_download_dir'),
+        ocmrf                  => true,
+        require                => Oradb::Opatchupgrade['112000_opatch_upgrade_db'],
+        puppetDownloadMntPoint => hiera('oracle_source'),
+      }
+
+      oradb::opatch{'19791420_db_patch_2':
+        ensure                 => 'present',
+        oracleProductHome      => hiera('oracle_home_dir'),
+        patchId                => '19791420',
+        patchFile              => 'p19791420_112040_Linux-x86-64.zip',
+        clusterWare            => false,
+        bundleSubPatchId       => '19282021', # sub patchid of bundle patch ( else I can't detect it)
+        bundleSubFolder        => '19282021', # optional subfolder inside the patch zip
+        user                   => hiera('oracle_os_user'),
+        group                  => 'oinstall',
+        downloadDir            => hiera('oracle_download_dir'),
+        ocmrf                  => true,
+        require                => Oradb::Opatch['19791420_db_patch'],
+        puppetDownloadMntPoint => hiera('oracle_source'),
       }
 
       oradb::database{ 'oraDb':
         oracleBase              => hiera('oracle_base_dir'),
         oracleHome              => hiera('oracle_home_dir'),
-        version                 => '11.2',
+        version                 => hiera('dbinstance_version'),
         user                    => hiera('oracle_os_user'),
         group                   => hiera('oracle_os_group'),
         downloadDir             => hiera('oracle_download_dir'),
@@ -709,8 +750,9 @@ Tnsnames.ora
         asmDiskgroup            => 'DATA',
         recoveryDiskgroup       => undef,
         recoveryAreaDestination => 'DATA',
-        require                 => Oradb::Installdb['11.2_linux-x64'],
+        require                 => Oradb::Opatch['19791420_db_patch_2'],
       }
+
 
 ## Oracle Database Client
 
