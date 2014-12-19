@@ -237,7 +237,7 @@ For opatchupgrade you need to provide the Oracle support csiNumber and supportId
 
 Opatch
 
-    # october 2014 11.2.0.4.4 patch 
+    # october 2014 11.2.0.4.4 patch
     oradb::opatch{'19121551_db_patch':
       ensure                 => 'present',
       oracleProductHome      => hiera('oracle_home_dir'),
@@ -268,7 +268,7 @@ or for clusterware aka opatch auto
       puppetDownloadMntPoint => hiera('oracle_source'),
     }
 
-    # this 19791420 patch contains 2 patches (in different sub folders), one bundle and a normal one. 
+    # this 19791420 patch contains 2 patches (in different sub folders), one bundle and a normal one.
     # we want to apply the bundle and need to provide the right value for bundleSubFolder
     oradb::opatch{'19791420_grid_patch':
       ensure                 => 'present',
@@ -304,7 +304,7 @@ or for clusterware aka opatch auto
       puppetDownloadMntPoint => hiera('oracle_source'),
     }
 
-    # same patch 19791420 but then for the oracle db home, this patch requires the bundle patch of 19791420 or 
+    # same patch 19791420 but then for the oracle db home, this patch requires the bundle patch of 19791420 or
     # 19121551 october 2014  11.2.0.4.4 patch
     oradb::opatch{'19791420_db_patch':
       ensure                 => 'present',
@@ -385,7 +385,7 @@ Database instance
 or based on your own template
 
 Add your template to the template dir of the oradb module, the template must be have the following extension dbt.erb like dbtemplate_12.1.dbt.erb
-Click here for an [12.1 db instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_12.1.dbt.erb)  
+Click here for an [12.1 db instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_12.1.dbt.erb)
 Click here for an [11.2 db asm instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_11gR2_asm.dbt.erb)
 
 
@@ -771,10 +771,38 @@ Tnsnames.ora
         storageType             => "ASM",
         asmSnmpPassword         => 'Welcome01',
         asmDiskgroup            => 'DATA',
-        recoveryDiskgroup       => undef,
+        recoveryDiskgroup       => 'DATA',
         recoveryAreaDestination => 'DATA',
         require                 => Oradb::Opatch['19791420_db_patch_2'],
       }
+
+      # or not based on a template
+      oradb::database{ 'oraDb':
+        oracleBase              => hiera('oracle_base_dir'),
+        oracleHome              => hiera('oracle_home_dir'),
+        version                 => hiera('dbinstance_version'),
+        user                    => hiera('oracle_os_user'),
+        group                   => hiera('oracle_os_group'),
+        downloadDir             => hiera('oracle_download_dir'),
+        action                  => 'create',
+        dbName                  => hiera('oracle_database_name'),
+        dbDomain                => hiera('oracle_database_domain_name'),
+        sysPassword             => hiera('oracle_database_sys_password'),
+        systemPassword          => hiera('oracle_database_system_password'),
+        characterSet            => "AL32UTF8",
+        nationalCharacterSet    => "UTF8",
+        sampleSchema            => 'FALSE',
+        memoryPercentage        => "40",
+        memoryTotal             => "800",
+        databaseType            => "MULTIPURPOSE",
+        emConfiguration         => "NONE",
+        storageType             => "ASM",
+        asmSnmpPassword         => 'Welcome01',
+        asmDiskgroup            => 'DATA',
+        recoveryAreaDestination => 'DATA',
+        require                 => Oradb::Opatch['19791420_db_patch_2'],
+      }
+
 
 
 ## Oracle Database Client
