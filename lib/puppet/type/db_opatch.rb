@@ -76,9 +76,9 @@ module Puppet
       EOT
     end
 
-    newparam(:clusterware) do
+    newparam(:opatch_auto) do
       desc <<-EOT
-        clusterware bundle patch
+        opatch auto bundle patch
       EOT
     end
 

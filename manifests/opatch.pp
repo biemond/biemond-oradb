@@ -21,7 +21,7 @@ define oradb::opatch(
   $oracleProductHome       = undef,
   $patchId                 = undef,
   $patchFile               = undef,
-  $clusterWare             = false,
+  $clusterWare             = false, # opatch auto or opatch apply
   $bundleSubPatchId        = undef,
   $bundleSubFolder         = undef,
   $user                    = 'oracle',
@@ -113,7 +113,7 @@ define oradb::opatch(
           extracted_patch_dir     => $extracted_patch_dir,
           ocmrf_file              => "${oracleProductHome}/OPatch/ocm.rsp",
           bundle_sub_patch_id     => $bundleSubPatchId,
-          clusterware             => $clusterWare,
+          opatch_auto             => $clusterWare,
         }
 
       } else {
@@ -126,7 +126,7 @@ define oradb::opatch(
           orainst_dir             => $oraInstPath,
           extracted_patch_dir     => $extracted_patch_dir,
           bundle_sub_patch_id     => $bundleSubPatchId,
-          clusterware             => $clusterWare,
+          opatch_auto             => $clusterWare,
         }
 
       }

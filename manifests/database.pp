@@ -107,7 +107,7 @@ define oradb::database(
 
     if $action == 'create' {
       if ( $template ) {
-        $command = "dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globalDbName} -responseFile NO_VALUE -sysPassword ${sysPassword} -systemPassword ${systemPassword}"
+        $command = "dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globalDbName} -responseFile NO_VALUE -sysPassword ${sysPassword} -systemPassword ${systemPassword} -storageType ${storageType}"
       } else {
         $command = "dbca -silent -responseFile ${filename}"
       }
