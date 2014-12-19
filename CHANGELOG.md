@@ -6,6 +6,7 @@
 - owner of the grid home or oracle home folder fix
 - renamed clusterware parameter of the opatch type to opatch_auto
 - StorageType parameter is now also used in the dbca command when using a database template
+- Added ASM 11.2 Database templated
 
 ## 1.0.24
 - Enterprise Manager agent install with AgentPull & AgentDeploy

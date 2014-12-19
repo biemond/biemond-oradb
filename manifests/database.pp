@@ -7,7 +7,7 @@
 define oradb::database(
   $oracleBase               = undef,
   $oracleHome               = undef,
-  $version                  = '11.2',
+  $version                  = '11.2', # 11.2|12.1
   $user                     = 'oracle',
   $group                    = 'dba',
   $downloadDir              = '/install',
@@ -26,7 +26,7 @@ define oradb::database(
   $sampleSchema             = TRUE,
   $memoryPercentage         = '40',
   $memoryTotal              = '800',
-  $databaseType             = 'MULTIPURPOSE',
+  $databaseType             = 'MULTIPURPOSE', # MULTIPURPOSE|DATA_WAREHOUSING|OLTP
   $emConfiguration          = 'NONE',  # CENTRAL|LOCAL|ALL|NONE
   $storageType              = 'FS', #FS|CFS|ASM
   $asmSnmpPassword          = 'Welcome01',
@@ -107,7 +107,7 @@ define oradb::database(
 
     if $action == 'create' {
       if ( $template ) {
-        $command = "dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globalDbName} -responseFile NO_VALUE -sysPassword ${sysPassword} -systemPassword ${systemPassword} -storageType ${storageType}"
+        $command = "dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globalDbName} -responseFile NO_VALUE -sysPassword ${sysPassword} -systemPassword ${systemPassword} -dbsnmpPassword ${dbSnmpPassword} -asmsnmpPassword ${asmSnmpPassword} -storageType ${storageType} -emConfiguration ${emConfiguration}"
       } else {
         $command = "dbca -silent -responseFile ${filename}"
       }

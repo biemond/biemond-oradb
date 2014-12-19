@@ -31,19 +31,20 @@
          <initParam name="audit_file_dest" value="{ORACLE_BASE}/admin/{DB_UNIQUE_NAME}/adump"/>
          <initParam name="compatible" value="12.1.0.0.0"/>
          <initParam name="remote_login_passwordfile" value="EXCLUSIVE"/>
-         <initParam name="memory_target" value="<%= @memoryTotal %>" unit="MB"/>
          <initParam name="processes" value="1000"/>
          <initParam name="undo_tablespace" value="UNDOTBS1"/>
          <initParam name="control_files" value="(&quot;<%= @oracleBase %>/oradata/{DB_UNIQUE_NAME}/control01.ctl&quot;, &quot;<%= @dataFileDestination %>/{DB_UNIQUE_NAME}/control02.ctl&quot;)"/>
          <initParam name="diagnostic_dest" value="{ORACLE_BASE}"/>
-         <initParam name="db_recovery_file_dest" value="<%= @recoveryAreaDestination %>"/>
          <initParam name="audit_trail" value="none"/>
          <initParam name="db_block_size" value="8" unit="KB"/>
          <initParam name="open_cursors" value="300"/>
          <initParam name="db_recovery_file_dest_size" value="1" unit="GB"/>
       </InitParams>
       <MiscParams>
-         <databaseType>MULTIPURPOSE</databaseType>
+         <databaseType><%= @databaseType %></databaseType>
+         <memoryPercentage><%= @memoryPercentage %></memoryPercentage>
+         <recoveryAreaDestination><%= @recoveryAreaDestination %></recoveryAreaDestination>
+         <totalMemory><%= @memoryTotal %></totalMemory>
          <maxUserConn>20</maxUserConn>
          <customSGA>false</customSGA>
          <characterSet>"<%= @characterSet %>"</characterSet>

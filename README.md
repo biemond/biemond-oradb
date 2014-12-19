@@ -384,8 +384,10 @@ Database instance
 
 or based on your own template
 
-Add your template to the template dir of the oradb module, the template must be have the following extension dbtemplate.dbt.erb
-Click here for an [12.1 db instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate.dbt.erb)
+Add your template to the template dir of the oradb module, the template must be have the following extension dbt.erb like dbtemplate_12.1.dbt.erb
+Click here for an [12.1 db instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_12.1.dbt.erb)  
+Click here for an [11.2 db asm instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_11gR2_asm.dbt.erb)
+
 
     oradb::database{ 'testDb_Create':
       oracleBase              => '/oracle',
@@ -393,7 +395,7 @@ Click here for an [12.1 db instance template example](https://github.com/biemond
       version                 => '12.1',
       user                    => 'oracle',
       group                   => 'dba',
-      template                => 'dbtemplate', #  this will use dbtemplate.dbt.erb example template
+      template                => 'dbtemplate_12.1', #  this will use dbtemplate_12.1.dbt.erb example template
       downloadDir             => '/install',
       action                  => 'create',
       dbName                  => 'test',
@@ -613,7 +615,7 @@ Tnsnames.ora
                       Exec["/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b3 bs=1M count=7520"],],
       }
 
-      $nfs_files = ['/nfs_client/asm_sda_nfs_b1','/nfs_client/asm_sda_nfs_b2','/nfs_client/asm_sda_nfs_b3','/nfs_client/asm_sda_nfs_b4'] 
+      $nfs_files = ['/nfs_client/asm_sda_nfs_b1','/nfs_client/asm_sda_nfs_b2','/nfs_client/asm_sda_nfs_b3','/nfs_client/asm_sda_nfs_b4']
 
       file { $nfs_files:
         ensure  => present,
@@ -745,6 +747,7 @@ Tnsnames.ora
         puppetDownloadMntPoint => hiera('oracle_source'),
       }
 
+      # based on a template
       oradb::database{ 'oraDb':
         oracleBase              => hiera('oracle_base_dir'),
         oracleHome              => hiera('oracle_home_dir'),
@@ -757,13 +760,14 @@ Tnsnames.ora
         dbDomain                => hiera('oracle_database_domain_name'),
         sysPassword             => hiera('oracle_database_sys_password'),
         systemPassword          => hiera('oracle_database_system_password'),
+        template                => 'dbtemplate_11gR2_asm',
         characterSet            => "AL32UTF8",
         nationalCharacterSet    => "UTF8",
-        initParams              => "open_cursors=1000,processes=600,job_queue_processes=4",
         sampleSchema            => 'FALSE',
         memoryPercentage        => "40",
         memoryTotal             => "800",
         databaseType            => "MULTIPURPOSE",
+        emConfiguration         => "NONE",
         storageType             => "ASM",
         asmSnmpPassword         => 'Welcome01',
         asmDiskgroup            => 'DATA',
