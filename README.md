@@ -619,7 +619,7 @@ Tnsnames.ora
         ensure  => present,
         owner   => 'grid',
         group   => 'asmadmin',
-        mode    => '0644',
+        mode    => '0664',
         require => Exec["/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b4 bs=1M count=7520"],
       }
       ###### end of NFS example
