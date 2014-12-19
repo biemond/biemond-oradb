@@ -535,7 +535,7 @@ Tnsnames.ora
 
       ####### NFS example
 
-      file { '/nfs_server_data':
+      file { '/home/nfs_server_data':
         ensure  => directory,
         recurse => false,
         replace => false,
@@ -551,10 +551,10 @@ Tnsnames.ora
         enable  => true,
       }
 
-      nfs::export { '/nfs_server_data':
+      nfs::export { '/home/nfs_server_data':
         options => [ 'rw', 'sync', 'no_wdelay','insecure_locks','no_root_squash' ],
         clients => [ "*" ],
-        require => File['/nfs_server_data']
+        require => [File['/home/nfs_server_data'],Class['nfs::server'],],
       }
 
       file { '/nfs_client':
@@ -568,11 +568,12 @@ Tnsnames.ora
       }
 
       mounts { 'Mount point for NFS data':
-        ensure => present,
-        source => 'soadbasm:/nfs_server_data',
-        dest   => '/nfs_client',
-        type   => 'nfs',
-        opts   => 'rw,bg,hard,nointr,tcp,vers=3,timeo=600,rsize=32768,wsize=32768,actimeo=0  0 0',
+        ensure  => present,
+        source  => 'soadbasm:/home/nfs_server_data',
+        dest    => '/nfs_client',
+        type    => 'nfs',
+        opts    => 'rw,bg,hard,nointr,tcp,vers=3,timeo=600,rsize=32768,wsize=32768,actimeo=0  0 0',
+        require => [File['/nfs_client'],Nfs::Export['/home/nfs_server_data'],]
       }
 
       exec { "/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b1 bs=1M count=7520":
@@ -591,17 +592,35 @@ Tnsnames.ora
                       Exec["/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b1 bs=1M count=7520"]],
       }
 
-      exec { "/bin/chown grid:asmadmin /nfs_client/*":
-        user      => 'root',
-        group     => 'root',
+      exec { "/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b3 bs=1M count=7520":
+        user      => 'grid',
+        group     => 'asmadmin',
         logoutput => true,
-        require   => Exec["/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b2 bs=1M count=7520"],
+        unless    => "/usr/bin/test -f /nfs_client/asm_sda_nfs_b3",
+        require   => [Mounts['Mount point for NFS data'],
+                      Exec["/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b1 bs=1M count=7520"],
+                      Exec["/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b2 bs=1M count=7520"],],
       }
-      exec { "/bin/chmod 664 /nfs_client/*":
-        user      => 'root',
-        group     => 'root',
+
+      exec { "/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b4 bs=1M count=7520":
+        user      => 'grid',
+        group     => 'asmadmin',
         logoutput => true,
-        require   => Exec["/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b2 bs=1M count=7520"],
+        unless    => "/usr/bin/test -f /nfs_client/asm_sda_nfs_b4",
+        require   => [Mounts['Mount point for NFS data'],
+                      Exec["/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b1 bs=1M count=7520"],
+                      Exec["/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b2 bs=1M count=7520"],
+                      Exec["/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b3 bs=1M count=7520"],],
+      }
+
+      $nfs_files = ['/nfs_client/asm_sda_nfs_b1','/nfs_client/asm_sda_nfs_b2','/nfs_client/asm_sda_nfs_b3','/nfs_client/asm_sda_nfs_b4'] 
+
+      file { $nfs_files:
+        ensure  => present,
+        owner   => 'grid',
+        group   => 'asmadmin',
+        mode    => '0644',
+        require => Exec["/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b4 bs=1M count=7520"],
       }
       ###### end of NFS example
 
@@ -1089,21 +1108,24 @@ install the following module to set the database kernel parameters
 install the following module to set the database user limits parameters
 *puppet module install erwbgy-limits*
 
-      group { 'dba' :
-        ensure      => present,
-      }
+       $all_groups = ['oinstall','dba' ,'oper']
 
-      user { 'oracle' :
-        ensure      => present,
-        gid         => 'dba',
-        groups      => 'dba',
-        shell       => '/bin/bash',
-        password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
-        home        => "/home/oracle",
-        comment     => "This user oracle was created by Puppet",
-        require     => Group['dba'],
-        managehome  => true,
-      }
+       group { $all_groups :
+         ensure      => present,
+       }
+
+       user { 'oracle' :
+         ensure      => present,
+         uid         => 500,
+         gid         => 'oinstall',
+         groups      => ['oinstall','dba','oper'],
+         shell       => '/bin/bash',
+         password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
+         home        => "/home/oracle",
+         comment     => "This user oracle was created by Puppet",
+         require     => Group[$all_groups],
+         managehome  => true,
+       }
 
        sysctl { 'kernel.msgmnb':                 ensure => 'present', permanent => 'yes', value => '65536',}
        sysctl { 'kernel.msgmax':                 ensure => 'present', permanent => 'yes', value => '65536',}
@@ -1133,14 +1155,14 @@ install the following module to set the database user limits parameters
          use_hiera => false,
        }
 
-      $install = [ 'binutils.x86_64', 'compat-libstdc++-33.x86_64', 'glibc.x86_64','ksh.x86_64','libaio.x86_64',
+       $install = [ 'binutils.x86_64', 'compat-libstdc++-33.x86_64', 'glibc.x86_64','ksh.x86_64','libaio.x86_64',
                     'libgcc.x86_64', 'libstdc++.x86_64', 'make.x86_64','compat-libcap1.x86_64', 'gcc.x86_64',
                     'gcc-c++.x86_64','glibc-devel.x86_64','libaio-devel.x86_64','libstdc++-devel.x86_64',
                     'sysstat.x86_64','unixODBC-devel','glibc.i686','libXext.x86_64','libXtst.x86_64']
 
-      package { $install:
-        ensure  => present,
-      }
+       package { $install:
+         ensure  => present,
+       }
 
 ## Solaris 10 kernel, ulimits and required packages
 
