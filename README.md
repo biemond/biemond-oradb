@@ -360,21 +360,23 @@ Database instance
     oradb::database{ 'testDb_Create':
       oracleBase              => '/oracle',
       oracleHome              => '/oracle/product/11.2/db',
-      version                 => '11.2' or "12.1",
+      version                 => '11.2',
       user                    => 'oracle',
       group                   => 'dba',
       downloadDir             => '/install',
       action                  => 'create',
       dbName                  => 'test',
       dbDomain                => 'oracle.com',
-      dbPort                  => '1521', #optional
+      dbPort                  => '1521',
       sysPassword             => 'Welcome01',
       systemPassword          => 'Welcome01',
       dataFileDestination     => "/oracle/oradata",
       recoveryAreaDestination => "/oracle/flash_recovery_area",
       characterSet            => "AL32UTF8",
       nationalCharacterSet    => "UTF8",
-      initParams              => "open_cursors=1000,processes=600,job_queue_processes=4",
+      initParams              => {'open_cursors'        => '1000',
+                                  'processes'           => '600',
+                                  'job_queue_processes' => '4' },
       sampleSchema            => 'TRUE',
       memoryPercentage        => "40",
       memoryTotal             => "800",
@@ -382,6 +384,11 @@ Database instance
       emConfiguration         => "NONE",
       require                 => Oradb::Listener['start listener'],
     }
+
+you can also use a comma separated string for initParams
+
+      initParams              => "open_cursors=1000,processes=600,job_queue_processes=4",
+
 
 or based on your own template
 

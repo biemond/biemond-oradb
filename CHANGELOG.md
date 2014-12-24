@@ -1,6 +1,7 @@
 # Version updates
 
 ## 1.0.26
+- initParams of database.pp now also support a hash besides a comma separated string
 
 ## 1.0.25
 - added extra parameter validation to installdb, installasm and installem_agent
