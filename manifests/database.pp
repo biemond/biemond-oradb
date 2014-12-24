@@ -72,6 +72,16 @@ define oradb::database(
       }
     }
 
+    if (is_hash($initParams) or is_string($initParams)) {
+      if is_hash($initParams) {
+        $sanitizedInitParams = join(join_keys_to_values($initParams, '='),',')
+      } else {
+        $sanitizedInitParams = $initParams
+      }
+    } else {
+      fail "initParams only supports a String or a Hash as value type"
+    }
+
     $sanitized_title = regsubst($title, '[^a-zA-Z0-9.-]', '_', 'G')
 
     $filename = "${path}/database_${sanitized_title}.rsp"
@@ -104,6 +114,7 @@ define oradb::database(
         before  => Exec["oracle database ${title}"],
       }
     }
+
 
     if $action == 'create' {
       if ( $template ) {
