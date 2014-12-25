@@ -1,6 +1,7 @@
 # Version updates
 
 ## 1.0.26
+- Support for 12.1 pluggable database
 - initParams of database.pp now also support a hash besides a comma separated string
 
 ## 1.0.25

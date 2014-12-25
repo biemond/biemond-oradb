@@ -9,6 +9,7 @@ Should work on Docker, for Solaris and on all Linux version like RedHat, CentOS,
 - Docker image of Oracle Database 12.1 SE [Docker Oracle Database 12.1.0.1](https://github.com/biemond/docker-database-puppet)
 - CentOS 6.5 vagrant box with Oracle Database 12.1 and Enterprise Manager 12.1.0.4 [Enterprise vagrant box](https://github.com/biemond/biemond-em-12c)
 - CentOS 6.6 vagrant box with Oracle Database 11.2.0.4 on NFS ASM [ASM vagrant box](https://github.com/biemond/biemond-oradb-vagrant-11.2-ASM)
+- CentOS 6.6 vagrant box with Oracle Database 12.1.0.1 with pluggable databases [12c pluggable db vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-CDB)
 - Solaris 11.2 vagrant box with Oracle Database 12.1 [solaris 11.2 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-solaris11.2)
 - Solaris 10 vagrant box with Oracle Database 12.1 [solaris 10 vagrant box](https://github.com/biemond/biemond-orawls-vagrant-solaris-soa)
 - CentOS 6.5 vagrant box with Oracle Database 11.2.0.4 and GoldenGate 12.1.2 [coherence goldengate vagrant box]( https://github.com/biemond/vagrant-wls12.1.2-coherence-goldengate)
@@ -23,7 +24,7 @@ Should work for Puppet 2.7 & 3.0
 - Oracle Grid 11.2.0.4, 12.1.0.1 Linux / Solaris installation
 - Oracle Database 12.1.0.1,12.1.0.2 Linux / Solaris installation
 - Oracle Database 11.2.0.1,11.2.0.3,11.2.0.4 Linux / Solaris installation
-- Oracle Database Instance 11.2 & 12.1 or provide your own db template
+- Oracle Database Instance 11.2 & 12.1 with pluggable database or provide your own db template
 - Oracle Database Client 12.1.0.1,12.1.0.2,11.2.0.4,11.2.0.1 Linux / Solaris installation
 - Oracle Database Net configuration
 - Oracle Database Listener
@@ -342,7 +343,7 @@ Listener
       oracleHome   => '/oracle/product/11.2/db',
       user         => 'oracle',
       group        => 'dba',
-      action       => 'start',
+      action       => 'stop',
       require      => Oradb::Net['config net8'],
     }
 
@@ -418,6 +419,63 @@ Click here for an [11.2 db asm instance template example](https://github.com/bie
       memoryPercentage        => "40",
       memoryTotal             => "800",
       require                 => Oradb::Listener['start listener'],
+    }
+
+12c container and pluggable databases
+
+    oradb::database{ 'oraDb':
+      oracleBase              => '/oracle',
+      oracleHome              => '/oracle/product/12.1/db',
+      version                 => '12.1',
+      user                    => 'oracle',
+      group                   => 'dba'
+      downloadDir             => '/install',
+      action                  => 'create',
+      dbName                  => 'orcl',
+      dbDomain                => 'example.com',
+      sysPassword             => 'Welcome01',
+      systemPassword          => 'Welcome01',
+      characterSet            => 'AL32UTF8',
+      nationalCharacterSet    => 'UTF8',
+      sampleSchema            => 'FALSE',
+      memoryPercentage        => '40',
+      memoryTotal             => '800',
+      databaseType            => 'MULTIPURPOSE',
+      emConfiguration         => 'NONE',
+      dataFileDestination     => '/oracle/oradata',
+      recoveryAreaDestination => '/oracle/flash_recovery_area',
+      initParams              => {'open_cursors'        => '1000',
+                                  'processes'           => '600',
+                                  'job_queue_processes' => '4' },
+      containerDatabase       => true,   <|-------
+    }
+
+    oradb::database_pluggable{'pdb1':
+      ensure                   => 'present',
+      version                  => '12.1',
+      oracle_home_dir          => '/oracle/product/12.1/db',
+      user                     => 'oracle',
+      group                    => 'dba',
+      source_db                => 'orcl',
+      pdb_name                 => 'pdb1',
+      pdb_admin_username       => 'pdb_adm',
+      pdb_admin_password       => 'Welcome01',
+      pdb_datafile_destination => "/oracle/oradata/orcl/pdb1",
+      create_user_tablespace   => true,
+      log_output               => true,
+    }
+
+    # remove the pluggable database
+    oradb::database_pluggable{'pdb1':
+      ensure                   => 'absent',
+      version                  => '12.1',
+      oracle_home_dir          => '/oracle/product/12.1/db',
+      user                     => 'oracle',
+      group                    => 'dba',
+      source_db                => 'orcl',
+      pdb_name                 => 'pdb1',
+      pdb_datafile_destination => "/oracle/oradata/orcl/pdb1",
+      log_output               => true,
     }
 
 or delete a database

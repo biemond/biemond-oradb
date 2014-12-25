@@ -137,6 +137,30 @@ describe 'oradb::database', :type => :define do
 
   end
 
+  describe "container database on 11.2" do
+    let(:params){{
+                   :oracleBase              => '/oracle',
+                   :oracleHome              => '/oracle/product/11.2/db',
+                   :version                 => '11.2',
+                   :user                    => 'oracle',
+                   :group                   => 'dba',
+                   :downloadDir             => '/install',
+                   :action                  => 'create',
+                   :containerDatabase       => true,
+    }}
+    let(:title) {'testDb_Create'}
+    let(:facts) {{ :operatingsystem => 'CentOS' ,
+                   :kernel          => 'Linux',
+                   :osfamily        => 'RedHat' }}
+
+    it do
+      expect { should contain_file("/install/database_testDb_Create.rsp")
+               }.to raise_error(Puppet::Error, /container or pluggable database is not supported on version 11.2/)
+    end
+
+  end
+
+
   describe "init params" do
 
     let(:title) {'testDb_Create'}

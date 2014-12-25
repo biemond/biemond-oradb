@@ -34,6 +34,7 @@ define oradb::database(
   $asmDiskgroup             = 'DATA',
   $recoveryDiskgroup        = undef,
   $cluster_nodes            = undef,
+  $containerDatabase        = false, # 12.1 feature for pluggable database
 ){
   if (!( $version in ['11.2','12.1'])) {
     fail('Unrecognized version')
@@ -59,6 +60,10 @@ define oradb::database(
     fail('Unrecognized storageType')
   }
 
+  if ( $version == '11.2' and $containerDatabase == true ){
+    fail('container or pluggable database is not supported on version 11.2')
+  }
+
   $continue = true
 
   if ( $continue ) {
@@ -79,7 +84,7 @@ define oradb::database(
         $sanitizedInitParams = $initParams
       }
     } else {
-      fail "initParams only supports a String or a Hash as value type"
+      fail 'initParams only supports a String or a Hash as value type'
     }
 
     $sanitized_title = regsubst($title, '[^a-zA-Z0-9.-]', '_', 'G')
