@@ -58,13 +58,9 @@ define oradb::installem_agent(
       oracle_base_home_dir => $oracle_base_dir,
       ora_inventory_dir    => $oraInventory,
       os_user              => $user,
-      os_group             => $group,
-      os_group_install     => undef,
-      os_group_oper        => undef,
+      os_group_install     => $group,
       download_dir         => $download_dir,
       log_output           => $log_output,
-      user_base_dir        => undef,
-      create_user          => false,
     }
 
     # check oraInst

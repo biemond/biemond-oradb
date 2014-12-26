@@ -1,6 +1,7 @@
 # Version updates
 
 ## 1.0.26
+- Removed createUser functionality in installdb & client, Puppet should do it instead of oradb module
 - Support for 12.1 pluggable database
 - initParams of database.pp now also support a hash besides a comma separated string
 

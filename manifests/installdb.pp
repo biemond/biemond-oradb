@@ -15,7 +15,7 @@ define oradb::installdb(
   $oracleHome              = undef,
   $eeOptionsSelection      = false,
   $eeOptionalComponents    = undef, # 'oracle.rdbms.partitioning:11.2.0.4.0,oracle.oraolap:11.2.0.4.0,oracle.rdbms.dm:11.2.0.4.0,oracle.rdbms.dv:11.2.0.4.0,oracle.rdbms.lbac:11.2.0.4.0,oracle.rdbms.rat:11.2.0.4.0'
-  $createUser              = true,
+  $createUser              = undef,
   $bashProfile             = true,
   $user                    = 'oracle',
   $userBaseDir             = '/home',
@@ -29,6 +29,13 @@ define oradb::installdb(
   $cluster_nodes           = undef,
 )
 {
+  if ( $createUser == true ){
+    fail("createUser parameter on installdb ${title} is removed from this oradb module, you need to create the oracle user and its groups yourself")
+  }
+
+  if ( $createUser == false ){
+    notify {"createUser parameter on installdb ${title} can be removed, createUser feature is removed from this oradb module":}
+  }
 
   if (!( $version in ['11.2.0.1','12.1.0.1','12.1.0.2','11.2.0.3','11.2.0.4'])){
     fail('Unrecognized database install version, use 11.2.0.1|11.2.0.3|11.2.0.4|12.1.0.1|12.1.0.1')
@@ -83,13 +90,9 @@ define oradb::installdb(
       oracle_base_home_dir => $oracleBase,
       ora_inventory_dir    => $oraInventory,
       os_user              => $user,
-      os_group             => $group,
       os_group_install     => $group_install,
-      os_group_oper        => $group_oper,
       download_dir         => $downloadDir,
       log_output           => true,
-      user_base_dir        => $userBaseDir,
-      create_user          => $createUser,
     }
 
     if ( $zipExtract ) {

@@ -7,7 +7,6 @@ define oradb::client(
   $oracleBase              = undef,
   $oracleHome              = undef,
   $dbPort                  = '1521',
-  $createUser              = true,
   $user                    = 'oracle',
   $userBaseDir             = '/home',
   $group                   = 'dba',
@@ -47,15 +46,10 @@ define oradb::client(
       oracle_base_home_dir => $oracleBase,
       ora_inventory_dir    => $oraInventory,
       os_user              => $user,
-      os_group             => $group,
       os_group_install     => $group_install,
-      os_group_oper        => undef,
       download_dir         => $downloadDir,
       log_output           => true,
-      user_base_dir        => $userBaseDir,
-      create_user          => $createUser,
     }
-
 
     # db file installer zip
     if $remoteFile == true {

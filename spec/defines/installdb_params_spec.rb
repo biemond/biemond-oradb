@@ -9,7 +9,6 @@ describe 'oradb::installdb', :type => :define do
           :databaseType            => 'SE',
           :oracleBase              => '/oracle',
           :oracleHome              => '/oracle/product/10.2/db',
-          :createUser              => true,
           :user                    => 'oracle',
           :group                   => 'dba',
           :group_install           => 'oinstall',
@@ -38,7 +37,6 @@ describe 'oradb::installdb', :type => :define do
           :databaseType            => 'SE',
           :oracleBase              => '/oracle',
           :oracleHome              => '/oracle/product/11.2/db',
-          :createUser              => true,
           :user                    => 'oracle',
           :group                   => 'dba',
           :group_install           => 'oinstall',
@@ -58,7 +56,6 @@ describe 'oradb::installdb', :type => :define do
              }.to raise_error(Puppet::Error, /Unrecognized operating system, please use it on a Linux or SunOS host/)
     end
 
-
   end
 
   describe "wrong db type" do
@@ -68,7 +65,6 @@ describe 'oradb::installdb', :type => :define do
           :databaseType            => 'XX',
           :oracleBase              => '/oracle',
           :oracleHome              => '/oracle/product/11.2/db',
-          :createUser              => true,
           :user                    => 'oracle',
           :group                   => 'dba',
           :group_install           => 'oinstall',
@@ -96,7 +92,6 @@ describe 'oradb::installdb', :type => :define do
           :file                    => 'linuxamd64_11gR2_database',
           :databaseType            => 'SE',
           :oracleHome              => '/oracle/product/11.2/db',
-          :createUser              => true,
           :user                    => 'oracle',
           :group                   => 'dba',
           :group_install           => 'oinstall',
@@ -125,7 +120,6 @@ describe 'oradb::installdb', :type => :define do
           :databaseType            => 'SE',
           :oracleBase              => 123,
           :oracleHome              => '/oracle/product/11.2/db',
-          :createUser              => true,
           :user                    => 'oracle',
           :group                   => 'dba',
           :group_install           => 'oinstall',
@@ -153,7 +147,6 @@ describe 'oradb::installdb', :type => :define do
           :file                    => 'linuxamd64_11gR2_database',
           :databaseType            => 'SE',
           :oracleBase              => '/oracle',
-          :createUser              => true,
           :user                    => 'oracle',
           :group                   => 'dba',
           :group_install           => 'oinstall',
@@ -183,7 +176,6 @@ describe 'oradb::installdb', :type => :define do
           :oracleBase              => 123,
           :oracleBase              => '/oracle',
           :oracleHome              => 123,
-          :createUser              => true,
           :user                    => 'oracle',
           :group                   => 'dba',
           :group_install           => 'oinstall',
@@ -212,7 +204,6 @@ describe 'oradb::installdb', :type => :define do
           :databaseType            => 'SE',
           :oracleBase              => '/oraclexxxx',
           :oracleHome              => '/oracle/product/11.2/db',
-          :createUser              => true,
           :user                    => 'oracle',
           :group                   => 'dba',
           :group_install           => 'oinstall',

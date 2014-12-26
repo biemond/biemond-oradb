@@ -17,7 +17,6 @@ define oradb::listener( $oracleBase  = undef,
                         $group       = 'dba',
                         $action      = 'start',
 )
-
 {
   $execPath = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${oracleHome}/bin"
 
@@ -40,7 +39,6 @@ define oradb::listener( $oracleBase  = undef,
   }
 
   $command  = "${ps_bin} ${ps_arg} | /bin/grep -v grep | /bin/grep '${$oracleHome}/bin/tnslsnr'"
-
 
   if $action == 'start' {
     exec { "listener start ${title}":

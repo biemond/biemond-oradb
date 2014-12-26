@@ -31,7 +31,6 @@ define oradb::opatch(
   $puppetDownloadMntPoint  = undef,
   $remoteFile              = true,
 )
-
 {
   $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
 

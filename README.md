@@ -85,6 +85,8 @@ The databaseType value should contain only one of these choices.
 - SE = Standard Edition
 - SEONE = Standard Edition One
 
+##
+
 ## Installation, Disk or memory issues
 
     # hiera
@@ -123,6 +125,71 @@ The databaseType value should contain only one of these choices.
 
 see this chapter "Linux kernel, ulimits and required packages" for more important information
 
+## Linux kernel, ulimits and required packages
+
+install the following module to set the database kernel parameters
+*puppet module install fiddyspence-sysctl*
+
+install the following module to set the database user limits parameters
+*puppet module install erwbgy-limits*
+
+       $all_groups = ['oinstall','dba' ,'oper']
+
+       group { $all_groups :
+         ensure      => present,
+       }
+
+       user { 'oracle' :
+         ensure      => present,
+         uid         => 500,
+         gid         => 'oinstall',
+         groups      => ['oinstall','dba','oper'],
+         shell       => '/bin/bash',
+         password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
+         home        => "/home/oracle",
+         comment     => "This user oracle was created by Puppet",
+         require     => Group[$all_groups],
+         managehome  => true,
+       }
+
+       sysctl { 'kernel.msgmnb':                 ensure => 'present', permanent => 'yes', value => '65536',}
+       sysctl { 'kernel.msgmax':                 ensure => 'present', permanent => 'yes', value => '65536',}
+       sysctl { 'kernel.shmmax':                 ensure => 'present', permanent => 'yes', value => '2588483584',}
+       sysctl { 'kernel.shmall':                 ensure => 'present', permanent => 'yes', value => '2097152',}
+       sysctl { 'fs.file-max':                   ensure => 'present', permanent => 'yes', value => '6815744',}
+       sysctl { 'net.ipv4.tcp_keepalive_time':   ensure => 'present', permanent => 'yes', value => '1800',}
+       sysctl { 'net.ipv4.tcp_keepalive_intvl':  ensure => 'present', permanent => 'yes', value => '30',}
+       sysctl { 'net.ipv4.tcp_keepalive_probes': ensure => 'present', permanent => 'yes', value => '5',}
+       sysctl { 'net.ipv4.tcp_fin_timeout':      ensure => 'present', permanent => 'yes', value => '30',}
+       sysctl { 'kernel.shmmni':                 ensure => 'present', permanent => 'yes', value => '4096', }
+       sysctl { 'fs.aio-max-nr':                 ensure => 'present', permanent => 'yes', value => '1048576',}
+       sysctl { 'kernel.sem':                    ensure => 'present', permanent => 'yes', value => '250 32000 100 128',}
+       sysctl { 'net.ipv4.ip_local_port_range':  ensure => 'present', permanent => 'yes', value => '9000 65500',}
+       sysctl { 'net.core.rmem_default':         ensure => 'present', permanent => 'yes', value => '262144',}
+       sysctl { 'net.core.rmem_max':             ensure => 'present', permanent => 'yes', value => '4194304', }
+       sysctl { 'net.core.wmem_default':         ensure => 'present', permanent => 'yes', value => '262144',}
+       sysctl { 'net.core.wmem_max':             ensure => 'present', permanent => 'yes', value => '1048576',}
+
+       class { 'limits':
+         config => {
+                    '*'       => { 'nofile'  => { soft => '2048'   , hard => '8192',   },},
+                    'oracle'  => { 'nofile'  => { soft => '65536'  , hard => '65536',  },
+                                    'nproc'  => { soft => '2048'   , hard => '16384',  },
+                                    'stack'  => { soft => '10240'  ,},},
+                    },
+         use_hiera => false,
+       }
+
+       $install = [ 'binutils.x86_64', 'compat-libstdc++-33.x86_64', 'glibc.x86_64','ksh.x86_64','libaio.x86_64',
+                    'libgcc.x86_64', 'libstdc++.x86_64', 'make.x86_64','compat-libcap1.x86_64', 'gcc.x86_64',
+                    'gcc-c++.x86_64','glibc-devel.x86_64','libaio-devel.x86_64','libstdc++-devel.x86_64',
+                    'sysstat.x86_64','unixODBC-devel','glibc.i686','libXext.x86_64','libXtst.x86_64']
+
+       package { $install:
+         ensure  => present,
+       }
+
+
 ## Database install
 
     $puppetDownloadMntPoint = "puppet:///modules/oradb/"
@@ -133,7 +200,6 @@ see this chapter "Linux kernel, ulimits and required packages" for more importan
       databaseType           => 'SE',
       oracleBase             => '/oracle',
       oracleHome             => '/oracle/product/12.1/db',
-      createUser             => true,
       bashProfile            => true,
       user                   => 'oracle',
       group                  => 'dba',
@@ -157,7 +223,6 @@ or with zipExtract ( does not download or extract , software is in /install/linu
       group                  => 'dba',
       group_install          => 'oinstall',
       group_oper             => 'oper',
-      createUser             => true,
       downloadDir            => '/install',
       zipExtract             => false,
     }
@@ -172,7 +237,6 @@ or
       oracleHome             => '/oracle/product/11.2/db',
       eeOptionsSelection     => true,
       eeOptionalComponents   => 'oracle.rdbms.partitioning:11.2.0.4.0,oracle.oraolap:11.2.0.4.0,oracle.rdbms.dm:11.2.0.4.0,oracle.rdbms.dv:11.2.0.4.0,oracle.rdbms.lbac:11.2.0.4.0,oracle.rdbms.rat:11.2.0.4.0',
-      createUser             => true,
       user                   => 'oracle',
       group                  => 'dba',
       group_install          => 'oinstall',
@@ -190,7 +254,6 @@ or
       databaseType           => 'SE',
       oracleBase             => '/oracle',
       oracleHome             => '/oracle/product/11.2/db',
-      createUser             => true,
       user                   => 'oracle',
       group                  => 'dba',
       group_install          => 'oinstall',
@@ -208,7 +271,6 @@ or
       databaseType  => 'SE',
       oracleBase    => '/oracle',
       oracleHome    => '/oracle/product/11.2/db',
-      createUser    => true,
       user          => 'oracle',
       group         => 'dba',
       group_install => 'oinstall',
@@ -756,7 +818,6 @@ Tnsnames.ora
         oracleBase             => hiera('oracle_base_dir'),
         oracleHome             => hiera('oracle_home_dir'),
         userBaseDir            => '/home',
-        createUser             => false,
         user                   => hiera('oracle_os_user'),
         group                  => 'dba',
         group_install          => 'oinstall',
@@ -769,16 +830,16 @@ Tnsnames.ora
       }
 
       oradb::opatchupgrade{'112000_opatch_upgrade_db':
-          oracleHome             => hiera('oracle_home_dir'),
-          patchFile              => 'p6880880_112000_Linux-x86-64.zip',
-          csiNumber              => undef,
-          supportId              => undef,
-          opversion              => '11.2.0.3.6',
-          user                   => hiera('oracle_os_user'),
-          group                  => hiera('oracle_os_group'),
-          downloadDir            => hiera('oracle_download_dir'),
-          puppetDownloadMntPoint => hiera('oracle_source'),
-          require                => Oradb::Installdb['db_linux-x64'],
+        oracleHome             => hiera('oracle_home_dir'),
+        patchFile              => 'p6880880_112000_Linux-x86-64.zip',
+        csiNumber              => undef,
+        supportId              => undef,
+        opversion              => '11.2.0.3.6',
+        user                   => hiera('oracle_os_user'),
+        group                  => hiera('oracle_os_group'),
+        downloadDir            => hiera('oracle_download_dir'),
+        puppetDownloadMntPoint => hiera('oracle_source'),
+        require                => Oradb::Installdb['db_linux-x64'],
       }
 
       oradb::opatch{'19791420_db_patch':
@@ -878,7 +939,6 @@ Tnsnames.ora
       file                   => 'linuxamd64_12c_client.zip',
       oracleBase             => '/oracle',
       oracleHome             => '/oracle/product/12.1/client',
-      createUser             => true,
       user                   => 'oracle',
       group                  => 'dba',
       group_install          => 'oinstall',
@@ -895,7 +955,6 @@ or
       file                   => 'linux.x64_11gR2_client.zip',
       oracleBase             => '/oracle',
       oracleHome             => '/oracle/product/11.2/client',
-      createUser             => true,
       user                   => 'oracle',
       group                  => 'dba',
       group_install          => 'oinstall',
@@ -1196,71 +1255,6 @@ OIM, OAM repository, OIM needs an Oracle Enterprise Edition database
       logoutput              => true,
       require                => Oradb::Dbactions['start oimDb'],
      }
-
-
-## Linux kernel, ulimits and required packages
-
-install the following module to set the database kernel parameters
-*puppet module install fiddyspence-sysctl*
-
-install the following module to set the database user limits parameters
-*puppet module install erwbgy-limits*
-
-       $all_groups = ['oinstall','dba' ,'oper']
-
-       group { $all_groups :
-         ensure      => present,
-       }
-
-       user { 'oracle' :
-         ensure      => present,
-         uid         => 500,
-         gid         => 'oinstall',
-         groups      => ['oinstall','dba','oper'],
-         shell       => '/bin/bash',
-         password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
-         home        => "/home/oracle",
-         comment     => "This user oracle was created by Puppet",
-         require     => Group[$all_groups],
-         managehome  => true,
-       }
-
-       sysctl { 'kernel.msgmnb':                 ensure => 'present', permanent => 'yes', value => '65536',}
-       sysctl { 'kernel.msgmax':                 ensure => 'present', permanent => 'yes', value => '65536',}
-       sysctl { 'kernel.shmmax':                 ensure => 'present', permanent => 'yes', value => '2588483584',}
-       sysctl { 'kernel.shmall':                 ensure => 'present', permanent => 'yes', value => '2097152',}
-       sysctl { 'fs.file-max':                   ensure => 'present', permanent => 'yes', value => '6815744',}
-       sysctl { 'net.ipv4.tcp_keepalive_time':   ensure => 'present', permanent => 'yes', value => '1800',}
-       sysctl { 'net.ipv4.tcp_keepalive_intvl':  ensure => 'present', permanent => 'yes', value => '30',}
-       sysctl { 'net.ipv4.tcp_keepalive_probes': ensure => 'present', permanent => 'yes', value => '5',}
-       sysctl { 'net.ipv4.tcp_fin_timeout':      ensure => 'present', permanent => 'yes', value => '30',}
-       sysctl { 'kernel.shmmni':                 ensure => 'present', permanent => 'yes', value => '4096', }
-       sysctl { 'fs.aio-max-nr':                 ensure => 'present', permanent => 'yes', value => '1048576',}
-       sysctl { 'kernel.sem':                    ensure => 'present', permanent => 'yes', value => '250 32000 100 128',}
-       sysctl { 'net.ipv4.ip_local_port_range':  ensure => 'present', permanent => 'yes', value => '9000 65500',}
-       sysctl { 'net.core.rmem_default':         ensure => 'present', permanent => 'yes', value => '262144',}
-       sysctl { 'net.core.rmem_max':             ensure => 'present', permanent => 'yes', value => '4194304', }
-       sysctl { 'net.core.wmem_default':         ensure => 'present', permanent => 'yes', value => '262144',}
-       sysctl { 'net.core.wmem_max':             ensure => 'present', permanent => 'yes', value => '1048576',}
-
-       class { 'limits':
-         config => {
-                    '*'       => { 'nofile'  => { soft => '2048'   , hard => '8192',   },},
-                    'oracle'  => { 'nofile'  => { soft => '65536'  , hard => '65536',  },
-                                    'nproc'  => { soft => '2048'   , hard => '16384',  },
-                                    'stack'  => { soft => '10240'  ,},},
-                    },
-         use_hiera => false,
-       }
-
-       $install = [ 'binutils.x86_64', 'compat-libstdc++-33.x86_64', 'glibc.x86_64','ksh.x86_64','libaio.x86_64',
-                    'libgcc.x86_64', 'libstdc++.x86_64', 'make.x86_64','compat-libcap1.x86_64', 'gcc.x86_64',
-                    'gcc-c++.x86_64','glibc-devel.x86_64','libaio-devel.x86_64','libstdc++-devel.x86_64',
-                    'sysstat.x86_64','unixODBC-devel','glibc.i686','libXext.x86_64','libXtst.x86_64']
-
-       package { $install:
-         ensure  => present,
-       }
 
 ## Solaris 10 kernel, ulimits and required packages
 

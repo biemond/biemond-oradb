@@ -72,7 +72,9 @@ define oradb::goldengate(
 
     exec { 'install oracle goldengate':
       command   => "/bin/sh -c 'unset DISPLAY;${downloadDir}/${ggateInstallDir}/Disk1/runInstaller -silent -waitforcompletion -responseFile ${downloadDir}/oggcore.rsp'",
-      require   => [ File["${downloadDir}/oggcore.rsp"],Oradb::Utils::Dborainst["ggate orainst ${version}"],Exec['extract gg'],],
+      require   => [File["${downloadDir}/oggcore.rsp"],
+                    Oradb::Utils::Dborainst["ggate orainst ${version}"],
+                    Exec['extract gg'],],
       creates   => $goldengateHome,
       timeout   => 0,
       path      => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin',
@@ -112,7 +114,8 @@ define oradb::goldengate(
 
     exec { "extract tar ${title}":
       command   => "tar -xf ${downloadDir}/${tarFile} -C ${goldengateHome}",
-      require   => [File[$goldengateHome],Exec["extract gg ${title}"]],
+      require   => [File[$goldengateHome],
+                    Exec["extract gg ${title}"]],
       creates   => "${goldengateHome}/ggsci",
       timeout   => 0,
       path      => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin',

@@ -99,13 +99,9 @@ define oradb::installasm(
       oracle_base_home_dir => $gridBase,
       ora_inventory_dir    => $oraInventory,
       os_user              => $user,
-      os_group             => $group,
       os_group_install     => $group_install,
-      os_group_oper        => $group_oper,
       download_dir         => $downloadDir,
       log_output           => true,
-      user_base_dir        => $userBaseDir,
-      create_user          => false,
     }
 
     if ( $zipExtract ) {
