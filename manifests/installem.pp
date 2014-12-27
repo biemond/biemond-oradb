@@ -50,6 +50,12 @@ define oradb::installem(
     }
   }
 
+  if $ora_inventory_dir == undef {
+    $oraInventory = "${oracle_base_dir}/oraInventory"
+  } else {
+    $oraInventory = "${ora_inventory_dir}/oraInventory"
+  }
+
   oradb::utils::dbstructure{"oracle em structure ${version}":
     oracle_base_home_dir => $oracle_base_dir,
     ora_inventory_dir    => $oraInventory,
@@ -66,12 +72,6 @@ define oradb::installem(
       $mountPoint     = 'puppet:///modules/oradb/'
     } else {
       $mountPoint     = $puppet_download_mnt_point
-    }
-
-    if $ora_inventory_dir == undef {
-      $oraInventory = "${oracle_base_dir}/oraInventory"
-    } else {
-      $oraInventory = "${ora_inventory_dir}/oraInventory"
     }
 
     if ( $zip_extract ) {
