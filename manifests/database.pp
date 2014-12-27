@@ -79,7 +79,8 @@ define oradb::database(
 
     if (is_hash($initParams) or is_string($initParams)) {
       if is_hash($initParams) {
-        $sanitizedInitParams = join(join_keys_to_values($initParams, '='),',')
+        $initParamsArray = sort(join_keys_to_values($initParams, '='))
+        $sanitizedInitParams = join($initParamsArray,',')
       } else {
         $sanitizedInitParams = $initParams
       }
