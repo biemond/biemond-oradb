@@ -1,6 +1,6 @@
 # == define: oradb::utils::dbstructure
 #
-#  create directories for the download folder and oracle base home
+#  create directories for the download, ora inventory and oracle base directories
 #
 #
 ##
@@ -10,47 +10,36 @@ define oradb::utils::dbstructure(
   $os_user              = undef,
   $os_group_install     = undef,
   $download_dir         = undef,
-  $log_output           = false,
 )
 {
-  $exec_path = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
-
   # create all folders
-  if !defined(Exec["create ${oracle_base_home_dir} directory"]) {
-    exec { "create ${oracle_base_home_dir} directory":
-      command   => "mkdir -p ${oracle_base_home_dir}",
-      unless    => "test -d ${oracle_base_home_dir}",
-      user      => 'root',
-      path      => $exec_path,
-      logoutput => $log_output,
+  # return an array of all folders and exclude duplicates
+  $dirtree_all = dirtree($oracle_base_home_dir,$ora_inventory_dir,$download_dir)
+  # exclude all folders which are important for permissions
+  $dirtree_all2 = delete($dirtree_all ,$oracle_base_home_dir)
+  $dirtree_all3 = delete($dirtree_all2,$download_dir)
+  $dirtree_all4 = delete($dirtree_all3,$ora_inventory_dir)
+  # add a unique prefix, to skip already defined with multiple dbstructures in
+  # same catalog like asm,db
+  $dirtree_all5 = prefix($dirtree_all4,$title)
+  ensure_resource('oradb::utils::dbcreatefolder', $dirtree_all5,
+    {
+      'prefix' => $title,
     }
-  }
+  )
 
-  if !defined(Exec["create ${download_dir} home directory"]) {
-    exec { "create ${download_dir} home directory":
-      command   => "mkdir -p ${download_dir}",
-      unless    => "test -d ${download_dir}",
-      user      => 'root',
-      path      => $exec_path,
-      logoutput => $log_output,
-    }
-  }
-
-  # also set permissions on downloadDir
+  # also set permissions on download dir
+  # check oracle install folder
   if !defined(File[$download_dir]) {
-    # check oracle install folder
     file { $download_dir:
       ensure  => directory,
       recurse => false,
       replace => false,
-      mode    => '0775',
-      owner   => $os_user,
-      group   => $os_group_install,
-      require => [Exec["create ${download_dir} home directory"],],
+      mode    => '0777',
     }
   }
 
-  # also set permissions on oracleHome
+  # also set permissions on oracle base dir
   if !defined(File[$oracle_base_home_dir]) {
     file { $oracle_base_home_dir:
       ensure  => directory,
@@ -59,11 +48,10 @@ define oradb::utils::dbstructure(
       mode    => '0775',
       owner   => $os_user,
       group   => $os_group_install,
-      require => Exec["create ${oracle_base_home_dir} directory"],
     }
   }
 
-  # also set permissions on oraInventory
+  # also set permissions on ora inventory dir
   if !defined(File[$ora_inventory_dir]) {
     file { $ora_inventory_dir:
       ensure  => directory,
@@ -72,8 +60,6 @@ define oradb::utils::dbstructure(
       mode    => '0775',
       owner   => $os_user,
       group   => $os_group_install,
-      require => [Exec["create ${oracle_base_home_dir} directory"],
-                  File[$oracle_base_home_dir],],
     }
   }
 }

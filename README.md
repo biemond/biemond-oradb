@@ -5,6 +5,11 @@ created by Edwin Biemond
 [biemond.blogspot.com](http://biemond.blogspot.com)
 [Github homepage](https://github.com/biemond/puppet)
 
+Dependency with
+- puppetlabs/concat >= 1.0.0
+- puppetlabs/stdlib >= 3.2.0
+- AlexCline/dirtree >= 0.2.1
+
 Should work on Docker, for Solaris and on all Linux version like RedHat, CentOS, Ubuntu, Debian, Suse SLES or OracleLinux
 - Docker image of Oracle Database 12.1 SE [Docker Oracle Database 12.1.0.1](https://github.com/biemond/docker-database-puppet)
 - CentOS 6.5 vagrant box with Oracle Database 12.1 and Enterprise Manager 12.1.0.4 [Enterprise vagrant box](https://github.com/biemond/biemond-em-12c)
@@ -1103,47 +1108,31 @@ In combination with the oracle puppet module from hajee you can create/change a 
         managehome  => true,
       }
 
-      file { "/oracle/product" :
-        ensure        => directory,
-        recurse       => false,
-        replace       => false,
-        mode          => 0775,
-        group         => hiera('oracle_os_group'),
-      }
-
       oradb::goldengate{ 'ggate12.1.2':
         version                 => '12.1.2',
         file                    => '121200_fbo_ggs_Linux_x64_shiphome.zip',
         databaseType            => 'Oracle',
         databaseVersion         => 'ORA11g',
-        databaseHome            => '/oracle/product/11.2/db',
+        databaseHome            => '/oracle/product/12.1/db',
         oracleBase              => '/oracle',
-        goldengateHome          => "/oracle/product/12.1.2/ggate",
+        goldengateHome          => "/oracle/product/12.1/ggate",
         managerPort             => 16000,
         user                    => 'ggate',
         group                   => 'dba',
         group_install           => 'oinstall',
         downloadDir             => '/install',
         puppetDownloadMntPoint  => hiera('oracle_source'),
-        require                 => File["/oracle/product"],
-      }
-
-      file { "/oracle/product/12.1.2/ggate/OPatch" :
-        ensure        => directory,
-        recurse       => true,
-        replace       => false,
-        mode          => 0775,
-        group         => hiera('oracle_os_group'),
-        require       => Oradb::Goldengate['ggate12.1.2'],
+        require                 => User['ggate'],
       }
 
       file { "/oracle/product/11.2.1" :
         ensure        => directory,
         recurse       => false,
         replace       => false,
-        mode          => 0775,
+        mode          => '0775',
         owner         => 'ggate',
-        group         => hiera('oracle_os_group'),
+        group         => 'dba',
+        require       => Oradb::Goldengate['ggate12.1.2'],
       }
 
       oradb::goldengate{ 'ggate11.2.1':
@@ -1151,11 +1140,11 @@ In combination with the oracle puppet module from hajee you can create/change a 
         file                    => 'ogg112101_fbo_ggs_Linux_x64_ora11g_64bit.zip',
         tarFile                 => 'fbo_ggs_Linux_x64_ora11g_64bit.tar',
         goldengateHome          => "/oracle/product/11.2.1/ggate",
-        user                    => hiera('ggate_os_user'),
-        group                   => hiera('oracle_os_group'),
+        user                    => 'ggate',
+        group                   => 'dba',
         downloadDir             => '/install',
-        puppetDownloadMntPoint  =>  hiera('oracle_source'),
-        require                 => [File["/oracle/product"],File["/oracle/product/11.2.1"]]
+        puppetDownloadMntPoint  => hiera('oracle_source'),
+        require                 => File["/oracle/product/11.2.1"],
       }
 
       oradb::goldengate{ 'ggate11.2.1_java':
@@ -1163,12 +1152,12 @@ In combination with the oracle puppet module from hajee you can create/change a 
         file                    => 'V38714-01.zip',
         tarFile                 => 'ggs_Adapters_Linux_x64.tar',
         goldengateHome          => "/oracle/product/11.2.1/ggate_java",
-        user                    => hiera('ggate_os_user'),
-        group                   => hiera('oracle_os_group'),
+        user                    => 'ggate',
+        group                   => 'dba',
         group_install           => 'oinstall',
         downloadDir             => '/install',
-        puppetDownloadMntPoint  =>  hiera('oracle_source'),
-        require                 => [File["/oracle/product"],File["/oracle/product/11.2.1"]]
+        puppetDownloadMntPoint  => hiera('oracle_source'),
+        require                 => File["/oracle/product/11.2.1"],
       }
 
 ## Oracle SOA Suite Repository Creation Utility (RCU)

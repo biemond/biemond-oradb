@@ -43,6 +43,15 @@ define oradb::installem_agent(
     }
   }
 
+  # setup oracle base with the right permissions
+  oradb::utils::dbstructure{"oracle em agent structure ${version}":
+    oracle_base_home_dir => $oracle_base_dir,
+    ora_inventory_dir    => $oraInventory,
+    os_user              => $user,
+    os_group_install     => $group,
+    download_dir         => $download_dir,
+  }
+
   if ( $continue ) {
 
     $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
@@ -51,16 +60,6 @@ define oradb::installem_agent(
       $oraInventory = "${oracle_base_dir}/oraInventory"
     } else {
       $oraInventory = "${ora_inventory_dir}/oraInventory"
-    }
-
-    # setup oracle base with the right permissions
-    oradb::utils::dbstructure{"oracle em agent structure ${version}":
-      oracle_base_home_dir => $oracle_base_dir,
-      ora_inventory_dir    => $oraInventory,
-      os_user              => $user,
-      os_group_install     => $group,
-      download_dir         => $download_dir,
-      log_output           => $log_output,
     }
 
     # check oraInst

@@ -64,93 +64,93 @@ define oradb::database(
     fail('container or pluggable database is not supported on version 11.2')
   }
 
-  $continue = true
+  $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin'
 
-  if ( $continue ) {
-    case $::kernel {
-      'Linux', 'SunOS': {
-        $execPath    = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
-        $path        = $downloadDir
-      }
-      default: {
-        fail('Unrecognized operating system')
-      }
+  case $::kernel {
+    'Linux': {
+      $userHome = "/home/${user}"
     }
-
-    if (is_hash($initParams) or is_string($initParams)) {
-      if is_hash($initParams) {
-        $initParamsArray = sort(join_keys_to_values($initParams, '='))
-        $sanitizedInitParams = join($initParamsArray,',')
-      } else {
-        $sanitizedInitParams = $initParams
-      }
-    } else {
-      fail 'initParams only supports a String or a Hash as value type'
+    'SunOS': {
+      $userHome = "/export/home/${user}"
     }
-
-    $sanitized_title = regsubst($title, '[^a-zA-Z0-9.-]', '_', 'G')
-
-    $filename = "${path}/database_${sanitized_title}.rsp"
-
-    if $dbDomain {
-      $globalDbName = "${dbName}.${dbDomain}"
-    } else {
-      $globalDbName = $dbName
-    }
-
-    if ! defined(File[$filename]) {
-      file { $filename:
-        ensure  => present,
-        content => template("oradb/dbca_${version}.rsp.erb"),
-        mode    => '0775',
-        owner   => $user,
-        group   => $group,
-        before  => Exec["oracle database ${title}"],
-      }
-    }
-
-    if ( $template ) {
-      $templatename = "${path}/${template}_${sanitized_title}.dbt"
-      file { $templatename:
-        ensure  => present,
-        content => template("oradb/${template}.dbt.erb"),
-        mode    => '0775',
-        owner   => $user,
-        group   => $group,
-        before  => Exec["oracle database ${title}"],
-      }
-    }
-
-
-    if $action == 'create' {
-      if ( $template ) {
-        $command = "dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globalDbName} -responseFile NO_VALUE -sysPassword ${sysPassword} -systemPassword ${systemPassword} -dbsnmpPassword ${dbSnmpPassword} -asmsnmpPassword ${asmSnmpPassword} -storageType ${storageType} -emConfiguration ${emConfiguration}"
-      } else {
-        $command = "dbca -silent -responseFile ${filename}"
-      }
-      exec { "oracle database ${title}":
-        command     => $command,
-        creates     => "${oracleBase}/admin/${dbName}",
-        timeout     => 0,
-        path        => $execPath,
-        user        => $user,
-        group       => $group,
-        cwd         => $oracleBase,
-        environment => ["USER=${user}",],
-        logoutput   => true,
-      }
-    } elsif $action == 'delete' {
-      exec { "oracle database ${title}":
-        command     => "dbca -silent -responseFile ${filename}",
-        onlyif      => "ls ${oracleBase}/admin/${dbName}",
-        timeout     => 0,
-        path        => $execPath,
-        user        => $user,
-        group       => $group,
-        cwd         => $oracleBase,
-        environment => ["USER=${user}",],
-        logoutput   => true,
-      }
+    default: {
+      fail('Unrecognized operating system')
     }
   }
+
+  if (is_hash($initParams) or is_string($initParams)) {
+    if is_hash($initParams) {
+      $initParamsArray = sort(join_keys_to_values($initParams, '='))
+      $sanitizedInitParams = join($initParamsArray,',')
+    } else {
+      $sanitizedInitParams = $initParams
+    }
+  } else {
+    fail 'initParams only supports a String or a Hash as value type'
+  }
+
+  $sanitized_title = regsubst($title, '[^a-zA-Z0-9.-]', '_', 'G')
+
+  if $dbDomain {
+    $globalDbName = "${dbName}.${dbDomain}"
+  } else {
+    $globalDbName = $dbName
+  }
+
+  if ! defined(File["${downloadDir}/database_${sanitized_title}.rsp"]) {
+    file { "${downloadDir}/database_${sanitized_title}.rsp":
+      ensure  => present,
+      content => template("oradb/dbca_${version}.rsp.erb"),
+      mode    => '0775',
+      owner   => $user,
+      group   => $group,
+      before  => Exec["oracle database ${title}"],
+      require => File[$downloadDir],
+    }
+  }
+
+  if ( $template ) {
+    $templatename = "${downloadDir}/${template}_${sanitized_title}.dbt"
+    file { $templatename:
+      ensure  => present,
+      content => template("oradb/${template}.dbt.erb"),
+      mode    => '0775',
+      owner   => $user,
+      group   => $group,
+      before  => Exec["oracle database ${title}"],
+      require => File[$downloadDir],
+    }
+  }
+
+  if $action == 'create' {
+    if ( $template ) {
+      $command = "${oracleHome}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globalDbName} -responseFile NO_VALUE -sysPassword ${sysPassword} -systemPassword ${systemPassword} -dbsnmpPassword ${dbSnmpPassword} -asmsnmpPassword ${asmSnmpPassword} -storageType ${storageType} -emConfiguration ${emConfiguration}"
+    } else {
+      $command = "${oracleHome}/bin/dbca -silent -responseFile ${downloadDir}/database_${sanitized_title}.rsp"
+    }
+    exec { "oracle database ${title}":
+      command     => $command,
+      creates     => "${oracleBase}/admin/${dbName}",
+      timeout     => 0,
+      path        => $execPath,
+      user        => $user,
+      group       => $group,
+      cwd         => $userHome,
+      environment => ["USER=${user}",],
+      logoutput   => true,
+    }
+  } elsif $action == 'delete' {
+    exec { "oracle database ${title}":
+      command     => "${oracleHome}/bin/dbca -silent -responseFile ${downloadDir}/database_${sanitized_title}.rsp",
+      onlyif      => "ls ${oracleBase}/admin/${dbName}",
+      timeout     => 0,
+      path        => $execPath,
+      user        => $user,
+      group       => $group,
+      cwd         => $userHome,
+      environment => ["USER=${user}",],
+      logoutput   => true,
+    }
+  }
+
 }

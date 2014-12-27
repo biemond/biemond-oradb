@@ -31,6 +31,14 @@ define oradb::client(
     }
   }
 
+  oradb::utils::dbstructure{"oracle structure ${version}":
+    oracle_base_home_dir => $oracleBase,
+    ora_inventory_dir    => $oraInventory,
+    os_user              => $user,
+    os_group_install     => $group_install,
+    download_dir         => $downloadDir,
+  }
+
   if ( $continue ) {
 
     $execPath     = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
@@ -40,15 +48,6 @@ define oradb::client(
       $mountPoint     = 'puppet:///modules/oradb/'
     } else {
       $mountPoint     = $puppetDownloadMntPoint
-    }
-
-    oradb::utils::dbstructure{"oracle structure ${version}":
-      oracle_base_home_dir => $oracleBase,
-      ora_inventory_dir    => $oraInventory,
-      os_user              => $user,
-      os_group_install     => $group_install,
-      download_dir         => $downloadDir,
-      log_output           => true,
     }
 
     # db file installer zip

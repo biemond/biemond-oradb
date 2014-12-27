@@ -53,12 +53,13 @@ define oradb::opatchupgrade(
 
     if ! defined(File["${downloadDir}/${patchFile}"]) {
       file {"${downloadDir}/${patchFile}":
-        ensure => present,
-        path   => "${downloadDir}/${patchFile}",
-        source => "${mountDir}/${patchFile}",
-        mode   => '0775',
-        owner  => $user,
-        group  => $group,
+        ensure  => present,
+        path    => "${downloadDir}/${patchFile}",
+        source  => "${mountDir}/${patchFile}",
+        mode    => '0775',
+        owner   => $user,
+        group   => $group,
+        require => File[$downloadDir],
       }
     }
 
@@ -102,6 +103,7 @@ define oradb::opatchupgrade(
             mode    => '0775',
             owner   => $user,
             group   => $group,
+            require => File[$downloadDir],
           }
 
           exec { "ksh ${downloadDir}/opatch_upgrade_${title}_${opversion}.ksh":

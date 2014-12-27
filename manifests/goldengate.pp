@@ -18,8 +18,24 @@ define oradb::goldengate(
   $puppetDownloadMntPoint  = undef,
 )
 {
+  if ( $goldengateHome == undef or is_string($goldengateHome) == false) {fail('You must specify a goldengateHome') }
+  if ( $file == undef or is_string($file) == false) {fail('You must specify a file') }
+  if ( $puppetDownloadMntPoint == undef or is_string($puppetDownloadMntPoint) == false) {fail('You must specify a puppetDownloadMntPoint') }
+
+
   if ( $version == '12.1.2' ) {
     # check if the oracle software already exists
+    if (!( $databaseType in ['Oracle'] )) {
+      fail('Unrecognized databaseType')
+    }
+    if (!( $databaseVersion in ['ORA11g','ORA12c'] )) {
+      fail('Unrecognized databaseVersion')
+    }
+    if ( $databaseHome == undef or is_string($databaseHome) == false) {fail('You must specify a databaseHome') }
+    if ( $oracleBase == undef or is_string($oracleBase) == false) {fail('You must specify an oracleBase') }
+    if ( $managerPort == undef or is_integer($managerPort) == false) {fail('You must specify a managerPort') }
+
+
     $found = oracle_exists( $goldengateHome )
 
     if $found == undef {
@@ -36,33 +52,47 @@ define oradb::goldengate(
     $continue = false
   }
 
+
+  if ( $version == '12.1.2' ) {
+    $oraInventory    = "${oracleBase}/oraInventory"
+
+    oradb::utils::dbstructure{"oracle goldengate structure ${version}":
+      oracle_base_home_dir => $oracleBase,
+      ora_inventory_dir    => $oraInventory,
+      os_user              => $user,
+      os_group_install     => $group_install,
+      download_dir         => $downloadDir,
+    }
+  }
+
   # only for 12.1.2
   if ( $continue == true ) {
 
-    $oraInventory    = "${oracleBase}/oraInventory"
     $ggateInstallDir = 'fbo_ggs_Linux_x64_shiphome'
 
     file { "${downloadDir}/${file}":
-      source => "${puppetDownloadMntPoint}/${file}",
-      owner  => $user,
-      group  => $group,
+      source  => "${puppetDownloadMntPoint}/${file}",
+      owner   => $user,
+      group   => $group,
+      require => Oradb::Utils::Dbstructure["oracle goldengate structure ${version}"],
     }
 
     exec { 'extract gg':
       command   => "unzip -o ${downloadDir}/${file} -d ${downloadDir}",
-      require   => File["${downloadDir}/${file}"],
       creates   => "${downloadDir}/${ggateInstallDir}",
       timeout   => 0,
       path      => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin',
       user      => $user,
       group     => $group,
-      logoutput => true,
+      logoutput => false,
+      require   => File["${downloadDir}/${file}"],
     }
 
     file { "${downloadDir}/oggcore.rsp":
       content => template("oradb/oggcore_${version}.rsp.erb"),
       owner   => $user,
       group   => $group,
+      require => Oradb::Utils::Dbstructure["oracle goldengate structure ${version}"],
     }
 
     oradb::utils::dborainst{"ggate orainst ${version}":
@@ -84,12 +114,28 @@ define oradb::goldengate(
       returns   => [3,0],
     }
 
-} else {
+  }
+
+  if ( $version != '12.1.2' ){
+
+    if ( $tarFile == undef or is_string($tarFile) == false) {fail("${title} You must specify a tarFile") }
+
+    # # check oracle install folder
+    # if !defined(File[$downloadDir]) {
+    #   file { $downloadDir:
+    #     ensure  => directory,
+    #     recurse => false,
+    #     replace => false,
+    #     mode    => '0777',
+    #   }
+    # }
+
     #version is different, use the old way
     file { "${downloadDir}/${file}":
-      source => "${puppetDownloadMntPoint}/${file}",
-      owner  => $user,
-      group  => $group,
+      source  => "${puppetDownloadMntPoint}/${file}",
+      owner   => $user,
+      group   => $group,
+      require => File[$downloadDir],
     }
 
     exec { "extract gg ${title}":
