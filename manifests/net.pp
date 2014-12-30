@@ -13,7 +13,7 @@ define oradb::net(
     fail('Unrecognized version')
   }
 
-  $execPath = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
+  $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin'
 
   file { "${downloadDir}/netca_${version}.rsp":
     ensure  => present,
@@ -25,7 +25,7 @@ define oradb::net(
   }
 
   exec { "install oracle net ${title}":
-    command     => "netca /silent /responsefile ${downloadDir}/netca_${version}.rsp",
+    command     => "${oracleHome}/bin/netca /silent /responsefile ${downloadDir}/netca_${version}.rsp",
     require     => File["${downloadDir}/netca_${version}.rsp"],
     creates     => "${oracleHome}/network/admin/listener.ora",
     path        => $execPath,

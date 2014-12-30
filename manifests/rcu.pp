@@ -41,7 +41,7 @@ define oradb::rcu(
 ){
   case $::kernel {
     'Linux': {
-      $execPath = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
+      $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin'
     }
     default: {
       fail('Unrecognized or not supported operating system')

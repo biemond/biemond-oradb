@@ -18,7 +18,7 @@ define oradb::listener( $oracleBase  = undef,
                         $action      = 'start',
 )
 {
-  $execPath = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:${oracleHome}/bin"
+  $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin'
 
   case $::kernel {
     'Linux': {

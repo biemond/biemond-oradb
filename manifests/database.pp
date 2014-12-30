@@ -135,7 +135,7 @@ define oradb::database(
       path        => $execPath,
       user        => $user,
       group       => $group,
-      cwd         => $userHome,
+      cwd         => $oracleBase,
       environment => ["USER=${user}",],
       logoutput   => true,
     }
@@ -147,7 +147,7 @@ define oradb::database(
       path        => $execPath,
       user        => $user,
       group       => $group,
-      cwd         => $userHome,
+      cwd         => $oracleBase,
       environment => ["USER=${user}",],
       logoutput   => true,
     }

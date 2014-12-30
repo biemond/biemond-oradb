@@ -180,31 +180,19 @@ define oradb::installem(
       }
     }
 
-    if ( $version in ['12.1.0.4']){
-      exec { "install oracle em ${title}":
-        command   => "/bin/sh -c 'unset DISPLAY;${download_dir}/${file}/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/em_install_${version}.rsp'",
-        creates   => $oracle_home_dir,
-        timeout   => 0,
-        returns   => [6,0],
-        path      => $execPath,
-        user      => $user,
-        group     => $group,
-        cwd       => $oracle_base_dir,
-        logoutput => true,
-        require   => [Oradb::Utils::Dborainst["em orainst ${version}"],
-                      File["${download_dir}/em_install_${version}.rsp"],
-                      File["${download_dir}/em_install_static_${version}.ini"],],
-      }
-
-      file { $oracle_home_dir:
-        ensure  => directory,
-        recurse => false,
-        replace => false,
-        mode    => '0775',
-        owner   => $user,
-        group   => $group,
-        require => Exec["install oracle em ${title}"],
-      }
+    exec { "install oracle em ${title}":
+      command   => "/bin/sh -c 'unset DISPLAY;${download_dir}/${file}/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/em_install_${version}.rsp'",
+      creates   => $oracle_home_dir,
+      timeout   => 0,
+      returns   => [6,0],
+      path      => $execPath,
+      user      => $user,
+      group     => $group,
+      cwd       => $oracle_base_dir,
+      logoutput => true,
+      require   => [Oradb::Utils::Dborainst["em orainst ${version}"],
+                    File["${download_dir}/em_install_${version}.rsp"],
+                    File["${download_dir}/em_install_static_${version}.ini"],],
     }
 
     exec { "run root.sh script ${title}":
@@ -215,6 +203,16 @@ define oradb::installem(
       cwd       => $oracle_base_dir,
       logoutput => $log_output,
       require   => Exec["install oracle em ${title}"],
+    }
+
+    file { $oracle_home_dir:
+      ensure  => directory,
+      recurse => false,
+      replace => false,
+      mode    => '0775',
+      owner   => $user,
+      group   => $group,
+      require => Exec["install oracle em ${title}","run root.sh script ${title}"],
     }
 
     # cleanup
