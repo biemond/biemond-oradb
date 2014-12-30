@@ -1,5 +1,8 @@
 # Version updates
 
+## 1.0.27
+- solaris fix for database.pp and opatch auto
+
 ## 1.0.26
 - Removed createUser functionality in installdb & client, Puppet should do it instead of oradb module
 - Support for 12.1 pluggable database
