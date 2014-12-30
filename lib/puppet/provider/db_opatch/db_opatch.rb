@@ -37,7 +37,7 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
 
     Puppet.debug "opatch action: #{action} with command #{command}"
     if opatch_auto == true
-      output = `su -c '#{command}'`
+      output = `EXPORT ORACLE_HOME=#{oracle_product_home_dir}; #{command}`
     else
       output = `su - #{user} -c '#{command}'`
     end
