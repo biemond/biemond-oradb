@@ -1,0 +1,12 @@
+---
+
+oradb:user_base_dir:  '/export/home'
+
+oradb:ps_bin_5_11:    '/bin/ps'
+oradb:ps_bin:         '/usr/ucb/ps'
+oradb:ps_arg:         'awwx'
+
+oradb:oratab:         '/var/opt/oracle/oratab'
+oradb:dbora_dir:      '/etc'
+
+oradb:orainst_dir:    '/var/opt/oracle'

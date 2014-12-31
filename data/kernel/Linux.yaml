@@ -1,0 +1,12 @@
+---
+
+oradb:user_base_dir:  '/home'
+
+
+oradb:ps_bin:         '/bin/ps'
+oradb:ps_arg:         '-ef'
+
+oradb:oratab:         '/etc/oratab'
+oradb:dbora_dir:      '/etc/init.d'
+
+oradb:orainst_dir:    '/etc'

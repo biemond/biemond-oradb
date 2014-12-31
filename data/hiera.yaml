@@ -1,0 +1,5 @@
+---
+
+:hierarchy:
+ - kernel/%{::kernel}
+ - common
