@@ -37,11 +37,10 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
 
     Puppet.debug "opatch action: #{action} with command #{command}"
     if opatch_auto == true
-      output = `export ORACLE_HOME=#{oracle_product_home_dir}; #{command}`
+      output = `export ORACLE_HOME=#{oracle_product_home_dir}; cd #{oracle_product_home_dir}; #{command}`
     else
-      output = `su - #{user} -c '#{command}'`
+      output = `su - #{user} -c 'export ORACLE_HOME=#{oracle_product_home_dir}; cd #{oracle_product_home_dir}; #{command}'`
     end
-    # output = execute command, :failonfail => true ,:uid => user
     Puppet.info "opatch result: #{output}"
 
     result = false
