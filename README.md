@@ -879,6 +879,19 @@ Tnsnames.ora
         puppetDownloadMntPoint => hiera('oracle_source'),
       }
 
+      # with the help of the oracle and easy-type module of Bert Hajee
+      ora_asm_diskgroup{ 'RECO@+ASM':
+        ensure          => 'present',
+        au_size         => '1',
+        compat_asm      => '11.2.0.0.0',
+        compat_rdbms    => '10.1.0.0.0',
+        diskgroup_state => 'MOUNTED',
+        disks           => {'RECO_0000' => {'diskname' => 'RECO_0000', 'path' => '/nfs_client/asm_sda_nfs_b3'},
+                            'RECO_0001' => {'diskname' => 'RECO_0001', 'path' => '/nfs_client/asm_sda_nfs_b4'}},
+        redundancy_type => 'EXTERNAL',
+        require         => Oradb::Opatch['19791420_db_patch_2'],
+      }
+
       # based on a template
       oradb::database{ 'oraDb':
         oracleBase              => hiera('oracle_base_dir'),
@@ -903,9 +916,10 @@ Tnsnames.ora
         storageType             => "ASM",
         asmSnmpPassword         => 'Welcome01',
         asmDiskgroup            => 'DATA',
-        recoveryDiskgroup       => 'DATA',
-        recoveryAreaDestination => 'DATA',
-        require                 => Oradb::Opatch['19791420_db_patch_2'],
+        recoveryDiskgroup       => 'RECO',
+        recoveryAreaDestination => 'RECO',
+        require                 => [Oradb::Opatch['19791420_db_patch_2'],
+                                    Ora_asm_diskgroup['RECO@+ASM'],],
       }
 
       # or not based on a template
