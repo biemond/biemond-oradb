@@ -35,7 +35,9 @@ define oradb::database(
   $recoveryDiskgroup        = undef,
   $cluster_nodes            = undef,
   $containerDatabase        = false, # 12.1 feature for pluggable database
-){
+  $puppetDownloadMntPoint   = undef,
+)
+{
   if (!( $version in ['11.2','12.1'])) {
     fail('Unrecognized version')
   }
@@ -65,6 +67,12 @@ define oradb::database(
   }
 
   $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin'
+
+  if $puppetDownloadMntPoint == undef {
+    $mountPoint = 'oradb/'
+  } else {
+    $mountPoint = $puppetDownloadMntPoint
+  }
 
   case $::kernel {
     'Linux': {
@@ -113,7 +121,7 @@ define oradb::database(
     $templatename = "${downloadDir}/${template}_${sanitized_title}.dbt"
     file { $templatename:
       ensure  => present,
-      content => template("oradb/${template}.dbt.erb"),
+      content => template("${mountPoint}/${template}.dbt.erb"),
       mode    => '0775',
       owner   => $user,
       group   => $group,
@@ -152,5 +160,4 @@ define oradb::database(
       logoutput   => true,
     }
   }
-
 }

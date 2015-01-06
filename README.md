@@ -460,9 +460,9 @@ you can also use a comma separated string for initParams
 
 or based on your own template
 
-Add your template to the template dir of the oradb module, the template must be have the following extension dbt.erb like dbtemplate_12.1.dbt.erb
-Click here for an [12.1 db instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_12.1.dbt.erb)
-Click here for an [11.2 db asm instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_11gR2_asm.dbt.erb)
+The template must be have the following extension dbt.erb like dbtemplate_12.1.dbt.erb, use puppetDownloadMntPoint parameter for the template location or add your template to the template dir of the oradb module
+- Click here for an [12.1 db instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_12.1.dbt.erb)
+- Click here for an [11.2 db asm instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_11gR2_asm.dbt.erb)
 
 
     oradb::database{ 'testDb_Create':
@@ -471,7 +471,7 @@ Click here for an [11.2 db asm instance template example](https://github.com/bie
       version                 => '12.1',
       user                    => 'oracle',
       group                   => 'dba',
-      template                => 'dbtemplate_12.1', #  this will use dbtemplate_12.1.dbt.erb example template
+      template                => 'dbtemplate_12.1', # or dbtemplate_11gR2_asm, this will use dbtemplate_12.1.dbt.erb example template
       downloadDir             => '/install',
       action                  => 'create',
       dbName                  => 'test',
@@ -487,6 +487,12 @@ Click here for an [11.2 db asm instance template example](https://github.com/bie
       memoryTotal             => "800",
       require                 => Oradb::Listener['start listener'],
     }
+
+or your own template on your own location
+
+      template                => 'my_dbtemplate_11gR2_asm',
+      puppetDownloadMntPoint  => '/vagrant', # 'oradb' etc
+
 
 12c container and pluggable databases
 

@@ -2,6 +2,7 @@
 
 ## 1.0.27
 - solaris fix for database.pp and opatch auto
+- puppetDownloadMntPoint parameter for database.pp which can be used for own db template
 
 ## 1.0.26
 - Removed createUser functionality in installdb & client, Puppet should do it instead of oradb module
