@@ -464,6 +464,7 @@ The template must be have the following extension dbt.erb like dbtemplate_12.1.d
 - Click here for an [12.1 db instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_12.1.dbt.erb)
 - Click here for an [11.2 db asm instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_11gR2_asm.dbt.erb)
 
+with a template of the oradb module
 
     oradb::database{ 'testDb_Create':
       oracleBase              => '/oracle',
