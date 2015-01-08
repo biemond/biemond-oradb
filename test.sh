@@ -24,3 +24,12 @@ bundle exec rake syntax
 bundle exec rake lint
 bundle exec rake ci:setup:rspec spec
 #bundle exec rake spec
+
+# Release the Puppet module, doing a clean, build, tag, push, bump_commit
+rake module:clean
+rake build
+
+rake module:push
+rake module:tag
+rake module:bump_commit  # Bump version and git commit
+

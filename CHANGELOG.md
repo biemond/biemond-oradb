@@ -1,5 +1,7 @@
 # Version updates
 
+## 1.0.28
+
 ## 1.0.27
 - solaris fix for database.pp and opatch auto
 - puppetDownloadMntPoint parameter for database.pp which can be used for own db template
