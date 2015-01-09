@@ -405,22 +405,30 @@ Oracle net
 
 Listener
 
-    oradb::listener{'stop listener':
-      oracleBase   => '/oracle',
-      oracleHome   => '/oracle/product/11.2/db',
-      user         => 'oracle',
-      group        => 'dba',
-      action       => 'stop',
-      require      => Oradb::Net['config net8'],
+    db_listener{ 'startlistener':
+      ensure          => 'running',  # running|start|abort|stop
+      oracle_base_dir => '/oracle',
+      oracle_home_dir => '/oracle/product/11.2/db',
+      os_user         => 'oracle',
     }
 
+    # subscribe to changes
+    db_listener{ 'startlistener':
+      ensure          => 'running',  # running|start|abort|stop
+      oracle_base_dir => '/oracle',
+      oracle_home_dir => '/oracle/product/11.2/db',
+      os_user         => 'oracle',
+      refreshonly     => true,
+      subscribe       => XXXXX,
+    }
+
+    # the old way which also calls db_listener type
     oradb::listener{'start listener':
+      action       => 'start',  # running|start|abort|stop
       oracleBase   => '/oracle',
       oracleHome   => '/oracle/product/11.2/db',
       user         => 'oracle',
       group        => 'dba',
-      action       => 'start',
-      require      => Oradb::Listener['stop listener'],
     }
 
 Database instance
@@ -794,16 +802,16 @@ Tnsnames.ora
       }
 
       oradb::opatchupgrade{'112000_opatch_upgrade_asm':
-          oracleHome             => hiera('grid_home_dir'),
-          patchFile              => 'p6880880_112000_Linux-x86-64.zip',
-          csiNumber              => undef,
-          supportId              => undef,
-          opversion              => '11.2.0.3.6',
-          user                   => hiera('grid_os_user'),
-          group                  => 'oinstall',
-          downloadDir            => hiera('oracle_download_dir'),
-          puppetDownloadMntPoint => hiera('oracle_source'),
-          require                => Oradb::Installasm['db_linux-x64'],
+        oracleHome             => hiera('grid_home_dir'),
+        patchFile              => 'p6880880_112000_Linux-x86-64.zip',
+        csiNumber              => undef,
+        supportId              => undef,
+        opversion              => '11.2.0.3.6',
+        user                   => hiera('grid_os_user'),
+        group                  => 'oinstall',
+        downloadDir            => hiera('oracle_download_dir'),
+        puppetDownloadMntPoint => hiera('oracle_source'),
+        require                => Oradb::Installasm['db_linux-x64'],
       }
 
       oradb::opatch{'19791420_grid_patch':
@@ -955,8 +963,6 @@ Tnsnames.ora
         recoveryAreaDestination => 'DATA',
         require                 => Oradb::Opatch['19791420_db_patch_2'],
       }
-
-
 
 ## Oracle Database Client
 

@@ -1,6 +1,8 @@
 # Version updates
 
 ## 1.0.28
+- fixed database install rsp 12.1.0.2
+- db_listener custom puppet type/provider, listener.pp calls this type
 
 ## 1.0.27
 - solaris fix for database.pp and opatch auto
