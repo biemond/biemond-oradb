@@ -58,6 +58,7 @@ In combination with the [ora_rac](https://forge.puppetlabs.com/hajee/ora_rac) mo
 - db_control, start stop or a restart a database instance also used by dbactions manifest.pp
 - db_opatch, used by the opatch.pp manifest
 - db_rcu, used by the rcu.pp manifest
+- db_listener, start stop or a restart the oracle listener ( supports refreshonly )
 
 
 In combination with the [oracle](http://forge.puppetlabs.com/hajee/oracle) module of Bert Hajee (http://forge.puppetlabs.com/hajee/oracle) you can also create
