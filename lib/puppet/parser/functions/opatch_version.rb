@@ -45,7 +45,7 @@ begin
     Puppet::Util::Log.create(
       :level   => :info,
       :message => msg,
-      :source  => 'oracle_exists'
+      :source  => 'opatch_version'
     )
   end
 
