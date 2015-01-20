@@ -113,7 +113,6 @@ define oradb::database(
       owner   => $user,
       group   => $group,
       before  => Exec["oracle database ${title}"],
-      require => File[$downloadDir],
     }
   }
 
@@ -126,7 +125,6 @@ define oradb::database(
       owner   => $user,
       group   => $group,
       before  => Exec["oracle database ${title}"],
-      require => File[$downloadDir],
     }
   }
 

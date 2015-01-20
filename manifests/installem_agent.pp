@@ -50,12 +50,13 @@ define oradb::installem_agent(
   }
 
   # setup oracle base with the right permissions
-  oradb::utils::dbstructure{"oracle em agent structure ${version}":
-    oracle_base_home_dir => $oracle_base_dir,
-    ora_inventory_dir    => $oraInventory,
-    os_user              => $user,
-    os_group_install     => $group,
-    download_dir         => $download_dir,
+  db_directory_structure{"oracle em agent structure ${version}":
+    ensure            => present,
+    oracle_base_dir   => $oracle_base_dir,
+    ora_inventory_dir => $oraInventory,
+    download_dir      => $download_dir,
+    os_user           => $user,
+    os_group          => $group,
   }
 
   if ( $continue ) {
@@ -92,7 +93,8 @@ define oradb::installem_agent(
         path      => $execPath,
         user      => $user,
         group     => $group,
-        require   => Package['curl'],
+        require   => [Package['curl'],
+                      Db_directory_structure["oracle em agent structure ${version}"],],
       }
 
       exec { "chmod ${title}":
@@ -111,6 +113,7 @@ define oradb::installem_agent(
         mode    => '0755',
         owner   => $user,
         group   => $group,
+        require => Db_directory_structure["oracle em agent structure ${version}"],
       }
 
       $command = "${download_dir}/AgentPull.sh LOGIN_USER=${sysman_user} LOGIN_PASSWORD=${sysman_password} PLATFORM=\"${install_platform}\" VERSION=${install_version} AGENT_BASE_DIR=${agent_base_dir} AGENT_REGISTRATION_PASSWORD=${agent_registration_password} RSPFILE_LOC=${download_dir}/em_agent.properties"
@@ -125,7 +128,7 @@ define oradb::installem_agent(
         require   => [Exec["agentPull ${title}"],
                       Exec["chmod ${title}"],
                       File["${download_dir}/em_agent.properties"],
-                      Oradb::Utils::Dbstructure["oracle em agent structure ${version}"],
+                      Db_directory_structure["oracle em agent structure ${version}"],
                       Oradb::Utils::Dborainst["em agent orainst ${version}"],],
       }
 
@@ -154,7 +157,7 @@ define oradb::installem_agent(
         path      => $execPath,
         user      => $user,
         group     => $group,
-        require   => [Oradb::Utils::Dbstructure["oracle em agent structure ${version}"],
+        require   => [Db_directory_structure["oracle em agent structure ${version}"],
                       Oradb::Utils::Dborainst["em agent orainst ${version}"],],
       }
 
@@ -172,7 +175,7 @@ define oradb::installem_agent(
         user      => $user,
         group     => $group,
         require   => [Exec["extract ${source} ${title}"],
-                      Oradb::Utils::Dbstructure["oracle em agent structure ${version}"],
+                      Db_directory_structure["oracle em agent structure ${version}"],
                       Oradb::Utils::Dborainst["em agent orainst ${version}"],],
       }
 

@@ -25,11 +25,13 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb utils structure" do
       it do
-        should contain_oradb__utils__dbstructure("oracle structure 12.1.0.1").with({
-              'oracle_base_home_dir'  => '/oracle',
+        should contain_db_directory_structure("oracle structure 12.1.0.1").with({
+              'ensure'                => 'present',
+              'oracle_base_dir'       => '/oracle',
               'ora_inventory_dir'     => '/oracle/oraInventory',
               'os_user'               => 'oracle',
-              'os_group_install'      => 'oinstall',
+              'os_group'              => 'oinstall',
+              'download_dir'          => '/install',
            })
       end
     end
@@ -53,7 +55,7 @@ describe 'oradb::installdb', :type => :define do
       it {
            should contain_file("/install/linuxamd64_12c_database_1of2.zip").with({
              'source'  => '/software/linuxamd64_12c_database_1of2.zip',
-           }).that_comes_before('Exec[extract /install/linuxamd64_12c_database_1of2.zip]').that_requires('Oradb::Utils::Dbstructure[oracle structure 12.1.0.1]')
+           }).that_comes_before('Exec[extract /install/linuxamd64_12c_database_1of2.zip]').that_requires('Db_directory_structure[oracle structure 12.1.0.1]')
          }
     end
 
@@ -61,7 +63,7 @@ describe 'oradb::installdb', :type => :define do
       it {
            should contain_exec("extract /install/linuxamd64_12c_database_1of2.zip").with({
              'command'  => 'unzip -o /install/linuxamd64_12c_database_1of2.zip -d /install/linuxamd64_12c_database',
-           }).that_requires('Oradb::Utils::Dbstructure[oracle structure 12.1.0.1]')
+           }).that_requires('Db_directory_structure[oracle structure 12.1.0.1]')
          }
     end
 
@@ -106,7 +108,7 @@ describe 'oradb::installdb', :type => :define do
         should contain_file("/home/oracle/.bash_profile").with({
              'owner'   => 'oracle',
              'group'   => 'dba',
-           }).that_requires('Oradb::Utils::Dbstructure[oracle structure 12.1.0.1]')
+           })
       end
     end
 
@@ -144,11 +146,13 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb utils structure" do
       it do
-        should contain_oradb__utils__dbstructure("oracle structure 11.2.0.4").with({
-              'oracle_base_home_dir'  => '/oracle',
+        should contain_db_directory_structure("oracle structure 11.2.0.4").with({
+              'ensure'                => 'present',
+              'oracle_base_dir'       => '/oracle',
               'ora_inventory_dir'     => '/oracle/oraInventory',
               'os_user'               => 'oracle',
-              'os_group_install'      => 'oinstall',
+              'os_group'              => 'oinstall',
+              'download_dir'          => '/install',
            })
       end
     end
@@ -172,7 +176,7 @@ describe 'oradb::installdb', :type => :define do
       it {
            should contain_exec("extract /install/p13390677_112040_Linux-x86-64_1of7.zip").with({
              'command'  => 'unzip -o /software/p13390677_112040_Linux-x86-64_1of7.zip -d /install/p13390677_112040_Linux-x86-64',
-           }).that_requires('Oradb::Utils::Dbstructure[oracle structure 11.2.0.4]')
+           }).that_requires('Db_directory_structure[oracle structure 11.2.0.4]')
          }
     end
 
@@ -209,7 +213,7 @@ describe 'oradb::installdb', :type => :define do
         should contain_file("/home/oracle/.bash_profile").with({
              'owner'   => 'oracle',
              'group'   => 'dba',
-           }).that_requires('Oradb::Utils::Dbstructure[oracle structure 11.2.0.4]')
+           })
       end
     end
 
@@ -245,13 +249,16 @@ describe 'oradb::installdb', :type => :define do
                    :kernel          => 'Linux',
                    :osfamily        => 'RedHat' }}
 
+
     describe "oradb utils structure" do
       it do
-        should contain_oradb__utils__dbstructure("oracle structure 11.2.0.3").with({
-              'oracle_base_home_dir'  => '/oracle',
+        should contain_db_directory_structure("oracle structure 11.2.0.3").with({
+              'ensure'                => 'present',
+              'oracle_base_dir'       => '/oracle',
               'ora_inventory_dir'     => '/oracle/oraInventory',
               'os_user'               => 'oracle',
-              'os_group_install'      => 'oinstall',
+              'os_group'              => 'oinstall',
+              'download_dir'          => '/mnt',
            })
       end
     end
@@ -296,7 +303,7 @@ describe 'oradb::installdb', :type => :define do
         should contain_file("/home/oracle/.bash_profile").with({
              'owner'   => 'oracle',
              'group'   => 'dba',
-           }).that_requires('Oradb::Utils::Dbstructure[oracle structure 11.2.0.3]')
+           })
       end
     end
 

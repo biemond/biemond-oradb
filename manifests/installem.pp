@@ -56,12 +56,13 @@ define oradb::installem(
     $oraInventory = "${ora_inventory_dir}/oraInventory"
   }
 
-  oradb::utils::dbstructure{"oracle em structure ${version}":
-    oracle_base_home_dir => $oracle_base_dir,
-    ora_inventory_dir    => $oraInventory,
-    os_user              => $user,
-    os_group_install     => $group,
-    download_dir         => $download_dir,
+  db_directory_structure{"oracle em structure ${version}":
+    ensure            => present,
+    oracle_base_dir   => $oracle_base_dir,
+    ora_inventory_dir => $oraInventory,
+    download_dir      => $download_dir,
+    os_user           => $user,
+    os_group          => $group,
   }
 
   if ( $continue ) {
@@ -92,7 +93,7 @@ define oradb::installem(
           mode    => '0775',
           owner   => $user,
           group   => $group,
-          require => Oradb::Utils::Dbstructure["oracle em structure ${version}"],
+          require => Db_directory_structure["oracle em structure ${version}"],
           before  => Exec["extract ${download_dir}/${file1}"],
         }
         # db file 2 installer zip
@@ -128,7 +129,7 @@ define oradb::installem(
         path      => $execPath,
         user      => $user,
         group     => $group,
-        require   => Oradb::Utils::Dbstructure["oracle em structure ${version}"],
+        require   => Db_directory_structure["oracle em structure ${version}"],
         # before    => Exec["install oracle em ${title}"],
       }
       exec { "extract ${download_dir}/${file2}":
@@ -166,7 +167,8 @@ define oradb::installem(
         mode    => '0775',
         owner   => $user,
         group   => $group,
-        require => Oradb::Utils::Dborainst["em orainst ${version}"],
+        require => [Oradb::Utils::Dborainst["em orainst ${version}"],
+                    Db_directory_structure["oracle em structure ${version}"],],
       }
     }
     if ! defined(File["${download_dir}/em_install_static_${version}.ini"]) {
@@ -176,7 +178,8 @@ define oradb::installem(
         mode    => '0775',
         owner   => $user,
         group   => $group,
-        require => Oradb::Utils::Dborainst["em orainst ${version}"],
+        require => [Oradb::Utils::Dborainst["em orainst ${version}"],
+                    Db_directory_structure["oracle em structure ${version}"],],
       }
     }
 

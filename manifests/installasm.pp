@@ -85,12 +85,13 @@ define oradb::installasm(
     $oraInventory = "${oraInventoryDir}/oraInventory"
   }
 
-  oradb::utils::dbstructure{"grid structure ${version}":
-    oracle_base_home_dir => $gridBase,
-    ora_inventory_dir    => $oraInventory,
-    os_user              => $user,
-    os_group_install     => $group_install,
-    download_dir         => $downloadDir,
+  db_directory_structure{"grid structure ${version}":
+    ensure            => present,
+    oracle_base_dir   => $gridBase,
+    ora_inventory_dir => $oraInventory,
+    download_dir      => $downloadDir,
+    os_user           => $user,
+    os_group          => $group_install,
   }
 
   if ( $continue ) {
@@ -122,7 +123,7 @@ define oradb::installasm(
           mode    => '0775',
           owner   => $user,
           group   => $group,
-          require => Oradb::Utils::Dbstructure["grid structure ${version}"],
+          require => Db_directory_structure["grid structure ${version}"],
           before  => Exec["extract ${downloadDir}/${file1}"],
         }
 
@@ -151,7 +152,7 @@ define oradb::installasm(
         user      => $user,
         group     => $group,
         creates   => "${downloadDir}/${file_without_ext}",
-        require   => Oradb::Utils::Dbstructure["grid structure ${version}"],
+        require   => Db_directory_structure["grid structure ${version}"],
         before    => Exec["install oracle grid ${title}"],
       }
       if ( $version == '12.1.0.1' ) {
@@ -180,7 +181,8 @@ define oradb::installasm(
         mode    => '0775',
         owner   => $user,
         group   => $group,
-        require => Oradb::Utils::Dborainst["grid orainst ${version}"],
+        require => [Oradb::Utils::Dborainst["grid orainst ${version}"],
+                    Db_directory_structure["grid structure ${version}"],],
       }
     }
 
@@ -207,7 +209,6 @@ define oradb::installasm(
         mode    => '0775',
         owner   => $user,
         group   => $group,
-        require => Oradb::Utils::Dbstructure["grid structure ${version}"],
       }
     }
 
@@ -271,7 +272,8 @@ define oradb::installasm(
         path      => $execPath,
         cwd       => $gridBase,
         logoutput => true,
-        require   => [Exec["run root.sh grid script ${title}"],File[$gridHome],],
+        require   => [Exec["run root.sh grid script ${title}"],
+                      File[$gridHome],],
       }
     } else {
       file { "${downloadDir}/cfgrsp.properties":
@@ -280,7 +282,8 @@ define oradb::installasm(
         mode    => '0600',
         owner   => $user,
         group   => $group,
-        require => [Exec["run root.sh grid script ${title}"],File[$gridHome],],
+        require => [Exec["run root.sh grid script ${title}"],
+                    File[$gridHome],],
       }
 
       exec { "run configToolAllCommands grid tool ${title}":

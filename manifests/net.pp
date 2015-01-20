@@ -21,7 +21,6 @@ define oradb::net(
     mode    => '0775',
     owner   => $user,
     group   => $group,
-    require => File[$downloadDir],
   }
 
   exec { "install oracle net ${title}":

@@ -53,13 +53,12 @@ define oradb::opatchupgrade(
 
     if ! defined(File["${downloadDir}/${patchFile}"]) {
       file {"${downloadDir}/${patchFile}":
-        ensure  => present,
-        path    => "${downloadDir}/${patchFile}",
-        source  => "${mountDir}/${patchFile}",
-        mode    => '0775',
-        owner   => $user,
-        group   => $group,
-        require => File[$downloadDir],
+        ensure => present,
+        path   => "${downloadDir}/${patchFile}",
+        source => "${mountDir}/${patchFile}",
+        mode   => '0775',
+        owner  => $user,
+        group  => $group,
       }
     }
 
@@ -72,22 +71,22 @@ define oradb::opatchupgrade(
         } ->
         exec { "extract opatch ${title} ${patchFile}":
           command   => "unzip -o ${downloadDir}/${patchFile} -d ${oracleHome}",
-          require   => File["${downloadDir}/${patchFile}"],
           path      => $execPath,
           user      => $user,
           group     => $group,
           logoutput => false,
+          require   => File["${downloadDir}/${patchFile}"],
         }
 
         if ( $csiNumber != undef and supportId != undef ) {
           exec { "exec emocmrsp ${title} ${opversion}":
             cwd       => $patchDir,
             command   => "${patchDir}/ocm/bin/emocmrsp -repeater NONE ${csiNumber} ${supportId}",
-            require   => Exec["extract opatch ${patchFile}"],
             path      => $execPath,
             user      => $user,
             group     => $group,
             logoutput => true,
+            require   => Exec["extract opatch ${patchFile}"],
           }
         } else {
 
@@ -103,18 +102,17 @@ define oradb::opatchupgrade(
             mode    => '0775',
             owner   => $user,
             group   => $group,
-            require => File[$downloadDir],
           }
 
           exec { "ksh ${downloadDir}/opatch_upgrade_${title}_${opversion}.ksh":
             cwd       => $patchDir,
-            require   => [File["${downloadDir}/opatch_upgrade_${title}_${opversion}.ksh"],
-                          Exec["extract opatch ${title} ${patchFile}"],
-                          Package['expect'],],
             path      => $execPath,
             user      => $user,
             group     => $group,
             logoutput => true,
+            require   => [File["${downloadDir}/opatch_upgrade_${title}_${opversion}.ksh"],
+                          Exec["extract opatch ${title} ${patchFile}"],
+                          Package['expect'],],
           }
         }
 

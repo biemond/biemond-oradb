@@ -65,7 +65,6 @@ define oradb::rcu(
       mode    => '0775',
       owner   => $user,
       group   => $group,
-      require => File[$downloadDir],
     }
   }
 

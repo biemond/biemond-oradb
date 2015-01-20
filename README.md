@@ -8,7 +8,6 @@ created by Edwin Biemond
 Dependency with
 - puppetlabs/concat >= 1.0.0
 - puppetlabs/stdlib >= 3.2.0
-- AlexCline/dirtree >= 0.2.1
 
 Should work on Docker, for Solaris and on all Linux version like RedHat, CentOS, Ubuntu, Debian, Suse SLES or OracleLinux
 - Docker image of Oracle Database 12.1 SE [Docker Oracle Database 12.1.0.1](https://github.com/biemond/docker-database-puppet)

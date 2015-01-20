@@ -56,12 +56,13 @@ define oradb::goldengate(
   if ( $version == '12.1.2' ) {
     $oraInventory    = "${oracleBase}/oraInventory"
 
-    oradb::utils::dbstructure{"oracle goldengate structure ${version}":
-      oracle_base_home_dir => $oracleBase,
-      ora_inventory_dir    => $oraInventory,
-      os_user              => $user,
-      os_group_install     => $group_install,
-      download_dir         => $downloadDir,
+    db_directory_structure{"oracle goldengate structure ${version}":
+      ensure            => present,
+      oracle_base_dir   => $oracleBase,
+      ora_inventory_dir => $oraInventory,
+      download_dir      => $downloadDir,
+      os_user           => $user,
+      os_group          => $group_install,
     }
   }
 
@@ -74,7 +75,7 @@ define oradb::goldengate(
       source  => "${puppetDownloadMntPoint}/${file}",
       owner   => $user,
       group   => $group,
-      require => Oradb::Utils::Dbstructure["oracle goldengate structure ${version}"],
+      require => Db_directory_structure["oracle goldengate structure ${version}"],
     }
 
     exec { 'extract gg':
@@ -92,7 +93,7 @@ define oradb::goldengate(
       content => template("oradb/oggcore_${version}.rsp.erb"),
       owner   => $user,
       group   => $group,
-      require => Oradb::Utils::Dbstructure["oracle goldengate structure ${version}"],
+      require => Db_directory_structure["oracle goldengate structure ${version}"],
     }
 
     oradb::utils::dborainst{"ggate orainst ${version}":
@@ -132,10 +133,9 @@ define oradb::goldengate(
 
     #version is different, use the old way
     file { "${downloadDir}/${file}":
-      source  => "${puppetDownloadMntPoint}/${file}",
-      owner   => $user,
-      group   => $group,
-      require => File[$downloadDir],
+      source => "${puppetDownloadMntPoint}/${file}",
+      owner  => $user,
+      group  => $group,
     }
 
     exec { "extract gg ${title}":

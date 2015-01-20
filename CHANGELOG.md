@@ -1,5 +1,8 @@
 # Version updates
 
+## 1.0.29
+- Custom type for db/asm/client oracle directory structure instead of dirtree and some manifests
+
 ## 1.0.28
 - fixed database install rsp 12.1.0.2
 - db_listener custom puppet type/provider, listener.pp calls this type

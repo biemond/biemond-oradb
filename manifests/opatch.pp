@@ -57,12 +57,11 @@ define oradb::opatch(
       # the patch used by the opatch
       if ! defined(File["${downloadDir}/${patchFile}"]) {
         file { "${downloadDir}/${patchFile}":
-          ensure  => present,
-          source  => "${mountPoint}/${patchFile}",
-          mode    => '0775',
-          owner   => $user,
-          group   => $group,
-          require => File[$downloadDir],
+          ensure => present,
+          source => "${mountPoint}/${patchFile}",
+          mode   => '0775',
+          owner  => $user,
+          group  => $group,
         }
       }
     }
