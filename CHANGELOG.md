@@ -1,5 +1,8 @@
 # Version updates
 
+## 1.0.30
+- Removed Oracle Home under base check for ASM installations, in CRS_CONFIG or CRS_SWONLY this is not right
+
 ## 1.0.29
 - Custom type for oracle db/asm/client/em directory structure instead of using dirtree and some oradb manifests
 

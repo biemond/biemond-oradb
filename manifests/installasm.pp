@@ -60,11 +60,6 @@ define oradb::installasm(
   if ( $gridBase == undef or is_string($gridBase) == false) {fail('You must specify an gridBase') }
   if ( $gridHome == undef or is_string($gridHome) == false) {fail('You must specify an gridHome') }
 
-  if ( $gridBase in $gridHome == false ){
-    fail('gridHome folder should be under the gridBase folder')
-  }
-
-
   # check if the oracle software already exists
   $found = oracle_exists( $gridHome )
 
