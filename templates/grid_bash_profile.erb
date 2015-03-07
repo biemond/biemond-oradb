@@ -8,7 +8,12 @@ ORACLE_HOME=<%= @gridHome %>
 SQLPLUS_HOME=<%= @gridHome %>
 PATH=/bin:/usr/local/bin:/usr/bin:/bin:<%= @gridHome %>/bin
 
+<% if @gridType  == 'HA_CONFIG' %>
 export ORACLE_SID=+ASM
+<% else %>
+export ORACLE_SID=+ASM1
+<% end %>
+
 export ORACLE_UNQNAME=+ASM
 
 export LD_LIBRARY_PATH
@@ -17,6 +22,6 @@ export ORACLE_HOME
 export SQLPLUS_HOME
 export PATH
 
-export TEMP=/tmp 
+export TEMP=/tmp
 export TMPDIR=/tmp
 umask 022

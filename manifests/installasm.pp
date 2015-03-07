@@ -5,6 +5,7 @@ define oradb::installasm(
   $version                 = undef,
   $file                    = undef,
   $gridType                = 'HA_CONFIG', #CRS_CONFIG|HA_CONFIG|UPGRADE|CRS_SWONLY
+  $stand_alone             = true, # in case of 'CRS_SWONLY' and used as stand alone or in RAC
   $gridBase                = undef,
   $gridHome                = undef,
   $oraInventoryDir         = undef,
@@ -259,7 +260,7 @@ define oradb::installasm(
       }
     }
 
-    if ( $gridType == 'CRS_SWONLY' ) {
+    if ( $gridType == 'CRS_SWONLY' and $stand_alone == true ) {
       exec { 'Configuring Grid Infrastructure for a Stand-Alone Server':
         command   => "${gridHome}/perl/bin/perl -I${gridHome}/perl/lib -I${gridHome}/crs/install ${gridHome}/crs/install/roothas.pl",
         user      => 'root',
