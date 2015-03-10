@@ -260,16 +260,18 @@ define oradb::installasm(
       }
     }
 
-    if ( $gridType == 'CRS_SWONLY' and $stand_alone == true ) {
-      exec { 'Configuring Grid Infrastructure for a Stand-Alone Server':
-        command   => "${gridHome}/perl/bin/perl -I${gridHome}/perl/lib -I${gridHome}/crs/install ${gridHome}/crs/install/roothas.pl",
-        user      => 'root',
-        group     => 'root',
-        path      => $execPath,
-        cwd       => $gridBase,
-        logoutput => true,
-        require   => [Exec["run root.sh grid script ${title}"],
-                      File[$gridHome],],
+    if ( $gridType == 'CRS_SWONLY' ) {
+      if ( $stand_alone == true ) {
+        exec { 'Configuring Grid Infrastructure for a Stand-Alone Server':
+          command   => "${gridHome}/perl/bin/perl -I${gridHome}/perl/lib -I${gridHome}/crs/install ${gridHome}/crs/install/roothas.pl",
+          user      => 'root',
+          group     => 'root',
+          path      => $execPath,
+          cwd       => $gridBase,
+          logoutput => true,
+          require   => [Exec["run root.sh grid script ${title}"],
+                        File[$gridHome],],
+        }
       }
     } else {
       file { "${downloadDir}/cfgrsp.properties":
