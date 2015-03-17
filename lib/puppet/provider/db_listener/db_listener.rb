@@ -5,16 +5,17 @@ Puppet::Type.type(:db_listener).provide(:db_listener) do
   end
 
   def listener_control(action)
-    Puppet.debug "listener action: #{action}"
+#    Puppet.debug "listener action: #{action} #{listener_name}"
 
-    oracleHome = resource[:oracle_home_dir]
-    oracleBase = resource[:oracle_base_dir]
-    user       = resource[:os_user]
+    oracleHome   = resource[:oracle_home_dir]
+    oracleBase   = resource[:oracle_base_dir]
+    user         = resource[:os_user]
+    listenername = resource[:listener_name]
 
     if action == :start
-      listener_action = 'start'
+      listener_action = "start #{listenername}"
     else
-      listener_action = 'stop'
+      listener_action = "stop #{listenername}"
     end
 
     command = "#{oracleHome}/bin/lsnrctl #{listener_action}"
@@ -27,13 +28,15 @@ Puppet::Type.type(:db_listener).provide(:db_listener) do
 
   def listener_status
     oracleHome = resource[:oracle_home_dir]
+    listenername = resource[:listener_name]
 
     kernel = Facter.value(:kernel)
 
     ps_bin = (kernel != 'SunOS' || (kernel == 'SunOS' && Facter.value(:kernelrelease) == '5.11')) ? '/bin/ps' : '/usr/ucb/ps'
     ps_arg = kernel == 'SunOS' ? 'awwx' : '-ef'
 
-    command  = "#{ps_bin} #{ps_arg} | /bin/grep -v grep | /bin/grep '#{oracleHome}/bin/tnslsnr'"
+    #command  = "#{ps_bin} #{ps_arg} | /bin/grep -v grep | /bin/grep '#{oracleHome}/bin/tnslsnr #{listenername}'"
+    command  = "#{ps_bin} #{ps_arg} | /bin/grep -v grep | /bin/grep -w ""#{listenername}"""
 
     Puppet.debug "listener_status #{command}"
     output = `#{command}`
