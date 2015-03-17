@@ -77,7 +77,7 @@ def get_orainst_products(path)
           elsif str.include? 'OraPlaceHolderDummyHome'
             # skip EM agent
           else
-            home = str.gsub("/","_").gsub("\\","_").gsub("c:","_c").gsub("d:","_d").gsub("e:","_e")
+            home = str.gsub('/', '_').gsub("\\", '_').gsub('c:', '_c').gsub('d:', '_d').gsub('e:', '_e')
             opatchver = get_opatch_version(str)
             Facter.add("oradb_inst_opatch#{home}") do
               setcode do

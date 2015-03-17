@@ -1,5 +1,8 @@
 # Version updates
 
+## 1.0.32
+- be able to provide a listener name for starting the oracle listener ( manifest and custom type)
+
 ## 1.0.31
 - installasm, stand alone parameter in combination with $gridType == 'CRS_SWONLY' used as standalone or in RAC
 - installasm, .profile fix for ORACLE_SID in case gridType = HA_CONFIG -> +ASM or in gridType = CRS_CONFIG -> +ASM1

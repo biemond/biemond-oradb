@@ -5,12 +5,12 @@ Puppet::Type.type(:db_listener).provide(:db_listener) do
   end
 
   def listener_control(action)
-#    Puppet.debug "listener action: #{action} #{listener_name}"
-
     oracleHome   = resource[:oracle_home_dir]
     oracleBase   = resource[:oracle_base_dir]
     user         = resource[:os_user]
     listenername = resource[:listener_name]
+
+    Puppet.debug "listener action: #{action} #{listenername}"
 
     if action == :start
       listener_action = "start #{listenername}"
@@ -35,8 +35,8 @@ Puppet::Type.type(:db_listener).provide(:db_listener) do
     ps_bin = (kernel != 'SunOS' || (kernel == 'SunOS' && Facter.value(:kernelrelease) == '5.11')) ? '/bin/ps' : '/usr/ucb/ps'
     ps_arg = kernel == 'SunOS' ? 'awwx' : '-ef'
 
-    #command  = "#{ps_bin} #{ps_arg} | /bin/grep -v grep | /bin/grep '#{oracleHome}/bin/tnslsnr #{listenername}'"
-    command  = "#{ps_bin} #{ps_arg} | /bin/grep -v grep | /bin/grep -w ""#{listenername}"""
+    # command  = "#{ps_bin} #{ps_arg} | /bin/grep -v grep | /bin/grep '#{oracleHome}/bin/tnslsnr #{listenername}'"
+    command  = "#{ps_bin} #{ps_arg} | /bin/grep -v grep | /bin/grep -w -i '#{listenername}'"
 
     Puppet.debug "listener_status #{command}"
     output = `#{command}`

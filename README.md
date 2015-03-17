@@ -410,6 +410,7 @@ Listener
       oracle_base_dir => '/oracle',
       oracle_home_dir => '/oracle/product/11.2/db',
       os_user         => 'oracle',
+      listener_name   => 'listener' # which is the default and optional
     }
 
     # subscribe to changes
@@ -418,6 +419,7 @@ Listener
       oracle_base_dir => '/oracle',
       oracle_home_dir => '/oracle/product/11.2/db',
       os_user         => 'oracle',
+      listener_name   => 'listener' # which is the default and optional
       refreshonly     => true,
       subscribe       => XXXXX,
     }
@@ -429,6 +431,7 @@ Listener
       oracleHome   => '/oracle/product/11.2/db',
       user         => 'oracle',
       group        => 'dba',
+      listenername => 'listener' # which is the default and optional
     }
 
 Database instance
