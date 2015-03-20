@@ -1,5 +1,9 @@
 # Version updates
 
+## 1.0.33
+- Small Suse fix for the autostart service
+- new installdb attribute cleanup_installfile
+
 ## 1.0.32
 - be able to provide a listener name for starting the oracle listener ( manifest and custom type)
 
