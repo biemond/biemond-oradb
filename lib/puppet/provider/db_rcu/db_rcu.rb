@@ -42,7 +42,7 @@ Puppet::Type.type(:db_rcu).provide(:db_rcu) do
     sql = <<-EOS
 set term off echo off pages 0 colsep '|' trimspool on
 spool /tmp/check_rcu_#{prefix}2.txt
-select distinct 'found' from system.schema_version_registry where mrc_name ='#{prefix}';
+select distinct 'found' from system.schema_version_registry where upper(mrc_name) = upper('#{prefix}');
 grant execute on sys.dbms_job to PUBLIC;
 grant execute on sys.dbms_reputil to PUBLIC;
 spool off

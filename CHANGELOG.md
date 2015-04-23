@@ -1,5 +1,9 @@
 # Version updates
 
+## 1.0.34
+- autostart fix so it also works for Oracle Linux 5
+- rcu prefix compare check fix ( Uppercase )
+
 ## 1.0.33
 - Small Suse fix for the autostart service
 - new installdb attribute cleanup_installfile
