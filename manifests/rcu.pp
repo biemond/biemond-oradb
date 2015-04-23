@@ -31,6 +31,7 @@ define oradb::rcu(
   $action                  = 'create',  # delete or create
   $dbServer                = undef,
   $dbService               = undef,
+  $sysUser                 = 'sys',
   $sysPassword             = undef,
   $schemaPrefix            = undef,
   $reposPassword           = undef,
@@ -142,7 +143,7 @@ define oradb::rcu(
   } else {
     $preCommand    = "${downloadDir}/rcu_${version}/rcuHome/bin/rcu -silent"
   }
-  $postCommand     = "-databaseType ORACLE -connectString ${dbServer}:${dbService} -dbUser SYS -dbRole SYSDBA -schemaPrefix ${schemaPrefix} ${components} "
+  $postCommand     = "-databaseType ORACLE -connectString ${dbServer}:${dbService} -dbUser ${sysUser} -dbRole SYSDBA -schemaPrefix ${schemaPrefix} ${components} "
   $passwordCommand = " -f < ${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"
 
   #optional set the Temp tablespace
@@ -165,6 +166,7 @@ define oradb::rcu(
     statement    => $statement,
     os_user      => $user,
     oracle_home  => $oracleHome,
+    sys_user     => $sysUser,
     sys_password => $sysPassword,
     db_server    => $dbServer,
     db_service   => $dbService,
