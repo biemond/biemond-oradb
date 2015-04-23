@@ -31,7 +31,7 @@ class oradb::prepareautostart
         command   => 'chkconfig --add dbora',
         require   => File['/etc/init.d/dbora'],
         user      => 'root',
-        unless    => 'chkconfig | /bin/grep \'dbora\'',
+        unless    => 'chkconfig --list | /bin/grep \'dbora\'',
         path      => $execPath,
         logoutput => true,
       }
