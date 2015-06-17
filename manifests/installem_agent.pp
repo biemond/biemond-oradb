@@ -75,7 +75,7 @@ define oradb::installem_agent(
     if ( $sysman_password == undef or is_string($sysman_password) == false) {fail('You must specify sysman_password') }
     if ( $oracle_base_dir == undef or is_string($oracle_base_dir) == false) {fail('You must specify oracle_base_dir') }
     if ( $agent_registration_password == undef or is_string($agent_registration_password) == false) {fail('You must specify agent_registration_password') }
-    if ( $em_upload_port == undef or is_string($em_upload_port) == false) {fail('You must specify em_upload_port') }
+    if ( $em_upload_port == undef or is_numeric($em_upload_port) == false) {fail('You must specify em_upload_port') }
 
     # chmod +x /tmp/AgentPull.sh
     if ( $install_type  == 'agentPull') {
