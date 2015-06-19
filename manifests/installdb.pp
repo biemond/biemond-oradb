@@ -39,7 +39,7 @@ define oradb::installdb(
   }
 
   if (!( $version in ['11.2.0.1','12.1.0.1','12.1.0.2','11.2.0.3','11.2.0.4'])){
-    fail('Unrecognized database install version, use 11.2.0.1|11.2.0.3|11.2.0.4|12.1.0.1|12.1.0.1')
+    fail('Unrecognized database install version, use 11.2.0.1|11.2.0.3|11.2.0.4|12.1.0.1|12.1.0.2')
   }
 
   if ( !($::kernel in ['Linux','SunOS'])){
