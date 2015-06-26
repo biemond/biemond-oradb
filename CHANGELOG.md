@@ -1,9 +1,13 @@
 # Version updates
 
+## 1.0.35
+- Add support for Grid 12.1.0.2 (installasm)
+
 ## 1.0.34
 - autostart fix so it also works for Oracle Linux 5
 - rcu prefix compare check fix ( Uppercase )
 - RCU fixes for OIM or OAM 11.1.1.2.3
+- installem em_upload_port parameter type fix
 
 ## 1.0.33
 - Small Suse fix for the autostart service
