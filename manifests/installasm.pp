@@ -46,8 +46,8 @@ define oradb::installasm(
     unless $storage_option in ['ASM_STORAGE', 'FILE_SYSTEM_STORAGE'] {fail 'storage_option must be either ASM_STORAGE of FILE_SYSTEM_STORAGE'}
   }
 
-  if (!( $version in ['11.2.0.4','12.1.0.1'] )){
-    fail('Unrecognized database grid install version, use 11.2.0.4 or 12.1.0.1')
+  if (!( $version in ['11.2.0.4','12.1.0.1', '12.1.0.2'] )){
+    fail('Unrecognized database grid install version, use 11.2.0.4, 12.1.0.1 or 12.1.0.2')
   }
 
   if ( !($::kernel in ['Linux','SunOS'])){
@@ -103,7 +103,7 @@ define oradb::installasm(
     if ( $zipExtract ) {
       # In $downloadDir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
 
-      if ( $version == '12.1.0.1') {
+      if versioncmp('12.1.0.1') >= 0 {
         $file1 =  "${file}_1of2.zip"
         $file2 =  "${file}_2of2.zip"
       }
@@ -123,7 +123,7 @@ define oradb::installasm(
           before  => Exec["extract ${downloadDir}/${file1}"],
         }
 
-        if ( $version == '12.1.0.1' ) {
+        if versioncmp('12.1.0.1') >= 0 {
           file { "${downloadDir}/${file2}":
             ensure  => present,
             source  => "${mountPoint}/${file2}",
@@ -151,7 +151,7 @@ define oradb::installasm(
         require   => Db_directory_structure["grid structure ${version}"],
         before    => Exec["install oracle grid ${title}"],
       }
-      if ( $version == '12.1.0.1' ) {
+      if versioncmp('12.1.0.1') >= 0 {
         exec { "extract ${downloadDir}/${file2}":
           command   => "unzip -o ${source}/${file2} -d ${downloadDir}/${file_without_ext}",
           timeout   => 0,
@@ -240,7 +240,7 @@ define oradb::installasm(
       }
 
       if ( $remoteFile == true ){
-        if ( $version == '12.1.0.1') {
+        if versioncmp('12.1.0.1') >= 0 {
           exec { "remove oracle asm file2 ${file2} ${title}":
             command => "rm -rf ${downloadDir}/${file2}",
             user    => 'root',
