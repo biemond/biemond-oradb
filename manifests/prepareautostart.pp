@@ -2,8 +2,10 @@
 #
 #  prepare autostart of the nodemanager for linux
 #
-class oradb::prepareautostart
-{
+class oradb::prepareautostart(
+  $oracleHome  = undef,
+  $user        = 'oracle'
+){
   $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
 
   case $::kernel {
