@@ -7,7 +7,11 @@ define oradb::autostartdatabase(
   $dbName      = undef,
   $user        = 'oracle',
 ){
-  include oradb::prepareautostart
+
+  class { 'oradb::prepareautostart':
+    oracleHome => $oracleHome,
+    user       => $user,
+  }
 
   $execPath    = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
 
