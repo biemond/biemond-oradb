@@ -10,6 +10,7 @@ define oradb::tnsnames(
   $failover           = 'ON',
   $connectServiceName = undef,
   $connectServer      = 'DEDICATED',
+  $entry_type         = 'tnsname',
 )
 {
   if ! defined(Concat["${oracleHome}/network/admin/tnsnames.ora"]) {
@@ -22,8 +23,14 @@ define oradb::tnsnames(
     }
   }
 
+  case $entry_type {
+    'tnsname'  : { $template_path = 'oradb/tnsnames.erb' }
+    'listener' : { $template_path = 'oradb/listener.erb' }
+    default    : { fail("${entry_type} is not a supported entry_type") }
+  }
+
   concat::fragment { $title:
     target  => "${oracleHome}/network/admin/tnsnames.ora",
-    content => template('oradb/tnsnames.erb'),
+    content => template($template_path),
   }
 }

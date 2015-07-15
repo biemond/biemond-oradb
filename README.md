@@ -33,6 +33,7 @@ Should work for Puppet 2.7 & 3.0
 - Oracle Database Net configuration
 - Oracle Database Listener
 - Tnsnames entry
+- Listener entry in tnsnames.ora
 - Oracle ASM
 - Oracle RAC
 - OPatch upgrade
@@ -648,6 +649,15 @@ Tnsnames.ora
       server             => { myserver => { host => soadb.example.nl, port => '1525', protocol => 'TCP' }, { host => soadb2.example.nl, port => '1526', protocol => 'TCP' }},
       connectServiceName => 'soarepos.example.nl',
       connectServer      => 'DEDICATED',
+      require            => Oradb::Dbactions['start oraDb'],
+    }
+
+    oradb::tnsnames{'testlistener':
+      entry_type         => 'listener'
+      oracleHome         => '/oracle/product/11.2/db',
+      user               => 'oracle',
+      group              => 'dba',
+      server             => { myserver => { host => soadb.example.nl, port => '1521', protocol => 'TCP' }},
       require            => Oradb::Dbactions['start oraDb'],
     }
 
