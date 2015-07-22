@@ -2,6 +2,8 @@
 
 ## 1.0.35
 - Add support for Grid 12.1.0.2 (installasm)
+- Fix unsetted vars in dbora template
+- Added ability to put listener entries in tnsnames.ora
 
 ## 1.0.34
 - autostart fix so it also works for Oracle Linux 5
