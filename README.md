@@ -653,11 +653,11 @@ Tnsnames.ora
     }
 
     oradb::tnsnames{'testlistener':
-      entry_type         => 'listener'
+      entry_type         => 'listener',
       oracleHome         => '/oracle/product/11.2/db',
       user               => 'oracle',
       group              => 'dba',
-      server             => { myserver => { host => soadb.example.nl, port => '1521', protocol => 'TCP' }},
+      server             => { myserver => { host => 'soadb.example.nl', port => '1521', protocol => 'TCP' }},
       require            => Oradb::Dbactions['start oraDb'],
     }
 
