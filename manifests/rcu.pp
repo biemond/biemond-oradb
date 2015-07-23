@@ -154,7 +154,7 @@ define oradb::rcu(
     os_user      => $user,
     oracle_home  => $oracle_home,
     sys_user     => $sys_user,
-    SYSPASSWORD => $sys_password,
+    sys_password => $sys_password,
     db_server    => $db_server,
     db_service   => $db_service,
     require      => [Exec["extract ${rcu_file}"],
