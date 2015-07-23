@@ -27,7 +27,6 @@ module Puppet
           :absent
         end
       end
-
     end
 
     newparam(:oracle_base_dir) do
@@ -78,6 +77,5 @@ module Puppet
 
       defaultto 'oinstall'
     end
-
   end
 end

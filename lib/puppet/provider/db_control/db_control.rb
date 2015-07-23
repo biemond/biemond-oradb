@@ -1,5 +1,4 @@
 Puppet::Type.type(:db_control).provide(:db_control) do
-
   def self.instances
     []
   end

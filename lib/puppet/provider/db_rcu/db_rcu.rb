@@ -1,6 +1,4 @@
-
 Puppet::Type.type(:db_rcu).provide(:db_rcu) do
-
   def self.instances
     []
   end
@@ -59,7 +57,7 @@ EOS
     raise ArgumentError, "Error executing puppet code, #{output}" if $? != 0
 
     if FileTest.exists?("/tmp/check_rcu_#{prefix}2.txt")
-      File.open("/tmp/check_rcu_#{prefix}2.txt") do | outputfile|
+      File.open("/tmp/check_rcu_#{prefix}2.txt") do |outputfile|
         outputfile.each_line do |li|
           unless li.nil?
             Puppet.debug "line #{li}"

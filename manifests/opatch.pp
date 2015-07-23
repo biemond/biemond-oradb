@@ -3,33 +3,20 @@
 # installs oracle patches for Oracle products
 #
 #
-# === Examples
-#  oradb::opatch{'14727310_db_patch':
-#    oracleProductHome => '/oracle/product/11.2/db',
-#    patchId           => '14727310',
-#    patchFile         => 'p14727310_112030_Linux-x86-64.zip',
-#    user              => 'oracle',
-#    group             => 'dba',
-#    downloadDir       => '/install',
-#    ocmrf             => 'true',
-#    require           => Class['oradb::installdb'],
-#  }
-#
-#
 define oradb::opatch(
-  $ensure                  = 'present',  #present|absent
-  $oracleProductHome       = undef,
-  $patchId                 = undef,
-  $patchFile               = undef,
-  $clusterWare             = false, # opatch auto or opatch apply
-  $bundleSubPatchId        = undef,
-  $bundleSubFolder         = undef,
-  $user                    = 'oracle',
-  $group                   = 'dba',
-  $downloadDir             = '/install',
-  $ocmrf                   = false,
-  $puppetDownloadMntPoint  = undef,
-  $remoteFile              = true,
+  $ensure                    = 'present',  #present|absent
+  $oracle_product_home       = undef,
+  $patch_id                  = undef,
+  $patch_file                = undef,
+  $clusterware               = false, # opatch auto or opatch apply
+  $bundle_sub_patch_id       = undef,
+  $bundle_sub_folder         = undef,
+  $user                      = 'oracle',
+  $group                     = 'dba',
+  $download_dir              = '/install',
+  $ocmrf                     = false,
+  $puppet_download_mnt_point = undef,
+  $remote_file               = true,
 )
 {
   $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
@@ -46,19 +33,19 @@ define oradb::opatch(
     }
   }
 
-  if $puppetDownloadMntPoint == undef {
+  if $puppet_download_mnt_point == undef {
     $mountPoint = 'puppet:///modules/oradb/'
   } else {
-    $mountPoint =  $puppetDownloadMntPoint
+    $mountPoint =  $puppet_download_mnt_point
   }
 
   if $ensure == 'present' {
-    if $remoteFile == true {
+    if $remote_file == true {
       # the patch used by the opatch
-      if ! defined(File["${downloadDir}/${patchFile}"]) {
-        file { "${downloadDir}/${patchFile}":
+      if ! defined(File["${download_dir}/${patch_file}"]) {
+        file { "${download_dir}/${patch_file}":
           ensure => present,
-          source => "${mountPoint}/${patchFile}",
+          source => "${mountPoint}/${patch_file}",
           mode   => '0775',
           owner  => $user,
           group  => $group,
@@ -70,62 +57,62 @@ define oradb::opatch(
   case $::kernel {
     'Linux', 'SunOS': {
       if $ensure == 'present' {
-        if $remoteFile == true {
-          exec { "extract opatch ${patchFile} ${title}":
-            command   => "unzip -n ${downloadDir}/${patchFile} -d ${downloadDir}",
-            require   => File["${downloadDir}/${patchFile}"],
-            creates   => "${downloadDir}/${patchId}",
+        if $remote_file == true {
+          exec { "extract opatch ${patch_file} ${title}":
+            command   => "unzip -n ${download_dir}/${patch_file} -d ${download_dir}",
+            require   => File["${download_dir}/${patch_file}"],
+            creates   => "${download_dir}/${patch_id}",
             path      => $execPath,
             user      => $user,
             group     => $group,
             logoutput => false,
-            before    => Db_opatch["${patchId} ${title}"],
+            before    => Db_opatch["${patch_id} ${title}"],
           }
         } else {
-          exec { "extract opatch ${patchFile} ${title}":
-            command   => "unzip -n ${mountPoint}/${patchFile} -d ${downloadDir}",
-            creates   => "${downloadDir}/${patchId}",
+          exec { "extract opatch ${patch_file} ${title}":
+            command   => "unzip -n ${mountPoint}/${patch_file} -d ${download_dir}",
+            creates   => "${download_dir}/${patch_id}",
             path      => $execPath,
             user      => $user,
             group     => $group,
             logoutput => false,
-            before    => Db_opatch["${patchId} ${title}"],
+            before    => Db_opatch["${patch_id} ${title}"],
           }
         }
       }
 
       # sometimes the bundle patch inside an other folder
-      if ( $bundleSubFolder ) {
-        $extracted_patch_dir = "${downloadDir}/${patchId}/${bundleSubFolder}"
+      if ( $bundle_sub_folder ) {
+        $extracted_patch_dir = "${download_dir}/${patch_id}/${bundle_sub_folder}"
       } else {
-        $extracted_patch_dir = "${downloadDir}/${patchId}"
+        $extracted_patch_dir = "${download_dir}/${patch_id}"
       }
 
       if $ocmrf == true {
 
-        db_opatch{ "${patchId} ${title}":
+        db_opatch{ "${patch_id} ${title}":
           ensure                  => $ensure,
-          patch_id                => $patchId,
+          patch_id                => $patch_id,
           os_user                 => $user,
-          oracle_product_home_dir => $oracleProductHome,
+          oracle_product_home_dir => $oracle_product_home,
           orainst_dir             => $oraInstPath,
           extracted_patch_dir     => $extracted_patch_dir,
-          ocmrf_file              => "${oracleProductHome}/OPatch/ocm.rsp",
-          bundle_sub_patch_id     => $bundleSubPatchId,
-          opatch_auto             => $clusterWare,
+          ocmrf_file              => "${oracle_product_home}/OPatch/ocm.rsp",
+          bundle_sub_patch_id     => $bundle_sub_patch_id,
+          opatch_auto             => $clusterware,
         }
 
       } else {
 
-        db_opatch{ "${patchId} ${title}":
+        db_opatch{ "${patch_id} ${title}":
           ensure                  => $ensure,
-          patch_id                => $patchId,
+          patch_id                => $patch_id,
           os_user                 => $user,
-          oracle_product_home_dir => $oracleProductHome,
+          oracle_product_home_dir => $oracle_product_home,
           orainst_dir             => $oraInstPath,
           extracted_patch_dir     => $extracted_patch_dir,
-          bundle_sub_patch_id     => $bundleSubPatchId,
-          opatch_auto             => $clusterWare,
+          bundle_sub_patch_id     => $bundle_sub_patch_id,
+          opatch_auto             => $clusterware,
         }
 
       }

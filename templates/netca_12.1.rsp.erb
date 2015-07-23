@@ -1,22 +1,22 @@
-###################################################################### 
-## Copyright(c) 1998, 2012 Oracle Corporation. All rights reserved. ## 
-##                                                                  ## 
-## Specify values for the variables listed below to customize your  ## 
-## installation.                                                    ## 
-##                                                                  ## 
-## Each variable is associated with a comment. The comment          ## 
-## identifies the variable type.                                    ## 
-##                                                                  ## 
-## Please specify the values in the following format:               ## 
-##                                                                  ## 
-##         Type         Example                                     ## 
-##         String       "Sample Value"                              ## 
-##         Boolean      True or False                               ## 
-##         Number       1000                                        ## 
-##         StringList   {"String value 1","String Value 2"}         ## 
-##                                                                  ## 
 ######################################################################
-##                                                                  ## 
+## Copyright(c) 1998, 2012 Oracle Corporation. All rights reserved. ##
+##                                                                  ##
+## Specify values for the variables listed below to customize your  ##
+## installation.                                                    ##
+##                                                                  ##
+## Each variable is associated with a comment. The comment          ##
+## identifies the variable type.                                    ##
+##                                                                  ##
+## Please specify the values in the following format:               ##
+##                                                                  ##
+##         Type         Example                                     ##
+##         String       "Sample Value"                              ##
+##         Boolean      True or False                               ##
+##         Number       1000                                        ##
+##         StringList   {"String value 1","String Value 2"}         ##
+##                                                                  ##
+######################################################################
+##                                                                  ##
 ## This sample response file causes the Oracle Net Configuration    ##
 ## Assistant (NetCA) to complete an Oracle Net configuration during ##
 ## a custom install of the Oracle12c server which is similar to     ##
@@ -24,9 +24,9 @@
 ## install. It also documents all of the NetCA response file        ##
 ## variables so you can create your own response file to configure  ##
 ## Oracle Net during an install the way you wish.                   ##
-##                                                                  ## 
+##                                                                  ##
 ######################################################################
-#./netca /silent /responsefile /install/p10404530_112030_Linux-x86-64/database/response/netca.rsp 
+#./netca /silent /responsefile /install/p10404530_112030_Linux-x86-64/database/response/netca.rsp
 
 [GENERAL]
 RESPONSEFILE_VERSION="12.1"
@@ -39,7 +39,7 @@ CREATE_TYPE="CUSTOM"
 # Pre-req    : N/A
 # Default    : TRUE
 # Note:
-# This must be set to false in order to run NetCA in silent mode. 
+# This must be set to false in order to run NetCA in silent mode.
 # This is a substitute of "/silent" flag in the NetCA command line.
 # The command line flag has precedence over the one in this response file.
 # This feature is present since 10.1.0.3.
@@ -64,7 +64,7 @@ SHOW_GUI=false
 [oracle.net.ca]
 #INSTALLED_COMPONENTS;StringList;list of installed components
 # The possible values for installed components are:
-# "net8","server","client","aso", "cman", "javavm" 
+# "net8","server","client","aso", "cman", "javavm"
 INSTALLED_COMPONENTS={"server","net8","javavm"}
 
 #INSTALL_TYPE;String;type of install
@@ -73,41 +73,41 @@ INSTALLED_COMPONENTS={"server","net8","javavm"}
 INSTALL_TYPE=""custom""
 
 #LISTENER_NUMBER;Number;Number of Listeners
-# A typical install sets one listener 
+# A typical install sets one listener
 LISTENER_NUMBER=1
 
 #LISTENER_NAMES;StringList;list of listener names
 # The values for listener are:
 # "LISTENER","LISTENER1","LISTENER2","LISTENER3", ...
-# A typical install sets only "LISTENER" 
+# A typical install sets only "LISTENER"
 LISTENER_NAMES={"LISTENER"}
 
 #LISTENER_PROTOCOLS;StringList;list of listener addresses (protocols and parameters separated by semicolons)
 # The possible values for listener protocols are:
-# "TCP;1521","TCPS;2484","NMP;ORAPIPE","IPC;IPCKEY","VI;1521" 
-# A typical install sets only "TCP;1521" 
-LISTENER_PROTOCOLS={"TCP;<%= @dbPort %>"}
+# "TCP;1521","TCPS;2484","NMP;ORAPIPE","IPC;IPCKEY","VI;1521"
+# A typical install sets only "TCP;1521"
+LISTENER_PROTOCOLS={"TCP;<%= @db_port %>"}
 
 #LISTENER_START;String;name of the listener to start, in double quotes
 LISTENER_START=""LISTENER""
 
 #NAMING_METHODS;StringList;list of naming methods
-# The possible values for naming methods are: 
+# The possible values for naming methods are:
 # LDAP, TNSNAMES, ONAMES, HOSTNAME, NOVELL, NIS, DCE
-# A typical install sets only: "TNSNAMES","ONAMES","HOSTNAMES" 
+# A typical install sets only: "TNSNAMES","ONAMES","HOSTNAMES"
 # or "LDAP","TNSNAMES","ONAMES","HOSTNAMES" for LDAP
 NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}
 
 #NOVELL_NAMECONTEXT;String;Novell Directory Service name context, in double quotes
-# A typical install does not use this variable. 
+# A typical install does not use this variable.
 #NOVELL_NAMECONTEXT = ""NAMCONTEXT""
 
 #SUN_METAMAP;String; SUN meta map, in double quotes
-# A typical install does not use this variable. 
+# A typical install does not use this variable.
 #SUN_METAMAP = ""MAP""
 
 #DCE_CELLNAME;String;DCE cell name, in double quotes
-# A typical install does not use this variable. 
+# A typical install does not use this variable.
 #DCE_CELLNAME = ""CELL""
 
 #NSN_NUMBER;Number;Number of NetService Names
@@ -124,9 +124,9 @@ NSN_SERVICE={"PLSExtProc"}
 
 #NSN_PROTOCOLS;StringList;list of coma separated strings of Net Service Name protocol parameters
 # The possible values for net service name protocol parameters are:
-# "TCP;HOSTNAME;1521","TCPS;HOSTNAME;2484","NMP;COMPUTERNAME;ORAPIPE","VI;HOSTNAME;1521","IPC;IPCKEY"  
+# "TCP;HOSTNAME;1521","TCPS;HOSTNAME;2484","NMP;COMPUTERNAME;ORAPIPE","VI;HOSTNAME;1521","IPC;IPCKEY"
 # A typical install sets parameters to "IPC;EXTPROC"
-NSN_PROTOCOLS={"TCP;HOSTNAME;<%= @dbPort %>"}
+NSN_PROTOCOLS={"TCP;HOSTNAME;<%= @db_port %>"}
 
 #SERVICEUSERPASSWORD;String;Windows service user password
 # If the oracle home is installed as secure user, supply the password

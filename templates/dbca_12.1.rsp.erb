@@ -67,7 +67,7 @@ OPERATION_TYPE = "<%= @operationType %>"
 [CREATEDATABASE]
 
 #-----------------------------------------------------------------------------
-# Name          : GDBNAME
+# Name          : Gdb_name
 # Datatype      : String
 # Description   : Global database name of the database
 # Valid values  : <db_name>.<db_domain> - when database domain isn't NULL
@@ -75,7 +75,7 @@ OPERATION_TYPE = "<%= @operationType %>"
 # Default value : None
 # Mandatory     : Yes
 #-----------------------------------------------------------------------------
-GDBNAME = "<%= @globalDbName %>"
+GDBNAME = "<%= @globaldb_name %>"
 
 #-----------------------------------------------------------------------------
 # Name          : RACONENODE
@@ -199,20 +199,20 @@ GDBNAME = "<%= @globalDbName %>"
 # Datatype      : String
 # Description   : System identifier (SID) of the database
 # Valid values  : Check Oracle12c Administrator's Guide
-# Default value : <db_name> specified in GDBNAME
+# Default value : <db_name> specified in Gdb_name
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-SID = "<%= @dbName %>"
+SID = "<%= @db_name %>"
 
 #-----------------------------------------------------------------------------
-# Name          : CREATEASCONTAINERDATABASE
+# Name          : CREATEAScontainer_database
 # Datatype      : boolean
 # Description   : flag to create database as container database
 # Valid values  : Check Oracle12c Administrator's Guide
 # Default value : false
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-CREATEASCONTAINERDATABASE = <%= @containerDatabase %>
+CREATEAScontainer_database = <%= @container_database %>
 
 #-----------------------------------------------------------------------------
 # Name          : NUMBEROFPDBS
@@ -225,14 +225,14 @@ CREATEASCONTAINERDATABASE = <%= @containerDatabase %>
 #NUMBEROFPDBS =
 
 #-----------------------------------------------------------------------------
-# Name          : PDBNAME
+# Name          : Pdb_name
 # Datatype      : String
-# Description   : Specify the pdbname/pdbanme prefix if one or more pdb need to be created
+# Description   : Specify the pdb_name/pdbanme prefix if one or more pdb need to be created
 # Valid values  : Check Oracle12c Administrator's Guide
 # Default value : None
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-#PDBNAME =
+#Pdb_name =
 
 
 #-----------------------------------------------------------------------------
@@ -267,24 +267,24 @@ TEMPLATENAME = "General_Purpose.dbc"
 
 
 #-----------------------------------------------------------------------------
-# Name          : SYSPASSWORD
+# Name          : sys_password
 # Datatype      : String
 # Description   : Password for SYS user
 # Valid values  : Check Oracle12c Administrator's Guide
 # Default value : None
 # Mandatory     : Yes
 #-----------------------------------------------------------------------------
-SYSPASSWORD = "<%= @sysPassword %>"
+SYSPASSWORD = "<%= @sys_password %>"
 
 #-----------------------------------------------------------------------------
-# Name          : SYSTEMPASSWORD
+# Name          : system_password
 # Datatype      : String
 # Description   : Password for SYSTEM user
 # Valid values  : Check Oracle12c Administrator's Guide
 # Default value : None
 # Mandatory     : Yes
 #-----------------------------------------------------------------------------
-SYSTEMPASSWORD = "<%= @systemPassword %>"
+SYSTEMPASSWORD = "<%= @system_password %>"
 
 #-----------------------------------------------------------------------------
 # Name          : SERVICEUSERPASSWORD
@@ -296,14 +296,14 @@ SYSTEMPASSWORD = "<%= @systemPassword %>"
 #SERVICEUSERPASSWORD = "password"
 
 #-----------------------------------------------------------------------------
-# Name          : EMCONFIGURATION
+# Name          : em_configuration
 # Datatype      : String
 # Description   : Enterprise Manager Configuration Type
 # Valid values  : CENTRAL|LOCAL|ALL|NONE
 # Default value : NONE
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-EMCONFIGURATION = "<%= @emConfiguration %>"
+EMCONFIGURATION = "<%= @em_configuration %>"
 
 #-----------------------------------------------------------------------------
 # Name          : SYSMANPASSWORD
@@ -311,27 +311,27 @@ EMCONFIGURATION = "<%= @emConfiguration %>"
 # Description   : Password for SYSMAN user
 # Valid values  : Check Oracle12c Administrator's Guide
 # Default value : None
-# Mandatory     : Yes, if LOCAL specified for EMCONFIGURATION
+# Mandatory     : Yes, if LOCAL specified for em_configuration
 #-----------------------------------------------------------------------------
 #SYSMANPASSWORD = "password"
 
 #-----------------------------------------------------------------------------
-# Name          : DBSNMPPASSWORD
+# Name          : db_snmp_password
 # Datatype      : String
 # Description   : Password for DBSNMP user
 # Valid values  : Check Oracle12c Administrator's Guide
 # Default value : None
-# Mandatory     : Yes, if EMCONFIGURATION is specified
+# Mandatory     : Yes, if em_configuration is specified
 #-----------------------------------------------------------------------------
 #DBSNMPPASSWORD = "password"
-DBSNMPPASSWORD = "<%= @dbSnmpPassword %>"
+DBSNMPPASSWORD = "<%= @db_snmp_password %>"
 
 #-----------------------------------------------------------------------------
 # Name          : CENTRALAGENT
 # Datatype      : String
 # Description   : Grid Control Central Agent Oracle Home
 # Default value : None
-# Mandatory     : Yes, if CENTRAL is specified for EMCONFIGURATION
+# Mandatory     : Yes, if CENTRAL is specified for em_configuration
 #-----------------------------------------------------------------------------
 #CENTRALAGENT =
 
@@ -340,7 +340,7 @@ DBSNMPPASSWORD = "<%= @dbSnmpPassword %>"
 # Datatype      : String
 # Description   : Host user name for EM backup job
 # Default value : None
-# Mandatory     : Yes, if ALL is specified for EMCONFIGURATION
+# Mandatory     : Yes, if ALL is specified for em_configuration
 #-----------------------------------------------------------------------------
 #HOSTUSERNAME =
 
@@ -349,7 +349,7 @@ DBSNMPPASSWORD = "<%= @dbSnmpPassword %>"
 # Datatype      : String
 # Description   : Host user password for EM backup job
 # Default value : None
-# Mandatory     : Yes, if ALL is specified for EMCONFIGURATION
+# Mandatory     : Yes, if ALL is specified for em_configuration
 #-----------------------------------------------------------------------------
 #HOSTUSERPASSWORD=
 
@@ -358,7 +358,7 @@ DBSNMPPASSWORD = "<%= @dbSnmpPassword %>"
 # Datatype      : String
 # Description   : Daily backup schedule in the form of hh:mm
 # Default value : 2:00
-# Mandatory     : Yes, if ALL is specified for EMCONFIGURATION
+# Mandatory     : Yes, if ALL is specified for em_configuration
 #-----------------------------------------------------------------------------
 #BACKUPSCHEDULE=
 
@@ -433,34 +433,34 @@ DBSNMPPASSWORD = "<%= @dbSnmpPassword %>"
 #DATAFILEJARLOCATION =
 
 #-----------------------------------------------------------------------------
-# Name          : DATAFILEDESTINATION
+# Name          : data_file_destination
 # Datatype      : String
 # Description   : Location of the data file's
 # Valid values  : Directory for all the database files
 # Default value : $ORACLE_BASE/oradata
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-DATAFILEDESTINATION ="<%= @dataFileDestination %>"
+DATAFILEDESTINATION ="<%= @data_file_destination %>"
 
 #-----------------------------------------------------------------------------
-# Name          : RECOVERYAREADESTINATION
+# Name          : recovery_area_destination
 # Datatype      : String
 # Description   : Location of the data file's
 # Valid values  : Recovery Area location
 # Default value : $ORACLE_BASE/flash_recovery_area
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-RECOVERYAREADESTINATION="<%= @recoveryAreaDestination %>"
+RECOVERYAREADESTINATION="<%= @recovery_area_destination %>"
 
 #-----------------------------------------------------------------------------
-# Name          : STORAGETYPE
+# Name          : storage_type
 # Datatype      : String
 # Description   : Specifies the storage on which the database is to be created
 # Valid values  : FS (CFS for RAC), ASM
 # Default value : FS
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-STORAGETYPE=<%= @storageType %>
+STORAGETYPE=<%= @storage_type %>
 
 #-----------------------------------------------------------------------------
 # Name          : DISKGROUPNAME
@@ -469,7 +469,7 @@ STORAGETYPE=<%= @storageType %>
 # Default value : DATA
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-DISKGROUPNAME=<%= @asmDiskgroup %>
+DISKGROUPNAME=<%= @asm_diskgroup %>
 
 #-----------------------------------------------------------------------------
 # Name          : ASMSNMP_PASSWORD
@@ -478,7 +478,7 @@ DISKGROUPNAME=<%= @asmDiskgroup %>
 # Default value : None
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-ASMSNMP_PASSWORD=<%= @asmSnmpPassword %>
+ASMSNMP_PASSWORD=<%= @asm_snmp_password %>
 
 #-----------------------------------------------------------------------------
 # Name          : RECOVERYGROUPNAME
@@ -487,28 +487,28 @@ ASMSNMP_PASSWORD=<%= @asmSnmpPassword %>
 # Default value : RECOVERY
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-RECOVERYGROUPNAME=<%= @recoveryDiskgroup %>
+RECOVERYGROUPNAME=<%= @recovery_diskgroup %>
 
 
 #-----------------------------------------------------------------------------
-# Name          : CHARACTERSET
+# Name          : character_set
 # Datatype      : String
 # Description   : Character set of the database
 # Valid values  : Check Oracle12c National Language Support Guide
 # Default value : "US7ASCII"
 # Mandatory     : NO
 #-----------------------------------------------------------------------------
-CHARACTERSET = "<%= @characterSet %>"
+CHARACTERSET = "<%= @character_set %>"
 
 #-----------------------------------------------------------------------------
-# Name          : NATIONALCHARACTERSET
+# Name          : NATIONALcharacter_set
 # Datatype      : String
 # Description   : National Character set of the database
 # Valid values  : "UTF8" or "AL16UTF16". For details, check Oracle12c National Language Support Guide
 # Default value : "AL16UTF16"
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-NATIONALCHARACTERSET= "<%= @nationalCharacterSet %>"
+NATIONALCHARACTERSET= "<%= @nationalcharacter_set %>"
 
 #-----------------------------------------------------------------------------
 # Name          : REGISTERWITHDIRSERVICE
@@ -578,7 +578,7 @@ NATIONALCHARACTERSET= "<%= @nationalCharacterSet %>"
 #VARIABLES =
 
 #-----------------------------------------------------------------------------
-# Name          : INITPARAMS
+# Name          : init_params
 # Datatype      : String
 # Description   : comma separated list of name=value pairs. Overrides initialization parameters defined in templates
 # Default value : None
@@ -587,33 +587,33 @@ NATIONALCHARACTERSET= "<%= @nationalCharacterSet %>"
 INITPARAMS ="<%= @sanitizedInitParams %>"
 
 #-----------------------------------------------------------------------------
-# Name          : SAMPLESCHEMA
+# Name          : sample_schema
 # Datatype      : Boolean
 # Description   : Specifies whether or not to add the Sample Schemas to your database
 # Valid values  : TRUE \ FALSE
 # Default value : FASLE
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-SAMPLESCHEMA="<%= @sampleSchema %>"
+SAMPLESCHEMA="<%= @sample_schema %>"
 
 #-----------------------------------------------------------------------------
-# Name          : MEMORYPERCENTAGE
+# Name          : memory_percentage
 # Datatype      : String
 # Description   : percentage of physical memory for Oracle
 # Default value : None
 # Mandatory     : NO
 #-----------------------------------------------------------------------------
-MEMORYPERCENTAGE = "<%= @memoryPercentage %>"
+MEMORYPERCENTAGE = "<%= @memory_percentage %>"
 
 #-----------------------------------------------------------------------------
-# Name          : DATABASETYPE
+# Name          : database_type
 # Datatype      : String
-# Description   : used for memory distribution when MEMORYPERCENTAGE specified
+# Description   : used for memory distribution when memory_percentage specified
 # Valid values  : MULTIPURPOSE|DATA_WAREHOUSING|OLTP
 # Default value : MULTIPURPOSE
 # Mandatory     : NO
 #-----------------------------------------------------------------------------
-DATABASETYPE = "<%= @databaseType %>"
+DATABASETYPE = "<%= @database_type %>"
 
 #-----------------------------------------------------------------------------
 # Name          : AUTOMATICMEMORYMANAGEMENT
@@ -633,7 +633,7 @@ DATABASETYPE = "<%= @databaseType %>"
 # Default value :
 # Mandatory     : NO
 #-----------------------------------------------------------------------------
-TOTALMEMORY = "<%= @memoryTotal %>"
+TOTALMEMORY = "<%= @memory_total %>"
 
 
 #-----------------------*** End of CREATEDATABASE section ***------------------------
@@ -650,7 +650,7 @@ TOTALMEMORY = "<%= @memoryTotal %>"
 # Default value : none
 # Mandatory     : YES
 #-----------------------------------------------------------------------------
-SOURCEDB = "myhost:<%= @dbPort %>:orcl"
+SOURCEDB = "myhost:<%= @db_port %>:orcl"
 
 #-----------------------------------------------------------------------------
 # Name          : SYSDBAUSERNAME
@@ -748,7 +748,7 @@ TEMPLATENAME = "My Clone TEMPLATE"
 # Default value : none
 # Mandatory     : YES
 #-----------------------------------------------------------------------------
-SOURCEDB = "<%= @dbName %>"
+SOURCEDB = "<%= @db_name %>"
 
 #-----------------------------------------------------------------------------
 # Name          : SYSDBAUSERNAME
@@ -767,7 +767,7 @@ SYSDBAUSERNAME = "sys"
 # Default value : none
 # Mandatory     : YES, if no OS authentication
 #-----------------------------------------------------------------------------
-SYSDBAPASSWORD = "<%= @sysPassword %>"
+SYSDBAPASSWORD = "<%= @sys_password %>"
 #-----------------------*** End of deleteDatabase section ***------------------------
 
 #-----------------------------------------------------------------------------
@@ -785,7 +785,7 @@ SYSDBAPASSWORD = "<%= @sysPassword %>"
 TEMPLATENAME = "New Database"
 
 #-----------------------------------------------------------------------------
-# Name          : GDBNAME
+# Name          : Gdb_name
 # Datatype      : String
 # Description   : Global database name of the database
 # Valid values  : <db_name>.<db_domain> - when database domain isn't NULL
@@ -911,7 +911,7 @@ GDBNAME = "orcl12.us.oracle.com"
 
 
 #-----------------------------------------------------------------------------
-# Name          : EMCONFIGURATION
+# Name          : em_configuration
 # Datatype      : String
 # Description   : Enterprise Manager Configuration Type
 # Valid values  : CENTRAL|LOCAL|ALL|NONE
@@ -926,26 +926,26 @@ GDBNAME = "orcl12.us.oracle.com"
 # Description   : Password for SYSMAN user
 # Valid values  : Check Oracle12c Administrator's Guide
 # Default value : None
-# Mandatory     : Yes, if LOCAL specified for EMCONFIGURATION
+# Mandatory     : Yes, if LOCAL specified for em_configuration
 #-----------------------------------------------------------------------------
 #SYSMANPASSWORD = "password"
 
 #-----------------------------------------------------------------------------
-# Name          : DBSNMPPASSWORD
+# Name          : db_snmp_password
 # Datatype      : String
 # Description   : Password for DBSNMP user
 # Valid values  : Check Oracle12c Administrator's Guide
 # Default value : None
-# Mandatory     : Yes, if EMCONFIGURATION is specified
+# Mandatory     : Yes, if em_configuration is specified
 #-----------------------------------------------------------------------------
-DBSNMPPASSWORD = "<%= @dbSnmpPassword %>"
+DBSNMPPASSWORD = "<%= @db_snmp_password %>"
 
 #-----------------------------------------------------------------------------
 # Name          : CENTRALAGENT
 # Datatype      : String
 # Description   : Grid Control Central Agent Oracle Home
 # Default value : None
-# Mandatory     : Yes, if CENTRAL is specified for EMCONFIGURATION
+# Mandatory     : Yes, if CENTRAL is specified for em_configuration
 #-----------------------------------------------------------------------------
 #CENTRALAGENT =
 
@@ -954,7 +954,7 @@ DBSNMPPASSWORD = "<%= @dbSnmpPassword %>"
 # Datatype      : String
 # Description   : Host user name for EM backup job
 # Default value : None
-# Mandatory     : Yes, if ALL is specified for EMCONFIGURATION
+# Mandatory     : Yes, if ALL is specified for em_configuration
 #-----------------------------------------------------------------------------
 #HOSTUSERNAME =
 
@@ -963,7 +963,7 @@ DBSNMPPASSWORD = "<%= @dbSnmpPassword %>"
 # Datatype      : String
 # Description   : Host user password for EM backup job
 # Default value : None
-# Mandatory     : Yes, if ALL is specified for EMCONFIGURATION
+# Mandatory     : Yes, if ALL is specified for em_configuration
 #-----------------------------------------------------------------------------
 #HOSTUSERPASSWORD=
 
@@ -972,7 +972,7 @@ DBSNMPPASSWORD = "<%= @dbSnmpPassword %>"
 # Datatype      : String
 # Description   : Daily backup schedule in the form of hh:mm
 # Default value : 2:00
-# Mandatory     : Yes, if ALL is specified for EMCONFIGURATION
+# Mandatory     : Yes, if ALL is specified for em_configuration
 #-----------------------------------------------------------------------------
 #BACKUPSCHEDULE=
 
@@ -1136,14 +1136,14 @@ SYSDBAUSERNAME = "sys"
 SOURCEDB = "orcl"
 
 #----------------------------------------------------------------------------------
-# Name          : PDBNAME
+# Name          : Pdb_name
 # Datatype      : String
 # Description   : The name of new pluggable database
 #         This pdb name must not be same as sourcedb name.
 # Default value : none
 # Mandatory     : YES
 #-----------------------------------------------------------------------------
-PDBNAME = "PDB1"
+Pdb_name = "PDB1"
 
 #----------------------------------------------------------------------------------
 # Name          : CREATEASCLONE
@@ -1261,7 +1261,7 @@ PDBNAME = "PDB1"
 # COPYPDBFILES = ""
 
 #----------------------------------------------------------------------------------
-# Name          : PDBDATAFILEDESTINATION
+# Name          : PDBdata_file_destination
 # Datatype      : String
 # Description   : common location for PDB datafile area
 # Default value : None
@@ -1281,7 +1281,7 @@ PDBNAME = "PDB1"
 # USEMETADATAFILELOCATION = ""
 
 #----------------------------------------------------------------------------------
-# Name          : CREATEUSERTABLESPACE
+# Name          : create_userTABLESPACE
 # Datatype      : Boolean
 # Description   : Specify true if a default user tablespace need to be created in new PDB
 #
@@ -1289,7 +1289,7 @@ PDBNAME = "PDB1"
 # Default value : TRUE
 # Mandatory     : NO
 #-----------------------------------------------------------------------------
-# CREATEUSERTABLESPACE = ""
+# create_userTABLESPACE = ""
 
 #-----------------------*** End of createPluggableDatabase section ***------------------------
 
@@ -1308,14 +1308,14 @@ PDBNAME = "PDB1"
 SOURCEDB = "orcl"
 
 #----------------------------------------------------------------------------------
-# Name          : PDBNAME
+# Name          : Pdb_name
 # Datatype      : String
 # Description   : The name of new pluggable database
 #         This pdb name must not be same as sourcedb name.
 # Default value : none
 # Mandatory     : YES
 #-----------------------------------------------------------------------------
-PDBNAME = "PDB1"
+Pdb_name = "PDB1"
 
 #----------------------------------------------------------------------------------
 # Name          : ARCHIVETYPE

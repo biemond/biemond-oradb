@@ -2,11 +2,11 @@
 
 ORACLE_TERM=xterm; export ORACLE_TERM
 
-LD_LIBRARY_PATH=<%= @oracleHome %>/lib
-ORACLE_BASE=<%= @oracleBase %>
-ORACLE_HOME=<%= @oracleHome %>
-SQLPLUS_HOME=<%= @oracleHome %>
-PATH=/bin:/usr/local/bin:/usr/bin:/bin:<%= @oracleHome %>/bin
+LD_LIBRARY_PATH=<%= @oracle_home %>/lib
+ORACLE_BASE=<%= @oracle_base %>
+ORACLE_HOME=<%= @oracle_home %>
+SQLPLUS_HOME=<%= @oracle_home %>
+PATH=/bin:/usr/local/bin:/usr/bin:/bin:<%= @oracle_home %>/bin
 
 export LD_LIBRARY_PATH
 export ORACLE_BASE
@@ -14,6 +14,6 @@ export ORACLE_HOME
 export SQLPLUS_HOME
 export PATH
 
-export TEMP=/tmp 
+export TEMP=/tmp
 export TMPDIR=/tmp
 umask 022

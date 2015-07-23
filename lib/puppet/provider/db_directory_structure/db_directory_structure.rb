@@ -1,9 +1,7 @@
 require 'fileutils'
 
 Puppet::Type.type(:db_directory_structure).provide(:db_directory_structure) do
-
   def configure
-
     name            = resource[:name]
     oracle_base     = resource[:oracle_base_dir]
     ora_inventory   = resource[:ora_inventory_dir]
@@ -38,5 +36,4 @@ Puppet::Type.type(:db_directory_structure).provide(:db_directory_structure) do
     Puppet.info "Setting public permissions 0777 for #{path}"
     FileUtils.chmod 0777, path
   end
-
 end

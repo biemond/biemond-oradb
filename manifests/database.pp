@@ -2,40 +2,40 @@
 #
 #
 # action        =  createDatabase|deleteDatabase
-# databaseType  = MULTIPURPOSE|DATA_WAREHOUSING|OLTP
+# database_type  = MULTIPURPOSE|DATA_WAREHOUSING|OLTP
 #
 define oradb::database(
-  $oracleBase               = undef,
-  $oracleHome               = undef,
-  $version                  = '11.2', # 11.2|12.1
-  $user                     = 'oracle',
-  $group                    = 'dba',
-  $downloadDir              = '/install',
-  $action                   = 'create',
-  $template                 = undef,
-  $dbName                   = 'orcl',
-  $dbDomain                 = undef,
-  $dbPort                   = '1521',
-  $sysPassword              = 'Welcome01',
-  $systemPassword           = 'Welcome01',
-  $dataFileDestination      = undef,
-  $recoveryAreaDestination  = undef,
-  $characterSet             = 'AL32UTF8',
-  $nationalCharacterSet     = 'UTF8',
-  $initParams               = undef,
-  $sampleSchema             = TRUE,
-  $memoryPercentage         = '40',
-  $memoryTotal              = '800',
-  $databaseType             = 'MULTIPURPOSE', # MULTIPURPOSE|DATA_WAREHOUSING|OLTP
-  $emConfiguration          = 'NONE',  # CENTRAL|LOCAL|ALL|NONE
-  $storageType              = 'FS', #FS|CFS|ASM
-  $asmSnmpPassword          = 'Welcome01',
-  $dbSnmpPassword           = 'Welcome01',
-  $asmDiskgroup             = 'DATA',
-  $recoveryDiskgroup        = undef,
-  $cluster_nodes            = undef,
-  $containerDatabase        = false, # 12.1 feature for pluggable database
-  $puppetDownloadMntPoint   = undef,
+  $oracle_base               = undef,
+  $oracle_home               = undef,
+  $version                   = '11.2', # 11.2|12.1
+  $user                      = 'oracle',
+  $group                     = 'dba',
+  $download_dir              = '/install',
+  $action                    = 'create',
+  $template                  = undef,
+  $db_name                   = 'orcl',
+  $db_domain                 = undef,
+  $db_port                   = '1521',
+  $sys_password              = 'Welcome01',
+  $system_password           = 'Welcome01',
+  $data_file_destination     = undef,
+  $recovery_area_destination = undef,
+  $character_set             = 'AL32UTF8',
+  $nationalcharacter_set     = 'UTF8',
+  $init_params               = undef,
+  $sample_schema             = TRUE,
+  $memory_percentage         = '40',
+  $memory_total              = '800',
+  $database_type             = 'MULTIPURPOSE', # MULTIPURPOSE|DATA_WAREHOUSING|OLTP
+  $em_configuration          = 'NONE',  # CENTRAL|LOCAL|ALL|NONE
+  $storage_type              = 'FS', #FS|CFS|ASM
+  $asm_snmp_password         = 'Welcome01',
+  $db_snmp_password          = 'Welcome01',
+  $asm_diskgroup             = 'DATA',
+  $recovery_diskgroup        = undef,
+  $cluster_nodes             = undef,
+  $container_database        = false, # 12.1 feature for pluggable database
+  $puppet_download_mnt_point = undef,
 )
 {
   if (!( $version in ['11.2','12.1'])) {
@@ -50,28 +50,28 @@ define oradb::database(
     fail('Unrecognized database action')
   }
 
-  if (!( $databaseType in ['MULTIPURPOSE','DATA_WAREHOUSING','OLTP'])) {
-    fail('Unrecognized databaseType')
+  if (!( $database_type in ['MULTIPURPOSE','DATA_WAREHOUSING','OLTP'])) {
+    fail('Unrecognized database_type')
   }
 
-  if (!( $emConfiguration in ['NONE','CENTRAL','LOCAL','ALL'])) {
-    fail('Unrecognized emConfiguration')
+  if (!( $em_configuration in ['NONE','CENTRAL','LOCAL','ALL'])) {
+    fail('Unrecognized em_configuration')
   }
 
-  if (!( $storageType in ['FS','CFS','ASM'])) {
-    fail('Unrecognized storageType')
+  if (!( $storage_type in ['FS','CFS','ASM'])) {
+    fail('Unrecognized storage_type')
   }
 
-  if ( $version == '11.2' and $containerDatabase == true ){
+  if ( $version == '11.2' and $container_database == true ){
     fail('container or pluggable database is not supported on version 11.2')
   }
 
   $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin'
 
-  if $puppetDownloadMntPoint == undef {
+  if $puppet_download_mnt_point == undef {
     $mountPoint = 'oradb/'
   } else {
-    $mountPoint = $puppetDownloadMntPoint
+    $mountPoint = $puppet_download_mnt_point
   }
 
   case $::kernel {
@@ -86,27 +86,27 @@ define oradb::database(
     }
   }
 
-  if (is_hash($initParams) or is_string($initParams)) {
-    if is_hash($initParams) {
-      $initParamsArray = sort(join_keys_to_values($initParams, '='))
+  if (is_hash($init_params) or is_string($init_params)) {
+    if is_hash($init_params) {
+      $initParamsArray = sort(join_keys_to_values($init_params, '='))
       $sanitizedInitParams = join($initParamsArray,',')
     } else {
-      $sanitizedInitParams = $initParams
+      $sanitizedInitParams = $init_params
     }
   } else {
-    fail 'initParams only supports a String or a Hash as value type'
+    fail 'init_params only supports a String or a Hash as value type'
   }
 
   $sanitized_title = regsubst($title, '[^a-zA-Z0-9.-]', '_', 'G')
 
-  if $dbDomain {
-    $globalDbName = "${dbName}.${dbDomain}"
+  if $db_domain {
+    $globaldb_name = "${db_name}.${db_domain}"
   } else {
-    $globalDbName = $dbName
+    $globaldb_name = $db_name
   }
 
-  if ! defined(File["${downloadDir}/database_${sanitized_title}.rsp"]) {
-    file { "${downloadDir}/database_${sanitized_title}.rsp":
+  if ! defined(File["${download_dir}/database_${sanitized_title}.rsp"]) {
+    file { "${download_dir}/database_${sanitized_title}.rsp":
       ensure  => present,
       content => template("oradb/dbca_${version}.rsp.erb"),
       mode    => '0775',
@@ -117,7 +117,7 @@ define oradb::database(
   }
 
   if ( $template ) {
-    $templatename = "${downloadDir}/${template}_${sanitized_title}.dbt"
+    $templatename = "${download_dir}/${template}_${sanitized_title}.dbt"
     file { $templatename:
       ensure  => present,
       content => template("${mountPoint}/${template}.dbt.erb"),
@@ -130,30 +130,30 @@ define oradb::database(
 
   if $action == 'create' {
     if ( $template ) {
-      $command = "${oracleHome}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globalDbName} -responseFile NO_VALUE -sysPassword ${sysPassword} -systemPassword ${systemPassword} -dbsnmpPassword ${dbSnmpPassword} -asmsnmpPassword ${asmSnmpPassword} -storageType ${storageType} -emConfiguration ${emConfiguration}"
+      $command = "${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration}"
     } else {
-      $command = "${oracleHome}/bin/dbca -silent -responseFile ${downloadDir}/database_${sanitized_title}.rsp"
+      $command = "${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp"
     }
     exec { "oracle database ${title}":
       command     => $command,
-      creates     => "${oracleBase}/admin/${dbName}",
+      creates     => "${oracle_base}/admin/${db_name}",
       timeout     => 0,
       path        => $execPath,
       user        => $user,
       group       => $group,
-      cwd         => $oracleBase,
+      cwd         => $oracle_base,
       environment => ["USER=${user}",],
       logoutput   => true,
     }
   } elsif $action == 'delete' {
     exec { "oracle database ${title}":
-      command     => "${oracleHome}/bin/dbca -silent -responseFile ${downloadDir}/database_${sanitized_title}.rsp",
-      onlyif      => "ls ${oracleBase}/admin/${dbName}",
+      command     => "${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp",
+      onlyif      => "ls ${oracle_base}/admin/${db_name}",
       timeout     => 0,
       path        => $execPath,
       user        => $user,
       group       => $group,
-      cwd         => $oracleBase,
+      cwd         => $oracle_base,
       environment => ["USER=${user}",],
       logoutput   => true,
     }

@@ -88,12 +88,12 @@ SELECTED_LANGUAGES=en
 #-------------------------------------------------------------------------------
 # Specify the complete path of the Oracle Home.
 #-------------------------------------------------------------------------------
-ORACLE_HOME=<%= @oracleHome %>
+ORACLE_HOME=<%= @oracle_home %>
 
 #-------------------------------------------------------------------------------
 # Specify the complete path of the Oracle Base.
 #-------------------------------------------------------------------------------
-ORACLE_BASE=<%= @oracleBase %>
+ORACLE_BASE=<%= @oracle_base %>
 
 #-------------------------------------------------------------------------------
 # Specify the installation edition of the component.
@@ -102,7 +102,7 @@ ORACLE_BASE=<%= @oracleBase %>
 #   - EE     : Enterprise Edition
 
 #-------------------------------------------------------------------------------
-oracle.install.db.InstallEdition=<%= @databaseType %>
+oracle.install.db.InstallEdition=<%= @database_type %>
 
 ###############################################################################
 #                                                                             #
@@ -253,7 +253,6 @@ oracle.install.db.config.PDBName=
 #  ZHT16HKSCS, WE8ISO8859P9, TR8MSWIN1254, VN8MSWIN1258
 #-------------------------------------------------------------------------------
 oracle.install.db.config.starterdb.characterSet=
-
 #------------------------------------------------------------------------------
 # This variable should be set to true if Automatic Memory Management
 # in Database is desired.

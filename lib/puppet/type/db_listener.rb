@@ -31,7 +31,6 @@ module Puppet
           val = property.retrieve
           property.sync unless property.safe_insync?(val)
         end
-
         event
       end
     end
@@ -86,6 +85,5 @@ module Puppet
       Puppet.info 'db_listener refresh'
       provider.restart
     end
-
   end
 end

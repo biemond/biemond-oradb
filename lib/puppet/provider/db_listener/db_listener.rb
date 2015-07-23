@@ -1,12 +1,11 @@
 Puppet::Type.type(:db_listener).provide(:db_listener) do
-
   def self.instances
     []
   end
 
   def listener_control(action)
-    oracleHome   = resource[:oracle_home_dir]
-    oracleBase   = resource[:oracle_base_dir]
+    oracle_home   = resource[:oracle_home_dir]
+    oracle_base   = resource[:oracle_base_dir]
     user         = resource[:os_user]
     listenername = resource[:listener_name]
 
@@ -18,16 +17,16 @@ Puppet::Type.type(:db_listener).provide(:db_listener) do
       listener_action = "stop #{listenername}"
     end
 
-    command = "#{oracleHome}/bin/lsnrctl #{listener_action}"
+    command = "#{oracle_home}/bin/lsnrctl #{listener_action}"
 
     Puppet.info "listener action: #{action} with command #{command}"
 
-    output = `su - #{user} -c 'export ORACLE_HOME="#{oracleHome}";export ORACLE_BASE="#{oracleBase}";export LD_LIBRARY_PATH="#{oracleHome}/lib";cd #{oracleHome};#{command}'`
+    output = `su - #{user} -c 'export ORACLE_HOME="#{oracle_home}";export ORACLE_BASE="#{oracle_base}";export LD_LIBRARY_PATH="#{oracle_home}/lib";cd #{oracle_home};#{command}'`
     Puppet.info "listener result: #{output}"
   end
 
   def listener_status
-    oracleHome = resource[:oracle_home_dir]
+    oracle_home = resource[:oracle_home_dir]
     listenername = resource[:listener_name]
 
     kernel = Facter.value(:kernel)
@@ -35,7 +34,7 @@ Puppet::Type.type(:db_listener).provide(:db_listener) do
     ps_bin = (kernel != 'SunOS' || (kernel == 'SunOS' && Facter.value(:kernelrelease) == '5.11')) ? '/bin/ps' : '/usr/ucb/ps'
     ps_arg = kernel == 'SunOS' ? 'awwx' : '-ef'
 
-    # command  = "#{ps_bin} #{ps_arg} | /bin/grep -v grep | /bin/grep '#{oracleHome}/bin/tnslsnr #{listenername}'"
+    # command  = "#{ps_bin} #{ps_arg} | /bin/grep -v grep | /bin/grep '#{oracle_home}/bin/tnslsnr #{listenername}'"
     command  = "#{ps_bin} #{ps_arg} | /bin/grep -v grep | /bin/grep -w -i '#{listenername}'"
 
     Puppet.debug "listener_status #{command}"
@@ -44,7 +43,7 @@ Puppet::Type.type(:db_listener).provide(:db_listener) do
     output.each_line do |li|
       unless li.nil?
         Puppet.debug "line #{li}"
-        if li.include? "#{oracleHome}/bin/tnslsnr"
+        if li.include? "#{oracle_home}/bin/tnslsnr"
           Puppet.debug 'found listener'
           return 'Found'
         end

@@ -30,7 +30,6 @@ module Puppet
 
         event
       end
-
     end
 
     newparam(:name) do
@@ -81,6 +80,5 @@ module Puppet
         The RCU statement.
       EOT
     end
-
   end
 end

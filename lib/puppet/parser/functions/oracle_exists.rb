@@ -6,7 +6,6 @@ begin
     module Parser
       module Functions
         newfunction(:oracle_exists, :type => :rvalue) do |args|
-
           ora = lookup_db_var('oradb_inst_products')
           log "oracle_exists #{ora}"
 
@@ -23,7 +22,6 @@ begin
           end
           log 'oracle_exists return false'
           return false
-
         end
       end
     end
@@ -57,5 +55,4 @@ begin
       :source  => 'oracle_exists'
     )
   end
-
 end

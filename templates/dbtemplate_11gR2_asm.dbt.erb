@@ -1,4 +1,4 @@
-<DatabaseTemplate name="<%= @dbName %>" description="<%= @dbName %> template" version="11.2.0.0.0">
+<DatabaseTemplate name="<%= @db_name %>" description="<%= @db_name %> template" version="11.2.0.0.0">
    <CommonAttributes>
       <option name="OMS" value="false"/>
       <option name="JSERVER" value="true"/>
@@ -10,7 +10,7 @@
       <option name="ORACLE_TEXT" value="false">
          <tablespace id="SYSAUX"/>
       </option>
-      <option name="SAMPLE_SCHEMA" value="<%= @sampleSchema %>"/>
+      <option name="SAMPLE_SCHEMA" value="<%= @sample_schema %>"/>
       <option name="CWMLITE" value="false">
          <tablespace id="SYSAUX"/>
       </option>
@@ -25,8 +25,8 @@
    <CustomScripts Execute="false"/>
    <InitParamAttributes>
       <InitParams>
-         <initParam name="db_name" value="<%= @dbName %>"/>
-         <initParam name="db_domain" value="<%= @dbDomain %>"/>
+         <initParam name="db_name" value="<%= @db_name %>"/>
+         <initParam name="db_domain" value="<%= @db_domain %>"/>
          <initParam name="dispatchers" value="(PROTOCOL=TCP) (SERVICE={SID}XDB)"/>
          <initParam name="audit_file_dest" value="{ORACLE_BASE}/admin/{DB_UNIQUE_NAME}/adump"/>
          <initParam name="compatible" value="11.2.0.4.0"/>
@@ -39,21 +39,21 @@
          <initParam name="open_cursors" value="1000"/>
          <initParam name="job_queue_processes" value="4"/>
          <initParam name="processes" value="600"/>
-         <initParam name="db_create_file_dest" value="+<%= @asmDiskgroup %>"/>
-         <initParam name="db_recovery_file_dest" value="+<%= @recoveryDiskgroup %>"/>
+         <initParam name="db_create_file_dest" value="+<%= @asm_diskgroup %>"/>
+         <initParam name="db_recovery_file_dest" value="+<%= @recovery_diskgroup %>"/>
          <initParam name="db_recovery_file_dest_size" value="1" unit="GB"/>
       </InitParams>
       <MiscParams>
-         <databaseType><%= @databaseType %></databaseType>
-         <diskGroupName>"+<%= @asmDiskgroup %>"</diskGroupName>
-         <recoveryGroupName>"+<%= @recoveryDiskgroup %>"</recoveryGroupName>
-         <recoveryAreaDestination>"+<%= @recoveryAreaDestination %>"</recoveryAreaDestination>
-         <memoryPercentage><%= @memoryPercentage %></memoryPercentage>
-         <totalMemory><%= @memoryTotal %></totalMemory>
+         <databaseType><%= @database_type %></databaseType>
+         <diskGroupName>"+<%= @asm_diskgroup %>"</diskGroupName>
+         <recoveryGroupName>"+<%= @recovery_diskgroup %>"</recoveryGroupName>
+         <recoveryAreaDestination>"+<%= @recovery_area_destination %>"</recoveryAreaDestination>
+         <memoryPercentage><%= @memory_percentage %></memoryPercentage>
+         <totalMemory><%= @memory_total %></totalMemory>
          <maxUserConn>20</maxUserConn>
          <customSGA>false</customSGA>
-         <characterSet>"<%= @characterSet %>"</characterSet>
-         <nationalCharacterSet>"<%= @nationalCharacterSet %>"</nationalCharacterSet>
+         <characterSet>"<%= @character_set %>"</characterSet>
+         <nationalCharacterSet>"<%= @nationalcharacter_set %>"</nationalCharacterSet>
          <archiveLogMode>false</archiveLogMode>
          <initParamFileName>{ORACLE_BASE}/admin/{DB_UNIQUE_NAME}/pfile/init.ora</initParamFileName>
       </MiscParams>

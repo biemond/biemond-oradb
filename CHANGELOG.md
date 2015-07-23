@@ -1,5 +1,8 @@
 # Version updates
 
+## 2.0.0
+- All parameters of classes or defines are now in snake case and not in camel case
+
 ## 1.0.35
 - Add support for Grid 12.1.0.2 (installasm)
 - Fix unsetted vars in dbora template
@@ -20,8 +23,8 @@
 - be able to provide a listener name for starting the oracle listener ( manifest and custom type)
 
 ## 1.0.31
-- installasm, stand alone parameter in combination with $gridType == 'CRS_SWONLY' used as standalone or in RAC
-- installasm, .profile fix for ORACLE_SID in case gridType = HA_CONFIG -> +ASM or in gridType = CRS_CONFIG -> +ASM1
+- installasm, stand alone parameter in combination with $grid_type == 'CRS_SWONLY' used as standalone or in RAC
+- installasm, .profile fix for ORACLE_SID in case grid_type = HA_CONFIG -> +ASM or in grid_type = CRS_CONFIG -> +ASM1
 
 ## 1.0.30
 - Removed Oracle Home under base check for ASM installations, in CRS_CONFIG or CRS_SWONLY this is not right
@@ -35,12 +38,12 @@
 
 ## 1.0.27
 - solaris fix for database.pp and opatch auto
-- puppetDownloadMntPoint parameter for database.pp which can be used for own db template
+- puppet_download_mnt_point parameter for database.pp which can be used for own db template
 
 ## 1.0.26
-- Removed createUser functionality in installdb & client, Puppet should do it instead of oradb module
+- Removed create_user functionality in installdb & client, Puppet should do it instead of oradb module
 - Support for 12.1 pluggable database
-- initParams of database.pp now also support a hash besides a comma separated string
+- init_params of database.pp now also support a hash besides a comma separated string
 - Refactored dbstructure so it works with multiple oracle homes
 - Goldengate 12.1.2 now uses dbstructure
 
@@ -49,7 +52,7 @@
 - opatch fix for opatch bundle zip files which has subfolders in the zip
 - owner of the grid home or oracle home folder fix
 - renamed clusterware parameter of the opatch type to opatch_auto
-- StorageType parameter is now also used in the dbca command when using a database template
+- storage_type parameter is now also used in the dbca command when using a database template
 - Added ASM 11.2 Database template
 
 ## 1.0.24
@@ -95,7 +98,7 @@
 - asm/grid for 12.1.0.1 & installasm fix for Oracle Restart fix, 11.2.0.1 rsp template fix
 
 ## 1.0.15
-- RCU fix for multiple FMW Repositories, installasm fix with zipExtract = false
+- RCU fix for multiple FMW Repositories, installasm fix with zip_extract = false
 
 ## 1.0.14
 - Rename some internal manifest to avoid a conflict with orawls
@@ -104,7 +107,7 @@
 - Oracle Database & Client 12.1.0.2 Support
 
 ## 1.0.11
-- database client fix with remote file, set DBSNMPPASSWORD on a database
+- database client fix with remote file, set db_snmp_password on a database
 
 ## 1.0.10
 - oraInst.loc bug fix, option to skip installdb bash profile
@@ -137,7 +140,7 @@
 - oracle module add##on for user,role and tablespace creation
 
 ## 0.9.9
-- emConfiguration parameter for Database creation
+- em_configuration parameter for Database creation
 
 ## 0.9.7
 - Oracle database 11.2.0.1, 12.1.0.1 client support, refactored installdb,net,goldengate

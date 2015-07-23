@@ -4,12 +4,12 @@ describe 'oradb::database', :type => :define do
 
   describe "wrong database version" do
     let(:params){{
-                   :oracleBase              => '/oracle',
-                   :oracleHome              => '/oracle/product/11.2/db',
+                   :oracle_base              => '/oracle',
+                   :oracle_home              => '/oracle/product/11.2/db',
                    :version                 => '11.1',
                    :user                    => 'oracle',
                    :group                   => 'dba',
-                   :downloadDir             => '/install',
+                   :download_dir             => '/install',
                    :action                  => 'create',
     }}
     let(:title) {'testDb_Create'}
@@ -26,12 +26,12 @@ describe 'oradb::database', :type => :define do
 
   describe "wrong OS" do
     let(:params){{
-                   :oracleBase              => '/oracle',
-                   :oracleHome              => '/oracle/product/11.2/db',
+                   :oracle_base              => '/oracle',
+                   :oracle_home              => '/oracle/product/11.2/db',
                    :version                 => '11.2',
                    :user                    => 'oracle',
                    :group                   => 'dba',
-                   :downloadDir             => '/install',
+                   :download_dir             => '/install',
                    :action                  => 'create',
     }}
     let(:title) {'testDb_Create'}
@@ -48,12 +48,12 @@ describe 'oradb::database', :type => :define do
 
   describe "wrong action" do
     let(:params){{
-                   :oracleBase              => '/oracle',
-                   :oracleHome              => '/oracle/product/11.2/db',
+                   :oracle_base              => '/oracle',
+                   :oracle_home              => '/oracle/product/11.2/db',
                    :version                 => '11.2',
                    :user                    => 'oracle',
                    :group                   => 'dba',
-                   :downloadDir             => '/install',
+                   :download_dir             => '/install',
                    :action                  => 'xxxxx',
     }}
     let(:title) {'testDb_Create'}
@@ -68,16 +68,16 @@ describe 'oradb::database', :type => :define do
 
   end
 
-  describe "wrong databaseType" do
+  describe "wrong database_type" do
     let(:params){{
-                   :oracleBase              => '/oracle',
-                   :oracleHome              => '/oracle/product/11.2/db',
+                   :oracle_base              => '/oracle',
+                   :oracle_home              => '/oracle/product/11.2/db',
                    :version                 => '11.2',
                    :user                    => 'oracle',
                    :group                   => 'dba',
-                   :downloadDir             => '/install',
+                   :download_dir             => '/install',
                    :action                  => 'create',
-                   :databaseType            => "XXXX",
+                   :database_type            => "XXXX",
     }}
     let(:title) {'testDb_Create'}
     let(:facts) {{ :operatingsystem => 'CentOS' ,
@@ -86,21 +86,21 @@ describe 'oradb::database', :type => :define do
 
     it do
       expect { should contain_file("/install/database_testDb_Create.rsp")
-               }.to raise_error(Puppet::Error, /Unrecognized databaseType/)
+               }.to raise_error(Puppet::Error, /Unrecognized database_type/)
     end
 
   end
 
-  describe "wrong emConfiguration" do
+  describe "wrong em_configuration" do
     let(:params){{
-                   :oracleBase              => '/oracle',
-                   :oracleHome              => '/oracle/product/11.2/db',
+                   :oracle_base              => '/oracle',
+                   :oracle_home              => '/oracle/product/11.2/db',
                    :version                 => '11.2',
                    :user                    => 'oracle',
                    :group                   => 'dba',
-                   :downloadDir             => '/install',
+                   :download_dir             => '/install',
                    :action                  => 'create',
-                   :emConfiguration         => "XXXX",
+                   :em_configuration         => "XXXX",
     }}
     let(:title) {'testDb_Create'}
     let(:facts) {{ :operatingsystem => 'CentOS' ,
@@ -109,21 +109,21 @@ describe 'oradb::database', :type => :define do
 
     it do
       expect { should contain_file("/install/database_testDb_Create.rsp")
-               }.to raise_error(Puppet::Error, /Unrecognized emConfiguration/)
+               }.to raise_error(Puppet::Error, /Unrecognized em_configuration/)
     end
 
   end
 
-  describe "wrong storageType" do
+  describe "wrong storage_type" do
     let(:params){{
-                   :oracleBase              => '/oracle',
-                   :oracleHome              => '/oracle/product/11.2/db',
+                   :oracle_base              => '/oracle',
+                   :oracle_home              => '/oracle/product/11.2/db',
                    :version                 => '11.2',
                    :user                    => 'oracle',
                    :group                   => 'dba',
-                   :downloadDir             => '/install',
+                   :download_dir             => '/install',
                    :action                  => 'create',
-                   :storageType             => "XXXX",
+                   :storage_type             => "XXXX",
     }}
     let(:title) {'testDb_Create'}
     let(:facts) {{ :operatingsystem => 'CentOS' ,
@@ -132,21 +132,21 @@ describe 'oradb::database', :type => :define do
 
     it do
       expect { should contain_file("/install/database_testDb_Create.rsp")
-               }.to raise_error(Puppet::Error, /Unrecognized storageType/)
+               }.to raise_error(Puppet::Error, /Unrecognized storage_type/)
     end
 
   end
 
   describe "container database on 11.2" do
     let(:params){{
-                   :oracleBase              => '/oracle',
-                   :oracleHome              => '/oracle/product/11.2/db',
+                   :oracle_base              => '/oracle',
+                   :oracle_home              => '/oracle/product/11.2/db',
                    :version                 => '11.2',
                    :user                    => 'oracle',
                    :group                   => 'dba',
-                   :downloadDir             => '/install',
+                   :download_dir             => '/install',
                    :action                  => 'create',
-                   :containerDatabase       => true,
+                   :container_database       => true,
     }}
     let(:title) {'testDb_Create'}
     let(:facts) {{ :operatingsystem => 'CentOS' ,
@@ -168,18 +168,18 @@ describe 'oradb::database', :type => :define do
                    :kernel          => 'Linux',
                    :osfamily        => 'RedHat' }}
     let(:base_params) {{
-                         :oracleBase              => '/oracle',
-                         :oracleHome              => '/oracle/product/11.2/db',
+                         :oracle_base              => '/oracle',
+                         :oracle_home              => '/oracle/product/11.2/db',
                          :version                 => '11.2',
                          :user                    => 'oracle',
                          :group                   => 'dba',
-                         :downloadDir             => '/install',
+                         :download_dir             => '/install',
                          :action                  => 'create'
     }}
 
     describe "specified as a String" do
 
-      let(:params) { base_params.merge(:initParams=> "a=1,b=2") }
+      let(:params) { base_params.merge(:init_params=> "a=1,b=2") }
 
       it "should pass" do
         expect { should contain_file("/install/database_testDb_Create.rsp")
@@ -190,7 +190,7 @@ describe 'oradb::database', :type => :define do
 
     describe "specified as a Hash" do
 
-      let(:params) { base_params.merge!(:initParams=> {'a' => 'a', 'b' => 'b'}) }
+      let(:params) { base_params.merge!(:init_params=> {'a' => 'a', 'b' => 'b'}) }
 
       it "should fail" do
         expect { should contain_file("/install/database_testDb_Create.rsp")
@@ -200,11 +200,11 @@ describe 'oradb::database', :type => :define do
 
     describe "specified as an Array" do
 
-      let(:params) { base_params.merge(:initParams=> [1,2,3,4,5]) }
+      let(:params) { base_params.merge(:init_params=> [1,2,3,4,5]) }
 
       it "should fail" do
         expect { should contain_file("/install/database_testDb_Create.rsp")
-                 }.to raise_error(Puppet::Error, /initParams only supports a String or a Hash as value type/)
+                 }.to raise_error(Puppet::Error, /init_params only supports a String or a Hash as value type/)
       end
 
     end

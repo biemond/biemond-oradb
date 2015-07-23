@@ -5,24 +5,24 @@
 #
 #
 define oradb::rcu(
-  $rcuFile                 = undef,
-  $product                 = 'soasuite',
-  $version                 = '11.1.1.7',
-  $oracleHome              = undef,
-  $user                    = 'oracle',
-  $group                   = 'dba',
-  $downloadDir             = '/install',
-  $action                  = 'create',  # delete or create
-  $dbServer                = undef,
-  $dbService               = undef,
-  $sysUser                 = 'sys',
-  $sysPassword             = undef,
-  $schemaPrefix            = undef,
-  $reposPassword           = undef,
-  $tempTablespace          = undef,
-  $puppetDownloadMntPoint  = undef,
-  $remoteFile              = true,
-  $logoutput               = false,
+  $rcu_file                  = undef,
+  $product                   = 'soasuite',
+  $version                   = '11.1.1.7',
+  $oracle_home               = undef,
+  $user                      = 'oracle',
+  $group                     = 'dba',
+  $download_dir              = '/install',
+  $action                    = 'create',  # delete or create
+  $db_server                 = undef,
+  $db_service                = undef,
+  $sys_user                  = 'sys',
+  $sys_password              = undef,
+  $schema_prefix             = undef,
+  $repos_password            = undef,
+  $temp_tablespace           = undef,
+  $puppet_download_mnt_point = undef,
+  $remote_file               = true,
+  $logoutput                 = false,
 ){
   case $::kernel {
     'Linux': {
@@ -33,18 +33,18 @@ define oradb::rcu(
     }
   }
 
-  if $puppetDownloadMntPoint == undef {
+  if $puppet_download_mnt_point == undef {
     $mountPoint = 'puppet:///modules/oradb/'
   } else {
-    $mountPoint = $puppetDownloadMntPoint
+    $mountPoint = $puppet_download_mnt_point
   }
 
   # create the rcu folder
-  if ! defined(File["${downloadDir}/rcu_${version}"]) {
+  if ! defined(File["${download_dir}/rcu_${version}"]) {
     # check rcu install folder
-    file { "${downloadDir}/rcu_${version}":
+    file { "${download_dir}/rcu_${version}":
       ensure  => directory,
-      path    => "${downloadDir}/rcu_${version}",
+      path    => "${download_dir}/rcu_${version}",
       recurse => false,
       replace => false,
       mode    => '0775',
@@ -54,26 +54,26 @@ define oradb::rcu(
   }
 
   # unzip rcu software
-  if $remoteFile == true {
-    if ! defined(File["${downloadDir}/${rcuFile}"]) {
-      file { "${downloadDir}/${rcuFile}":
+  if $remote_file == true {
+    if ! defined(File["${download_dir}/${rcu_file}"]) {
+      file { "${download_dir}/${rcu_file}":
         ensure => present,
         mode   => '0775',
         owner  => $user,
         group  => $group,
-        source => "${mountPoint}/${rcuFile}",
-        before => Exec["extract ${rcuFile}"],
+        source => "${mountPoint}/${rcu_file}",
+        before => Exec["extract ${rcu_file}"],
       }
     }
-    $source = $downloadDir
+    $source = $download_dir
   } else {
     $source = $mountPoint
   }
 
-  if ! defined(Exec["extract ${rcuFile}"]) {
-    exec { "extract ${rcuFile}":
-      command   => "unzip ${source}/${rcuFile} -d ${downloadDir}/rcu_${version}",
-      creates   => "${downloadDir}/rcu_${version}/rcuHome",
+  if ! defined(Exec["extract ${rcu_file}"]) {
+    exec { "extract ${rcu_file}":
+      command   => "unzip ${source}/${rcu_file} -d ${download_dir}/rcu_${version}",
+      creates   => "${download_dir}/rcu_${version}/rcuHome",
       path      => $execPath,
       user      => $user,
       group     => $group,
@@ -81,14 +81,14 @@ define oradb::rcu(
     }
   }
 
-  if ! defined(File["${downloadDir}/rcu_${version}/rcuHome/rcu/log"]) {
+  if ! defined(File["${download_dir}/rcu_${version}/rcuHome/rcu/log"]) {
     # check rcu log folder
-    file { "${downloadDir}/rcu_${version}/rcuHome/rcu/log":
+    file { "${download_dir}/rcu_${version}/rcuHome/rcu/log":
       ensure  => directory,
-      path    => "${downloadDir}/rcu_${version}/rcuHome/rcu/log",
+      path    => "${download_dir}/rcu_${version}/rcuHome/rcu/log",
       recurse => false,
       replace => false,
-      require => Exec["extract ${rcuFile}"],
+      require => Exec["extract ${rcu_file}"],
       mode    => '0775',
       owner   => $user,
       group   => $group,
@@ -97,47 +97,47 @@ define oradb::rcu(
 
   if $product == 'soasuite' {
     $components           = '-component SOAINFRA -component ORASDPM -component MDS -component OPSS -component BAM'
-    $componentsPasswords  = [$reposPassword, $reposPassword, $reposPassword,$reposPassword,$reposPassword]
+    $componentsPasswords  = [$repos_password, $repos_password, $repos_password,$repos_password,$repos_password]
   } elsif $product == 'webcenter' {
     $components           = '-component MDS -component OPSS -component CONTENTSERVER11 -component CONTENTSERVER11SEARCH -component URM -component PORTLET -component WEBCENTER -component ACTIVITIES -component DISCUSSIONS'
     # extra password for DISCUSSIONS and ACTIVITIES
-    $componentsPasswords  = [$reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword]
+    $componentsPasswords  = [$repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password]
   } elsif $product == 'oam' {
     $components           = '-component MDS -component OPSS -component IAU -component OAM'
-    $componentsPasswords  = [$reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword]
+    $componentsPasswords  = [$repos_password, $repos_password, $repos_password, $repos_password, $repos_password]
   } elsif $product == 'oim' {
     $components           = '-component SOAINFRA -component ORASDPM -component MDS -component OPSS -component BAM -component IAU -component BIPLATFORM -component OIF -component OIM -component OAM -component OAAM'
-    $componentsPasswords  = [$reposPassword, $reposPassword, $reposPassword,$reposPassword,$reposPassword,$reposPassword, $reposPassword, $reposPassword,$reposPassword, $reposPassword, $reposPassword]
+    $componentsPasswords  = [$repos_password, $repos_password, $repos_password,$repos_password,$repos_password,$repos_password, $repos_password, $repos_password,$repos_password, $repos_password, $repos_password]
   } elsif $product == 'all' {
     $components           = '-component SOAINFRA -component ORASDPM -component MDS -component OPSS -component BAM -component CONTENTSERVER11 -component CONTENTSERVER11SEARCH -component URM -component PORTLET -component WEBCENTER -component ACTIVITIES -component DISCUSSIONS'
     # extra password for DISCUSSIONS and ACTIVITIES
-    $componentsPasswords  = [ $reposPassword, $reposPassword, $reposPassword,$reposPassword,$reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword, $reposPassword]
+    $componentsPasswords  = [ $repos_password, $repos_password, $repos_password,$repos_password,$repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password]
   } else {
     fail('Unrecognized FMW product')
   }
 
-  file { "${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt":
+  file { "${download_dir}/rcu_${version}/rcu_passwords_${title}.txt":
     ensure  => present,
-    require => Exec["extract ${rcuFile}"],
+    require => Exec["extract ${rcu_file}"],
     content => template('oradb/rcu_passwords.txt.erb'),
     mode    => '0775',
     owner   => $user,
     group   => $group,
   }
 
-  if ( $oracleHome != undef ) {
-    $preCommand    = "export SQLPLUS_HOME=${oracleHome};${downloadDir}/rcu_${version}/rcuHome/bin/rcu -silent"
+  if ( $oracle_home != undef ) {
+    $preCommand    = "export SQLPLUS_HOME=${oracle_home};${download_dir}/rcu_${version}/rcuHome/bin/rcu -silent"
   } else {
-    $preCommand    = "${downloadDir}/rcu_${version}/rcuHome/bin/rcu -silent"
+    $preCommand    = "${download_dir}/rcu_${version}/rcuHome/bin/rcu -silent"
   }
-  $postCommand     = "-databaseType ORACLE -connectString ${dbServer}:${dbService} -dbUser ${sysUser} -dbRole SYSDBA -schemaPrefix ${schemaPrefix} ${components} "
-  $passwordCommand = " -f < ${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"
+  $postCommand     = "-database_type ORACLE -connectString ${db_server}:${db_service} -dbUser ${sys_user} -dbRole SYSDBA -schema_prefix ${schema_prefix} ${components} "
+  $passwordCommand = " -f < ${download_dir}/rcu_${version}/rcu_passwords_${title}.txt"
 
   #optional set the Temp tablespace
-  if $tempTablespace == undef {
+  if $temp_tablespace == undef {
     $createCommand  = "${preCommand} -createRepository ${postCommand} ${passwordCommand}"
   } else {
-    $createCommand  = "${preCommand} -createRepository ${postCommand} -tempTablespace ${tempTablespace} ${passwordCommand}"
+    $createCommand  = "${preCommand} -createRepository ${postCommand} -temp_tablespace ${temp_tablespace} ${passwordCommand}"
   }
   $deleteCommand  = "${preCommand} -dropRepository ${postCommand} ${passwordCommand}"
 
@@ -148,17 +148,17 @@ define oradb::rcu(
     $statement = $deleteCommand
   }
 
-  db_rcu{ $schemaPrefix:
+  db_rcu{ $schema_prefix:
     ensure       => $action,
     statement    => $statement,
     os_user      => $user,
-    oracle_home  => $oracleHome,
-    sys_user     => $sysUser,
-    sys_password => $sysPassword,
-    db_server    => $dbServer,
-    db_service   => $dbService,
-    require      => [Exec["extract ${rcuFile}"],
-                    File["${downloadDir}/rcu_${version}/rcu_passwords_${title}.txt"],],
+    oracle_home  => $oracle_home,
+    sys_user     => $sys_user,
+    SYSPASSWORD => $sys_password,
+    db_server    => $db_server,
+    db_service   => $db_service,
+    require      => [Exec["extract ${rcu_file}"],
+                    File["${download_dir}/rcu_${version}/rcu_passwords_${title}.txt"],],
   }
 
 }

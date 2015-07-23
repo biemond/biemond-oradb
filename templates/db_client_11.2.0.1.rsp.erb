@@ -11,58 +11,58 @@
 ###############################################################################
 
 #-------------------------------------------------------------------------------
-# Do not change the following system generated value. 
+# Do not change the following system generated value.
 #-------------------------------------------------------------------------------
 oracle.install.responseFileVersion=/oracle/install/rspfmt_clientinstall_response_schema_v11_2_0
 
 #-------------------------------------------------------------------------------
-# This variable holds the hostname of the system as set by the user. 
-# It can be used to force the installation to use an alternative   
+# This variable holds the hostname of the system as set by the user.
+# It can be used to force the installation to use an alternative
 # hostname rather than using the first hostname found on the system
 # (e.g., for systems with multiple hostnames and network interfaces).
 ORACLE_HOSTNAME=
 #-------------------------------------------------------------------------------
-# Unix group to be set for the inventory directory.  
+# Unix group to be set for the inventory directory.
 UNIX_GROUP_NAME=<%= @group_install %>
 #-------------------------------------------------------------------------------
 # Inventory location.
 INVENTORY_LOCATION=<%= @oraInventory %>
 #-------------------------------------------------------------------------------
-# Languages in which the components will be installed.             
+# Languages in which the components will be installed.
 #
-# en   : English                  ja   : Japanese                  
-# fr   : French                   ko   : Korean                    
-# ar   : Arabic                   es   : Latin American Spanish    
-# bn   : Bengali                  lv   : Latvian                   
-# pt_BR: Brazilian Portuguese     lt   : Lithuanian                
-# bg   : Bulgarian                ms   : Malay                     
-# fr_CA: Canadian French          es_MX: Mexican Spanish           
-# ca   : Catalan                  no   : Norwegian                 
-# hr   : Croatian                 pl   : Polish                    
-# cs   : Czech                    pt   : Portuguese                
-# da   : Danish                   ro   : Romanian                  
-# nl   : Dutch                    ru   : Russian                   
-# ar_EG: Egyptian                 zh_CN: Simplified Chinese        
-# en_GB: English (Great Britain)  sk   : Slovak                    
-# et   : Estonian                 sl   : Slovenian                 
-# fi   : Finnish                  es_ES: Spanish                   
-# de   : German                   sv   : Swedish                   
-# el   : Greek                    th   : Thai                      
-# iw   : Hebrew                   zh_TW: Traditional Chinese       
-# hu   : Hungarian                tr   : Turkish                   
-# is   : Icelandic                uk   : Ukrainian                 
-# in   : Indonesian               vi   : Vietnamese                
-# it   : Italian                                                   
+# en   : English                  ja   : Japanese
+# fr   : French                   ko   : Korean
+# ar   : Arabic                   es   : Latin American Spanish
+# bn   : Bengali                  lv   : Latvian
+# pt_BR: Brazilian Portuguese     lt   : Lithuanian
+# bg   : Bulgarian                ms   : Malay
+# fr_CA: Canadian French          es_MX: Mexican Spanish
+# ca   : Catalan                  no   : Norwegian
+# hr   : Croatian                 pl   : Polish
+# cs   : Czech                    pt   : Portuguese
+# da   : Danish                   ro   : Romanian
+# nl   : Dutch                    ru   : Russian
+# ar_EG: Egyptian                 zh_CN: Simplified Chinese
+# en_GB: English (Great Britain)  sk   : Slovak
+# et   : Estonian                 sl   : Slovenian
+# fi   : Finnish                  es_ES: Spanish
+# de   : German                   sv   : Swedish
+# el   : Greek                    th   : Thai
+# iw   : Hebrew                   zh_TW: Traditional Chinese
+# hu   : Hungarian                tr   : Turkish
+# is   : Icelandic                uk   : Ukrainian
+# in   : Indonesian               vi   : Vietnamese
+# it   : Italian
 #
 # Example : SELECTED_LANGUAGES=en,fr,ja
 #-------------------------------------------------------------------------------
 SELECTED_LANGUAGES=en
 #-------------------------------------------------------------------------------
-# Complete path of the Oracle Home  
-ORACLE_HOME=<%= @oracleHome %>
+# Complete path of the Oracle Home
+ORACLE_HOME=<%= @oracle_home %>
 #-------------------------------------------------------------------------------
-# Complete path of the Oracle Base. 
-ORACLE_BASE=<%= @oracleBase %>
+# Complete path of the Oracle Base.
+ORACLE_BASE=<%= @oracle_base %>
 #-------------------------------------------------------------------------------
 #Name       : INSTALL_TYPE
 #Datatype   : String
@@ -117,9 +117,9 @@ oracle.install.client.installType=Administrator
 oracle.install.client.customComponents="oracle.sqlj:11.2.0.1.0","oracle.rdbms.util:11.2.0.1.0","oracle.javavm.client:11.2.0.1.0","oracle.sqlplus:11.2.0.1.0","oracle.dbjava.jdbc:11.2.0.1.0","oracle.ldap.client:11.2.0.1.0","oracle.rdbms.oci:11.2.0.1.0","oracle.precomp:11.2.0.1.0","oracle.xdk:11.2.0.1.0","oracle.network.aso:11.2.0.1.0","oracle.assistants.oemlt:11.2.0.1.0","oracle.oraolap.mgmt:11.2.0.1.0","oracle.network.client:11.2.0.1.0","oracle.network.cman:11.2.0.1.0","oracle.network.listener:11.2.0.1.0","oracle.ordim.client:11.2.0.1.0","oracle.ons:11.2.0.0.0","oracle.odbc:11.2.0.1.0","oracle.has.client:11.2.0.1.0","oracle.dbdev:11.2.0.1.0","oracle.rdbms.scheduler:11.2.0.1.0"
 #-------------------------------------------------------------------------------
 #Name       : MTS_PORT
-#Datatype   : int 
+#Datatype   : int
 #Description: Port number to be used for by the Oracle MTS Recovery Service to listen
-#	      for requests. This needs to be entered in case oracle.ntoramts is 
+#	      for requests. This needs to be entered in case oracle.ntoramts is
 #	      selected in the list of custom components in custom install
 #
 #

@@ -12,13 +12,13 @@
 
 
 #-------------------------------------------------------------------------------
-# Do not change the following system generated value. 
+# Do not change the following system generated value.
 #-------------------------------------------------------------------------------
 oracle.install.responseFileVersion=/oracle/install/rspfmt_clientinstall_response_schema_v12.1.0
 
 #-------------------------------------------------------------------------------
-# This variable holds the hostname of the system as set by the user. 
-# It can be used to force the installation to use an alternative   
+# This variable holds the hostname of the system as set by the user.
+# It can be used to force the installation to use an alternative
 # hostname rather than using the first hostname found on the system
 # (e.g., for systems with multiple hostnames and network interfaces).
 #-------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ ORACLE_HOSTNAME=
 
 #-------------------------------------------------------------------------------
 # Unix group to be set for the inventory directory.
-#------------------------------------------------------------------------------- 
+#-------------------------------------------------------------------------------
 UNIX_GROUP_NAME=<%= @group_install %>
 
 #-------------------------------------------------------------------------------
@@ -35,31 +35,31 @@ UNIX_GROUP_NAME=<%= @group_install %>
 INVENTORY_LOCATION=<%= @oraInventory %>
 
 #-------------------------------------------------------------------------------
-# Specify the languages in which the components will be installed.             
+# Specify the languages in which the components will be installed.
 #
-# en   : English                  ja   : Japanese                  
-# fr   : French                   ko   : Korean                    
-# ar   : Arabic                   es   : Latin American Spanish    
-# bn   : Bengali                  lv   : Latvian                   
-# pt_BR: Brazilian Portuguese     lt   : Lithuanian                
-# bg   : Bulgarian                ms   : Malay                     
-# fr_CA: Canadian French          es_MX: Mexican Spanish           
-# ca   : Catalan                  no   : Norwegian                 
-# hr   : Croatian                 pl   : Polish                    
-# cs   : Czech                    pt   : Portuguese                
-# da   : Danish                   ro   : Romanian                  
-# nl   : Dutch                    ru   : Russian                   
-# ar_EG: Egyptian                 zh_CN: Simplified Chinese        
-# en_GB: English (Great Britain)  sk   : Slovak                    
-# et   : Estonian                 sl   : Slovenian                 
-# fi   : Finnish                  es_ES: Spanish                   
-# de   : German                   sv   : Swedish                   
-# el   : Greek                    th   : Thai                      
-# iw   : Hebrew                   zh_TW: Traditional Chinese       
-# hu   : Hungarian                tr   : Turkish                   
-# is   : Icelandic                uk   : Ukrainian                 
-# in   : Indonesian               vi   : Vietnamese                
-# it   : Italian                                                   
+# en   : English                  ja   : Japanese
+# fr   : French                   ko   : Korean
+# ar   : Arabic                   es   : Latin American Spanish
+# bn   : Bengali                  lv   : Latvian
+# pt_BR: Brazilian Portuguese     lt   : Lithuanian
+# bg   : Bulgarian                ms   : Malay
+# fr_CA: Canadian French          es_MX: Mexican Spanish
+# ca   : Catalan                  no   : Norwegian
+# hr   : Croatian                 pl   : Polish
+# cs   : Czech                    pt   : Portuguese
+# da   : Danish                   ro   : Romanian
+# nl   : Dutch                    ru   : Russian
+# ar_EG: Egyptian                 zh_CN: Simplified Chinese
+# en_GB: English (Great Britain)  sk   : Slovak
+# et   : Estonian                 sl   : Slovenian
+# fi   : Finnish                  es_ES: Spanish
+# de   : German                   sv   : Swedish
+# el   : Greek                    th   : Thai
+# iw   : Hebrew                   zh_TW: Traditional Chinese
+# hu   : Hungarian                tr   : Turkish
+# is   : Icelandic                uk   : Ukrainian
+# in   : Indonesian               vi   : Vietnamese
+# it   : Italian
 #
 # all_langs   : All languages
 #
@@ -73,13 +73,13 @@ SELECTED_LANGUAGES=en
 
 #-------------------------------------------------------------------------------
 # Complete path of the Oracle Home
-#-------------------------------------------------------------------------------  
-ORACLE_HOME=<%= @oracleHome %>
+#-------------------------------------------------------------------------------
+ORACLE_HOME=<%= @oracle_home %>
 
 #-------------------------------------------------------------------------------
 # Complete path of the Oracle Base.
 #-------------------------------------------------------------------------------
-ORACLE_BASE=<%= @oracleBase %>
+ORACLE_BASE=<%= @oracle_base %>
 
 #------------------------------------------------------------------------------
 #Name       : INSTALL_TYPE
@@ -128,7 +128,7 @@ oracle.install.client.installType=Administrator
 # oracle.odbc:12.1.0.1.0 -- "Oracle ODBC Driver"
 # oracle.has.client:12.1.0.1.0 -- "Oracle Clusterware High Availability API"
 # oracle.dbdev:12.1.0.1.0 -- "Oracle SQL Developer"
-# oracle.rdbms.scheduler:12.1.0.1.0 -- "Oracle Scheduler Agent" 
+# oracle.rdbms.scheduler:12.1.0.1.0 -- "Oracle Scheduler Agent"
 #
 # Example    : oracle.install.client.customComponents="oracle.precomp:12.1.0.1.0","oracle.oraolap.mgmt:12.1.0.1.0","oracle.rdbms.scheduler:12.1.0.1.0"
 #-------------------------------------------------------------------------------
@@ -169,14 +169,14 @@ oracle.installer.autoupdates.option=SKIP_UPDATES
 oracle.installer.autoupdates.downloadUpdatesLoc=
 
 #------------------------------------------------------------------------------
-# Specify the My Oracle Support Account Username which has the patches download privileges  
+# Specify the My Oracle Support Account Username which has the patches download privileges
 # to be used for software updates.
 #  Example   : AUTOUPDATES_MYORACLESUPPORT_USERNAME=abc@oracle.com
 #------------------------------------------------------------------------------
 AUTOUPDATES_MYORACLESUPPORT_USERNAME=
 
 #------------------------------------------------------------------------------
-# Specify the My Oracle Support Account Username password which has the patches download privileges  
+# Specify the My Oracle Support Account Username password which has the patches download privileges
 # to be used for software updates.
 #
 # Example    : AUTOUPDATES_MYORACLESUPPORT_PASSWORD=password
@@ -186,30 +186,30 @@ AUTOUPDATES_MYORACLESUPPORT_PASSWORD=
 #------------------------------------------------------------------------------
 # Specify the Proxy server name. Length should be greater than zero.
 #
-# Example    : PROXY_HOST=proxy.domain.com 
+# Example    : PROXY_HOST=proxy.domain.com
 #------------------------------------------------------------------------------
 PROXY_HOST=
 
 #------------------------------------------------------------------------------
 # Specify the proxy port number. Should be Numeric and atleast 2 chars.
 #
-# Example    : PROXY_PORT=25 
+# Example    : PROXY_PORT=25
 #------------------------------------------------------------------------------
 PROXY_PORT=
 
 #------------------------------------------------------------------------------
-# Specify the proxy user name. Leave PROXY_USER and PROXY_PWD 
+# Specify the proxy user name. Leave PROXY_USER and PROXY_PWD
 # blank if your proxy server requires no authentication.
 #
-# Example    : PROXY_USER=username 
+# Example    : PROXY_USER=username
 #------------------------------------------------------------------------------
 PROXY_USER=
 
 #------------------------------------------------------------------------------
-# Specify the proxy password. Leave PROXY_USER and PROXY_PWD  
+# Specify the proxy password. Leave PROXY_USER and PROXY_PWD
 # blank if your proxy server requires no authentication.
 #
-# Example    : PROXY_PWD=password 
+# Example    : PROXY_PWD=password
 #------------------------------------------------------------------------------
 PROXY_PWD=
 

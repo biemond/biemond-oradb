@@ -6,13 +6,12 @@ begin
     module Parser
       module Functions
         newfunction(:opatch_version, :type => :rvalue) do |args|
+          oracle_homeArg = args[0].strip.downcase
+          oracle_home = oracle_homeArg.gsub('/', '_').gsub('\\', '_').gsub('c:', '_c').gsub('d:', '_d').gsub('e:', '_e')
 
-          oracleHomeArg = args[0].strip.downcase
-          oracleHome = oracleHomeArg.gsub('/', '_').gsub('\\', '_').gsub('c:', '_c').gsub('d:', '_d').gsub('e:', '_e')
-
-          log "lookup fact oradb_inst_opatch#{oracleHome}"
+          log "lookup fact oradb_inst_opatch#{oracle_home}"
           # check the oracle home opatch
-          found = lookup_db_var("oradb_inst_opatch#{oracleHome}")
+          found = lookup_db_var("oradb_inst_opatch#{oracle_home}")
           log "found value #{found}"
           return found
         end
@@ -48,5 +47,4 @@ begin
       :source  => 'opatch_version'
     )
   end
-
 end

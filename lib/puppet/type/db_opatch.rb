@@ -30,7 +30,6 @@ module Puppet
 
         event
       end
-
     end
 
     newparam(:name) do
@@ -87,6 +86,5 @@ module Puppet
         One of the Sub patch number of the bundle patch
       EOT
     end
-
   end
 end

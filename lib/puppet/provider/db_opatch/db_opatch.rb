@@ -1,6 +1,4 @@
-
 Puppet::Type.type(:db_opatch).provide(:db_opatch) do
-
   def self.instances
     []
   end
@@ -77,7 +75,7 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
     Puppet.debug "#{output}"
     # output = execute command, :failonfail => true ,:uid => user
     output.each_line do |li|
-      opatch = li[5, li.index(':')-5 ].strip + ';' if (li['Patch'] and li[': applied on'])
+      opatch = li[5, li.index(':') - 5].strip + ';' if (li['Patch'] and li[': applied on'])
       unless opatch.nil?
         Puppet.debug "line #{opatch}"
         if opatch.include? patchId

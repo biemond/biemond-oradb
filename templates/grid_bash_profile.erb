@@ -2,13 +2,13 @@
 
 ORACLE_TERM=xterm; export ORACLE_TERM
 
-LD_LIBRARY_PATH=<%= @gridHome %>/lib
-ORACLE_BASE=<%= @gridBase %>
-ORACLE_HOME=<%= @gridHome %>
-SQLPLUS_HOME=<%= @gridHome %>
-PATH=/bin:/usr/local/bin:/usr/bin:/bin:<%= @gridHome %>/bin
+LD_LIBRARY_PATH=<%= @grid_home %>/lib
+ORACLE_BASE=<%= @grid_base %>
+ORACLE_HOME=<%= @grid_home %>
+SQLPLUS_HOME=<%= @grid_home %>
+PATH=/bin:/usr/local/bin:/usr/bin:/bin:<%= @grid_home %>/bin
 
-<% if @gridType  == 'HA_CONFIG' %>
+<% if @grid_type  == 'HA_CONFIG' %>
 export ORACLE_SID=+ASM
 <% else %>
 export ORACLE_SID=+ASM1
