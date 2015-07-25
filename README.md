@@ -5,6 +5,8 @@ created by Edwin Biemond
 [biemond.blogspot.com](http://biemond.blogspot.com)
 [Github homepage](https://github.com/biemond/puppet)
 
+With version >= 2.0.0  all manifest parameters are in lowercase and in snakestyle instead of camelcase
+
 Dependency with
 - puppetlabs/concat >= 1.0.0
 - puppetlabs/stdlib >= 3.2.0
