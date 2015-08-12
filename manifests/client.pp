@@ -12,6 +12,7 @@ define oradb::client(
   $group                     = 'dba',
   $group_install             = 'oinstall',
   $download_dir              = '/install',
+  $bash_profile              = true,
   $puppet_download_mnt_point = undef,
   $remote_file               = true,
   $logoutput                 = true,
@@ -137,14 +138,16 @@ define oradb::client(
       logoutput => $logoutput,
     }
 
-    if ! defined(File["${user_base_dir}/${user}/.bash_profile"]) {
-      file { "${user_base_dir}/${user}/.bash_profile":
-        ensure  => present,
-        # content => template('oradb/bash_profile.erb'),
-        content => regsubst(template('oradb/bash_profile.erb'), '\r\n', "\n", 'EMG'),
-        mode    => '0775',
-        owner   => $user,
-        group   => $group,
+    if ( $bash_profile == true ) {
+      if ! defined(File["${user_base_dir}/${user}/.bash_profile"]) {
+        file { "${user_base_dir}/${user}/.bash_profile":
+          ensure  => present,
+          # content => template('oradb/bash_profile.erb'),
+          content => regsubst(template('oradb/bash_profile.erb'), '\r\n', "\n", 'EMG'),
+          mode    => '0775',
+          owner   => $user,
+          group   => $group,
+        }
       }
     }
 

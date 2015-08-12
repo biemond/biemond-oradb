@@ -1,5 +1,8 @@
 # Version updates
 
+## 2.0.1
+-  bash_profile option for database clients
+
 ## 2.0.0
 - All parameters of classes or defines are now in snake case and not in camel case
 
