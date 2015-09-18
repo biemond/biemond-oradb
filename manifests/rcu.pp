@@ -130,14 +130,14 @@ define oradb::rcu(
   } else {
     $preCommand    = "${download_dir}/rcu_${version}/rcuHome/bin/rcu -silent"
   }
-  $postCommand     = "-database_type ORACLE -connectString ${db_server}:${db_service} -dbUser ${sys_user} -dbRole SYSDBA -schema_prefix ${schema_prefix} ${components} "
+  $postCommand     = "-databaseType ORACLE -connectString ${db_server}:${db_service} -dbUser ${sys_user} -dbRole SYSDBA -schemaPrefix ${schema_prefix} ${components} "
   $passwordCommand = " -f < ${download_dir}/rcu_${version}/rcu_passwords_${title}.txt"
 
   #optional set the Temp tablespace
   if $temp_tablespace == undef {
     $createCommand  = "${preCommand} -createRepository ${postCommand} ${passwordCommand}"
   } else {
-    $createCommand  = "${preCommand} -createRepository ${postCommand} -temp_tablespace ${temp_tablespace} ${passwordCommand}"
+    $createCommand  = "${preCommand} -createRepository ${postCommand} -tempTablespace ${temp_tablespace} ${passwordCommand}"
   }
   $deleteCommand  = "${preCommand} -dropRepository ${postCommand} ${passwordCommand}"
 
