@@ -276,7 +276,7 @@ or
     oradb::installdb{ '112010_Linux-x86-64':
       version       => '11.2.0.1',
       file          => 'linux.x64_11gR2_database',
-      DATABASETYPE => 'SE',
+      DATABASETYPE  => 'SE',
       oracle_base   => '/oracle',
       oracle_home   => '/oracle/product/11.2/db',
       user          => 'oracle',
@@ -457,8 +457,8 @@ Database instance
       character_set             => "AL32UTF8",
       nationalcharacter_set     => "UTF8",
       init_params               => {'open_cursors'        => '1000',
-                                  'processes'           => '600',
-                                  'job_queue_processes' => '4' },
+                                    'processes'           => '600',
+                                    'job_queue_processes' => '4' },
       sample_schema             => 'TRUE',
       memory_percentage         => "40",
       memory_total              => "800",
@@ -999,7 +999,7 @@ Tnsnames.ora
 or
 
     oradb::client{ '11.2.0.1_Linux-x86-64':
-      version                    => '11.2.0.1',
+      version                   => '11.2.0.1',
       file                      => 'linux.x64_11gR2_client.zip',
       oracle_base               => '/oracle',
       oracle_home               => '/oracle/product/11.2/client',
@@ -1153,18 +1153,18 @@ In combination with the oracle puppet module from hajee you can create/change a 
       }
 
       oradb::goldengate{ 'ggate12.1.2':
-        version                  => '12.1.2',
-        file                     => '121200_fbo_ggs_Linux_x64_shiphome.zip',
-        database_type            => 'Oracle',
-        database_version         => 'ORA11g',
-        database_home            => '/oracle/product/12.1/db',
-        oracle_base              => '/oracle',
-        goldengate_home          => "/oracle/product/12.1/ggate",
-        manager_port             => 16000,
-        user                     => 'ggate',
-        group                    => 'dba',
-        group_install            => 'oinstall',
-        download_dir             => '/install',
+        version                   => '12.1.2',
+        file                      => '121200_fbo_ggs_Linux_x64_shiphome.zip',
+        database_type             => 'Oracle',
+        database_version          => 'ORA11g',
+        database_home             => '/oracle/product/12.1/db',
+        oracle_base               => '/oracle',
+        goldengate_home           => "/oracle/product/12.1/ggate",
+        manager_port              => 16000,
+        user                      => 'ggate',
+        group                     => 'dba',
+        group_install             => 'oinstall',
+        download_dir              => '/install',
         puppet_download_mnt_point => hiera('oracle_source'),
         require                   => User['ggate'],
       }
@@ -1216,19 +1216,19 @@ RCU examples
 soa suite repository
 
     oradb::rcu{'DEV_PS6':
-      rcu_file          => 'ofm_rcu_linux_11.1.1.7.0_32_disk1_1of1.zip',
-      product          => 'soasuite',
-      version          => '11.1.1.7',
-      oracle_home       => '/oracle/product/11.2/db',
-      user             => 'oracle',
-      group            => 'dba',
-      download_dir      => '/install',
-      action           => 'create',
-      db_server         => 'dbagent1.alfa.local:1521',
-      db_service        => 'test.oracle.com',
-      sys_password      => 'Welcome01',
-      schema_prefix     => 'DEV',
-      reposPassword    => 'Welcome02',
+      rcu_file       => 'ofm_rcu_linux_11.1.1.7.0_32_disk1_1of1.zip',
+      product        => 'soasuite',
+      version        => '11.1.1.7',
+      oracle_home    => '/oracle/product/11.2/db',
+      user           => 'oracle',
+      group          => 'dba',
+      download_dir   => '/install',
+      action         => 'create',
+      db_server      => 'dbagent1.alfa.local:1521',
+      db_service     => 'test.oracle.com',
+      sys_password   => 'Welcome01',
+      schema_prefix  => 'DEV',
+      repos_password => 'Welcome02',
     }
 
 webcenter repository with a fixed temp tablespace
@@ -1283,7 +1283,7 @@ OIM, OAM repository, OIM needs an Oracle Enterprise Edition database
       db_service                => 'oim.oracle.com',
       sys_password              => hiera('database_test_sys_password'),
       schema_prefix             => 'DEV',
-      reposPassword             => hiera('database_test_rcu_dev_password'),
+      repos_password            => hiera('database_test_rcu_dev_password'),
       puppet_download_mnt_point => $puppet_download_mnt_point,
       logoutput                 => true,
       require                   => Oradb::Dbactions['start oimDb'],
