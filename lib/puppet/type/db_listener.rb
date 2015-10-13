@@ -6,17 +6,17 @@ module Puppet
       desc 'Whether to do something.'
 
       newvalue(:start, :event => :listener_running) do
-        unless :refreshonly == true
+        unless resource[:refreshonly] == :true
           provider.start
         end
       end
 
       newvalue(:stop, :event => :listener_stop) do
-        unless :refreshonly == true
+        unless resource[:refreshonly] == :true
           provider.stop
         end
       end
-
+ 
       aliasvalue(:running, :start)
       aliasvalue(:abort, :stop)
 
@@ -24,10 +24,17 @@ module Puppet
         provider.status
       end
 
-      def sync
-        event = super()
+      def insync?(to)
+        if resource[:refreshonly] == :true
+          true
+        else
+          to == should
+        end
+      end
 
-        if property = @resource.property(:enable)
+      def sync
+       event = super()
+       if property = @resource.property(:enable)
           val = property.retrieve
           property.sync unless property.safe_insync?(val)
         end
@@ -76,9 +83,9 @@ module Puppet
         refresh mechanism for when a dependent object is changed.
       EOT
 
-      newvalues(:true, :false)
+      newvalues(true, false)
 
-      defaultto :false
+      defaultto false
     end
 
     def refresh
