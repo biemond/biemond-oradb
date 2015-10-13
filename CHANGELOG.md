@@ -1,7 +1,10 @@
 # Version updates
 
 ## 2.0.1
--  bash_profile option for database clients
+- bash_profile option for database clients
+- rcu 11g fix
+- 12.1.0.2 oracle client template
+- db_listener type refreshonly fix
 
 ## 2.0.0
 - All parameters of classes or defines are now in snake case and not in camel case
