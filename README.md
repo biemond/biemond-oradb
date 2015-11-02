@@ -5,6 +5,10 @@ created by Edwin Biemond
 [biemond.blogspot.com](http://biemond.blogspot.com)
 [Github homepage](https://github.com/biemond/puppet)
 
+If you need support, checkout the [ora_install](https://www.enterprisemodules.com/shop/products/puppet-ora_install-module) from [Enterprise Modules](https://www.enterprisemodules.com/)
+
+[![Enterprise Modules](https://raw.githubusercontent.com/enterprisemodules/public_images/master/banner1.jpg)](https://www.enterprisemodules.com)
+
 With version >= 2.0.0  all manifest parameters are in lowercase and in snakestyle instead of camelcase
 
 Dependency with
