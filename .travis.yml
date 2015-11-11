@@ -18,8 +18,8 @@ notifications:
   email:
     - biemond@gmail.com
 env:
-  - PUPPET_VERSION="~> 3.4.0"
-  - PUPPET_VERSION="~> 3.6.0"
-  - PUPPET_VERSION="~> 3.7.0" STRICT_VARIABLES=yes
-  - PUPPET_VERSION="~> 3.8.0" STRICT_VARIABLES=yes
-  - PUPPET_VERSION="~> 4.2.0"
+  - PUPPET_VERSION=3.4.3
+  - PUPPET_VERSION=3.6.2
+  - PUPPET_VERSION=3.7.4
+  - PUPPET_VERSION=3.8.2
+  - PUPPET_VERSION=4.2.2
