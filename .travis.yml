@@ -4,6 +4,7 @@ cache:
   directories:
   - vendor/bundle
 rvm:
+  - 1.8.7
   - 1.9.3
   - 2.0.0
 bundler_args: --without development
@@ -17,7 +18,8 @@ notifications:
   email:
     - biemond@gmail.com
 env:
-  - PUPPET_VERSION=3.6.2
-  - PUPPET_VERSION=3.7.3
-  - PUPPET_VERSION=3.8.2
-  - PUPPET_VERSION=4.2.2
+  - PUPPET_VERSION="~> 3.4.0"
+  - PUPPET_VERSION="~> 3.6.0"
+  - PUPPET_VERSION="~> 3.7.0" STRICT_VARIABLES=yes
+  - PUPPET_VERSION="~> 3.8.0" STRICT_VARIABLES=yes
+  - PUPPET_VERSION="~> 4.2.0"
