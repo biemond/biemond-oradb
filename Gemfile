@@ -18,4 +18,4 @@ gem 'rubocop', :git => 'https://github.com/bbatsov/rubocop',  :require => false
 gem 'puppet-blacksmith'
 gem 'fog', '>= 1.25.0'
 gem 'fog-google', '= 0.1.0'
-
+gem 'tins', '~> 1.6'
