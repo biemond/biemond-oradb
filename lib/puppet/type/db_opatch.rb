@@ -81,6 +81,12 @@ module Puppet
       EOT
     end
 
+    newparam(:use_opatchauto_utility) do
+      desc <<-EOT
+        use the opatchauto_utility instead of opatch auto
+      EOT
+    end
+
     newparam(:bundle_sub_patch_id) do
       desc <<-EOT
         One of the Sub patch number of the bundle patch

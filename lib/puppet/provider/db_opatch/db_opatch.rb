@@ -10,6 +10,7 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
     extracted_patch_dir     = resource[:extracted_patch_dir]
     ocmrf_file              = resource[:ocmrf_file]
     opatch_auto             = resource[:opatch_auto]
+    use_opatchauto_utility  = resource[:use_opatchauto_utility]
 
     Puppet.debug "opatch auto result: #{opatch_auto}"
 
@@ -26,14 +27,22 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
         command = "#{oracle_product_home_dir}/OPatch/opatch rollback -id #{patchName} -silent -oh #{oracle_product_home_dir}"
       end
     else
-      if action == :present
-        command = "#{oracle_product_home_dir}/OPatch/opatch auto #{extracted_patch_dir} #{ocmrf} -oh #{oracle_product_home_dir}"
+      if use_opatchauto_utility == false
+        if action == :present
+          command = "#{oracle_product_home_dir}/OPatch/opatch auto #{extracted_patch_dir} #{ocmrf} -oh #{oracle_product_home_dir}"
+        else
+          command = "#{oracle_product_home_dir}/OPatch/opatch auto -rollback #{extracted_patch_dir} #{ocmrf} -oh #{oracle_product_home_dir}"
+        end
       else
-        command = "#{oracle_product_home_dir}/OPatch/opatch auto -rollback #{extracted_patch_dir} #{ocmrf} -oh #{oracle_product_home_dir}"
+        if action == :present
+          command = "#{oracle_product_home_dir}/OPatch/opatchauto apply #{extracted_patch_dir} #{ocmrf} -oh #{oracle_product_home_dir}"
+        else
+          command = "#{oracle_product_home_dir}/OPatch/opatchauto rollback #{extracted_patch_dir} #{ocmrf} -oh #{oracle_product_home_dir}"
+        end
       end
     end
 
-    Puppet.debug "opatch action: #{action} with command #{command}"
+    Puppet.info "opatch action: #{action} with command #{command}"
     if opatch_auto == true
       output = `export ORACLE_HOME=#{oracle_product_home_dir}; cd #{oracle_product_home_dir}; #{command}`
     else
@@ -44,7 +53,7 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
     result = false
     output.each_line do |li|
       unless li.nil?
-        if li.include? 'OPatch completed' or li.include? 'OPatch succeeded' or li.include? 'opatch auto succeeded'
+        if li.include? 'OPatch completed' or li.include? 'OPatch succeeded' or li.include? 'opatch auto succeeded' or li.include? 'opatchauto succeeded'
           result = true
         end
       end
@@ -58,7 +67,7 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
     oracle_product_home_dir = resource[:oracle_product_home_dir]
     orainst_dir             = resource[:orainst_dir]
     bundle_sub_patch_id     = resource[:bundle_sub_patch_id]
-    opatch_auto             = resource[:opatch_auto]
+    # opatch_auto             = resource[:opatch_auto]
 
     unless bundle_sub_patch_id.nil?
       patchId = bundle_sub_patch_id
@@ -66,10 +75,10 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
       patchId = patchName
     end
 
-    Puppet.debug "search for patchid #{patchId}"
+    Puppet.info "search for patchid #{patchId}"
 
     command  = oracle_product_home_dir + '/OPatch/opatch lsinventory -patch_id -oh ' + oracle_product_home_dir + ' -invPtrLoc ' + orainst_dir + '/oraInst.loc'
-    Puppet.debug "opatch_status for patch #{patchName} command: #{command}"
+    Puppet.info "opatch_status for patch #{patchName} command: #{command}"
 
     output = `su - #{user} -c '#{command}'`
     Puppet.debug "#{output}"
@@ -100,7 +109,7 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
 
     patchName               = resource[:patch_id]
     bundle_sub_patch_id     = resource[:bundle_sub_patch_id]
-    opatch_auto             = resource[:opatch_auto]
+    # opatch_auto             = resource[:opatch_auto]
 
     unless bundle_sub_patch_id.nil?
       patchId = bundle_sub_patch_id
@@ -108,7 +117,7 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
       patchId = patchName
     end
 
-    Puppet.debug "opatch_status output #{output} for patchId #{patchId}"
+    Puppet.info "opatch_status output #{output} for patchId #{patchId}"
     if output == patchId
       return :present
     else

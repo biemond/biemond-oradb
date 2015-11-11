@@ -1,5 +1,8 @@
 # Version updates
 
+## 2.0.2
+- support the new opatchauto utility instead of opatch auto by use_opatchauto_utility => true
+
 ## 2.0.1
 - bash_profile option for database clients
 - rcu 11g fix

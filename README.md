@@ -18,6 +18,7 @@ Dependency with
 Should work on Docker, for Solaris and on all Linux version like RedHat, CentOS, Ubuntu, Debian, Suse SLES or OracleLinux
 - Docker image of Oracle Database 12.1 SE [Docker Oracle Database 12.1.0.1](https://github.com/biemond/docker-database-puppet)
 - CentOS 6.5 vagrant box with Oracle Database 12.1 and Enterprise Manager 12.1.0.4 [Enterprise vagrant box](https://github.com/biemond/biemond-em-12c)
+- CentOS 6.6 vagrant box with Oracle Database 12.1.0.2 on NFS ASM [ASM vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-ASM)
 - CentOS 6.6 vagrant box with Oracle Database 11.2.0.4 on NFS ASM [ASM vagrant box](https://github.com/biemond/biemond-oradb-vagrant-11.2-ASM)
 - CentOS 6.6 vagrant box with Oracle Database 12.1.0.1 with pluggable databases [12c pluggable db vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-CDB)
 - Solaris 11.2 vagrant box with Oracle Database 12.1 [solaris 11.2 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-solaris11.2)
@@ -328,6 +329,26 @@ Opatch
     }
 
 or for clusterware aka opatch auto
+
+to use the new opatchauto utility(12.1) instead of opatch auto(11.2) use this parameter use_opatchauto_utility => true
+
+    oradb::opatch{'21523260_grid_patch':
+      ensure                    => 'present',
+      oracle_product_home       => hiera('grid_home_dir'),
+      patch_id                  => '21523260',
+      patch_file                => 'p21523260_121020_Linux-x86-64.zip',
+      clusterware               => true,
+      use_opatchauto_utility    => true,
+      bundle_sub_patch_id       => '21359755', # sub patch_id of bundle patch ( else I can't detect it)
+      user                      => hiera('grid_os_user'),
+      group                     => 'oinstall',
+      download_dir              => hiera('oracle_download_dir'),
+      ocmrf                     => true,
+      puppet_download_mnt_point => hiera('oracle_source'),
+      require                   => Oradb::Opatchupgrade['121000_opatch_upgrade_asm'],
+    }
+
+the old way (11g)
 
     oradb::opatch{'18706472_grid_patch':
       ensure                    => 'present',
