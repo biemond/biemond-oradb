@@ -3,45 +3,77 @@ require 'spec_helper'
 describe 'oradb::installdb', :type => :define do
 
   describe "CentOS remote" do
-    let(:params){{
-          :version                 => '12.1.0.1',
-          :file                    => 'linuxamd64_12c_database',
-          :database_type            => 'SE',
-          :oracle_base              => '/oracle',
-          :oracle_home              => '/oracle/product/12.1/db',
-          :user                    => 'oracle',
-          :group                   => 'dba',
-          :group_install           => 'oinstall',
-          :group_oper              => 'oper',
-          :remote_file              => true,
-          :zip_extract              => true,
-          :download_dir             => '/install',
-          :puppet_download_mnt_point  => '/software',
-                }}
+    default_params = {
+          :version                   => '12.1.0.1',
+          :file                      => 'linuxamd64_12c_database',
+          :database_type             => 'SE',
+          :oracle_base               => '/oracle',
+          :oracle_home               => '/oracle/product/12.1/db',
+          :user                      => 'oracle',
+          :group                     => 'dba',
+          :group_install             => 'oinstall',
+          :group_oper                => 'oper',
+          :remote_file               => true,
+          :zip_extract               => true,
+          :download_dir              => '/install',
+          :puppet_download_mnt_point => '/software' }
+    let(:params) { default_params }
     let(:title) {'12.1.0.1_Linux-x86-64'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
-
-    describe "oradb utils structure" do
-      it do
-        should contain_db_directory_structure("oracle structure 12.1.0.1").with({
-              'ensure'                => 'present',
-              'oracle_base_dir'       => '/oracle',
-              'ora_inventory_dir'     => '/oracle/oraInventory',
-              'os_user'               => 'oracle',
-              'os_group'              => 'oinstall',
-              'download_dir'          => '/install',
+    default_facts = { :operatingsystem => 'CentOS',
+                      :kernel          => 'Linux',
+                      :osfamily        => 'RedHat' }
+    let(:facts) { default_facts }
+    context 'with no oradb_inst_loc_data fact' do
+      describe "oradb utils structure" do
+        it do
+          should contain_db_directory_structure("oracle structure 12.1.0.1").with({
+              'ensure'            => 'present',
+              'oracle_base_dir'   => '/oracle',
+              'ora_inventory_dir' => '/oracle/../oraInventory',
+              'os_user'           => 'oracle',
+              'os_group'          => 'oinstall',
+              'download_dir'      => '/install',
            })
+        end
+      end
+
+      describe "oradb orainst" do
+        it do
+          should contain_oradb__utils__dborainst('database orainst 12.1.0.1').with({
+             'ora_inventory_dir' => '/oracle/../oraInventory',
+             'os_group'          => 'oinstall',
+           })
+        end
       end
     end
+    context 'with oradb_inst_loc_data=/u01/app/oraInventory' do
 
-    describe "oradb orainst" do
-      it do
-        should contain_oradb__utils__dborainst('database orainst 12.1.0.1').with({
-             'ora_inventory_dir'  => '/oracle/oraInventory',
-             'os_group'           => 'oinstall',
-           })
+      facts = default_facts.merge( { :oradb_inst_loc_data => '/u01/app/oraInventory' } )
+      let(:facts) { facts }
+      it { is_expected.to contain_db_directory_structure("oracle structure 12.1.0.1").with_ora_inventory_dir('/u01/app/oraInventory') }
+      it { is_expected.to contain_oradb__utils__dborainst('database orainst 12.1.0.1').with_ora_inventory_dir('/u01/app/oraInventory') }
+    end
+    context 'with ora_inventory_dir parameter provided' do
+      params = default_params.merge( { :ora_inventory_dir => '/ora/inventory/dir' } )
+      let(:params) { params }
+      context 'and no oradb_inst_loc_data fact' do
+        it { is_expected.to contain_db_directory_structure("oracle structure 12.1.0.1").with_ora_inventory_dir('/ora/inventory/dir/oraInventory') }
+        it { is_expected.to contain_oradb__utils__dborainst('database orainst 12.1.0.1').with_ora_inventory_dir('/ora/inventory/dir/oraInventory') }
+      end
+      context 'and oradb_inst_loc_data fact' do
+        #Even with the fact present, the provided ora_inventory_dir is used instead
+        facts = default_facts.merge( { :oradb_inst_loc_data => '/u01/app/oraInventory' } )
+        let(:facts) { facts }
+        it { is_expected.to contain_db_directory_structure("oracle structure 12.1.0.1").with_ora_inventory_dir('/ora/inventory/dir/oraInventory') }
+        it { is_expected.to contain_oradb__utils__dborainst('database orainst 12.1.0.1').with_ora_inventory_dir('/ora/inventory/dir/oraInventory') }
+      end
+    end
+    context 'with invalid ora_inventory_dir parameter' do
+      params = default_params.merge( { :ora_inventory_dir => 'not_an_absolute_path' } )
+      let(:params) { params }
+      it 'should raise an error' do
+        expect { expect(subject).to contain_db_directory_structure("oracle structure 12.1.0.1") }.to raise_error Puppet::Error,
+          /"not_an_absolute_path" is not an absolute path/
       end
     end
 
@@ -149,7 +181,7 @@ describe 'oradb::installdb', :type => :define do
         should contain_db_directory_structure("oracle structure 11.2.0.4").with({
               'ensure'                => 'present',
               'oracle_base_dir'       => '/oracle',
-              'ora_inventory_dir'     => '/oracle/oraInventory',
+              'ora_inventory_dir'     => '/oracle/../oraInventory',
               'os_user'               => 'oracle',
               'os_group'              => 'oinstall',
               'download_dir'          => '/install',
@@ -160,7 +192,7 @@ describe 'oradb::installdb', :type => :define do
     describe "oradb orainst" do
       it do
         should contain_oradb__utils__dborainst('database orainst 11.2.0.4').with({
-             'ora_inventory_dir'  => '/oracle/oraInventory',
+             'ora_inventory_dir'  => '/oracle/../oraInventory',
              'os_group'           => 'oinstall',
            })
       end
@@ -255,7 +287,7 @@ describe 'oradb::installdb', :type => :define do
         should contain_db_directory_structure("oracle structure 11.2.0.3").with({
               'ensure'                => 'present',
               'oracle_base_dir'       => '/oracle',
-              'ora_inventory_dir'     => '/oracle/oraInventory',
+              'ora_inventory_dir'     => '/oracle/../oraInventory',
               'os_user'               => 'oracle',
               'os_group'              => 'oinstall',
               'download_dir'          => '/mnt',
@@ -266,7 +298,7 @@ describe 'oradb::installdb', :type => :define do
     describe "oradb orainst" do
       it do
         should contain_oradb__utils__dborainst('database orainst 11.2.0.3').with({
-             'ora_inventory_dir'  => '/oracle/oraInventory',
+             'ora_inventory_dir'  => '/oracle/../oraInventory',
              'os_group'           => 'oinstall',
            })
       end

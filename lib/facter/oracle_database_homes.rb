@@ -56,7 +56,7 @@ def get_orainst_loc
     end
     return str
   else
-    return 'NotFound'
+    return nil
   end
 end
 
