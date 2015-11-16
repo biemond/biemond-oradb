@@ -6,6 +6,7 @@ define oradb::client(
   $file                      = undef,
   $oracle_base               = undef,
   $oracle_home               = undef,
+  $ora_inventory_dir         = undef,
   $db_port                   = '1521',
   $user                      = 'oracle',
   $user_base_dir             = '/home',
@@ -18,6 +19,9 @@ define oradb::client(
   $logoutput                 = true,
 )
 {
+  validate_absolute_path($oracle_home)
+  validate_absolute_path($oracle_base)
+
   # check if the oracle software already exists
   $found = oracle_exists( $oracle_home )
 
@@ -32,7 +36,12 @@ define oradb::client(
     }
   }
 
-  $oraInventory = "${oracle_base}/oraInventory"
+  if $ora_inventory_dir == undef {
+    $oraInventory = pick($::oradb_inst_loc_data,oradb_cleanpath("${oracle_base}/../oraInventory"))
+  } else {
+    validate_absolute_path($ora_inventory_dir)
+    $oraInventory = "${ora_inventory_dir}/oraInventory"
+  }
 
   db_directory_structure{"client structure ${version}":
     ensure            => present,

@@ -27,7 +27,7 @@ define oradb::installdb(
   $puppet_download_mnt_point = undef,
   $remote_file               = true,
   $cluster_nodes             = undef,
-  $cleanup_install_files      = true,
+  $cleanup_install_files     = true,
 )
 {
   if ( $create_user == true ){
@@ -80,8 +80,9 @@ define oradb::installdb(
   }
 
   if $ora_inventory_dir == undef {
-    $oraInventory = "${oracle_base}/oraInventory"
+    $oraInventory = pick($::oradb_inst_loc_data,oradb_cleanpath("${oracle_base}/../oraInventory"))
   } else {
+    validate_absolute_path($ora_inventory_dir)
     $oraInventory = "${ora_inventory_dir}/oraInventory"
   }
 

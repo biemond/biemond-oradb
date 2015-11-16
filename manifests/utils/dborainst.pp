@@ -25,7 +25,7 @@ define oradb::utils::dborainst
       }
     }
     default: {
-        fail("Unrecognized operating system ${::kernel}, please use it on a Linux host")
+        fail("Unrecognized operating system ${::kernel}, please use it on a Linux or SunOS host")
     }
   }
 

@@ -9,6 +9,7 @@ define oradb::goldengate(
   $database_version          = 'ORA11g',  # 'ORA11g'|'ORA12c'  only for > 12.1.2
   $database_home             = undef,     # only for > 12.1.2
   $oracle_base               = undef,     # only for > 12.1.2
+  $ora_inventory_dir         = undef,
   $goldengate_home           = undef,
   $manager_port              = undef,
   $user                      = 'ggate',
@@ -54,7 +55,12 @@ define oradb::goldengate(
 
 
   if ( $version == '12.1.2' ) {
-    $oraInventory    = "${oracle_base}/oraInventory"
+    if $ora_inventory_dir == undef {
+      $oraInventory = pick($::oradb_inst_loc_data,oradb_cleanpath("${oracle_base}/../oraInventory"))
+    } else {
+      validate_absolute_path($ora_inventory_dir)
+      $oraInventory = "${ora_inventory_dir}/oraInventory"
+    }
 
     db_directory_structure{"oracle goldengate structure ${version}":
       ensure            => present,

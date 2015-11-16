@@ -51,8 +51,9 @@ define oradb::installem(
   }
 
   if $ora_inventory_dir == undef {
-    $oraInventory = "${oracle_base_dir}/oraInventory"
+    $oraInventory = pick($::oradb_inst_loc_data,oradb_cleanpath("${oracle_base_dir}/../oraInventory"))
   } else {
+    validate_absolute_path($ora_inventory_dir)
     $oraInventory = "${ora_inventory_dir}/oraInventory"
   }
 

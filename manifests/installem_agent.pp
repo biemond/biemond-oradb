@@ -30,6 +30,7 @@ define oradb::installem_agent(
   }
 
   # check if the oracle software already exists
+  validate_absolute_path( $agent_base_dir )
   $found = oracle_exists( $agent_base_dir )
 
   if $found == undef {
@@ -43,9 +44,11 @@ define oradb::installem_agent(
     }
   }
 
+  validate_absolute_path($oracle_base_dir)
   if $ora_inventory_dir == undef {
-    $oraInventory = "${oracle_base_dir}/oraInventory"
+    $oraInventory = pick($::oradb_inst_loc_data,oradb_cleanpath("${oracle_base_dir}/../oraInventory"))
   } else {
+    validate_absolute_path($ora_inventory_dir)
     $oraInventory = "${ora_inventory_dir}/oraInventory"
   }
 
