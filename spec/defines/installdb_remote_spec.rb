@@ -76,6 +76,11 @@ describe 'oradb::installdb', :type => :define do
           /"not_an_absolute_path" is not an absolute path/
       end
     end
+    context 'with oracle base = /oracle' do
+      params = default_params.merge( { :oracle_base => '/oracle' } )
+      let(:params) { params }
+      it { is_expected.to contain_db_directory_structure("oracle structure 12.1.0.1").with_ora_inventory_dir('/oraInventory') }
+    end
 
     describe "oradb response file" do
       it do
