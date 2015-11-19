@@ -2,6 +2,8 @@
 
 ## 2.0.2
 - support the new opatchauto utility instead of opatch auto by use_opatchauto_utility => true
+- support 12.1 CDB with custom database template
+- changed the default oraInventory location when it is not defined
 
 ## 2.0.1
 - bash_profile option for database clients

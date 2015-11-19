@@ -501,6 +501,7 @@ or based on your own template
 
 The template must be have the following extension dbt.erb like dbtemplate_12.1.dbt.erb, use puppet_download_mnt_point parameter for the template location or add your template to the template dir of the oradb module
 - Click here for an [12.1 db instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_12.1.dbt.erb)
+- Click here for an [12.1 db asm instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_12.1_asm.dbt.erb)
 - Click here for an [11.2 db asm instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_11gR2_asm.dbt.erb)
 
 with a template of the oradb module
