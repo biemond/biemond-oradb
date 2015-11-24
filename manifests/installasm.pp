@@ -175,7 +175,7 @@ define oradb::installasm(
       file { "${download_dir}/grid_install_${version}.rsp":
         ensure  => present,
         content => template("oradb/grid_install_${version}.rsp.erb"),
-        mode    => '0775',
+        mode    => '0770',
         owner   => $user,
         group   => $group,
         require => [Oradb::Utils::Dborainst["grid orainst ${version}"],
