@@ -109,7 +109,7 @@ define oradb::database(
     file { "${download_dir}/database_${sanitized_title}.rsp":
       ensure  => present,
       content => template("oradb/dbca_${version}.rsp.erb"),
-      mode    => '0775',
+      mode    => '0770',
       owner   => $user,
       group   => $group,
       before  => Exec["oracle database ${title}"],
