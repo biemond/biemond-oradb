@@ -1,5 +1,9 @@
 # Version updates
 
+## 2.0.3
+- security/permissions fixes with files which can contain passwords
+- RCU now uses system call instead of backticks which allows more complex passwords
+
 ## 2.0.2
 - support the new opatchauto utility instead of opatch auto by use_opatchauto_utility => true
 - support 12.1 CDB with custom database template
