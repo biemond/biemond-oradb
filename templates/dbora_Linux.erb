@@ -10,6 +10,7 @@
 
 ORA_HOME=<%= @oracle_home %>
 ORA_OWNER=<%= @user %>
+LOCK_FILE=/var/lock/subsys/<%= @service_name %>
 
 if [ ! -f $ORA_HOME/bin/dbstart ]
 then
@@ -24,7 +25,7 @@ case "$1" in
         # will not prompt the user for any values
         #su $ORA_OWNER -c "$ORA_HOME/bin/lsnrctl start"
         su $ORA_OWNER -c "$ORA_HOME/bin/dbstart $ORA_HOME"
-        touch /var/lock/subsys/dbora
+        touch $LOCK_FILE
         ;;
     'stop')
         # Stop the Oracle databases:
@@ -32,6 +33,6 @@ case "$1" in
         # will not prompt the user for any values
         su $ORA_OWNER -c "$ORA_HOME/bin/dbshut $ORA_HOME"
         #su $ORA_OWNER -c "$ORA_HOME/bin/lsnrctl stop"
-        rm -f /var/lock/subsys/dbora
+        rm -f $LOCK_FILE
         ;;
 esac

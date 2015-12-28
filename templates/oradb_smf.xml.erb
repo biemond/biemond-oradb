@@ -13,9 +13,9 @@
             <service_fmri value="svc:/milestone/multi-user"/>
         </dependency>
 
-        <exec_method type="method" name="start" exec="<%= @dboraLocation %>/dbora %m" timeout_seconds="500" />
-        <exec_method type="method" name="stop" exec="<%= @dboraLocation %>/dbora %m" timeout_seconds="500" />
-        <exec_method type="method" name="restart" exec="<%= @dboraLocation %>/dbora %m" timeout_seconds="500" />
+        <exec_method type="method" name="start" exec="<%= @dboraLocation %>/<%= @service_name %> %m" timeout_seconds="500" />
+        <exec_method type="method" name="stop" exec="<%= @dboraLocation %>/<%= @service_name %> %m" timeout_seconds="500" />
+        <exec_method type="method" name="restart" exec="<%= @dboraLocation %>/<%= @service_name %> %m" timeout_seconds="500" />
 
         <instance enabled="true" name="default"/>
         <template>
