@@ -1,24 +1,27 @@
+require 'byebug'
+
 module Puppet
-  newtype(:db_control) do
+  Type::newtype(:db_control) do
     desc 'control the database instance state like running,stop,restart'
 
     newproperty(:ensure) do
       desc 'Whether to do something.'
 
       newvalue(:start, :event => :instance_running) do
-        unless :refreshonly == true
+        unless resource[:refreshonly] == :true
           provider.start
         end
       end
 
       newvalue(:stop, :event => :instance_stop) do
-        unless :refreshonly == true
+        unless resource[:refreshonly] == :true
           provider.stop
         end
       end
 
       aliasvalue(:running, :start)
       aliasvalue(:abort, :stop)
+      aliasvalue(:stopped, :stop)
 
       def retrieve
         provider.status
@@ -52,6 +55,12 @@ module Puppet
     newparam(:oracle_product_home_dir) do
       desc <<-EOT
         The oracle product home folder.
+      EOT
+    end
+
+    newparam(:grid_product_home_dir) do
+      desc <<-EOT
+        The grid product home folder.
       EOT
     end
 
