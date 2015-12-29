@@ -6,6 +6,8 @@ platform :ruby_19, :ruby_20 do
   gem 'coveralls', :require => false
   gem 'simplecov', :require => false
 end
+gem 'rspec-puppet-utils', :git => 'https://github.com/Accuity/rspec-puppet-utils.git'
+gem 'hiera-puppet-helper', :git => 'https://github.com/bobtfish/hiera-puppet-helper.git'
 gem 'puppet-lint'
 gem 'puppet', puppetversion
 gem 'rspec-puppet'
