@@ -1,4 +1,4 @@
-Puppet::Type.type(:db_control).provide(:nogrid, :parent => :base) do
+Puppet::Type.type(:db_control).provide(:sqlplus, :parent => :base) do
 
 #
   # This is bit of a hack. id is always root, but we need to declare a default provider
@@ -7,7 +7,6 @@ Puppet::Type.type(:db_control).provide(:nogrid, :parent => :base) do
 
 
   def instance_control(action)
-    debugger
     Puppet.debug "instance action: #{action}"
 
     command, @succes_output = case action
