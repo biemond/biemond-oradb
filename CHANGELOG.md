@@ -1,5 +1,12 @@
 # Version updates
 
+## 2.0.4
+- some more strict file permissions
+- rcu allows now more complex passwords
+- allow to change the service name instead of dbora
+- installdb is_rack_one_install option for 12.1.0.2
+- dbcontrol fixes in combination with Oracle Grid
+
 ## 2.0.3
 - security/permissions fixes with files which can contain passwords
 - RCU now uses system call instead of backticks which allows more complex passwords

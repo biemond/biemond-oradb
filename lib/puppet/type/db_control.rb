@@ -1,5 +1,3 @@
-require 'byebug'
-
 module Puppet
   Type::newtype(:db_control) do
     desc 'control the database instance state like running,stop,restart'
