@@ -48,7 +48,7 @@ Puppet::Type.type(:db_control).provide(:srvctl, :parent => :base) do
   def srvctl(command)
     oracle_home = resource[:oracle_product_home_dir]
     command =[
-      "ORACLE_HOME=#{oracle_home}",
+      "export ORACLE_HOME=#{oracle_home}",
       "export PATH=#{oracle_home}/bin:$PATH",
       "export LD_LIBRARY_PATH=#{oracle_home}/lib",
       "$ORACLE_HOME/bin/srvctl #{command}"
