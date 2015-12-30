@@ -642,6 +642,27 @@ Database instance actions
       require                 => Oradb::Dbactions['stop testDb'],
     }
 
+    # grid or asm
+    db_control{'instance control asm':
+      provider                => 'srvctl',
+      ensure                  => 'start',
+      instance_name           => '+ASM',
+      oracle_product_home_dir => hiera('oracle_home_dir'),
+      grid_product_home_dir   => hiera('grid_home_dir'),
+      os_user                 => hiera('grid_os_user'),
+      db_type                 => 'grid',
+    }
+
+    oradb::dbactions{ 'start grid':
+      db_type                 => 'grid',
+      oracle_home             => hiera('oracle_home_dir'),
+      grid_home               => hiera('grid_home_dir'),
+      user                    => hiera('grid_os_user'),
+      group                   => hiera('oracle_os_group'),
+      action                  => 'start',
+      db_name                 => '+ASM',
+    }
+
     # subscribe to changes
     db_control{'emrepos restart':
       ensure                  => 'running', #running|start|abort|stop
@@ -658,6 +679,7 @@ Database instance actions
       db_name                 => 'test',
       require                 => Oradb::Dbactions['start testDb'],
     }
+
 
 Tnsnames.ora
 

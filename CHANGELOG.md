@@ -5,7 +5,7 @@
 - rcu allows now more complex passwords
 - allow to change the service name instead of dbora
 - installdb is_rack_one_install option for 12.1.0.2
-- dbcontrol fixes in combination with Oracle Grid
+- db_control type & dbcontrol manifest supports now also Grid
 
 ## 2.0.3
 - security/permissions fixes with files which can contain passwords
