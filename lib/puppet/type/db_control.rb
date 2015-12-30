@@ -50,6 +50,16 @@ module Puppet
       EOT
     end
 
+    newparam(:db_type) do
+      desc <<-EOT
+        The type of instance.
+      EOT
+
+      defaultto(:database)
+      newvalues(:database, :asm)
+      aliasvalue(:grid, :asm)
+    end
+
     newparam(:oracle_product_home_dir) do
       desc <<-EOT
         The oracle product home folder.
