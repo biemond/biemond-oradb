@@ -1,0 +1,761 @@
+# Created using puppet-retrospec - https://github.com/nwops/puppet-retrospec
+# This schema file can be used to validate hiera data
+# http://www.kuwata-lab.com/kwalify/ruby/users-guide.01.html#schema
+# To validate your hiera data against this schema install the kwalify gem
+# 1. gem install kwalify
+# 2. kwalify -lf /Users/cosman/singlestone/modules/biemond-oradb/biemond-oradb_schema.yaml hiera_data_file.yaml
+# By default this schema is generic and only covers basic parameter types.
+# You should update the schema to match your expected data types in your puppet classes
+# or anywhere else you call hiera using the hiera() function.
+# This schema contains 246 entries.
+--- 
+  type: map
+  mapping: 
+    hostclass: 
+      type: map
+      mapping: 
+        "oradb::shout": 
+          type: bool
+          required: false
+        "oradb::prepareautostart::oracle_home": 
+          type: any
+          required: false
+        "oradb::prepareautostart::user": 
+          type: str
+          required: false
+        "oradb::prepareautostart::service_name": 
+          type: str
+          required: false
+    definition: 
+      type: map
+      mapping: 
+        "oradb::autostartdatabase::oracle_home": 
+          type: any
+          required: false
+        "oradb::autostartdatabase::db_name": 
+          type: any
+          required: false
+        "oradb::autostartdatabase::user": 
+          type: str
+          required: false
+        "oradb::autostartdatabase::service_name": 
+          type: str
+          required: false
+        "oradb::client::version": 
+          type: any
+          required: false
+        "oradb::client::file": 
+          type: any
+          required: false
+        "oradb::client::oracle_base": 
+          type: any
+          required: false
+        "oradb::client::oracle_home": 
+          type: any
+          required: false
+        "oradb::client::ora_inventory_dir": 
+          type: any
+          required: false
+        "oradb::client::db_port": 
+          type: str
+          required: false
+        "oradb::client::user": 
+          type: str
+          required: false
+        "oradb::client::user_base_dir": 
+          type: str
+          required: false
+        "oradb::client::group": 
+          type: str
+          required: false
+        "oradb::client::group_install": 
+          type: str
+          required: false
+        "oradb::client::download_dir": 
+          type: str
+          required: false
+        "oradb::client::bash_profile": 
+          type: bool
+          required: false
+        "oradb::client::puppet_download_mnt_point": 
+          type: any
+          required: false
+        "oradb::client::remote_file": 
+          type: bool
+          required: false
+        "oradb::client::logoutput": 
+          type: bool
+          required: false
+        "oradb::database::oracle_base": 
+          type: any
+          required: false
+        "oradb::database::oracle_home": 
+          type: any
+          required: false
+        "oradb::database::version": 
+          type: str
+          required: false
+        "oradb::database::user": 
+          type: str
+          required: false
+        "oradb::database::group": 
+          type: str
+          required: false
+        "oradb::database::download_dir": 
+          type: str
+          required: false
+        "oradb::database::action": 
+          type: str
+          required: false
+        "oradb::database::template": 
+          type: any
+          required: false
+        "oradb::database::db_name": 
+          type: str
+          required: false
+        "oradb::database::db_domain": 
+          type: any
+          required: false
+        "oradb::database::db_port": 
+          type: str
+          required: false
+        "oradb::database::sys_password": 
+          type: str
+          required: false
+        "oradb::database::system_password": 
+          type: str
+          required: false
+        "oradb::database::data_file_destination": 
+          type: any
+          required: false
+        "oradb::database::recovery_area_destination": 
+          type: any
+          required: false
+        "oradb::database::character_set": 
+          type: str
+          required: false
+        "oradb::database::nationalcharacter_set": 
+          type: str
+          required: false
+        "oradb::database::init_params": 
+          type: any
+          required: false
+        "oradb::database::sample_schema": 
+          type: any
+          required: false
+        "oradb::database::memory_percentage": 
+          type: str
+          required: false
+        "oradb::database::memory_total": 
+          type: str
+          required: false
+        "oradb::database::database_type": 
+          type: str
+          required: false
+        "oradb::database::em_configuration": 
+          type: str
+          required: false
+        "oradb::database::storage_type": 
+          type: str
+          required: false
+        "oradb::database::asm_snmp_password": 
+          type: str
+          required: false
+        "oradb::database::db_snmp_password": 
+          type: str
+          required: false
+        "oradb::database::asm_diskgroup": 
+          type: str
+          required: false
+        "oradb::database::recovery_diskgroup": 
+          type: any
+          required: false
+        "oradb::database::cluster_nodes": 
+          type: any
+          required: false
+        "oradb::database::container_database": 
+          type: bool
+          required: false
+        "oradb::database::puppet_download_mnt_point": 
+          type: any
+          required: false
+        "oradb::database_pluggable::ensure": 
+          type: str
+          required: false
+        "oradb::database_pluggable::version": 
+          type: str
+          required: false
+        "oradb::database_pluggable::oracle_home_dir": 
+          type: any
+          required: false
+        "oradb::database_pluggable::user": 
+          type: str
+          required: false
+        "oradb::database_pluggable::group": 
+          type: str
+          required: false
+        "oradb::database_pluggable::source_db": 
+          type: any
+          required: false
+        "oradb::database_pluggable::pdb_name": 
+          type: any
+          required: false
+        "oradb::database_pluggable::pdb_datafile_destination": 
+          type: any
+          required: false
+        "oradb::database_pluggable::pdb_admin_username": 
+          type: str
+          required: false
+        "oradb::database_pluggable::pdb_admin_password": 
+          type: any
+          required: false
+        "oradb::database_pluggable::create_user_tablespace": 
+          type: bool
+          required: false
+        "oradb::database_pluggable::log_output": 
+          type: bool
+          required: false
+        "oradb::dbactions::db_type": 
+          type: str
+          required: false
+        "oradb::dbactions::oracle_home": 
+          type: any
+          required: false
+        "oradb::dbactions::grid_home": 
+          type: any
+          required: false
+        "oradb::dbactions::user": 
+          type: str
+          required: false
+        "oradb::dbactions::group": 
+          type: str
+          required: false
+        "oradb::dbactions::action": 
+          type: str
+          required: false
+        "oradb::dbactions::db_name": 
+          type: str
+          required: false
+        "oradb::goldengate::version": 
+          type: str
+          required: false
+        "oradb::goldengate::file": 
+          type: any
+          required: false
+        "oradb::goldengate::tar_file": 
+          type: any
+          required: false
+        "oradb::goldengate::database_type": 
+          type: str
+          required: false
+        "oradb::goldengate::database_version": 
+          type: str
+          required: false
+        "oradb::goldengate::database_home": 
+          type: any
+          required: false
+        "oradb::goldengate::oracle_base": 
+          type: any
+          required: false
+        "oradb::goldengate::ora_inventory_dir": 
+          type: any
+          required: false
+        "oradb::goldengate::goldengate_home": 
+          type: any
+          required: false
+        "oradb::goldengate::manager_port": 
+          type: any
+          required: false
+        "oradb::goldengate::user": 
+          type: str
+          required: false
+        "oradb::goldengate::group": 
+          type: str
+          required: false
+        "oradb::goldengate::group_install": 
+          type: str
+          required: false
+        "oradb::goldengate::download_dir": 
+          type: str
+          required: false
+        "oradb::goldengate::puppet_download_mnt_point": 
+          type: any
+          required: false
+        "oradb::installasm::version": 
+          type: any
+          required: false
+        "oradb::installasm::file": 
+          type: any
+          required: false
+        "oradb::installasm::grid_type": 
+          type: str
+          required: false
+        "oradb::installasm::stand_alone": 
+          type: bool
+          required: false
+        "oradb::installasm::grid_base": 
+          type: any
+          required: false
+        "oradb::installasm::grid_home": 
+          type: any
+          required: false
+        "oradb::installasm::ora_inventory_dir": 
+          type: any
+          required: false
+        "oradb::installasm::user": 
+          type: str
+          required: false
+        "oradb::installasm::user_base_dir": 
+          type: str
+          required: false
+        "oradb::installasm::group": 
+          type: str
+          required: false
+        "oradb::installasm::group_install": 
+          type: str
+          required: false
+        "oradb::installasm::group_oper": 
+          type: str
+          required: false
+        "oradb::installasm::group_asm": 
+          type: str
+          required: false
+        "oradb::installasm::sys_asm_password": 
+          type: str
+          required: false
+        "oradb::installasm::asm_monitor_password": 
+          type: str
+          required: false
+        "oradb::installasm::asm_diskgroup": 
+          type: str
+          required: false
+        "oradb::installasm::disk_discovery_string": 
+          type: any
+          required: false
+        "oradb::installasm::disk_redundancy": 
+          type: str
+          required: false
+        "oradb::installasm::disks": 
+          type: any
+          required: false
+        "oradb::installasm::download_dir": 
+          type: str
+          required: false
+        "oradb::installasm::zip_extract": 
+          type: bool
+          required: false
+        "oradb::installasm::puppet_download_mnt_point": 
+          type: any
+          required: false
+        "oradb::installasm::remote_file": 
+          type: bool
+          required: false
+        "oradb::installasm::cluster_name": 
+          type: any
+          required: false
+        "oradb::installasm::scan_name": 
+          type: any
+          required: false
+        "oradb::installasm::scan_port": 
+          type: any
+          required: false
+        "oradb::installasm::cluster_nodes": 
+          type: any
+          required: false
+        "oradb::installasm::network_interface_list": 
+          type: any
+          required: false
+        "oradb::installasm::storage_option": 
+          type: any
+          required: false
+        "oradb::installdb::version": 
+          type: any
+          required: false
+        "oradb::installdb::file": 
+          type: any
+          required: false
+        "oradb::installdb::database_type": 
+          type: str
+          required: false
+        "oradb::installdb::ora_inventory_dir": 
+          type: any
+          required: false
+        "oradb::installdb::oracle_base": 
+          type: any
+          required: false
+        "oradb::installdb::oracle_home": 
+          type: any
+          required: false
+        "oradb::installdb::ee_options_selection": 
+          type: bool
+          required: false
+        "oradb::installdb::ee_optional_components": 
+          type: any
+          required: false
+        "oradb::installdb::create_user": 
+          type: any
+          required: false
+        "oradb::installdb::bash_profile": 
+          type: bool
+          required: false
+        "oradb::installdb::user": 
+          type: str
+          required: false
+        "oradb::installdb::user_base_dir": 
+          type: str
+          required: false
+        "oradb::installdb::group": 
+          type: str
+          required: false
+        "oradb::installdb::group_install": 
+          type: str
+          required: false
+        "oradb::installdb::group_oper": 
+          type: str
+          required: false
+        "oradb::installdb::download_dir": 
+          type: str
+          required: false
+        "oradb::installdb::zip_extract": 
+          type: bool
+          required: false
+        "oradb::installdb::puppet_download_mnt_point": 
+          type: any
+          required: false
+        "oradb::installdb::remote_file": 
+          type: bool
+          required: false
+        "oradb::installdb::cluster_nodes": 
+          type: any
+          required: false
+        "oradb::installdb::cleanup_install_files": 
+          type: bool
+          required: false
+        "oradb::installdb::is_rack_one_install": 
+          type: bool
+          required: false
+        "oradb::installem::version": 
+          type: str
+          required: false
+        "oradb::installem::file": 
+          type: any
+          required: false
+        "oradb::installem::ora_inventory_dir": 
+          type: any
+          required: false
+        "oradb::installem::oracle_base_dir": 
+          type: any
+          required: false
+        "oradb::installem::oracle_home_dir": 
+          type: any
+          required: false
+        "oradb::installem::agent_base_dir": 
+          type: any
+          required: false
+        "oradb::installem::software_library_dir": 
+          type: any
+          required: false
+        "oradb::installem::weblogic_user": 
+          type: str
+          required: false
+        "oradb::installem::weblogic_password": 
+          type: any
+          required: false
+        "oradb::installem::database_hostname": 
+          type: any
+          required: false
+        "oradb::installem::database_listener_port": 
+          type: any
+          required: false
+        "oradb::installem::database_service_sid_name": 
+          type: any
+          required: false
+        "oradb::installem::database_sys_password": 
+          type: any
+          required: false
+        "oradb::installem::sysman_password": 
+          type: any
+          required: false
+        "oradb::installem::agent_registration_password": 
+          type: any
+          required: false
+        "oradb::installem::deployment_size": 
+          type: str
+          required: false
+        "oradb::installem::user": 
+          type: str
+          required: false
+        "oradb::installem::group": 
+          type: str
+          required: false
+        "oradb::installem::download_dir": 
+          type: str
+          required: false
+        "oradb::installem::zip_extract": 
+          type: bool
+          required: false
+        "oradb::installem::puppet_download_mnt_point": 
+          type: any
+          required: false
+        "oradb::installem::remote_file": 
+          type: bool
+          required: false
+        "oradb::installem::log_output": 
+          type: bool
+          required: false
+        "oradb::installem_agent::version": 
+          type: str
+          required: false
+        "oradb::installem_agent::install_type": 
+          type: any
+          required: false
+        "oradb::installem_agent::install_version": 
+          type: str
+          required: false
+        "oradb::installem_agent::install_platform": 
+          type: str
+          required: false
+        "oradb::installem_agent::source": 
+          type: any
+          required: false
+        "oradb::installem_agent::ora_inventory_dir": 
+          type: any
+          required: false
+        "oradb::installem_agent::oracle_base_dir": 
+          type: any
+          required: false
+        "oradb::installem_agent::agent_base_dir": 
+          type: any
+          required: false
+        "oradb::installem_agent::agent_instance_home_dir": 
+          type: any
+          required: false
+        "oradb::installem_agent::agent_registration_password": 
+          type: any
+          required: false
+        "oradb::installem_agent::agent_port": 
+          type: any
+          required: false
+        "oradb::installem_agent::sysman_user": 
+          type: str
+          required: false
+        "oradb::installem_agent::sysman_password": 
+          type: any
+          required: false
+        "oradb::installem_agent::oms_host": 
+          type: any
+          required: false
+        "oradb::installem_agent::oms_port": 
+          type: any
+          required: false
+        "oradb::installem_agent::em_upload_port": 
+          type: any
+          required: false
+        "oradb::installem_agent::user": 
+          type: str
+          required: false
+        "oradb::installem_agent::group": 
+          type: str
+          required: false
+        "oradb::installem_agent::download_dir": 
+          type: str
+          required: false
+        "oradb::installem_agent::log_output": 
+          type: bool
+          required: false
+        "oradb::listener::oracle_base": 
+          type: any
+          required: false
+        "oradb::listener::oracle_home": 
+          type: any
+          required: false
+        "oradb::listener::user": 
+          type: str
+          required: false
+        "oradb::listener::group": 
+          type: str
+          required: false
+        "oradb::listener::action": 
+          type: str
+          required: false
+        "oradb::listener::listener_name": 
+          type: str
+          required: false
+        "oradb::net::oracle_home": 
+          type: any
+          required: false
+        "oradb::net::version": 
+          type: str
+          required: false
+        "oradb::net::user": 
+          type: str
+          required: false
+        "oradb::net::group": 
+          type: str
+          required: false
+        "oradb::net::download_dir": 
+          type: str
+          required: false
+        "oradb::net::db_port": 
+          type: str
+          required: false
+        "oradb::opatch::ensure": 
+          type: str
+          required: false
+        "oradb::opatch::oracle_product_home": 
+          type: any
+          required: false
+        "oradb::opatch::patch_id": 
+          type: any
+          required: false
+        "oradb::opatch::patch_file": 
+          type: any
+          required: false
+        "oradb::opatch::clusterware": 
+          type: bool
+          required: false
+        "oradb::opatch::use_opatchauto_utility": 
+          type: bool
+          required: false
+        "oradb::opatch::bundle_sub_patch_id": 
+          type: any
+          required: false
+        "oradb::opatch::bundle_sub_folder": 
+          type: any
+          required: false
+        "oradb::opatch::user": 
+          type: str
+          required: false
+        "oradb::opatch::group": 
+          type: str
+          required: false
+        "oradb::opatch::download_dir": 
+          type: str
+          required: false
+        "oradb::opatch::ocmrf": 
+          type: bool
+          required: false
+        "oradb::opatch::puppet_download_mnt_point": 
+          type: any
+          required: false
+        "oradb::opatch::remote_file": 
+          type: bool
+          required: false
+        "oradb::opatchupgrade::oracle_home": 
+          type: any
+          required: false
+        "oradb::opatchupgrade::patch_file": 
+          type: any
+          required: false
+        "oradb::opatchupgrade::csi_number": 
+          type: any
+          required: false
+        "oradb::opatchupgrade::support_id": 
+          type: any
+          required: false
+        "oradb::opatchupgrade::opversion": 
+          type: any
+          required: false
+        "oradb::opatchupgrade::user": 
+          type: str
+          required: false
+        "oradb::opatchupgrade::group": 
+          type: str
+          required: false
+        "oradb::opatchupgrade::download_dir": 
+          type: str
+          required: false
+        "oradb::opatchupgrade::puppet_download_mnt_point": 
+          type: any
+          required: false
+        "oradb::rcu::rcu_file": 
+          type: any
+          required: false
+        "oradb::rcu::product": 
+          type: str
+          required: false
+        "oradb::rcu::version": 
+          type: str
+          required: false
+        "oradb::rcu::oracle_home": 
+          type: any
+          required: false
+        "oradb::rcu::user": 
+          type: str
+          required: false
+        "oradb::rcu::group": 
+          type: str
+          required: false
+        "oradb::rcu::download_dir": 
+          type: str
+          required: false
+        "oradb::rcu::action": 
+          type: str
+          required: false
+        "oradb::rcu::db_server": 
+          type: any
+          required: false
+        "oradb::rcu::db_service": 
+          type: any
+          required: false
+        "oradb::rcu::sys_user": 
+          type: str
+          required: false
+        "oradb::rcu::sys_password": 
+          type: any
+          required: false
+        "oradb::rcu::schema_prefix": 
+          type: any
+          required: false
+        "oradb::rcu::repos_password": 
+          type: any
+          required: false
+        "oradb::rcu::temp_tablespace": 
+          type: any
+          required: false
+        "oradb::rcu::puppet_download_mnt_point": 
+          type: any
+          required: false
+        "oradb::rcu::remote_file": 
+          type: bool
+          required: false
+        "oradb::rcu::logoutput": 
+          type: bool
+          required: false
+        "oradb::tnsnames::oracle_home": 
+          type: any
+          required: false
+        "oradb::tnsnames::user": 
+          type: str
+          required: false
+        "oradb::tnsnames::group": 
+          type: str
+          required: false
+        "oradb::tnsnames::server": 
+          type: map
+          mapping: 
+            "=": 
+              type: any
+              required: false
+          required: false
+        "oradb::tnsnames::loadbalance": 
+          type: str
+          required: false
+        "oradb::tnsnames::failover": 
+          type: str
+          required: false
+        "oradb::tnsnames::connect_service_name": 
+          type: any
+          required: false
+        "oradb::tnsnames::connect_server": 
+          type: str
+          required: false
+        "oradb::tnsnames::entry_type": 
+          type: str
+          required: false
+        "oradb::utils::dborainst::ora_inventory_dir": 
+          type: any
+          required: false
+        "oradb::utils::dborainst::os_group": 
+          type: any
+          required: false
