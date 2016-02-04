@@ -2,34 +2,45 @@
 #s
 #
 define oradb::installem(
-  $version                     = '12.1.0.4',
-  $file                        = undef,
-  $ora_inventory_dir           = undef,
-  $oracle_base_dir             = undef,
-  $oracle_home_dir             = undef,
-  $agent_base_dir              = undef,
-  $software_library_dir        = undef,
-  $weblogic_user               = 'weblogic',
-  $weblogic_password           = undef,
-  $database_hostname           = undef,
-  $database_listener_port      = 1521,
-  $database_service_sid_name   = undef,
-  $database_sys_password       = undef,
-  $sysman_password             = undef,
-  $agent_registration_password = undef,
-  $deployment_size             = 'SMALL', #'SMALL','MEDIUM','LARGE'
-  $user                        = 'oracle',
-  $group                       = 'oinstall',
-  $download_dir                = '/install',
-  $zip_extract                 = true,
-  $puppet_download_mnt_point   = undef,
-  $remote_file                 = true,
-  $log_output                  = false,
+  $version                       = '12.1.0.5',
+  $file                          = undef,
+  $ora_inventory_dir             = undef,
+  $oracle_base_dir               = undef,
+  $oracle_home_dir               = undef,
+  $agent_base_dir                = undef,
+  $software_library_dir          = undef,
+  $weblogic_user                 = 'weblogic',
+  $weblogic_password             = undef,
+  $database_hostname             = undef,
+  $database_listener_port        = 1521,
+  $database_service_sid_name     = undef,
+  $database_sys_password         = undef,
+  $sysman_password               = undef,
+  $agent_registration_password   = undef,
+  $deployment_size               = 'SMALL', #'SMALL','MEDIUM','LARGE'
+  $user                          = 'oracle',
+  $group                         = 'oinstall',
+  $download_dir                  = '/install',
+  $zip_extract                   = true,
+  $puppet_download_mnt_point     = undef,
+  $remote_file                   = true,
+  $log_output                    = false,
+  $admin_server_https_port       = 7101,
+  $managed_server_http_port      = 7201,
+  $managed_server_https_port     = 7301,
+  $em_upload_http_port           = 4889,
+  $em_upload_https_port          = 1159,
+  $em_central_console_http_port  = 7788,
+  $em_central_console_https_port = 7799,
+  $bi_publisher_http_port        = 9701,
+  $bi_publisher_https_port       = 9801,
+  $nodemanager_https_port        = 7401,
+  $agent_port                    = 3872,
 )
 {
 
-  if (!( $version in ['12.1.0.4'])){
-    fail('Unrecognized em version, use 12.1.0.4')
+  if (!( $version in ['12.1.0.4', '12.1.0.5'])){
+    fail('Unrecognized em version, use 12.1.0.4 or 12.1.0.5')
   }
 
   if ( !($::kernel in ['Linux','SunOS'])){
@@ -79,7 +90,7 @@ define oradb::installem(
     if ( $zip_extract ) {
       # In $download_dir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
 
-      if ( $version in ['12.1.0.4']) {
+      if ( $version in ['12.1.0.4', '12.1.0.5']) {
         $file1 =  "${file}_disk1.zip"
         $file2 =  "${file}_disk2.zip"
         $file3 =  "${file}_disk3.zip"
@@ -185,13 +196,11 @@ define oradb::installem(
     }
 
     exec { "install oracle em ${title}":
-      command   => "/bin/sh -c 'unset DISPLAY;${download_dir}/${file}/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/em_install_${version}.rsp'",
+      command   => "/bin/su - ${user} -c 'unset DISPLAY;${download_dir}/${file}/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/em_install_${version}.rsp'",
       creates   => $oracle_home_dir,
       timeout   => 0,
       returns   => [6,0],
       path      => $execPath,
-      user      => $user,
-      group     => $group,
       cwd       => $oracle_base_dir,
       logoutput => true,
       require   => [Oradb::Utils::Dborainst["em orainst ${version}"],
