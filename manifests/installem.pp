@@ -142,7 +142,7 @@ define oradb::installem(
         user      => $user,
         group     => $group,
         require   => Db_directory_structure["oracle em structure ${version}"],
-        # before    => Exec["install oracle em ${title}"],
+        before    => Exec["install oracle em ${title}"],
       }
       exec { "extract ${download_dir}/${file2}":
         command   => "unzip -o ${source}/${file2} -d ${download_dir}/${file}",
@@ -152,7 +152,7 @@ define oradb::installem(
         user      => $user,
         group     => $group,
         require   => Exec["extract ${download_dir}/${file1}"],
-        # before    => Exec["install oracle em ${title}"],
+        before    => Exec["install oracle em ${title}"],
       }
       exec { "extract ${download_dir}/${file3}":
         command   => "unzip -o ${source}/${file3} -d ${download_dir}/${file}",
@@ -162,7 +162,7 @@ define oradb::installem(
         user      => $user,
         group     => $group,
         require   => Exec["extract ${download_dir}/${file2}"],
-        # before    => Exec["install oracle em ${title}"],
+        before    => Exec["install oracle em ${title}"],
       }
 
     }
