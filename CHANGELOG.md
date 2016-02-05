@@ -3,6 +3,7 @@
 ## 2.0.4
 - dbtemplate_12.1.dbt database template should also work for 12.1.0.2
 - db_structure fixes, correct permissions and chown order
+- support for Enterprise Manager 12.1.0.5
 
 ## 2.0.3
 - some more strict file permissions
