@@ -74,14 +74,15 @@ define oradb::installem_agent(
 
     if ( $source == undef or is_string($source) == false) {fail('You must specify source') }
     if ( $agent_base_dir == undef or is_string($agent_base_dir) == false) {fail('You must specify agent_base_dir') }
-    if ( $sysman_user == undef or is_string($sysman_user) == false) {fail('You must specify sysman_user') }
-    if ( $sysman_password == undef or is_string($sysman_password) == false) {fail('You must specify sysman_password') }
     if ( $oracle_base_dir == undef or is_string($oracle_base_dir) == false) {fail('You must specify oracle_base_dir') }
     if ( $agent_registration_password == undef or is_string($agent_registration_password) == false) {fail('You must specify agent_registration_password') }
     if ( $em_upload_port == undef or is_numeric($em_upload_port) == false) {fail('You must specify em_upload_port') }
 
     # chmod +x /tmp/AgentPull.sh
     if ( $install_type  == 'agentPull') {
+
+      if ( $sysman_user == undef or is_string($sysman_user) == false) {fail('You must specify sysman_user') }
+      if ( $sysman_password == undef or is_string($sysman_password) == false) {fail('You must specify sysman_password') }
 
       if !defined(Package['curl']) {
         package { 'curl':
