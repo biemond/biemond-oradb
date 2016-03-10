@@ -106,8 +106,8 @@ define oradb::rcu(
     $components           = '-component MDS -component OPSS -component IAU -component OAM'
     $componentsPasswords  = [$repos_password, $repos_password, $repos_password, $repos_password, $repos_password]
   } elsif $product == 'oim' {
-    $components           = '-component SOAINFRA -component ORASDPM -component MDS -component OPSS -component BAM -component IAU -component BIPLATFORM -component OIF -component OIM -component OAM -component OAAM'
-    $componentsPasswords  = [$repos_password, $repos_password, $repos_password,$repos_password,$repos_password,$repos_password, $repos_password, $repos_password,$repos_password, $repos_password, $repos_password]
+    $components           = '-component SOAINFRA -component ORASDPM -component MDS -component OPSS -component BAM -component IAU -component BIPLATFORM -component OIF -component OIM -component OAM -component OAAM -component OMSM'
+    $componentsPasswords  = [$repos_password, $repos_password, $repos_password,$repos_password,$repos_password,$repos_password, $repos_password, $repos_password,$repos_password, $repos_password, $repos_password, $repos_password]
   } elsif $product == 'all' {
     $components           = '-component SOAINFRA -component ORASDPM -component MDS -component OPSS -component BAM -component CONTENTSERVER11 -component CONTENTSERVER11SEARCH -component URM -component PORTLET -component WEBCENTER -component ACTIVITIES -component DISCUSSIONS'
     # extra password for DISCUSSIONS and ACTIVITIES
