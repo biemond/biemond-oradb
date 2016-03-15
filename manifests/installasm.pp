@@ -20,6 +20,7 @@ define oradb::installasm(
   $asm_diskgroup             = 'DATA',
   $disk_discovery_string     = undef,
   $disk_redundancy           = 'NORMAL',
+  $disk_au_size              = 1,
   $disks                     = undef,
   $download_dir              = '/install',
   $zip_extract                = true,
@@ -34,6 +35,12 @@ define oradb::installasm(
 )
 {
 
+  case $disk_au_size {
+    1, 2, 4, 8, 16, 32, 64: {  } # Do nothing. These are valid values
+    default: {
+      fail("${disk_au_size} is an invalid disk_au_size. It needs to be one of these values: 1, 2, 4, 8, 16, 32, 64")
+    }
+  }
   $file_without_ext = regsubst($file, '(.+?)(\.zip*$|$)', '\1')
   #notify {"oradb::installasm file without extension ${$file_without_ext} ":}
 
