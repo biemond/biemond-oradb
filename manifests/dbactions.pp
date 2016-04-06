@@ -21,7 +21,7 @@ define oradb::dbactions(
       os_user                 => $user,
     }
   } elsif $db_type in ['grid','asm'] {
-    db_control{'instance control ${title}':
+    db_control{"instance control ${title}":
       ensure                  => $action,   #running|start|abort|stop
       provider                => 'srvctl',
       instance_name           => $db_name,
