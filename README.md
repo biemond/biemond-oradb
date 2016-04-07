@@ -1061,7 +1061,7 @@ or
       logoutput                 => true,
     }
 
-## Enteprise Mananager
+## Enterprise Manager
 
     oradb::installem{ 'em12104':
       version                     => '12.1.0.4',
