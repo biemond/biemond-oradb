@@ -1,0 +1,11 @@
+[Unit]
+Description=Oracle High Availability Services
+After=syslog.target
+
+[Service]
+ExecStart=/etc/init.d/init.ohasd run >/dev/null 2>&1 Type=simple
+Restart=always
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
