@@ -192,7 +192,7 @@ define oradb::installasm(
 
     exec { "install oracle grid ${title}":
       command     => "/bin/sh -c 'unset DISPLAY;${download_dir}/${file_without_ext}/grid/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/grid_install_${version}.rsp'",
-      creates     => $grid_home,
+      creates     => "${grid_home}/bin",
       environment => ["USER=${user}","LOGNAME=${user}"],
       timeout     => 0,
       returns     => [6,0],
