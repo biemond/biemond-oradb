@@ -1,5 +1,5 @@
 module Puppet
-  newtype(:db_directory_structure) do
+  Type::newtype(:db_directory_structure) do
     desc 'add all the directories needed by the oracle db or asm installation'
 
     newparam(:name) do

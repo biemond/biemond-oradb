@@ -1,5 +1,5 @@
 module Puppet
-  newtype(:db_rcu) do
+  Type::newtype(:db_rcu) do
     desc 'This is the Oracle RCU ( Repository creation utility) installer type'
 
     newproperty(:ensure) do

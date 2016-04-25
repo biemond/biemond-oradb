@@ -29,12 +29,16 @@ begin
 
   def db_var_exists(name)
     # puts "lookup fact "+name
-    if lookupvar(name) != :undefined
-      if lookupvar(name).nil?
-        # puts "return false"
-        return false
+    begin
+      if lookupvar(name) != :undefined
+        if lookupvar(name).nil?
+          # puts "return false"
+          return false
+        end
+        return true
       end
-      return true
+    rescue
+      false
     end
     # puts "not found"
     false

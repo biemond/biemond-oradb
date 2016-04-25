@@ -1,5 +1,5 @@
 module Puppet
-  newtype(:db_listener) do
+  Type::newtype(:db_listener) do
     desc 'control the oracle db listener state like running,stop,restart'
 
     newproperty(:ensure) do
@@ -16,7 +16,7 @@ module Puppet
           provider.stop
         end
       end
- 
+
       aliasvalue(:running, :start)
       aliasvalue(:abort, :stop)
 

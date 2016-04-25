@@ -3,6 +3,7 @@
 ## 2.0.5
 - EM agent, Move sysman parameter validation to agentpull block
 - Fix rcu status check, rollback from version 2.0.1
+- ASM service fix for RHEL7
 
 ## 2.0.4
 - dbtemplate_12.1.dbt database template should also work for 12.1.0.2
