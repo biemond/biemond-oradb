@@ -6,15 +6,15 @@ define oradb::client(
   String $file                      = undef,
   String $oracle_base               = undef,
   String $oracle_home               = undef,
-  String $ora_inventory_dir         = undef,
-  Integer $db_port                  = hiera('oradb:listener_port'),
-  String $user                      = hiera('oradb:user'),
-  String $user_base_dir             = hiera('oradb:user_base_dir'),
-  String $group                     = hiera('oradb:group'),
-  String $group_install             = hiera('oradb:group_install'),
-  String $download_dir              = hiera('oradb:download_dir'),
+  $ora_inventory_dir                = undef,
+  Integer $db_port                  = lookup('oradb::listener_port'),
+  String $user                      = lookup('oradb::user'),
+  String $user_base_dir             = lookup('oradb::user_base_dir'),
+  String $group                     = lookup('oradb::group'),
+  String $group_install             = lookup('oradb::group_install'),
+  String $download_dir              = lookup('oradb::download_dir'),
   Boolean $bash_profile             = true,
-  String $puppet_download_mnt_point = hiera('oradb:module_mountpoint'),
+  String $puppet_download_mnt_point = lookup('oradb::module_mountpoint'),
   Boolean $remote_file              = true,
   Boolean $logoutput                = true,
 )
@@ -37,7 +37,7 @@ define oradb::client(
   }
 
   if $ora_inventory_dir == undef {
-    $oraInventory = pick($::oradb_inst_loc_data,oradb_cleanpath("${oracle_base}/../oraInventory"))
+    $oraInventory = pick($::oradb_inst_loc_data, oradb_cleanpath("${oracle_base}/../oraInventory"))
   } else {
     validate_absolute_path($ora_inventory_dir)
     $oraInventory = "${ora_inventory_dir}/oraInventory"
@@ -54,19 +54,13 @@ define oradb::client(
 
   if ( $continue ) {
 
-    $execPath = hiera('oradb:exec_path')
-
-    if $puppet_download_mnt_point == undef {
-      $mountPoint     = 'puppet:///modules/oradb/'
-    } else {
-      $mountPoint     = $puppet_download_mnt_point
-    }
+    $exec_path = lookup('oradb::exec_path')
 
     # db file installer zip
     if $remote_file == true {
       file { "${download_dir}/${file}":
         ensure  => present,
-        source  => "${mountPoint}/${file}",
+        source  => "${puppet_download_mnt_point}/${file}",
         before  => Exec["extract ${download_dir}/${file}"],
         mode    => '0775',
         owner   => $user,
@@ -75,12 +69,12 @@ define oradb::client(
       }
       $source = $download_dir
     } else {
-      $source = $mountPoint
+      $source = $puppet_download_mnt_point
     }
     exec { "extract ${download_dir}/${file}":
       command   => "unzip -o ${source}/${file} -d ${download_dir}/client_${version}",
       timeout   => 0,
-      path      => $execPath,
+      path      => $exec_path,
       user      => $user,
       group     => $group,
       logoutput => false,
@@ -113,7 +107,7 @@ define oradb::client(
       creates   => $oracle_home,
       timeout   => 0,
       returns   => [6,0],
-      path      => $execPath,
+      path      => $exec_path,
       user      => $user,
       group     => $group_install,
       logoutput => $logoutput,
@@ -124,7 +118,7 @@ define oradb::client(
       user      => 'root',
       group     => 'root',
       require   => Exec["install oracle client ${title}"],
-      path      => $execPath,
+      path      => $exec_path,
       logoutput => $logoutput,
     }
 
@@ -141,7 +135,7 @@ define oradb::client(
       command   => "${oracle_home}/bin/netca /silent /responsefile ${download_dir}/netca_client_${version}.rsp",
       require   => [File["${download_dir}/netca_client_${version}.rsp"],Exec["run root.sh script ${title}"],],
       creates   => "${oracle_home}/network/admin/sqlnet.ora",
-      path      => $execPath,
+      path      => $exec_path,
       user      => $user,
       group     => $group,
       logoutput => $logoutput,
@@ -165,7 +159,7 @@ define oradb::client(
       command => "rm -rf ${download_dir}/client_${version}",
       user    => 'root',
       group   => 'root',
-      path    => $execPath,
+      path    => $exec_path,
       require => Exec["install oracle net ${title}"],
     }
 
@@ -174,7 +168,7 @@ define oradb::client(
         command => "rm -rf ${download_dir}/${file}",
         user    => 'root',
         group   => 'root',
-        path    => $execPath,
+        path    => $exec_path,
         require => Exec["install oracle net ${title}"],
       }
     }

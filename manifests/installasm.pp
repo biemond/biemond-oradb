@@ -215,7 +215,7 @@ define oradb::installasm(
         group   => $group,
       }
     }
-    
+
     #because of RHEL7 uses systemd we need to create the service differently
     if ($::osfamily == 'RedHat') and ($::operatingsystemmajrelease == '7')
     {
