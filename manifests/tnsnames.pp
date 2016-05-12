@@ -2,15 +2,15 @@
 #
 #
 define oradb::tnsnames(
-  $oracle_home          = undef,
-  $user                 = 'oracle',
-  $group                = 'dba',
-  $server               = {myserver => { host => undef, port => '1521', protocol => 'TCP' }},
-  $loadbalance          = 'ON',
-  $failover             = 'ON',
-  $connect_service_name = undef,
-  $connect_server       = 'DEDICATED',
-  $entry_type           = 'tnsname',
+  String $oracle_home          = undef,
+  String $user                 = hiera('oradb:user'),
+  String $group                = hiera('oradb:group'),
+  String $server               = {myserver => { host => undef, port => '1521', protocol => 'TCP' }},
+  String $loadbalance          = 'ON',
+  String $failover             = 'ON',
+  String $connect_service_name = undef,
+  String $connect_server       = 'DEDICATED',
+  String $entry_type           = 'tnsname',
 )
 {
   if ! defined(Concat["${oracle_home}/network/admin/tnsnames.ora"]) {

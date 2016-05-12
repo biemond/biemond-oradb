@@ -1,17 +1,14 @@
 # == Class: oradb::listener
 #
 #
-define oradb::listener( $oracle_base   = undef,
-                        $oracle_home   = undef,
-                        $user          = 'oracle',
-                        $group         = 'dba',
-                        $action        = 'start',
-                        $listener_name = 'listener',
+define oradb::listener( String $oracle_base   = undef,
+                        String $oracle_home   = undef,
+                        String $user          = lookup('oradb::user'),
+                        String $group         = lookup('oradb::group'),
+                        Enum["running", "start", "abort", "stop"] $action = 'start',
+                        String $listener_name = 'listener',
 )
 {
-  if (!( $action in ['running','start','abort','stop'])){
-    fail('Unrecognized action, use running|start|abort|stop')
-  }
 
   db_listener{ $title:
     ensure          => $action,

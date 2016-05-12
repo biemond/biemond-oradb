@@ -2,21 +2,21 @@
 #
 #
 define oradb::client(
-  $version                   = undef,
-  $file                      = undef,
-  $oracle_base               = undef,
-  $oracle_home               = undef,
-  $ora_inventory_dir         = undef,
-  $db_port                   = '1521',
-  $user                      = 'oracle',
-  $user_base_dir             = '/home',
-  $group                     = 'dba',
-  $group_install             = 'oinstall',
-  $download_dir              = '/install',
-  $bash_profile              = true,
-  $puppet_download_mnt_point = undef,
-  $remote_file               = true,
-  $logoutput                 = true,
+  String $version                   = undef,
+  String $file                      = undef,
+  String $oracle_base               = undef,
+  String $oracle_home               = undef,
+  String $ora_inventory_dir         = undef,
+  Integer $db_port                  = hiera('oradb:listener_port'),
+  String $user                      = hiera('oradb:user'),
+  String $user_base_dir             = hiera('oradb:user_base_dir'),
+  String $group                     = hiera('oradb:group'),
+  String $group_install             = hiera('oradb:group_install'),
+  String $download_dir              = hiera('oradb:download_dir'),
+  Boolean $bash_profile             = true,
+  String $puppet_download_mnt_point = hiera('oradb:module_mountpoint'),
+  Boolean $remote_file              = true,
+  Boolean $logoutput                = true,
 )
 {
   validate_absolute_path($oracle_home)
@@ -54,7 +54,7 @@ define oradb::client(
 
   if ( $continue ) {
 
-    $execPath     = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
+    $execPath = hiera('oradb:exec_path')
 
     if $puppet_download_mnt_point == undef {
       $mountPoint     = 'puppet:///modules/oradb/'

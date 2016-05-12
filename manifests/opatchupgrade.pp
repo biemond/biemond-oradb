@@ -4,24 +4,22 @@
 #
 #
 define oradb::opatchupgrade(
-  $oracle_home                = undef,
-  $patch_file                 = undef,
-  $csi_number                 = undef,
-  $support_id                 = undef,
-  $opversion                  = undef,
-  $user                       = 'oracle',
-  $group                      = 'dba',
-  $download_dir               = '/install',
-  $puppet_download_mnt_point  = undef,
+  String $oracle_home               = undef,
+  String $patch_file                = undef,
+  String $csi_number                = undef,
+  String $support_id                = undef,
+  String $opversion                 = undef,
+  String $user                      = hiera('oradb:user'),
+  String $group                     = hiera('oradb:group'),
+  String $download_dir              = hiera('oradb:download_dir'),
+  String $puppet_download_mnt_point = hiera('oradb:module_mountpoint'),
 ){
-  $execPath      = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
-  $patchDir      = "${oracle_home}/OPatch"
+  $execPath = hiera('oradb:exec_path')
+  $patchDir      = "${oracleHome}/OPatch"
 
-  # if a mount was not specified then get the install media from the puppet master
-  if $puppet_download_mnt_point == undef {
-    $mountDir = 'puppet:///modules/oradb'
-  } else {
-    $mountDir = $puppet_download_mnt_point
+  $supported_db_kernels = join( hiera('oradb:kernels'), '|')
+  if ( $::kernel in $supported_db_kernels == false){
+    fail("Unrecognized operating system, please use it on a ${supported_db_kernels} host")
   }
 
   # check the opatch version

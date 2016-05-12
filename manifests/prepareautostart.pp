@@ -3,23 +3,12 @@
 #  prepare autostart of the nodemanager for linux
 #
 class oradb::prepareautostart(
-  $oracle_home  = undef,
-  $user         = 'oracle',
-  $service_name = 'dbora'
+  String $oracle_home  = undef,
+  String $user         = lookup('oradb::user'),
+  String $service_name = lookup('oradb::host::service_name'),
 ){
-  $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
-
-  case $::kernel {
-    'Linux': {
-      $dboraLocation = '/etc/init.d'
-    }
-    'SunOS': {
-      $dboraLocation = '/etc'
-    }
-    default: {
-      fail('Unrecognized kernel, please use it on a Linux or SunOS host')
-    }
-  }
+  $exec_path     = lookup('oradb::exec_path')
+  $dboraLocation = lookup('oradb::dbora_dir')
 
   file { "${dboraLocation}/${service_name}" :
     ensure  => present,
@@ -35,7 +24,7 @@ class oradb::prepareautostart(
         require   => File["/etc/init.d/${service_name}"],
         user      => 'root',
         unless    => "chkconfig --list | /bin/grep \'${service_name}\'",
-        path      => $execPath,
+        path      => $exec_path,
         logoutput => true,
       }
     }
@@ -45,7 +34,7 @@ class oradb::prepareautostart(
         require   => File["/etc/init.d/${service_name}"],
         user      => 'root',
         unless    => "ls /etc/rc3.d/*${service_name} | /bin/grep \'${service_name}\'",
-        path      => $execPath,
+        path      => $exec_path,
         logoutput => true,
       }
     }
@@ -61,7 +50,7 @@ class oradb::prepareautostart(
         require   => File['/tmp/oradb_smf.xml',"${dboraLocation}/${service_name}"],
         user      => 'root',
         unless    => 'svccfg list | grep oracledatabase',
-        path      => $execPath,
+        path      => $exec_path,
         logoutput => true,
       }
     }

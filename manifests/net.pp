@@ -1,19 +1,18 @@
 # == Class: oradb::net
 #
 define oradb::net(
-  $oracle_home  = undef,
-  $version      = '11.2',
-  $user         = 'oracle',
-  $group        = 'dba',
-  $download_dir = '/install',
-  $db_port      = '1521',
+  String $oracle_home  = undef,
+  String $version      = lookup('oradb::version'),
+  String $user         = lookup('oradb::user'),
+  String $group        = lookup('oradb::group'),
+  String $download_dir = lookup('oradb::download_dir'),
+  Integer $db_port     = lookup('oradb::listener_port'),
 ){
-  if $version in ['11.2','12.1'] {
-  } else {
-    fail('Unrecognized version')
+  if ( $version in lookup('oradb::net_versions') == false ) {
+    fail('Unrecognized version for oradb::net')
   }
 
-  $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin'
+  $exec_path = lookup('oradb::exec_path')
 
   file { "${download_dir}/netca_${version}.rsp":
     ensure  => present,
@@ -27,7 +26,7 @@ define oradb::net(
     command     => "${oracle_home}/bin/netca /silent /responsefile ${download_dir}/netca_${version}.rsp",
     require     => File["${download_dir}/netca_${version}.rsp"],
     creates     => "${oracle_home}/network/admin/listener.ora",
-    path        => $execPath,
+    path        => $exec_path,
     user        => $user,
     group       => $group,
     environment => ["USER=${user}",],

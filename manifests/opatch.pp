@@ -4,41 +4,24 @@
 #
 #
 define oradb::opatch(
-  $ensure                    = 'present',  #present|absent
-  $oracle_product_home       = undef,
-  $patch_id                  = undef,
-  $patch_file                = undef,
-  $clusterware               = false, # opatch auto or opatch apply
-  $use_opatchauto_utility    = false,
-  $bundle_sub_patch_id       = undef,
-  $bundle_sub_folder         = undef,
-  $user                      = 'oracle',
-  $group                     = 'dba',
-  $download_dir              = '/install',
-  $ocmrf                     = false,
-  $puppet_download_mnt_point = undef,
-  $remote_file               = true,
+  String $ensure = 'present',  # Enum['present','absent']
+  String $oracle_product_home       = undef,
+  String $patch_id                  = undef,
+  String $patch_file                = undef,
+  Boolean $clusterware              = false, # opatch auto or opatch apply
+  Boolean $use_opatchauto_utility   = false,
+  String $bundle_sub_patch_id       = undef,
+  String $bundle_sub_folder         = undef,
+  String $user                      = hiera('oradb:user'),
+  String $group                     = hiera('oradb:group'),
+  String $download_dir              = hiera('oradb:download_dir'),
+  Boolean $ocmrf                    = false,
+  String $puppet_download_mnt_point = hiera('oradb:module_mountpoint'),
+  Boolean $remote_file              = true,
 )
 {
-  $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
-
-  case $::kernel {
-    'Linux': {
-      $oraInstPath = '/etc'
-    }
-    'SunOS': {
-      $oraInstPath = '/var/opt/oracle'
-    }
-    default: {
-        fail("Unrecognized operating system ${::kernel}, please use it on a Linux host")
-    }
-  }
-
-  if $puppet_download_mnt_point == undef {
-    $mountPoint = 'puppet:///modules/oradb/'
-  } else {
-    $mountPoint =  $puppet_download_mnt_point
-  }
+  $execPath    = hiera('oradb:exec_path')
+  $oraInstPath = hiera('oradb:orainst_dir')
 
   if $ensure == 'present' {
     if $remote_file == true {

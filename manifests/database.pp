@@ -1,45 +1,46 @@
 # == Class: oradb::database
 #
-#
-# action        =  createDatabase|deleteDatabase
-# database_type  = MULTIPURPOSE|DATA_WAREHOUSING|OLTP
-#
 define oradb::database(
-  $oracle_base               = undef,
-  $oracle_home               = undef,
-  $version                   = '11.2', # 11.2|12.1
-  $user                      = 'oracle',
-  $group                     = 'dba',
-  $download_dir              = '/install',
-  $action                    = 'create',
-  $template                  = undef,
-  $db_name                   = 'orcl',
-  $db_domain                 = undef,
-  $db_port                   = '1521',
-  $sys_password              = 'Welcome01',
-  $system_password           = 'Welcome01',
-  $data_file_destination     = undef,
-  $recovery_area_destination = undef,
-  $character_set             = 'AL32UTF8',
-  $nationalcharacter_set     = 'UTF8',
-  $init_params               = undef,
-  $sample_schema             = TRUE,
-  $memory_percentage         = '40',
-  $memory_total              = '800',
-  $database_type             = 'MULTIPURPOSE', # MULTIPURPOSE|DATA_WAREHOUSING|OLTP
-  $em_configuration          = 'NONE',  # CENTRAL|LOCAL|ALL|NONE
-  $storage_type              = 'FS', #FS|CFS|ASM
-  $asm_snmp_password         = 'Welcome01',
-  $db_snmp_password          = 'Welcome01',
-  $asm_diskgroup             = 'DATA',
-  $recovery_diskgroup        = undef,
-  $cluster_nodes             = undef,
-  $container_database        = false, # 12.1 feature for pluggable database
-  $puppet_download_mnt_point = undef,
+  String $oracle_base               = undef,
+  String $oracle_home               = undef,
+  String $version                   = lookup('oradb::version'),
+  String $user                      = lookup('oradb::user'),
+  String $group                     = lookup('oradb::group'),
+  String $download_dir              = lookup('oradb::download_dir'),
+  String $action                    = lookup('oradb::database::action'),
+  $template                         = undef,
+  String $db_name                   = lookup('oradb::database_name'),
+  String $db_domain                 = undef,
+  Integer $db_port                  = lookup('oradb::listener_port'),
+  String $sys_password              = lookup('oradb::default::password'),
+  String $system_password           = lookup('oradb::default::password'),
+  $data_file_destination            = undef,
+  $recovery_area_destination        = undef,
+  String $character_set             = lookup('oradb::database::character_set'),
+  String $nationalcharacter_set     = lookup('oradb::database::nationalcharacter_set'),
+  $init_params                      = lookup('oradb::database::init_params'),
+  String $sample_schema             = lookup('oradb::database::sample_schema'),
+  Integer $memory_percentage        = lookup('oradb::database::memory_percentage'),
+  Integer $memory_total             = lookup('oradb::database::memory_total'),
+  Enum["MULTIPURPOSE", "DATA_WAREHOUSING", "OLTP"] $database_type = lookup('oradb::database::database_type'),
+  Enum["NONE", "CENTRAL", "LOCAL", "ALL"] $em_configuration = lookup('oradb::database::em_configuration'),
+  Enum["FS", "CFS", "ASM"] $storage_type = lookup('oradb::database::storage_type'),
+  String $asm_snmp_password         = lookup('oradb::default::password'),
+  String $db_snmp_password          = lookup('oradb::default::password'),
+  String $asm_diskgroup             = lookup('oradb::database::asm_diskgroup'),
+  $recovery_diskgroup               = undef,
+  $cluster_nodes                    = undef,
+  Boolean $container_database       = false, # 12.1 feature for pluggable database
+  String $puppet_download_mnt_point = lookup('oradb::module_mountpoint'),
 )
 {
-  if (!( $version in ['11.2','12.1'])) {
-    fail('Unrecognized version')
+  if ( $version in lookup('oradb::database_versions') == false ) {
+    fail('Unrecognized version for oradb::database')
+  }
+
+  $supported_db_kernels = join( lookup('oradb::kernels'), '|')
+  if ( $::kernel in $supported_db_kernels == false){
+    fail("Unrecognized operating system, please use it on a ${supported_db_kernels} host")
   }
 
   if $action == 'create' {
@@ -50,41 +51,25 @@ define oradb::database(
     fail('Unrecognized database action')
   }
 
-  if (!( $database_type in ['MULTIPURPOSE','DATA_WAREHOUSING','OLTP'])) {
+  if ( $database_type in lookup('oradb::instance_types') == false ) {
     fail('Unrecognized database_type')
   }
 
-  if (!( $em_configuration in ['NONE','CENTRAL','LOCAL','ALL'])) {
-    fail('Unrecognized em_configuration')
+  if ( $em_configuration in lookup('oradb::instance_em_configuration') == false) {
+    fail('Unrecognized emConfiguration')
   }
 
-  if (!( $storage_type in ['FS','CFS','ASM'])) {
-    fail('Unrecognized storage_type')
+  if ( $storage_type in lookup('oradb::instance_storage_type') == false ) {
+    fail('Unrecognized storageType')
   }
 
   if ( $version == '11.2' and $container_database == true ){
     fail('container or pluggable database is not supported on version 11.2')
   }
 
-  $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin'
-
-  if $puppet_download_mnt_point == undef {
-    $mountPoint = 'oradb/'
-  } else {
-    $mountPoint = $puppet_download_mnt_point
-  }
-
-  case $::kernel {
-    'Linux': {
-      $userHome = "/home/${user}"
-    }
-    'SunOS': {
-      $userHome = "/export/home/${user}"
-    }
-    default: {
-      fail('Unrecognized operating system')
-    }
-  }
+  $exec_path = lookup('oradb::exec_path')
+  $user_base = lookup('oradb::user_base_dir')
+  $userHome  = "${user_base}/${user}"
 
   if (is_hash($init_params) or is_string($init_params)) {
     if is_hash($init_params) {
@@ -120,7 +105,7 @@ define oradb::database(
     $templatename = "${download_dir}/${template}_${sanitized_title}.dbt"
     file { $templatename:
       ensure  => present,
-      content => template("${mountPoint}/${template}.dbt.erb"),
+      content => template("${puppet_download_mnt_point}/${template}.dbt.erb"),
       mode    => '0775',
       owner   => $user,
       group   => $group,
@@ -142,9 +127,9 @@ define oradb::database(
       command     => $command,
       creates     => "${oracle_base}/admin/${db_name}",
       timeout     => 0,
-      path        => $execPath,
+      path        => $exec_path,
       user        => $user,
-      group       => $group,
+      group       => $group ,
       cwd         => $oracle_base,
       environment => ["USER=${user}",],
       logoutput   => true,
@@ -154,9 +139,9 @@ define oradb::database(
       command     => "${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp",
       onlyif      => "ls ${oracle_base}/admin/${db_name}",
       timeout     => 0,
-      path        => $execPath,
+      path        => $exec_path,
       user        => $user,
-      group       => $group,
+      group       => $group ,
       cwd         => $oracle_base,
       environment => ["USER=${user}",],
       logoutput   => true,

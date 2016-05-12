@@ -1,6 +1,12 @@
 # Oracle Database puppet module
 [![Build Status](https://travis-ci.org/biemond/biemond-oradb.png)](https://travis-ci.org/biemond/biemond-oradb) [![Coverage Status](https://coveralls.io/repos/biemond/biemond-oradb/badge.png?branch=master)](https://coveralls.io/r/biemond/biemond-oradb?branch=master)
 
+This version located at [puppet4_3_data branch](https://github.com/biemond/biemond-oradb/tree/puppet4_3_data) uses the latest features of puppet 4 like
+- Strong data typing
+- Internal hiera module data
+
+It cannot be used with puppet 3
+
 created by Edwin Biemond
 [biemond.blogspot.com](http://biemond.blogspot.com)
 [Github homepage](https://github.com/biemond/puppet)
@@ -13,7 +19,7 @@ With version >= 2.0.0  all manifest parameters are in lowercase and in snakestyl
 
 Dependency with
 - puppetlabs/concat >= 1.0.0
-- puppetlabs/stdlib >= 3.2.0
+- puppetlabs/stdlib >= 4.0.0
 
 Should work on Docker, for Solaris and on all Linux version like RedHat, CentOS, Ubuntu, Debian, Suse SLES or OracleLinux
 - Docker image of Oracle Database 12.1 SE [Docker Oracle Database 12.1.0.1](https://github.com/biemond/docker-database-puppet)
@@ -28,7 +34,7 @@ Should work on Docker, for Solaris and on all Linux version like RedHat, CentOS,
 Example of Opensource Puppet 3.4.3 Puppet master configuration in a vagrant box [puppet master](https://github.com/biemond/vagrant-puppetmaster)
 - oradb (oracle database 11.2.0.1 ) with GoldenGate 12.1.2
 
-Should work for Puppet 2.7 & 3.0
+Should work for Puppet >=  4.0
 
 ## Oracle Database Features
 

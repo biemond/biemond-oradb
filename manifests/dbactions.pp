@@ -5,13 +5,13 @@
 #
 #
 define oradb::dbactions(
-  $db_type     = 'database',
+  Enum["database", "grid", "asm"] $db_type     = 'database',
   $oracle_home = undef,
   $grid_home   = undef,
-  $user        = 'oracle',
-  $group       = 'dba',
-  $action      = 'start',
-  $db_name     = 'orcl',
+  String $user        = lookup('oradb::user'),
+  String $group       = lookup('oradb::group'),
+  Enum["start", "stop", "running", "abort"] $action      = 'start',
+  String $db_name     = lookup('oradb::database_name'),
 ){
   if $db_type == 'database' {
     db_control{"instance control ${title}":
