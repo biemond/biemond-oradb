@@ -1,43 +1,27 @@
 # == Class: oradb::rcu
 #    rcu for soa suite, webcenter
 #
-#    product = soasuite|webcenter|oim|oam|all
-#
-#
 define oradb::rcu(
-  $rcu_file                  = undef,
-  $product                   = 'soasuite',
-  $version                   = '11.1.1.7',
-  $oracle_home               = undef,
-  $user                      = 'oracle',
-  $group                     = 'dba',
-  $download_dir              = '/install',
-  $action                    = 'create',  # delete or create
-  $db_server                 = undef,
-  $db_service                = undef,
-  $sys_user                  = 'sys',
-  $sys_password              = undef,
-  $schema_prefix             = undef,
-  $repos_password            = undef,
-  $temp_tablespace           = undef,
-  $puppet_download_mnt_point = undef,
-  $remote_file               = true,
-  $logoutput                 = false,
+  String $rcu_file                  = undef,
+  Enum["soasuite", "webcenter", "oam", "oim", "all"] $product = 'soasuite',
+  String $version                   = '11.1.1.7',
+  $oracle_home                      = undef,
+  String $user                      = lookup('oradb::user'),
+  String $group                     = lookup('oradb::group'),
+  String $download_dir              = lookup('oradb::download_dir'),
+  Enum["delete", "create"] $action  = 'create',
+  String $db_server                 = undef,
+  String $db_service                = undef,
+  String $sys_user                  = 'sys',
+  String $sys_password              = undef,
+  String $schema_prefix             = undef,
+  String $repos_password            = undef,
+  $temp_tablespace                  = undef,
+  String $puppet_download_mnt_point = lookup('oradb::module_mountpoint'),
+  Boolean $remote_file              = true,
+  Boolean $logoutput                = false,
 ){
-  case $::kernel {
-    'Linux': {
-      $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin'
-    }
-    default: {
-      fail('Unrecognized or not supported operating system')
-    }
-  }
-
-  if $puppet_download_mnt_point == undef {
-    $mountPoint = 'puppet:///modules/oradb/'
-  } else {
-    $mountPoint = $puppet_download_mnt_point
-  }
+  $execPath = lookup('oradb::exec_path')
 
   # create the rcu folder
   if ! defined(File["${download_dir}/rcu_${version}"]) {
@@ -61,13 +45,13 @@ define oradb::rcu(
         mode   => '0775',
         owner  => $user,
         group  => $group,
-        source => "${mountPoint}/${rcu_file}",
+        source => "${puppet_download_mnt_point}/${rcu_file}",
         before => Exec["extract ${rcu_file}"],
       }
     }
     $source = $download_dir
   } else {
-    $source = $mountPoint
+    $source = $puppet_download_mnt_point
   }
 
   if ! defined(Exec["extract ${rcu_file}"]) {

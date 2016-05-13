@@ -2,30 +2,30 @@
 #
 #
 define oradb::installasm(
-  $version                   = undef,
-  $file                      = undef,
-  $grid_type                 = 'HA_CONFIG', #CRS_CONFIG|HA_CONFIG|UPGRADE|CRS_SWONLY
-  $stand_alone               = true, # in case of 'CRS_SWONLY' and used as stand alone or in RAC
-  $grid_base                 = undef,
-  $grid_home                 = undef,
-  $ora_inventory_dir         = undef,
-  $user                      = 'grid',
-  $user_base_dir             = '/home',
-  $group                     = 'asmdba',
-  $group_install             = 'oinstall',
-  $group_oper                = 'asmoper',
-  $group_asm                 = 'asmadmin',
-  $sys_asm_password          = 'Welcome01',
-  $asm_monitor_password      = 'Welcome01',
-  $asm_diskgroup             = 'DATA',
-  $disk_discovery_string     = undef,
-  $disk_redundancy           = 'NORMAL',
-  $disk_au_size              = 1,
-  $disks                     = undef,
-  $download_dir              = '/install',
-  $zip_extract                = true,
-  $puppet_download_mnt_point = undef,
-  $remote_file               = true,
+  String $version                   = undef,
+  String $file                      = undef,
+  Enum["HA_CONFIG", "CRS_CONFIG", "UPGRADE", "CRS_SWONLY"] $grid_type  = 'HA_CONFIG',
+  Boolean $stand_alone              = true, # in case of 'CRS_SWONLY' and used as stand alone or in RAC
+  String $grid_base                 = undef,
+  String $grid_home                 = undef,
+  $ora_inventory_dir                = undef,
+  String $user                      = lookup('oradb::grid::user'),
+  String $user_base_dir             = lookup('oradb::user_base_dir'),
+  String $group                     = lookup('oradb::grid::group'),
+  String $group_install             = lookup('oradb::grid::group_install'),
+  String $group_oper                = lookup('oradb::grid::group_oper'),
+  String $group_asm                 = lookup('oradb::grid::group_asm'),
+  String $download_dir              = lookup('oradb::download_dir'),
+  Boolean $zip_extract              = true,
+  String $puppet_download_mnt_point = lookup('oradb::module_mountpoint'),
+  String $sys_asm_password          = lookup('oradb::grid::default::password'),
+  String $asm_monitor_password      = lookup('oradb::grid::default::password'),
+  String $asm_diskgroup             = 'DATA',
+  $disk_discovery_string            = undef,
+  String $disk_redundancy           = 'NORMAL',
+  Integer $disk_au_size             = 1,
+  $disks                             = undef,
+  Boolean $remote_file               = true,
   $cluster_name              = undef,
   $scan_name                 = undef,
   $scan_port                 = undef,
@@ -53,16 +53,19 @@ define oradb::installasm(
     unless $storage_option in ['ASM_STORAGE', 'FILE_SYSTEM_STORAGE'] {fail 'storage_option must be either ASM_STORAGE of FILE_SYSTEM_STORAGE'}
   }
 
-  if (!( $version in ['11.2.0.4','12.1.0.1', '12.1.0.2'] )){
-    fail('Unrecognized database grid install version, use 11.2.0.4, 12.1.0.1 or 12.1.0.2')
+  $supported_grid_versions = join( lookup('oradb::grid_versions'), '|')
+  if ( $version in $supported_grid_versions == false ){
+    fail("Unrecognized database grid install version, use ${supported_grid_versions}")
   }
 
-  if ( !($::kernel in ['Linux','SunOS'])){
-    fail('Unrecognized operating system, please use it on a Linux or SunOS host')
+  $supported_db_kernels = join( lookup('oradb::kernels'), '|')
+  if ( $::kernel in $supported_db_kernels == false){
+    fail("Unrecognized operating system, please use it on a ${supported_db_kernels} host")
   }
 
-  if ( !($grid_type in ['CRS_CONFIG','HA_CONFIG','UPGRADE','CRS_SWONLY'])){
-    fail('Unrecognized database grid type, please use CRS_CONFIG|HA_CONFIG|UPGRADE|CRS_SWONLY')
+  $supported_grid_types = join( lookup('oradb::grid_type'), '|')
+  if ($grid_type in $supported_grid_types == false ){
+    fail("Unrecognized database grid type, please use ${supported_grid_types}")
   }
 
   if ( $grid_base == undef or is_string($grid_base) == false) {fail('You must specify an grid_base') }
@@ -100,13 +103,7 @@ define oradb::installasm(
 
   if ( $continue ) {
 
-    $execPath     = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
-
-    if $puppet_download_mnt_point == undef {
-      $mountPoint     = 'puppet:///modules/oradb/'
-    } else {
-      $mountPoint     = $puppet_download_mnt_point
-    }
+    $exec_path = lookup('oradb::exec_path')
 
     if ( $zip_extract ) {
       # In $download_dir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
@@ -123,7 +120,7 @@ define oradb::installasm(
 
         file { "${download_dir}/${file1}":
           ensure  => present,
-          source  => "${mountPoint}/${file1}",
+          source  => "${puppet_download_mnt_point}/${file1}",
           mode    => '0775',
           owner   => $user,
           group   => $group,
@@ -134,7 +131,7 @@ define oradb::installasm(
         if versioncmp($version, '12.1.0.1') >= 0 {
           file { "${download_dir}/${file2}":
             ensure  => present,
-            source  => "${mountPoint}/${file2}",
+            source  => "${puppet_download_mnt_point}/${file2}",
             mode    => '0775',
             owner   => $user,
             group   => $group,
@@ -145,14 +142,14 @@ define oradb::installasm(
 
         $source = $download_dir
       } else {
-        $source = $mountPoint
+        $source = $puppet_download_mnt_point
       }
 
       exec { "extract ${download_dir}/${file1}":
         command   => "unzip -o ${source}/${file1} -d ${download_dir}/${file_without_ext}",
         timeout   => 0,
         logoutput => false,
-        path      => $execPath,
+        path      => $exec_path,
         user      => $user,
         group     => $group,
         creates   => "${download_dir}/${file_without_ext}",
@@ -164,7 +161,7 @@ define oradb::installasm(
           command   => "unzip -o ${source}/${file2} -d ${download_dir}/${file_without_ext}",
           timeout   => 0,
           logoutput => false,
-          path      => $execPath,
+          path      => $exec_path,
           user      => $user,
           group     => $group,
           require   => Exec["extract ${download_dir}/${file1}"],
@@ -196,7 +193,7 @@ define oradb::installasm(
       environment => ["USER=${user}","LOGNAME=${user}"],
       timeout     => 0,
       returns     => [6,0],
-      path        => $execPath,
+      path        => $exec_path,
       user        => $user,
       group       => $group_install,
       cwd         => $grid_base,
@@ -242,7 +239,7 @@ define oradb::installasm(
       command   => "${grid_home}/root.sh",
       user      => 'root',
       group     => 'root',
-      path      => $execPath,
+      path      => $exec_path,
       cwd       => $grid_base,
       logoutput => true,
       require   => Exec["install oracle grid ${title}"],
@@ -264,7 +261,7 @@ define oradb::installasm(
         command => "rm -rf ${download_dir}/${file_without_ext}",
         user    => 'root',
         group   => 'root',
-        path    => $execPath,
+        path    => $exec_path,
         require => Exec["install oracle grid ${title}"],
       }
 
@@ -274,7 +271,7 @@ define oradb::installasm(
             command => "rm -rf ${download_dir}/${file2}",
             user    => 'root',
             group   => 'root',
-            path    => $execPath,
+            path    => $exec_path,
             require => Exec["install oracle grid ${title}"],
           }
         }
@@ -283,7 +280,7 @@ define oradb::installasm(
           command => "rm -rf ${download_dir}/${file1}",
           user    => 'root',
           group   => 'root',
-          path    => $execPath,
+          path    => $exec_path,
           require => Exec["install oracle grid ${title}"],
         }
       }
@@ -295,7 +292,7 @@ define oradb::installasm(
           command   => "${grid_home}/perl/bin/perl -I${grid_home}/perl/lib -I${grid_home}/crs/install ${grid_home}/crs/install/roothas.pl",
           user      => 'root',
           group     => 'root',
-          path      => $execPath,
+          path      => $exec_path,
           cwd       => $grid_base,
           logoutput => true,
           require   => [Exec["run root.sh grid script ${title}"],
@@ -318,7 +315,7 @@ define oradb::installasm(
         command   => "${grid_home}/cfgtoollogs/configToolAllCommands RESPONSE_FILE=${download_dir}/cfgrsp.properties",
         user      => $user,
         group     => $group_install,
-        path      => $execPath,
+        path      => $exec_path,
         provider  => 'shell',
         cwd       => "${grid_home}/cfgtoollogs",
         logoutput => true,

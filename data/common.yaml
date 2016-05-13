@@ -7,10 +7,11 @@ oradb::group:            'dba'
 oradb::group_install:    'oinstall'
 oradb::group_oper:       'oper'
 
-oradb::user_grid:         'grid'
-oradb::group_grid:        'asmdba'
-oradb::group_oper_grid:   'asmoper'
-oradb::group_asm_grid:    'asmadmin'
+oradb::grid::user:          'grid'
+oradb::grid::group:         'asmdba'
+oradb::grid::group_install: 'oinstall'
+oradb::grid::group_oper:    'asmoper'
+oradb::grid::group_asm:     'asmadmin'
 
 oradb::download_dir:      '/var/tmp/install'
 oradb::module_mountpoint: 'puppet:///modules/oradb/'
@@ -21,7 +22,8 @@ oradb::listener_port:     1521
 oradb::database_name:     'orcl'
 oradb::host::service_name: 'dbora'
 
-oradb::default::password: 'Welcome01'
+oradb::default::password:       'Welcome01'
+oradb::grid::default::password: 'Welcome01'
 
 # check on all supported database versions
 oradb::versions:

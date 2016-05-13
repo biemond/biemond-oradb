@@ -18,7 +18,7 @@ define oradb::database(
   $recovery_area_destination        = undef,
   String $character_set             = lookup('oradb::database::character_set'),
   String $nationalcharacter_set     = lookup('oradb::database::nationalcharacter_set'),
-  $init_params                      = lookup('oradb::database::init_params'),
+  $init_params                      = undef,
   String $sample_schema             = lookup('oradb::database::sample_schema'),
   Integer $memory_percentage        = lookup('oradb::database::memory_percentage'),
   Integer $memory_total             = lookup('oradb::database::memory_total'),

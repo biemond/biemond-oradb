@@ -6,18 +6,18 @@
 define oradb::opatchupgrade(
   String $oracle_home               = undef,
   String $patch_file                = undef,
-  String $csi_number                = undef,
-  String $support_id                = undef,
+  $csi_number                       = undef,
+  $support_id                       = undef,
   String $opversion                 = undef,
-  String $user                      = hiera('oradb:user'),
-  String $group                     = hiera('oradb:group'),
-  String $download_dir              = hiera('oradb:download_dir'),
-  String $puppet_download_mnt_point = hiera('oradb:module_mountpoint'),
+  String $user                      = lookup('oradb::user'),
+  String $group                     = lookup('oradb::group'),
+  String $download_dir              = lookup('oradb::download_dir'),
+  String $puppet_download_mnt_point = lookup('oradb::module_mountpoint'),
 ){
-  $execPath = hiera('oradb:exec_path')
-  $patchDir      = "${oracleHome}/OPatch"
+  $execPath = lookup('oradb::exec_path')
+  $patchDir = "${oracle_home}/OPatch"
 
-  $supported_db_kernels = join( hiera('oradb:kernels'), '|')
+  $supported_db_kernels = join( lookup('oradb::kernels'), '|')
   if ( $::kernel in $supported_db_kernels == false){
     fail("Unrecognized operating system, please use it on a ${supported_db_kernels} host")
   }
@@ -38,7 +38,7 @@ define oradb::opatchupgrade(
       file {"${download_dir}/${patch_file}":
         ensure => present,
         path   => "${download_dir}/${patch_file}",
-        source => "${mountDir}/${patch_file}",
+        source => "${puppet_download_mnt_point}/${patch_file}",
         mode   => '0775',
         owner  => $user,
         group  => $group,

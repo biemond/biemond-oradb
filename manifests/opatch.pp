@@ -4,24 +4,24 @@
 #
 #
 define oradb::opatch(
-  String $ensure = 'present',  # Enum['present','absent']
+  Enum["present", "absent"] $ensure = 'present',
   String $oracle_product_home       = undef,
   String $patch_id                  = undef,
   String $patch_file                = undef,
   Boolean $clusterware              = false, # opatch auto or opatch apply
   Boolean $use_opatchauto_utility   = false,
-  String $bundle_sub_patch_id       = undef,
-  String $bundle_sub_folder         = undef,
-  String $user                      = hiera('oradb:user'),
-  String $group                     = hiera('oradb:group'),
-  String $download_dir              = hiera('oradb:download_dir'),
+  $bundle_sub_patch_id              = undef,
+  $bundle_sub_folder                = undef,
+  String $user                      = lookup('oradb::user'),
+  String $group                     = lookup('oradb::group'),
+  String $download_dir              = lookup('oradb::download_dir'),
   Boolean $ocmrf                    = false,
-  String $puppet_download_mnt_point = hiera('oradb:module_mountpoint'),
+  String $puppet_download_mnt_point = lookup('oradb::module_mountpoint'),
   Boolean $remote_file              = true,
 )
 {
-  $execPath    = hiera('oradb:exec_path')
-  $oraInstPath = hiera('oradb:orainst_dir')
+  $execPath    = lookup('oradb::exec_path')
+  $oraInstPath = lookup('oradb::orainst_dir')
 
   if $ensure == 'present' {
     if $remote_file == true {
@@ -29,7 +29,7 @@ define oradb::opatch(
       if ! defined(File["${download_dir}/${patch_file}"]) {
         file { "${download_dir}/${patch_file}":
           ensure => present,
-          source => "${mountPoint}/${patch_file}",
+          source => "${puppet_download_mnt_point}/${patch_file}",
           mode   => '0775',
           owner  => $user,
           group  => $group,
