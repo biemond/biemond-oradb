@@ -2,49 +2,51 @@
 #s
 #
 define oradb::installem(
-  $version                       = '12.1.0.5',
-  $file                          = undef,
-  $ora_inventory_dir             = undef,
-  $oracle_base_dir               = undef,
-  $oracle_home_dir               = undef,
-  $agent_base_dir                = undef,
-  $software_library_dir          = undef,
-  $weblogic_user                 = 'weblogic',
-  $weblogic_password             = undef,
-  $database_hostname             = undef,
-  $database_listener_port        = 1521,
-  $database_service_sid_name     = undef,
-  $database_sys_password         = undef,
-  $sysman_password               = undef,
-  $agent_registration_password   = undef,
-  $deployment_size               = 'SMALL', #'SMALL','MEDIUM','LARGE'
-  $user                          = 'oracle',
-  $group                         = 'oinstall',
-  $download_dir                  = '/install',
-  $zip_extract                   = true,
-  $puppet_download_mnt_point     = undef,
-  $remote_file                   = true,
-  $log_output                    = false,
-  $admin_server_https_port       = 7101,
-  $managed_server_http_port      = 7201,
-  $managed_server_https_port     = 7301,
-  $em_upload_http_port           = 4889,
-  $em_upload_https_port          = 1159,
-  $em_central_console_http_port  = 7788,
-  $em_central_console_https_port = 7799,
-  $bi_publisher_http_port        = 9701,
-  $bi_publisher_https_port       = 9801,
-  $nodemanager_https_port        = 7401,
-  $agent_port                    = 3872,
+  String $version                       = '12.1.0.5',
+  String $file                          = undef,
+  $ora_inventory_dir                    = undef,
+  String $oracle_base_dir               = undef,
+  String $oracle_home_dir               = undef,
+  $agent_base_dir                       = undef,
+  $software_library_dir                 = undef,
+  String $weblogic_user                 = 'weblogic',
+  $weblogic_password                    = undef,
+  String $database_hostname             = undef,
+  Integer $database_listener_port       = 1521,
+  String $database_service_sid_name     = undef,
+  String $database_sys_password         = undef,
+  String $sysman_password               = undef,
+  $agent_registration_password          = undef,
+  Enum["SMALL", "MEDIUM", "LARGE"] $deployment_size = 'SMALL',
+  String $user                           = lookup('oradb::user'),
+  String $group                          = lookup('oradb::group_install'),
+  String $download_dir                   = lookup('oradb::download_dir'),
+  Boolean $zip_extract                   = true,
+  String $puppet_download_mnt_point      = lookup('oradb::module_mountpoint'),
+  Boolean $remote_file                   = true,
+  Boolean $log_output                    = false,
+  Integer $admin_server_https_port       = 7101,
+  Integer $managed_server_http_port      = 7201,
+  Integer $managed_server_https_port     = 7301,
+  Integer $em_upload_http_port           = 4889,
+  Integer $em_upload_https_port          = 1159,
+  Integer $em_central_console_http_port  = 7788,
+  Integer $em_central_console_https_port = 7799,
+  Integer $bi_publisher_http_port        = 9701,
+  Integer $bi_publisher_https_port       = 9801,
+  Integer $nodemanager_https_port        = 7401,
+  Integer $agent_port                    = 3872,
 )
 {
 
-  if (!( $version in ['12.1.0.4', '12.1.0.5'])){
-    fail('Unrecognized em version, use 12.1.0.4 or 12.1.0.5')
+  $supported_em_versions = join( lookup('oradb::enterprise_manager_versions'), '|')
+  if ( $version in $supported_em_versions == false ){
+    fail("Unrecognized em version, use ${supported_em_versions}")
   }
 
-  if ( !($::kernel in ['Linux','SunOS'])){
-    fail('Unrecognized operating system, please use it on a Linux or SunOS host')
+  $supported_db_kernels = join( lookup('oradb::kernels'), '|')
+  if ( $::kernel in $supported_db_kernels == false){
+    fail("Unrecognized operating system, please use it on a ${supported_db_kernels} host")
   }
 
   # check if the oracle software already exists
@@ -62,7 +64,7 @@ define oradb::installem(
   }
 
   if $ora_inventory_dir == undef {
-    $oraInventory = pick($::oradb_inst_loc_data,oradb_cleanpath("${oracle_base_dir}/../oraInventory"))
+    $oraInventory = pick($::oradb_inst_loc_data, oradb_cleanpath("${oracle_base_dir}/../oraInventory"))
   } else {
     validate_absolute_path($ora_inventory_dir)
     $oraInventory = "${ora_inventory_dir}/oraInventory"
@@ -79,7 +81,7 @@ define oradb::installem(
 
   if ( $continue ) {
 
-    $execPath     = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
+    $execPath = lookup('oradb::exec_path')
 
     if $puppet_download_mnt_point == undef {
       $mountPoint     = 'puppet:///modules/oradb/'
@@ -95,7 +97,6 @@ define oradb::installem(
         $file2 =  "${file}_disk2.zip"
         $file3 =  "${file}_disk3.zip"
       }
-
 
       if $remote_file == true {
 

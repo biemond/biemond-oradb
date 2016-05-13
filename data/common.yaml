@@ -42,6 +42,7 @@ oradb::grid_versions:
 # check on all supported enterprise manager versions
 oradb::enterprise_manager_versions:
  - '12.1.0.4'
+ - '12.1.0.5'
 
 # check on all supported enterprise agent versions
 oradb::enterprise_manager_agent_versions:

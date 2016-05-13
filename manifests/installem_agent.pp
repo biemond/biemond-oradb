@@ -2,31 +2,32 @@
 #
 #
 define oradb::installem_agent(
-  $version                     = '12.1.0.5',
-  $install_type                = undef, #'agentPull'|'agentDeploy'
-  $install_version             = '12.1.0.5.0',
-  $install_platform            = 'Linux x86-64',
-  $source                      = undef, # 'https://<OMS_HOST>:<OMS_PORT>/em/install/getAgentImage'|'/tmp/12.1.0.4.0_AgentCore_226_Linux_x64.zip'
-  $ora_inventory_dir           = undef,
-  $oracle_base_dir             = undef,
-  $agent_base_dir              = undef,
-  $agent_instance_home_dir     = undef,
-  $agent_registration_password = undef,
-  $agent_port                  = 1830,
-  $sysman_user                 = 'sysman',
-  $sysman_password             = undef,
-  $oms_host                    = undef, # 'emapp.example.com'
-  $oms_port                    = undef, # 7802
-  $em_upload_port              = undef, # 14511
-  $user                        = 'oracle',
-  $group                       = 'oinstall',
-  $download_dir                = '/install',
-  $log_output                  = false,
+  String $version                      = '12.1.0.5',
+  Enum["agentPull", "agentDeploy"] $install_type = undef,
+  String $install_version              = '12.1.0.5.0',
+  String $install_platform             = 'Linux x86-64',
+  String $source                       = undef, # 'https://<OMS_HOST>:<OMS_PORT>/em/install/getAgentImage'|'/tmp/12.1.0.4.0_AgentCore_226_Linux_x64.zip'
+  $ora_inventory_dir                   = undef,
+  String $oracle_base_dir              = undef,
+  String $agent_base_dir               = undef,
+  String $agent_instance_home_dir      = undef,
+  String $agent_registration_password  = undef,
+  Integer $agent_port                  = 1830,
+  String $sysman_user                  = 'sysman',
+  $sysman_password                     = undef,
+  String $oms_host                     = undef, # 'emapp.example.com'
+  Integer $oms_port                    = undef, # 7802
+  Integer $em_upload_port              = undef, # 14511
+  String $user                         = lookup('oradb::user'),
+  String $group                        = lookup('oradb::group_install'),
+  String $download_dir                 = lookup('oradb::download_dir'),
+  Boolean $log_output                  = false,
 )
 {
 
-  if (!( $version in ['12.1.0.4', '12.1.0.5'])){
-    fail('Unrecognized em agent version, use 12.1.0.4 or 12.1.0.5')
+  $supported_em_versions = join( lookup('oradb::enterprise_manager_agent_versions'), '|')
+  if ( $version in $supported_em_versions == false ){
+    fail("Unrecognized em version, use ${supported_em_versions}")
   }
 
   # check if the oracle software already exists
@@ -64,7 +65,7 @@ define oradb::installem_agent(
 
   if ( $continue ) {
 
-    $execPath = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
+    $execPath = lookup('oradb::exec_path')
 
     # check oraInst
     oradb::utils::dborainst{"em agent orainst ${version}":
