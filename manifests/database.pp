@@ -23,7 +23,7 @@ define oradb::database(
   $character_set             = 'AL32UTF8',
   $nationalcharacter_set     = 'UTF8',
   $init_params               = undef,
-  $sample_schema             = TRUE,
+  $sample_schema             = 'TRUE',
   $memory_percentage         = '40',
   $memory_total              = '800',
   $database_type             = 'MULTIPURPOSE', # MULTIPURPOSE|DATA_WAREHOUSING|OLTP
