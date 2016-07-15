@@ -13,6 +13,7 @@ define oradb::database(
   $download_dir              = '/install',
   $action                    = 'create',
   $template                  = undef,
+  $template_seeded           = undef,
   $db_name                   = 'orcl',
   $db_domain                 = undef,
   $db_port                   = '1521',
@@ -116,7 +117,9 @@ define oradb::database(
     }
   }
 
-  if ( $template ) {
+  if ( $template_seeded ) {
+    $templatename = "${download_dir}/${template_seeded}.dbc"
+  } elsif ( $template ) {
     $templatename = "${download_dir}/${template}_${sanitized_title}.dbt"
     file { $templatename:
       ensure  => present,
@@ -126,10 +129,12 @@ define oradb::database(
       group   => $group,
       before  => Exec["oracle database ${title}"],
     }
+  } else {
+    $templatename = undef
   }
 
   if $action == 'create' {
-    if ( $template ) {
+    if ( $templatename ) {
       if ( $version == '11.2' or $container_database == false ) {
         $command = "${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration}"
       } else {
