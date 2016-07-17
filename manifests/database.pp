@@ -118,7 +118,7 @@ define oradb::database(
   }
 
   if ( $template_seeded ) {
-    $templatename = "${download_dir}/${template_seeded}.dbc"
+    $templatename = "${oracle_home}/assistants/dbca/templates/${template_seeded}.dbc"
   } elsif ( $template ) {
     $templatename = "${download_dir}/${template}_${sanitized_title}.dbt"
     file { $templatename:

@@ -22,8 +22,8 @@ Dependency with
 
 Should work on Docker, for Solaris and on all Linux version like RedHat, CentOS, Ubuntu, Debian, Suse SLES or OracleLinux
 - Docker image of Oracle Database 12.1 SE [Docker Oracle Database 12.1.0.1](https://github.com/biemond/docker-database-puppet)
-- CentOS 6.5 vagrant box with Oracle Database 12.1 and Enterprise Manager 12.1.0.4 [Enterprise vagrant box](https://github.com/biemond/biemond-em-12c)
-- CentOS 6.6 vagrant box with Oracle Database 12.1.0.2 on NFS ASM [ASM vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-ASM)
+- CentOS 6.7 vagrant box with Oracle Database 12.1 and Enterprise Manager 12.1.0.5 [Enterprise vagrant box](https://github.com/biemond/biemond-em-12c)
+- CentOS 7.2 vagrant box with Oracle Database 12.1.0.2 on NFS ASM [ASM vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-ASM)
 - CentOS 6.6 vagrant box with Oracle Database 11.2.0.4 on NFS ASM [ASM vagrant box](https://github.com/biemond/biemond-oradb-vagrant-11.2-ASM)
 - CentOS 6.6 vagrant box with Oracle Database 12.1.0.1 with pluggable databases [12c pluggable db vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-CDB)
 - Solaris 11.2 vagrant box with Oracle Database 12.1 [solaris 11.2 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-solaris11.2)
@@ -50,7 +50,7 @@ Should work for Puppet 2.7 & 3.0
 - Oracle RAC
 - OPatch upgrade
 - Apply OPatch also for clusterware
-- Create database instances
+- Create database instances, also based on your own template or seeded template
 - Stop/Start database instances with db_control puppet resource type
 
 ## Enterprise Manager
@@ -96,14 +96,16 @@ else you can use $source =>
 
 when the files are also locally accessible then you can also set $remote_file => false this will not move the files to the download folder, just extract or install
 
-## templates.pp
+## Virtualbox 5 & BCA Operation failed
+You can get this 12c error BCA Operation failed when you use Virtualbox 5
 
-The database_type value should contain only one of these choices.
-- EE = Enterprise Edition
-- SE = Standard Edition
-- SEONE = Standard Edition One
+There is an issue related with this
+- https://forums.virtualbox.org/viewtopic.php?f=8&t=76375
 
-##
+The workaround seems to be here
+- https://www.virtualbox.org/ticket/14427
+
+But for the purposes of doing an automatic installation is not a good workaround, so I would suggest is someone faces the same problem just downgrade to virtualbox 4 the last release until that ticket is closed
 
 ## Installation, Disk or memory issues
 
@@ -297,8 +299,9 @@ or
       zip_extract   => true,
      }
 
-Patching
+## Patching
 
+### Opatchupgrade
 For opatchupgrade you need to provide the Oracle support csi_number and supportId and need to be online. Or leave them empty but it needs the Expect rpm to emulate OCM
 
     # use this on a Grid or Database home
@@ -317,7 +320,7 @@ For opatchupgrade you need to provide the Oracle support csi_number and supportI
       require                   =>  Oradb::Installdb['112030_Linux-x86-64'],
     }
 
-Opatch
+### Opatch
 
     # october 2014 11.2.0.4.4 patch
     oradb::opatch{'19121551_db_patch':
@@ -333,7 +336,7 @@ Opatch
       puppet_download_mnt_point => hiera('oracle_source'),
     }
 
-or for clusterware aka opatch auto
+### Clusterware aka opatch auto
 
 to use the new opatchauto utility(12.1) instead of opatch auto(11.2) use this parameter use_opatchauto_utility => true
 
@@ -353,7 +356,7 @@ to use the new opatchauto utility(12.1) instead of opatch auto(11.2) use this pa
       require                   => Oradb::Opatchupgrade['121000_opatch_upgrade_asm'],
     }
 
-the old way (11g)
+### The old way (11g)
 
     oradb::opatch{'18706472_grid_patch':
       ensure                    => 'present',
@@ -424,7 +427,7 @@ the old way (11g)
       puppet_download_mnt_point => hiera('oracle_source'),
     }
 
-Oracle net
+## Oracle net
 
     oradb::net{ 'config net8':
       oracle_home   => '/oracle/product/11.2/db',
@@ -436,7 +439,7 @@ Oracle net
       require       => Oradb::Opatch['14727310_db_patch'],
     }
 
-Listener
+## Listener
 
     db_listener{ 'startlistener':
       ensure          => 'running',  # running|start|abort|stop
@@ -467,7 +470,7 @@ Listener
       listener_name => 'listener' # which is the default and optional
     }
 
-Database instance
+## Database instance
 
     oradb::database{ 'testDb_Create':
       oracle_base               => '/oracle',
@@ -502,7 +505,8 @@ you can also use a comma separated string for init_params
       init_params              => "open_cursors=1000,processes=600,job_queue_processes=4",
 
 
-or based on your own template
+### template (not seeded)
+based on your own dbt template ( not seeded )
 
 The template must be have the following extension dbt.erb like dbtemplate_12.1.dbt.erb, use puppet_download_mnt_point parameter for the template location or add your template to the template dir of the oradb module
 - Click here for an [12.1 db instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_12.1.dbt.erb)
@@ -540,7 +544,39 @@ or your own template on your own location
       puppet_download_mnt_point  => '/vagrant', # 'oradb' etc
 
 
-12c container and pluggable databases
+### seeded template
+based on a seeded dbc template
+
+use existing or copy all files to $ORACLE_HOME/assistants/dbca/templates
+
+The template must be have the following extension dbc like General_Purpose.dbc
+
+    oradb::database{ 'testDb_Create':
+      oracle_base               => '/oracle',
+      oracle_home               => '/oracle/product/12.1/db',
+      version                   => '12.1',
+      user                      => 'oracle',
+      group                     => 'dba',
+      template_seeded           => '12.1.0.2.0_Database_Template_for_EM12_1_0_5_0_Small_deployment',
+      download_dir              => '/install',
+      action                    => 'create',
+      db_name                   => 'test',
+      db_domain                 => 'oracle.com',
+      db_port                   => '1521',
+      sys_password              => 'Welcome01',
+      system_password           => 'Welcome01',
+      data_file_destination     => "/oracle/oradata",
+      recovery_area_destination => "/oracle/flash_recovery_area",
+      character_set             => "AL32UTF8",
+      nationalcharacter_set     => "UTF8",
+      memory_percentage         => "40",
+      memory_total              => "800",
+      require                   => Oradb::Listener['start listener'],
+    }
+
+
+
+### 12c container and pluggable databases
 
     oradb::database{ 'oraDb':
       oracle_base               => '/oracle',
@@ -612,7 +648,7 @@ or delete a database
     }
 
 
-Database instance actions
+## Database instance actions
 
     db_control{'emrepos start':
       ensure                  => 'running', #running|start|abort|stop
@@ -686,7 +722,7 @@ Database instance actions
     }
 
 
-Tnsnames.ora
+## Tnsnames
 
     oradb::tnsnames{'orcl':
       oracle_home          => '/oracle/product/11.2/db',
