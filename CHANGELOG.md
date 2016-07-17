@@ -1,5 +1,10 @@
 # Version updates
 
+## 2.0.6
+- Seeded database template support
+- oracle_hostname parameter for emagent
+- puppet 4 fixes
+
 ## 2.0.5
 - EM agent, Move sysman parameter validation to agentpull block
 - Fix rcu status check, rollback from version 2.0.1
