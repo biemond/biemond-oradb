@@ -1,5 +1,8 @@
 # Version updates
 
+## 2.0.7
+- In case of a template, set character parameter for the default database build command. It is being set to AL32UTF8.
+
 ## 2.0.6
 - Seeded database template support
 - oracle_hostname parameter for emagent
