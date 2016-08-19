@@ -17,6 +17,7 @@ define oradb::client(
   $puppet_download_mnt_point = undef,
   $remote_file               = true,
   $logoutput                 = true,
+  $temp_dir                  = '/tmp',
 )
 {
   validate_absolute_path($oracle_home)

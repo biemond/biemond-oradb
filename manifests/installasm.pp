@@ -32,6 +32,7 @@ define oradb::installasm(
   $cluster_nodes             = undef,
   $network_interface_list    = undef,
   $storage_option            = undef,
+  $temp_dir                  = '/tmp',
 )
 {
 

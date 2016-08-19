@@ -29,6 +29,7 @@ define oradb::installdb(
   $cluster_nodes             = undef,
   $cleanup_install_files     = true,
   $is_rack_one_install       = false,
+  $temp_dir                  = '/tmp',
 )
 {
   if ( $create_user == true ){
