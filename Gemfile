@@ -10,7 +10,7 @@ gem 'rspec-puppet-utils', :git => 'https://github.com/Accuity/rspec-puppet-utils
 gem 'hiera-puppet-helper', :git => 'https://github.com/bobtfish/hiera-puppet-helper.git'
 gem 'puppet-lint'
 gem 'puppet', puppetversion
-gem 'rspec-puppet'
+gem 'rspec-puppet', '= 2.3.2'
 gem 'rspec-system-puppet'
 gem 'puppetlabs_spec_helper'
 gem 'puppet-syntax'
