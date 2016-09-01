@@ -33,6 +33,7 @@ define oradb::installasm(
   $network_interface_list    = undef,
   $storage_option            = undef,
   $temp_dir                  = '/tmp',
+  $remote_node               = undef, # hostname or ip address
 )
 {
 
@@ -56,6 +57,10 @@ define oradb::installasm(
 
   if (!( $version in ['11.2.0.4','12.1.0.1', '12.1.0.2'] )){
     fail('Unrecognized database grid install version, use 11.2.0.4, 12.1.0.1 or 12.1.0.2')
+  }
+
+  if ($grid_type == 'CRS_CONFIG' and $remote_node == undef) {
+    fail('You must specify remote_node if grid_type is CRS_CONFIG')
   }
 
   if ( !($::kernel in ['Linux','SunOS'])){
@@ -247,6 +252,32 @@ define oradb::installasm(
       cwd       => $grid_base,
       logoutput => true,
       require   => Exec["install oracle grid ${title}"],
+    }
+    
+    if ($grid_type == 'CRS_CONFIG') {     
+      # execute the scripts on the remote nodes
+      exec { "run orainstRoot.sh grid script ${title} on ${remote_node}":
+        timeout   => 0,
+        command   => "ssh ${remote_node} ${$oraInventory}/orainstRoot.sh",
+        user      => 'root',
+        group     => 'root',
+        path      => $execPath,
+        cwd       => $grid_base,
+        logoutput => true,
+        require   => Exec["run root.sh grid script ${title}"],
+      }
+      
+      exec { "run root.sh grid script ${title} on ${remote_node}":
+        timeout   => 0,
+        command   => "ssh ${remote_node} ${grid_home}/root.sh",
+        user      => 'root',
+        group     => 'root',
+        path      => $execPath,
+        cwd       => $grid_base,
+        logoutput => true,
+        require   => Exec["run orainstRoot.sh grid script ${title} on ${remote_node}"],
+        before    => Exec["run configToolAllCommands grid tool ${title}"],
+      }
     }
 
     file { $grid_home:
