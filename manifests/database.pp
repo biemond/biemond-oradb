@@ -34,7 +34,7 @@ define oradb::database(
   $db_snmp_password          = 'Welcome01',
   $asm_diskgroup             = 'DATA',
   $recovery_diskgroup        = undef,
-  $cluster_nodes             = undef, # hostname or ip address
+  $cluster_nodes             = undef, # comma separated list with at first the local and at second the remode host e.g. "racnode1,racnode2"
   $container_database        = false, # 12.1 feature for pluggable database
   $puppet_download_mnt_point = undef,
 )
