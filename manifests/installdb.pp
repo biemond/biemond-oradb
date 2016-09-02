@@ -30,6 +30,7 @@ define oradb::installdb(
   $cleanup_install_files     = true,
   $is_rack_one_install       = false,
   $temp_dir                  = '/tmp',
+  $remote_node               = undef,   # hostname or ip address
 )
 {
   if ( $create_user == true ){
@@ -213,6 +214,19 @@ define oradb::installdb(
       cwd       => $oracle_base,
       logoutput => true,
       require   => Exec["install oracle database ${title}"],
+    }
+    
+    if ( $remote_node != undef) { 
+      # execute the scripts on the remote nodes
+      exec { "run root.sh script ${title} on ${remote_node}":
+        command   => "ssh ${remote_node} ${oracle_home}/root.sh",
+        user      => 'root',
+        group     => 'root',
+        path      => $execPath,
+        cwd       => $oracle_base,
+        logoutput => true,
+        require   => Exec["run root.sh script ${title}"],
+      }
     }
 
     file { $oracle_home:
