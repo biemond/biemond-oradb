@@ -215,14 +215,16 @@ define oradb::installdb(
       require   => Exec["install oracle database ${title}"],
     }
 
-    file { $oracle_home:
-      ensure  => directory,
-      recurse => false,
-      replace => false,
-      mode    => '0775',
-      owner   => $user,
-      group   => $group_install,
-      require => Exec["install oracle database ${title}","run root.sh script ${title}"],
+    if !defined(File["${oracle_home}"]) {
+      file { $oracle_home:
+        ensure  => directory,
+        recurse => false,
+        replace => false,
+        mode    => '0775',
+        owner   => $user,
+        group   => $group_install,
+        require => Exec["install oracle database ${title}","run root.sh script ${title}"],
+      }
     }
 
     # cleanup
