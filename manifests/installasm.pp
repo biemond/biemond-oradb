@@ -241,13 +241,14 @@ define oradb::installasm(
 
       exec { 'daemon-reload for ohas':
         command => '/bin/systemctl daemon-reload',
-      } ->
-
-      service { 'ohas.service':
-        ensure => running,
-        enable => true,
-        before => Exec["run root.sh grid script ${title}"],
       }
+      # ->
+
+      # service { 'ohas.service':
+      #   ensure => running,
+      #   enable => true,
+      #   before => Exec["run root.sh grid script ${title}"],
+      # }
     }
 
     exec { "run root.sh grid script ${title}":
