@@ -2,6 +2,8 @@
 
 ## 2.0.7
 - In case of a template, set character parameter for the default database build command. It is being set to AL32UTF8.
+- Installasm new 12.1.0.2 storage_option values 'LOCAL_ASM_STORAGE', 'FLEX_ASM_STORAGE', 'CLIENT_ASM_STORAGE', 'FILE_SYSTEM_STORAGE'
+- Installdb new 12.1.0.2 database_type values 'EE','SE2'
 
 ## 2.0.6
 - Seeded database template support

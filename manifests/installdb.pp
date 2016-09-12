@@ -48,8 +48,10 @@ define oradb::installdb(
     fail('Unrecognized operating system, please use it on a Linux or SunOS host')
   }
 
-  if ( !($database_type in ['EE','SE','SEONE'])){
+  if ( $version in ['11.2.0.1','11.2.0.3','11.2.0.4','12.1.0.1'] and !($database_type in ['EE','SE','SEONE'])) {
     fail('Unrecognized database type, please use EE|SE|SEONE')
+  } elsif ( $version in ['12.1.0.2'] and !($database_type in ['EE','SE2'])) {
+    fail('Unrecognized database type, please use EE|SE2')
   }
 
   if ( $oracle_base == undef or is_string($oracle_base) == false) {fail('You must specify an oracle_base') }

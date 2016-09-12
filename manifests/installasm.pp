@@ -51,7 +51,11 @@ define oradb::installasm(
     if ( $cluster_nodes == undef or is_string($cluster_nodes) == false) {fail('You must specify cluster_nodes if cluster_name is defined') }
     if ( $network_interface_list == undef or is_string($network_interface_list) == false) {fail('You must specify network_interface_list if cluster_name is defined') }
     if ( $storage_option == undef or is_string($storage_option) == false) {fail('You must specify storage_option if cluster_name is defined') }
-    unless $storage_option in ['ASM_STORAGE', 'FILE_SYSTEM_STORAGE'] {fail 'storage_option must be either ASM_STORAGE of FILE_SYSTEM_STORAGE'}
+    if ( $version == '12.1.0.2' ) {
+      unless $storage_option in ['LOCAL_ASM_STORAGE', 'FLEX_ASM_STORAGE', 'CLIENT_ASM_STORAGE', 'FILE_SYSTEM_STORAGE'] {fail 'storage_option must be LOCAL_ASM_STORAGE, FLEX_ASM_STORAGE, CLIENT_ASM_STORAGE or FILE_SYSTEM_STORAGE'}
+    } else {
+      unless $storage_option in ['ASM_STORAGE', 'FILE_SYSTEM_STORAGE'] {fail 'storage_option must be either ASM_STORAGE of FILE_SYSTEM_STORAGE'}
+    }
   }
 
   if (!( $version in ['11.2.0.4','12.1.0.1', '12.1.0.2'] )){
