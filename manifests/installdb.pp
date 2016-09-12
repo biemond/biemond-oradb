@@ -217,7 +217,7 @@ define oradb::installdb(
       require   => Exec["install oracle database ${title}"],
     }
 
-    if !defined(File["${oracle_home}"]) {
+    if !defined(File[$oracle_home]) {
       file { $oracle_home:
         ensure  => directory,
         recurse => false,

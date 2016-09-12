@@ -26,7 +26,7 @@ describe 'oradb::installdb', :type => :define do
     context 'with no oradb_inst_loc_data fact' do
       describe "oradb utils structure" do
         it do
-          should contain_db_directory_structure("oracle structure 12.1.0.1").with({
+          should contain_db_directory_structure("oracle structure 12.1.0.1_12.1.0.1_Linux-x86-64").with({
               'ensure'            => 'present',
               'oracle_base_dir'   => '/u01/app/oracle',
               'ora_inventory_dir' => '/u01/app/oraInventory',
@@ -39,7 +39,7 @@ describe 'oradb::installdb', :type => :define do
 
       describe "oradb orainst" do
         it do
-          should contain_oradb__utils__dborainst('database orainst 12.1.0.1').with({
+          should contain_oradb__utils__dborainst('database orainst 12.1.0.1_12.1.0.1_Linux-x86-64').with({
              'ora_inventory_dir' => '/u01/app/oraInventory',
              'os_group'          => 'oinstall',
            })
@@ -50,41 +50,41 @@ describe 'oradb::installdb', :type => :define do
 
       facts = default_facts.merge( { :oradb_inst_loc_data => '/u01/app/oraInventory' } )
       let(:facts) { facts }
-      it { is_expected.to contain_db_directory_structure("oracle structure 12.1.0.1").with_ora_inventory_dir('/u01/app/oraInventory') }
-      it { is_expected.to contain_oradb__utils__dborainst('database orainst 12.1.0.1').with_ora_inventory_dir('/u01/app/oraInventory') }
+      it { is_expected.to contain_db_directory_structure("oracle structure 12.1.0.1_12.1.0.1_Linux-x86-64").with_ora_inventory_dir('/u01/app/oraInventory') }
+      it { is_expected.to contain_oradb__utils__dborainst('database orainst 12.1.0.1_12.1.0.1_Linux-x86-64').with_ora_inventory_dir('/u01/app/oraInventory') }
     end
     context 'with ora_inventory_dir parameter provided' do
       params = default_params.merge( { :ora_inventory_dir => '/ora/inventory/dir' } )
       let(:params) { params }
       context 'and no oradb_inst_loc_data fact' do
-        it { is_expected.to contain_db_directory_structure("oracle structure 12.1.0.1").with_ora_inventory_dir('/ora/inventory/dir/oraInventory') }
-        it { is_expected.to contain_oradb__utils__dborainst('database orainst 12.1.0.1').with_ora_inventory_dir('/ora/inventory/dir/oraInventory') }
+        it { is_expected.to contain_db_directory_structure("oracle structure 12.1.0.1_12.1.0.1_Linux-x86-64").with_ora_inventory_dir('/ora/inventory/dir/oraInventory') }
+        it { is_expected.to contain_oradb__utils__dborainst('database orainst 12.1.0.1_12.1.0.1_Linux-x86-64').with_ora_inventory_dir('/ora/inventory/dir/oraInventory') }
       end
       context 'and oradb_inst_loc_data fact' do
         #Even with the fact present, the provided ora_inventory_dir is used instead
         facts = default_facts.merge( { :oradb_inst_loc_data => '/u01/app/oraInventory' } )
         let(:facts) { facts }
-        it { is_expected.to contain_db_directory_structure("oracle structure 12.1.0.1").with_ora_inventory_dir('/ora/inventory/dir/oraInventory') }
-        it { is_expected.to contain_oradb__utils__dborainst('database orainst 12.1.0.1').with_ora_inventory_dir('/ora/inventory/dir/oraInventory') }
+        it { is_expected.to contain_db_directory_structure("oracle structure 12.1.0.1_12.1.0.1_Linux-x86-64").with_ora_inventory_dir('/ora/inventory/dir/oraInventory') }
+        it { is_expected.to contain_oradb__utils__dborainst('database orainst 12.1.0.1_12.1.0.1_Linux-x86-64').with_ora_inventory_dir('/ora/inventory/dir/oraInventory') }
       end
     end
     context 'with invalid ora_inventory_dir parameter' do
       params = default_params.merge( { :ora_inventory_dir => 'not_an_absolute_path' } )
       let(:params) { params }
       it 'should raise an error' do
-        expect { expect(subject).to contain_db_directory_structure("oracle structure 12.1.0.1") }.to raise_error Puppet::Error,
+        expect { expect(subject).to contain_db_directory_structure("oracle structure 12.1.0.1_12.1.0.1_Linux-x86-64") }.to raise_error Puppet::Error,
           /"not_an_absolute_path" is not an absolute path/
       end
     end
     context 'with oracle base = /oracle' do
       params = default_params.merge( { :oracle_base => '/oracle' } )
       let(:params) { params }
-      it { is_expected.to contain_db_directory_structure("oracle structure 12.1.0.1").with_ora_inventory_dir('/oraInventory') }
+      it { is_expected.to contain_db_directory_structure("oracle structure 12.1.0.1_12.1.0.1_Linux-x86-64").with_ora_inventory_dir('/oraInventory') }
     end
 
     describe "oradb response file" do
       it do
-        should contain_file("/install/db_install_12.1.0.1.rsp").that_requires('Oradb::Utils::Dborainst[database orainst 12.1.0.1]')
+        should contain_file("/install/db_install_12.1.0.1_12.1.0.1_Linux-x86-64.rsp").that_requires('Oradb::Utils::Dborainst[database orainst 12.1.0.1_12.1.0.1_Linux-x86-64]')
       end
     end
 
@@ -92,7 +92,7 @@ describe 'oradb::installdb', :type => :define do
       it {
            should contain_file("/install/linuxamd64_12c_database_1of2.zip").with({
              'source'  => '/software/linuxamd64_12c_database_1of2.zip',
-           }).that_comes_before('Exec[extract /install/linuxamd64_12c_database_1of2.zip]').that_requires('Db_directory_structure[oracle structure 12.1.0.1]')
+           }).that_comes_before('Exec[extract /install/linuxamd64_12c_database_1of2.zip]').that_requires('Db_directory_structure[oracle structure 12.1.0.1_12.1.0.1_Linux-x86-64]')
          }
     end
 
@@ -100,7 +100,7 @@ describe 'oradb::installdb', :type => :define do
       it {
            should contain_exec("extract /install/linuxamd64_12c_database_1of2.zip").with({
              'command'  => 'unzip -o /install/linuxamd64_12c_database_1of2.zip -d /install/linuxamd64_12c_database',
-           }).that_requires('Db_directory_structure[oracle structure 12.1.0.1]')
+           }).that_requires('Db_directory_structure[oracle structure 12.1.0.1_12.1.0.1_Linux-x86-64]')
          }
     end
 
@@ -123,10 +123,10 @@ describe 'oradb::installdb', :type => :define do
     describe "oradb install database" do
       it {
            should contain_exec("install oracle database 12.1.0.1_Linux-x86-64").with({
-             'command'  => "/bin/sh -c 'unset DISPLAY;/install/linuxamd64_12c_database/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile /install/db_install_12.1.0.1.rsp'",
+             'command'  => "/bin/sh -c 'unset DISPLAY;/install/linuxamd64_12c_database/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile /install/db_install_12.1.0.1_12.1.0.1_Linux-x86-64.rsp'",
              'creates'  => "/u01/app/oracle/product/12.1/db/dbs",
              'group'    => 'oinstall',
-           }).that_requires('Oradb::Utils::Dborainst[database orainst 12.1.0.1]').that_requires('File[/install/db_install_12.1.0.1.rsp]')
+           }).that_requires('Oradb::Utils::Dborainst[database orainst 12.1.0.1_12.1.0.1_Linux-x86-64]').that_requires('File[/install/db_install_12.1.0.1_12.1.0.1_Linux-x86-64.rsp]')
          }
     end
 
@@ -183,7 +183,7 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb utils structure" do
       it do
-        should contain_db_directory_structure("oracle structure 11.2.0.4").with({
+        should contain_db_directory_structure("oracle structure 11.2.0.4_11.2.0.4_Linux-x86-64").with({
               'ensure'            => 'present',
               'oracle_base_dir'   => '/u01/app/oracle',
               'ora_inventory_dir' => '/u01/app/oraInventory',
@@ -196,7 +196,7 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb orainst" do
       it do
-        should contain_oradb__utils__dborainst('database orainst 11.2.0.4').with({
+        should contain_oradb__utils__dborainst('database orainst 11.2.0.4_11.2.0.4_Linux-x86-64').with({
              'ora_inventory_dir' => '/u01/app/oraInventory',
              'os_group'          => 'oinstall',
            })
@@ -205,7 +205,7 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb response file" do
       it do
-        should contain_file("/install/db_install_11.2.0.4.rsp").that_requires('Oradb::Utils::Dborainst[database orainst 11.2.0.4]')
+        should contain_file("/install/db_install_11.2.0.4_11.2.0.4_Linux-x86-64.rsp").that_requires('Oradb::Utils::Dborainst[database orainst 11.2.0.4_11.2.0.4_Linux-x86-64]')
       end
     end
 
@@ -213,7 +213,7 @@ describe 'oradb::installdb', :type => :define do
       it {
            should contain_exec("extract /install/p13390677_112040_Linux-x86-64_1of7.zip").with({
              'command'  => 'unzip -o /software/p13390677_112040_Linux-x86-64_1of7.zip -d /install/p13390677_112040_Linux-x86-64',
-           }).that_requires('Db_directory_structure[oracle structure 11.2.0.4]')
+           }).that_requires('Db_directory_structure[oracle structure 11.2.0.4_11.2.0.4_Linux-x86-64]')
          }
     end
 
@@ -228,10 +228,10 @@ describe 'oradb::installdb', :type => :define do
     describe "oradb install database" do
       it {
            should contain_exec("install oracle database 11.2.0.4_Linux-x86-64").with({
-             'command'  => "/bin/sh -c 'unset DISPLAY;/install/p13390677_112040_Linux-x86-64/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile /install/db_install_11.2.0.4.rsp'",
+             'command'  => "/bin/sh -c 'unset DISPLAY;/install/p13390677_112040_Linux-x86-64/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile /install/db_install_11.2.0.4_11.2.0.4_Linux-x86-64.rsp'",
              'creates'  => "/u01/app/oracle/product/11.2/db/dbs",
              'group'    => 'oinstall',
-           }).that_requires('Oradb::Utils::Dborainst[database orainst 11.2.0.4]').that_requires('File[/install/db_install_11.2.0.4.rsp]')
+           }).that_requires('Oradb::Utils::Dborainst[database orainst 11.2.0.4_11.2.0.4_Linux-x86-64]').that_requires('File[/install/db_install_11.2.0.4_11.2.0.4_Linux-x86-64.rsp]')
          }
     end
 
@@ -289,7 +289,7 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb utils structure" do
       it do
-        should contain_db_directory_structure("oracle structure 11.2.0.3").with({
+        should contain_db_directory_structure("oracle structure 11.2.0.3_11.2.0.3_Linux-x86-64").with({
               'ensure'            => 'present',
               'oracle_base_dir'   => '/u01/app/oracle',
               'ora_inventory_dir' => '/u01/app/oraInventory',
@@ -302,7 +302,7 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb orainst" do
       it do
-        should contain_oradb__utils__dborainst('database orainst 11.2.0.3').with({
+        should contain_oradb__utils__dborainst('database orainst 11.2.0.3_11.2.0.3_Linux-x86-64').with({
              'ora_inventory_dir' => '/u01/app/oraInventory',
              'os_group'          => 'oinstall',
            })
@@ -311,17 +311,17 @@ describe 'oradb::installdb', :type => :define do
 
     describe "oradb response file" do
       it do
-        should contain_file("/mnt/db_install_11.2.0.3.rsp").that_requires('Oradb::Utils::Dborainst[database orainst 11.2.0.3]')
+        should contain_file("/mnt/db_install_11.2.0.3_11.2.0.3_Linux-x86-64.rsp").that_requires('Oradb::Utils::Dborainst[database orainst 11.2.0.3_11.2.0.3_Linux-x86-64]')
       end
     end
 
     describe "oradb install database" do
       it {
            should contain_exec("install oracle database 11.2.0.3_Linux-x86-64").with({
-             'command'  => "/bin/sh -c 'unset DISPLAY;/mnt/p10404530_112030_Linux-x86-64/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile /mnt/db_install_11.2.0.3.rsp'",
+             'command'  => "/bin/sh -c 'unset DISPLAY;/mnt/p10404530_112030_Linux-x86-64/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile /mnt/db_install_11.2.0.3_11.2.0.3_Linux-x86-64.rsp'",
              'creates'  => "/u01/app/oracle/product/11.2/db/dbs",
              'group'    => 'oinstall',
-           }).that_requires('Oradb::Utils::Dborainst[database orainst 11.2.0.3]').that_requires('File[/mnt/db_install_11.2.0.3.rsp]')
+           }).that_requires('Oradb::Utils::Dborainst[database orainst 11.2.0.3_11.2.0.3_Linux-x86-64]').that_requires('File[/mnt/db_install_11.2.0.3_11.2.0.3_Linux-x86-64.rsp]')
          }
     end
 
