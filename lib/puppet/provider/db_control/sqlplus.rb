@@ -12,6 +12,8 @@ Puppet::Type.type(:db_control).provide(:sqlplus, :parent => :base) do
     command, @succes_output = case action
     when :start
       ['startup', /Database opened/]
+    when :mount
+      ['startup mount', /Database mounted/]
     when :stop
       ['shutdown immediate', /ORACLE instance shut down/]
     else

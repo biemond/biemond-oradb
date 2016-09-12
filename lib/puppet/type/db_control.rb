@@ -17,6 +17,12 @@ module Puppet
         end
       end
 
+      newvalue(:mount, :event => :instance_running) do
+        unless resource[:refreshonly] == :true
+          provider.mount
+        end
+      end
+	  
       aliasvalue(:running, :start)
       aliasvalue(:abort, :stop)
       aliasvalue(:stopped, :stop)
