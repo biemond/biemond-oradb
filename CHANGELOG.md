@@ -3,9 +3,14 @@
 ## 2.0.7
 - In case of a template, set character parameter for the default database build command. It is being set to AL32UTF8.
 - installasm new 12.1.0.2 storage_option values 'LOCAL_ASM_STORAGE', 'FLEX_ASM_STORAGE', 'CLIENT_ASM_STORAGE', 'FILE_SYSTEM_STORAGE'
+- installasm bash_profile parameter
+- installasm remote_node parameter, ability to execute orainstRoot.sh and root.sh on remode node
 - installdb new 12.1.0.2 database_type values 'EE','SE2'
 - installdb, handling 2 installations of the same oracle database version on the same host
 - installem_agent option to not manage curl
+- db_control startup in mount status for standby databases
+- database.pp use cluster_nodes for -nodelist parameter
+
 
 ## 2.0.6
 - Seeded database template support
