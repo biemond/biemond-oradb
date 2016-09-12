@@ -7,6 +7,7 @@
 - installasm remote_node parameter, ability to execute orainstRoot.sh and root.sh on remode node
 - installdb new 12.1.0.2 database_type values 'EE','SE2'
 - installdb, handling 2 installations of the same oracle database version on the same host
+- installdb, remote_node parameter, ability to execute root.sh on remode node
 - installem_agent option to not manage curl
 - db_control startup in mount status for standby databases
 - database.pp use cluster_nodes for -nodelist parameter
