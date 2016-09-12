@@ -23,6 +23,7 @@ define oradb::installem_agent(
   $download_dir                = '/install',
   $log_output                  = false,
   $oracle_hostname             = undef,
+  $manage_curl                 = true,
 )
 {
 
@@ -85,7 +86,7 @@ define oradb::installem_agent(
       if ( $sysman_user == undef or is_string($sysman_user) == false) {fail('You must specify sysman_user') }
       if ( $sysman_password == undef or is_string($sysman_password) == false) {fail('You must specify sysman_password') }
 
-      if !defined(Package['curl']) {
+      if $manage_curl and !defined(Package['curl']) {
         package { 'curl':
           ensure  => present,
         }
