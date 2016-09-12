@@ -33,6 +33,7 @@ define oradb::installasm(
   $network_interface_list    = undef,
   $storage_option            = undef,
   $temp_dir                  = '/tmp',
+  $bash_profile              = true,
 )
 {
 
@@ -209,16 +210,18 @@ define oradb::installasm(
       require     => [Oradb::Utils::Dborainst["grid orainst ${version}"],
                       File["${download_dir}/grid_install_${version}.rsp"]],
     }
-
-    if ! defined(File["${user_base_dir}/${user}/.bash_profile"]) {
-      file { "${user_base_dir}/${user}/.bash_profile":
-        ensure  => present,
-        # content => template('oradb/grid_bash_profile.erb'),
-        content => regsubst(template('oradb/grid_bash_profile.erb'), '\r\n', "\n", 'EMG'),
-        mode    => '0775',
-        owner   => $user,
-        group   => $group,
-      }
+    
+    if ( $bash_profile == true ) {
+      if ! defined(File["${user_base_dir}/${user}/.bash_profile"]) {
+        file { "${user_base_dir}/${user}/.bash_profile":
+          ensure  => present,
+          # content => template('oradb/grid_bash_profile.erb'),
+          content => regsubst(template('oradb/grid_bash_profile.erb'), '\r\n', "\n", 'EMG'),
+          mode    => '0775',
+          owner   => $user,
+          group   => $group,
+        }
+      }  
     }
 
     #because of RHEL7 uses systemd we need to create the service differently
