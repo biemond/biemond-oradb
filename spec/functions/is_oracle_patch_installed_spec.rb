@@ -8,12 +8,12 @@ describe 'is_oracle_patch_installed', :type => :puppet_function do
         :opatch_patches => {
           '/u01/app/oracle/product/12.1.0/dbhome_1' => [
             {
-              :patch_id => '21485069',
-              :patch_desc => ''
+              'patch_id' => '21485069',
+              'patch_desc' => ''
             },
             {
-              :patch_id => '21948354',
-              :patch_desc => 'Database Patch Set Update : 12.1.0.2.160119 (21948354)'
+              'patch_id' => '21948354',
+              'patch_desc' => 'Database Patch Set Update : 12.1.0.2.160119 (21948354)'
             }
           ]
         }
