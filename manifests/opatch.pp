@@ -48,8 +48,6 @@ define oradb::opatch(
           ensure => present,
           source => "${mountPoint}/${patch_file}",
           mode   => '0775',
-          owner  => $user,
-          group  => $group,
         }
       }
     }
