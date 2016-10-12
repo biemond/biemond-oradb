@@ -72,12 +72,6 @@ module Puppet
       EOT
     end
 
-    newparam(:grid_product_home_dir) do
-      desc <<-EOT
-        The grid product home folder.
-      EOT
-    end
-
     newparam(:os_user) do
       desc <<-EOT
         The weblogic operating system user.
