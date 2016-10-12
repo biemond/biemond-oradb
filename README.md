@@ -689,7 +689,6 @@ or delete a database
       ensure                  => 'start',
       instance_name           => '+ASM',
       oracle_product_home_dir => hiera('oracle_home_dir'),
-      grid_product_home_dir   => hiera('grid_home_dir'),
       os_user                 => hiera('grid_os_user'),
       db_type                 => 'grid',
     }
