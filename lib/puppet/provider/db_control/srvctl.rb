@@ -37,13 +37,11 @@ Puppet::Type.type(:db_control).provide(:srvctl, :parent => :base) do
     @output.scan(/is running/).empty? ? :stop : :start
   end
 
-
   private
 
   def unsuccessful?
     !@output.scan(/failed/).empty?
   end
-
 
   def srvctl(command)
     oracle_home = resource[:oracle_product_home_dir]
