@@ -1,11 +1,11 @@
-# == Class: oradb::tnsnames
 #
+# = Class: oradb::tnsnames
 #
 define oradb::tnsnames(
   String $oracle_home          = undef,
-  String $user                 = hiera('oradb:user'),
-  String $group                = hiera('oradb:group'),
-  String $server               = {myserver => { host => undef, port => '1521', protocol => 'TCP' }},
+  String $user                 = undef,
+  String $group                = undef,
+  Hash   $server               = { myserver => { host => undef, port => '1521', protocol => 'TCP' }},
   String $loadbalance          = 'ON',
   String $failover             = 'ON',
   String $connect_service_name = undef,
