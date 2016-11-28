@@ -1,7 +1,11 @@
 # Version updates
 
 ## 2.0.8
-- opatch_patches facts requires stdlib 4.11
+- Add opatch_patches structured fact but requires stdlib 4.11
+- new function is_oracle_patch_installed
+- RCU fixes for running as non-root user
+- Resolve idempotence issue which happens when a patch from the same source needs to be applied multiple times
+- dbactions.pp or db_control supports now also mount
 
 ## 2.0.7
 - In case of a template, set character parameter for the default database build command. It is being set to AL32UTF8.
