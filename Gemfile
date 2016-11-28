@@ -2,10 +2,12 @@ source 'https://rubygems.org'
 
 puppetversion = ENV.key?('PUPPET_VERSION') ? "= #{ENV['PUPPET_VERSION']}" : ['>= 3.0']
 
-platform :ruby_19, :ruby_20 do
-  gem 'coveralls', :require => false
-  gem 'simplecov', :require => false
-end
+
+gem 'coveralls', :require => false
+gem 'simplecov', :require => false
+gem 'simplecov-console', :require => false
+gem 'codeclimate-test-reporter', :require => false
+
 gem 'rspec-puppet-utils', :git => 'https://github.com/Accuity/rspec-puppet-utils.git'
 gem 'hiera-puppet-helper', :git => 'https://github.com/bobtfish/hiera-puppet-helper.git'
 gem 'puppet-lint'
