@@ -1,5 +1,9 @@
 # Version updates
 
+## 2.0.9
+- variables support for dbt templates with parameter template_variables
+- bash_profile also loads bashrc when it exists
+
 ## 2.0.8
 - Add opatch_patches structured fact but requires stdlib 4.11
 - new function is_oracle_patch_installed

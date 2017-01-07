@@ -1,5 +1,9 @@
 
 
+if [ -f ~/.bashrc ]; then
+   . ~/.bashrc
+fi
+
 ORACLE_TERM=xterm; export ORACLE_TERM
 
 LD_LIBRARY_PATH=<%= @oracle_home %>/lib
