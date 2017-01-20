@@ -1,6 +1,6 @@
 # Oracle Database puppet module
 
-[![Build Status](https://travis-ci.org/biemond/biemond-oradb.svg?branch=master)](https://travis-ci.org/biemond/biemond-oradb) ![Puppet Forge Version](https://img.shields.io/puppetforge/v/biemond/oradb.svg) ![Puppet Forge Score](https://img.shields.io/puppetforge/f/biemond/oradb.svg) ![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/biemond/oradb.svg) [![Code Climate](https://codeclimate.com/github/biemond/biemond-oradb/badges/gpa.svg)](https://codeclimate.com/github/biemond/biemond-oradb) [![Coverage Status](https://coveralls.io/repos/biemond/biemond-oradb/badge.svg?branch=master&service=github)](https://coveralls.io/github/biemond/biemond-oradb?branch=master)
+[![Build Status](https://travis-ci.org/biemond/biemond-oradb.svg?branch=master)](https://travis-ci.org/biemond/biemond-oradb) ![Puppet Forge Version](https://img.shields.io/puppetforge/v/biemond/oradb.svg) ![Puppet Forge Score](https://img.shields.io/puppetforge/f/biemond/oradb.svg) ![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/biemond/oradb.svg) [![Coverage Status](https://coveralls.io/repos/biemond/biemond-oradb/badge.svg?branch=master&service=github)](https://coveralls.io/github/biemond/biemond-oradb?branch=master)
 
 Latest puppet 4 version (It cannot be used with puppet 3) is located at [puppet4_3_data branch](https://github.com/biemond/biemond-oradb/tree/puppet4_3_data) and uses the latest features of puppet 4 like
 - Strong data typing
