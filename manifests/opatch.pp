@@ -52,7 +52,7 @@ define oradb::opatch(
           }
         } else {
           exec { "extract opatch ${patch_file} ${title}":
-            command   => "unzip -n ${mountPoint}/${patch_file} -d ${download_dir}",
+            command   => "unzip -n ${puppet_download_mnt_point}/${patch_file} -d ${download_dir}",
             creates   => "${download_dir}/${patch_id}",
             path      => $execPath,
             user      => $user,

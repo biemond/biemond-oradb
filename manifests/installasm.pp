@@ -214,7 +214,7 @@ define oradb::installasm(
           owner   => $user,
           group   => $group,
         }
-      }  
+      }
     }
 
     #because of RHEL7 uses systemd we need to create the service differently
@@ -229,7 +229,7 @@ define oradb::installasm(
 
       exec { 'daemon-reload for ohas':
         command => '/bin/systemctl daemon-reload',
-      }  
+      }
       # ->
 
       # service { 'ohas.service':

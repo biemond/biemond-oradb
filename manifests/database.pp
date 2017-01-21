@@ -71,7 +71,7 @@ define oradb::database(
 
   $exec_path = lookup('oradb::exec_path')
   $user_base = lookup('oradb::user_base_dir')
-  $userHome  = "${user_base}/${user}"
+  $user_home = "${user_base}/${user}"
 
   if (is_hash($init_params) or is_string($init_params)) {
     if is_hash($init_params) {
@@ -121,7 +121,7 @@ define oradb::database(
     $templatename = "${download_dir}/${template}_${sanitized_title}.dbt"
     file { $templatename:
       ensure  => present,
-      content => template("${mountPoint}/${template}.dbt.erb"),
+      content => template("${puppet_download_mnt_point}/${template}.dbt.erb"),
       mode    => '0775',
       owner   => $user,
       group   => $group,

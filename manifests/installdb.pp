@@ -226,7 +226,7 @@ define oradb::installdb(
         command   => "ssh ${remote_node} ${oracle_home}/root.sh",
         user      => 'root',
         group     => 'root',
-        path      => $execPath,
+        path      => $exec_path,
         cwd       => $oracle_base,
         logoutput => true,
         require   => Exec["run root.sh script ${title}"],
