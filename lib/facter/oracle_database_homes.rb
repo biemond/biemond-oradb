@@ -45,6 +45,17 @@ def get_opatch_version(name)
   opatchver
 end
 
+def get_opatch_patches(name)
+  opatch_out = Facter::Util::Resolution.exec(get_su_command + get_database_user + ' -c "' + name + '/OPatch/opatch lspatches"')
+  return nil if opatch_out.nil?
+
+  opatch_out.each_line.collect do |line|
+    next unless line =~ /^\d+;/
+    split_line = line.split(';')
+    { 'patch_id' => split_line[0], 'patch_desc' => split_line[1].chomp }
+  end.compact
+end
+
 def get_orainst_loc
   if FileTest.exists?(get_ora_inv_path + '/oraInst.loc')
     str = ''
@@ -65,7 +76,8 @@ def get_orainst_products(path)
     if FileTest.exists?(path + '/ContentsXML/inventory.xml')
       file = File.read(path + '/ContentsXML/inventory.xml')
       doc = REXML::Document.new file
-      software =  ''
+      software = ''
+      patches_fact = {}
       doc.elements.each('/INVENTORY/HOME_LIST/HOME') do |element|
         str = element.attributes['LOC']
         unless str.nil?
@@ -84,8 +96,13 @@ def get_orainst_products(path)
                 opatchver
               end
             end
+            patches = get_opatch_patches(str)
+            patches_fact[str] = patches unless patches.nil?
           end
         end
+      end
+      Facter.add('opatch_patches') do
+        setcode { patches_fact }
       end
       return software
     else

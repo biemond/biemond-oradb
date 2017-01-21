@@ -30,7 +30,7 @@
          <initParam name="remote_login_passwordfile" value="EXCLUSIVE"/>
          <initParam name="processes" value="1000"/>
          <initParam name="undo_tablespace" value="UNDOTBS1"/>
-         <initParam name="control_files" value="(&quot;<%= @oracle_base %>/oradata/{DB_UNIQUE_NAME}/control01.ctl&quot;, &quot;<%= @data_file_destination %>/{DB_UNIQUE_NAME}/control02.ctl&quot;)"/>
+         <initParam name="control_files" value="(&quot;{location01}/{DB_UNIQUE_NAME}/control01.ctl&quot;, &quot;{location02}/{DB_UNIQUE_NAME}/control02.ctl&quot;)"/>
          <initParam name="diagnostic_dest" value="{ORACLE_BASE}"/>
          <initParam name="audit_trail" value="none"/>
          <initParam name="db_block_size" value="8" unit="KB"/>
@@ -59,10 +59,10 @@
          <maxLogMembers>3</maxLogMembers>
          <maxLogHistory>1</maxLogHistory>
          <maxInstances>8</maxInstances>
-         <image name="control01.ctl" filepath="<%= @oracle_base %>/oradata/{DB_UNIQUE_NAME}/"/>
-         <image name="control02.ctl" filepath="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/"/>
+         <image name="control01.ctl" filepath="{location01}/{DB_UNIQUE_NAME}/"/>
+         <image name="control02.ctl" filepath="{location02}/{DB_UNIQUE_NAME}/"/>
       </ControlfileAttributes>
-      <DatafileAttributes id="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/sysaux01.dbf" con_id="1">
+      <DatafileAttributes id="{location01}/{DB_UNIQUE_NAME}/sysaux01.dbf" con_id="1">
          <tablespace>SYSAUX</tablespace>
          <temporary>false</temporary>
          <online>true</online>
@@ -73,7 +73,7 @@
          <increment unit="KB">10240</increment>
          <maxSize unit="MB">4096</maxSize>
       </DatafileAttributes>
-      <DatafileAttributes id="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/system01.dbf" con_id="1">
+      <DatafileAttributes id="{location01}/{DB_UNIQUE_NAME}/system01.dbf" con_id="1">
          <tablespace>SYSTEM</tablespace>
          <temporary>false</temporary>
          <online>true</online>
@@ -84,7 +84,7 @@
          <increment unit="KB">10240</increment>
          <maxSize unit="MB">4096</maxSize>
       </DatafileAttributes>
-      <DatafileAttributes id="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/temp01.dbf" con_id="1">
+      <DatafileAttributes id="{location02}/{DB_UNIQUE_NAME}/temp01.dbf" con_id="1">
          <tablespace>TEMP</tablespace>
          <temporary>false</temporary>
          <online>true</online>
@@ -95,7 +95,7 @@
          <increment unit="KB">640</increment>
          <maxSize unit="MB">4096</maxSize>
       </DatafileAttributes>
-      <DatafileAttributes id="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/undotbs01.dbf" con_id="1">
+      <DatafileAttributes id="{location02}/{DB_UNIQUE_NAME}/undotbs01.dbf" con_id="1">
          <tablespace>UNDOTBS1</tablespace>
          <temporary>false</temporary>
          <online>true</online>
@@ -126,7 +126,7 @@
          <autoSegmentMgmt>true</autoSegmentMgmt>
          <bigfile>false</bigfile>
          <datafilesList>
-            <TablespaceDatafileAttributes id="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/sysaux01.dbf">
+            <TablespaceDatafileAttributes id="{location01}/{DB_UNIQUE_NAME}/sysaux01.dbf">
                <id>-1</id>
             </TablespaceDatafileAttributes>
          </datafilesList>
@@ -151,7 +151,7 @@
          <autoSegmentMgmt>true</autoSegmentMgmt>
          <bigfile>false</bigfile>
          <datafilesList>
-            <TablespaceDatafileAttributes id="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/system01.dbf">
+            <TablespaceDatafileAttributes id="{location01}/{DB_UNIQUE_NAME}/system01.dbf">
                <id>-1</id>
             </TablespaceDatafileAttributes>
          </datafilesList>
@@ -176,7 +176,7 @@
          <autoSegmentMgmt>true</autoSegmentMgmt>
          <bigfile>false</bigfile>
          <datafilesList>
-            <TablespaceDatafileAttributes id="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/temp01.dbf">
+            <TablespaceDatafileAttributes id="{location02}/{DB_UNIQUE_NAME}/temp01.dbf">
                <id>-1</id>
             </TablespaceDatafileAttributes>
          </datafilesList>
@@ -201,7 +201,7 @@
          <autoSegmentMgmt>true</autoSegmentMgmt>
          <bigfile>false</bigfile>
          <datafilesList>
-            <TablespaceDatafileAttributes id="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/undotbs01.dbf">
+            <TablespaceDatafileAttributes id="{location02}/{DB_UNIQUE_NAME}/undotbs01.dbf">
                <id>-1</id>
             </TablespaceDatafileAttributes>
          </datafilesList>
@@ -210,29 +210,29 @@
          <reuse>false</reuse>
          <fileSize unit="KB">512000</fileSize>
          <Thread>1</Thread>
-         <member ordinal="0" memberName="redo0101.log" filepath="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/"/>
-         <member ordinal="0" memberName="redo0102.log" filepath="<%= @oracle_base %>/oradata/{DB_UNIQUE_NAME}/"/>
+         <member ordinal="0" memberName="redo0101.log" filepath="{location01}/{DB_UNIQUE_NAME}/"/>
+         <member ordinal="0" memberName="redo0102.log" filepath="{location02}/{DB_UNIQUE_NAME}/"/>
       </RedoLogGroupAttributes>
       <RedoLogGroupAttributes id="2">
          <reuse>false</reuse>
          <fileSize unit="KB">512000</fileSize>
          <Thread>1</Thread>
-         <member ordinal="0" memberName="redo0201.log" filepath="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/"/>
-         <member ordinal="0" memberName="redo0202.log" filepath="<%= @oracle_base %>/oradata/{DB_UNIQUE_NAME}/"/>
+         <member ordinal="0" memberName="redo0201.log" filepath="{location01}/{DB_UNIQUE_NAME}/"/>
+         <member ordinal="0" memberName="redo0202.log" filepath="{location02}/{DB_UNIQUE_NAME}/"/>
       </RedoLogGroupAttributes>
       <RedoLogGroupAttributes id="3">
          <reuse>false</reuse>
          <fileSize unit="KB">512000</fileSize>
          <Thread>1</Thread>
-         <member ordinal="0" memberName="redo0301.log" filepath="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/"/>
-         <member ordinal="0" memberName="redo0302.log" filepath="<%= @oracle_base %>/oradata/{DB_UNIQUE_NAME}/"/>
+         <member ordinal="0" memberName="redo0301.log" filepath="{location01}/{DB_UNIQUE_NAME}/"/>
+         <member ordinal="0" memberName="redo0302.log" filepath="{location02}/{DB_UNIQUE_NAME}/"/>
       </RedoLogGroupAttributes>
       <RedoLogGroupAttributes id="4">
          <reuse>false</reuse>
          <fileSize unit="KB">512000</fileSize>
          <Thread>1</Thread>
-         <member ordinal="0" memberName="redo0401.log" filepath="<%= @data_file_destination %>/{DB_UNIQUE_NAME}/"/>
-         <member ordinal="0" memberName="redo0402.log" filepath="<%= @oracle_base %>/oradata/{DB_UNIQUE_NAME}/"/>
+         <member ordinal="0" memberName="redo0401.log" filepath="{location01}/{DB_UNIQUE_NAME}/"/>
+         <member ordinal="0" memberName="redo0402.log" filepath="{location02}/{DB_UNIQUE_NAME}/"/>
       </RedoLogGroupAttributes>
    </StorageAttributes>
 </DatabaseTemplate>

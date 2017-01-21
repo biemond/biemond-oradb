@@ -65,11 +65,12 @@ define oradb::rcu(
     }
   }
 
-  if ! defined(File["${download_dir}/rcu_${version}/rcuHome/rcu/log"]) {
+  # rcuHome is read only for non-root user so put log dir above it
+  if ! defined(File["${download_dir}/rcu_${version}/log"]) {
     # check rcu log folder
-    file { "${download_dir}/rcu_${version}/rcuHome/rcu/log":
+    file { "${download_dir}/rcu_${version}/log":
       ensure  => directory,
-      path    => "${download_dir}/rcu_${version}/rcuHome/rcu/log",
+      path    => "${download_dir}/rcu_${version}/log",
       recurse => false,
       replace => false,
       require => Exec["extract ${rcu_file}"],
@@ -110,9 +111,9 @@ define oradb::rcu(
   }
 
   if ( $oracle_home != undef ) {
-    $preCommand    = "export SQLPLUS_HOME=${oracle_home};${download_dir}/rcu_${version}/rcuHome/bin/rcu -silent"
+    $preCommand    = "export SQLPLUS_HOME=${oracle_home};export RCU_LOG_LOCATION=${download_dir}/rcu_${version}/log;${download_dir}/rcu_${version}/rcuHome/bin/rcu -silent"
   } else {
-    $preCommand    = "${download_dir}/rcu_${version}/rcuHome/bin/rcu -silent"
+    $preCommand    = "export RCU_LOG_LOCATION=${download_dir}/rcu_${version}/log;${download_dir}/rcu_${version}/rcuHome/bin/rcu -silent"
   }
   $postCommand     = "-databaseType ORACLE -connectString ${db_server}:${db_service} -dbUser ${sys_user} -dbRole SYSDBA -schemaPrefix ${schema_prefix} ${components} "
   $passwordCommand = " -f < ${download_dir}/rcu_${version}/rcu_passwords_${title}.txt"

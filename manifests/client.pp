@@ -17,6 +17,7 @@ define oradb::client(
   String $puppet_download_mnt_point = lookup('oradb::module_mountpoint'),
   Boolean $remote_file              = true,
   Boolean $logoutput                = true,
+  String $temp_dir                  = '/tmp',
 )
 {
   validate_absolute_path($oracle_home)
@@ -100,17 +101,18 @@ define oradb::client(
 
     # In $download_dir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
     exec { "install oracle client ${title}":
-      command   => "/bin/sh -c 'unset DISPLAY;${download_dir}/client_${version}/client/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/db_client_${version}.rsp'",
-      require   => [Oradb::Utils::Dborainst["oracle orainst ${version}"],
-                    File["${download_dir}/db_client_${version}.rsp"],
-                    Exec["extract ${download_dir}/${file}"]],
-      creates   => $oracle_home,
-      timeout   => 0,
-      returns   => [6,0],
-      path      => $exec_path,
-      user      => $user,
-      group     => $group_install,
-      logoutput => $logoutput,
+      command     => "/bin/sh -c 'unset DISPLAY;${download_dir}/client_${version}/client/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/db_client_${version}.rsp'",
+      require     => [Oradb::Utils::Dborainst["oracle orainst ${version}"],
+                      File["${download_dir}/db_client_${version}.rsp"],
+                      Exec["extract ${download_dir}/${file}"]],
+      creates     => $oracle_home,
+      timeout     => 0,
+      returns     => [6,0],
+      path        => $execPath,
+      user        => $user,
+      group       => $group_install,
+      logoutput   => $logoutput,
+      environment => "TEMP=${temp_dir}",
     }
 
     exec { "run root.sh script ${title}":

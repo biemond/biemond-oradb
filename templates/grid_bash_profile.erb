@@ -1,5 +1,4 @@
 
-
 ORACLE_TERM=xterm; export ORACLE_TERM
 
 LD_LIBRARY_PATH=<%= @grid_home %>/lib
@@ -22,6 +21,6 @@ export ORACLE_HOME
 export SQLPLUS_HOME
 export PATH
 
-export TEMP=/tmp
-export TMPDIR=/tmp
+export TEMP=<%= @temp_dir %>
+export TMPDIR=<%= @temp_dir %>
 umask 022

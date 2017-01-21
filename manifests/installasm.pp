@@ -24,14 +24,16 @@ define oradb::installasm(
   $disk_discovery_string            = undef,
   String $disk_redundancy           = 'NORMAL',
   Integer $disk_au_size             = 1,
-  $disks                             = undef,
-  Boolean $remote_file               = true,
-  $cluster_name              = undef,
-  $scan_name                 = undef,
-  $scan_port                 = undef,
-  $cluster_nodes             = undef,
-  $network_interface_list    = undef,
-  $storage_option            = undef,
+  $disks                            = undef,
+  Boolean $remote_file              = true,
+  $cluster_name                     = undef,
+  $scan_name                        = undef,
+  $scan_port                        = undef,
+  $cluster_nodes                    = undef,
+  $network_interface_list           = undef,
+  $storage_option                   = undef,
+  String $temp_dir                  = '/tmp',
+  Boolean $bash_profile             = true,
 )
 {
 
@@ -202,21 +204,23 @@ define oradb::installasm(
                       File["${download_dir}/grid_install_${version}.rsp"]],
     }
 
-    if ! defined(File["${user_base_dir}/${user}/.bash_profile"]) {
-      file { "${user_base_dir}/${user}/.bash_profile":
-        ensure  => present,
-        # content => template('oradb/grid_bash_profile.erb'),
-        content => regsubst(template('oradb/grid_bash_profile.erb'), '\r\n', "\n", 'EMG'),
-        mode    => '0775',
-        owner   => $user,
-        group   => $group,
-      }
+    if ( $bash_profile == true ) {
+      if ! defined(File["${user_base_dir}/${user}/.bash_profile"]) {
+        file { "${user_base_dir}/${user}/.bash_profile":
+          ensure  => present,
+          # content => template('oradb/grid_bash_profile.erb'),
+          content => regsubst(template('oradb/grid_bash_profile.erb'), '\r\n', "\n", 'EMG'),
+          mode    => '0775',
+          owner   => $user,
+          group   => $group,
+        }
+      }  
     }
 
     #because of RHEL7 uses systemd we need to create the service differently
     if ($::osfamily == 'RedHat') and ($::operatingsystemmajrelease == '7')
     {
-      file {'/etc/systemd/system/ohas.service':
+      file {'/etc/systemd/system/oracle-ohasd.service':
         ensure  => 'file',
         content => template('oradb/ohas.service.erb'),
         mode    => '0644',
@@ -225,13 +229,15 @@ define oradb::installasm(
 
       exec { 'daemon-reload for ohas':
         command => '/bin/systemctl daemon-reload',
-      } ->
+      }  
+      # ->
 
-      service { 'ohas.service':
-        ensure => running,
-        enable => true,
-        before => Exec["run root.sh grid script ${title}"],
-      }
+      # service { 'ohas.service':
+      #   ensure => running,
+      #   enable => true,
+      #   before => Exec["run root.sh grid script ${title}"],
+      # }
+
     }
 
     exec { "run root.sh grid script ${title}":

@@ -2,22 +2,24 @@ source 'https://rubygems.org'
 
 puppetversion = ENV.key?('PUPPET_VERSION') ? "= #{ENV['PUPPET_VERSION']}" : ['>= 3.0']
 
-platform :ruby_19, :ruby_20 do
-  gem 'coveralls', :require => false
-  gem 'simplecov', :require => false
-end
+
+gem 'coveralls', :require => false
+gem 'simplecov', :require => false
+gem 'simplecov-console', :require => false
+gem 'codeclimate-test-reporter', :require => false
+
 gem 'rspec-puppet-utils', :git => 'https://github.com/Accuity/rspec-puppet-utils.git'
 gem 'hiera-puppet-helper', :git => 'https://github.com/bobtfish/hiera-puppet-helper.git'
 gem 'puppet-lint'
 gem 'puppet', puppetversion
-gem 'rspec-puppet'
+gem 'rspec-puppet', '= 2.3.2'
 gem 'rspec-system-puppet'
 gem 'puppetlabs_spec_helper'
 gem 'puppet-syntax'
-gem 'facter', '>= 1.6.10'
+#gem 'facter', '>= 1.6.10'
 gem 'ci_reporter_rspec'
 gem 'rubocop', :git => 'https://github.com/bbatsov/rubocop',  :require => false
 gem 'puppet-blacksmith'
-gem 'fog', '>= 1.25.0'
-gem 'fog-google', '= 0.1.0'
-gem 'tins', '= 1.6.0'
+#gem 'fog', '>= 1.25.0'
+#gem 'fog-google', '= 0.1.0'
+#gem 'tins', '= 1.6.0'

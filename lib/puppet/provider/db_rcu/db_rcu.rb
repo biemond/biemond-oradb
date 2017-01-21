@@ -12,7 +12,13 @@ Puppet::Type.type(:db_rcu).provide(:db_rcu) do
     # environment = "SQLPLUS_HOME=#{oracle_home}"
     Puppet.debug "rcu statement: #{statement}"
 
-    output = `su - #{user} -c '#{statement}'`
+    # stdin from password file is lost if running as oracle but try to su
+    if Puppet.features.root?
+      output = `su - #{user} -c '#{statement}'`
+    else
+      output = `#{statement}`
+    end
+
     # output = execute statement, :failonfail => true ,:uid => user, :custom_environment => environment
     Puppet.info "RCU result: #{output}"
     result = false

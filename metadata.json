@@ -1,6 +1,5 @@
 {
   "author": "Edwin Biemond",
-  "data_provider": "hiera",
   "dependencies": [
     {
       "name": "puppetlabs/concat",
@@ -8,7 +7,7 @@
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 3.2.0"
+      "version_requirement": ">= 4.11.0 < 5.0.0"
     }
   ],
   "license": "Apache-2.0",
@@ -96,12 +95,12 @@
   "requirements": [
     {
       "name": "pe",
-      "version_requirement": ">=2.7.20"
+      "version_requirement": ">=4.3"
     },
     {
       "name": "puppet",
-      "version_requirement": ">=2.7.20"
+      "version_requirement": ">=4.3"
     }
   ],
-  "version": "2.0.6"
+  "version": "2.0.10"
 }

@@ -1,5 +1,33 @@
 # Version updates
 
+## 2.0.9
+- variables support for dbt templates with parameter template_variables
+- bash_profile also loads bashrc when it exists
+
+## 2.0.8
+- Add opatch_patches structured fact but requires stdlib 4.11
+- new function is_oracle_patch_installed
+- RCU fixes for running as non-root user
+- Resolve idempotence issue which happens when a patch from the same source needs to be applied multiple times
+- dbactions.pp or db_control supports now also mount
+
+## 2.0.7
+- In case of a template, set character parameter for the default database build command. It is being set to AL32UTF8.
+- installasm new 12.1.0.2 storage_option values 'LOCAL_ASM_STORAGE', 'FLEX_ASM_STORAGE', 'CLIENT_ASM_STORAGE', 'FILE_SYSTEM_STORAGE'
+- installasm bash_profile parameter
+- installasm remote_node parameter, ability to execute orainstRoot.sh and root.sh on remode node
+- installdb new 12.1.0.2 database_type values 'EE','SE2'
+- installdb, handling 2 installations of the same oracle database version on the same host
+- installdb, remote_node parameter, ability to execute root.sh on remode node
+- installem_agent option to not manage curl
+- db_control startup in mount status for standby databases
+- database.pp use cluster_nodes for -nodelist parameter
+
+## 2.0.6
+- Seeded database template support
+- oracle_hostname parameter for emagent
+- puppet 4 fixes
+
 ## 2.0.5
 - EM agent, Move sysman parameter validation to agentpull block
 - Fix rcu status check, rollback from version 2.0.1
