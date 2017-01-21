@@ -38,7 +38,7 @@ define oradb::opatch(
     }
   }
 
-  case $::kernel {
+  case $facts['kernel'] {
     'Linux', 'SunOS': {
       if $ensure == 'present' {
         if $remote_file == true {

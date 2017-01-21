@@ -18,7 +18,7 @@ define oradb::opatchupgrade(
   $patchDir = "${oracle_home}/OPatch"
 
   $supported_db_kernels = join( lookup('oradb::kernels'), '|')
-  if ( $::kernel in $supported_db_kernels == false){
+  if ( $facts['kernel'] in $supported_db_kernels == false){
     fail("Unrecognized operating system, please use it on a ${supported_db_kernels} host")
   }
 
@@ -45,7 +45,7 @@ define oradb::opatchupgrade(
       }
     }
 
-    case $::kernel {
+    case $facts['kernel'] {
       'Linux', 'SunOS': {
         file { $patchDir:
           ensure  => absent,

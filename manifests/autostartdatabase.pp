@@ -19,7 +19,7 @@ define oradb::autostartdatabase(
   $oratab         = lookup('oradb::oratab')
   $dbora_location = lookup('oradb::dbora_dir')
 
-  case $::kernel {
+  case $facts['kernel'] {
     'Linux': {
       $sed_command = "sed -i -e's/:N/:Y/g' ${oratab}"
     }

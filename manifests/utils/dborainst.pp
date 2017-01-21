@@ -10,7 +10,7 @@ define oradb::utils::dborainst
   String $os_group          = lookup('oradb::group'),
 ){
   $ora_inst_path = lookup('oradb::orainst_dir')
-  if ( $::kernel == 'SunOS'){
+  if ( $facts['kernel'] == 'SunOS'){
     if !defined(File[$ora_inst_path]) {
       file { $ora_inst_path:
         ensure => directory,

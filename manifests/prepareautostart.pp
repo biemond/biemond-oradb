@@ -17,7 +17,7 @@ class oradb::prepareautostart(
     content => regsubst(template("oradb/dbora_${::kernel}.erb"), '\r\n', "\n", 'EMG'),
   }
 
-  case $::operatingsystem {
+  case $facts['operatingsystem'] {
     'CentOS', 'RedHat', 'OracleLinux', 'SLES': {
       exec { "enable service ${service_name}":
         command   => "chkconfig --add ${service_name}",

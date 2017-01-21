@@ -218,7 +218,7 @@ define oradb::installasm(
     }
 
     #because of RHEL7 uses systemd we need to create the service differently
-    if ($::osfamily == 'RedHat') and ($::operatingsystemmajrelease == '7')
+    if ($facts['osfamily'] == 'RedHat' and $facts['operatingsystemmajrelease'] == '7')
     {
       file {'/etc/systemd/system/oracle-ohasd.service':
         ensure  => 'file',
