@@ -19,7 +19,7 @@ With version >= 2.0.0  all manifest parameters are in lowercase and in snakestyl
 
 Dependency with
 - puppetlabs/concat >= 1.0.0
-- puppetlabs/stdlib >= 3.2.0
+- puppetlabs/stdlib >= 4.0.0
 
 Should work on Docker, for Solaris and on all Linux version like RedHat, CentOS, Ubuntu, Debian, Suse SLES or OracleLinux
 - Docker image of Oracle Database 12.1 SE [Docker Oracle Database 12.1.0.1](https://github.com/biemond/docker-database-puppet)
@@ -34,7 +34,7 @@ Should work on Docker, for Solaris and on all Linux version like RedHat, CentOS,
 Example of Opensource Puppet 3.4.3 Puppet master configuration in a vagrant box [puppet master](https://github.com/biemond/vagrant-puppetmaster)
 - oradb (oracle database 11.2.0.1 ) with GoldenGate 12.1.2
 
-Should work for Puppet 2.7 & 3.0
+Should work for Puppet >=  4.0
 
 ## Oracle Database Features
 

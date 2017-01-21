@@ -177,8 +177,8 @@ define oradb::installdb(
         mode    => '0775',
         owner   => $user,
         group   => $group,
-        require => [Oradb::Utils::Dborainst["database orainst ${version}"],
-                    Db_directory_structure["oracle structure ${version}"],],
+        require => [Oradb::Utils::Dborainst["database orainst ${version}_${title}"],
+                    Db_directory_structure["oracle structure ${version}_${title}"],],
       }
     }
 

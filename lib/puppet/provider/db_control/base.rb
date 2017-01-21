@@ -13,6 +13,10 @@ Puppet::Type.type(:db_control).provide(:base) do
   def stop
     instance_control :stop
   end
+  
+  def mount
+    instance_control :mount
+  end
 
   def restart
     instance_control :stop

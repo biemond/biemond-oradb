@@ -103,18 +103,6 @@ define oradb::database(
     }
   }
 
-  if ( $template ) {
-    $templatename = "${download_dir}/${template}_${sanitized_title}.dbt"
-    file { $templatename:
-      ensure  => present,
-      content => template("${puppet_download_mnt_point}/${template}.dbt.erb"),
-      mode    => '0775',
-      owner   => $user,
-      group   => $group,
-      before  => Exec["oracle database ${title}"],
-    }
-  }
-
   if ( $template_seeded ) {
     $templatename = "${oracle_home}/assistants/dbca/templates/${template_seeded}.dbc"
   } elsif ( $template ) {

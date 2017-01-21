@@ -1,5 +1,6 @@
 {
   "author": "Edwin Biemond",
+  "data_provider": "hiera",
   "dependencies": [
     {
       "name": "puppetlabs/concat",
