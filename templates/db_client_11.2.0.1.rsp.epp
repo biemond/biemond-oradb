@@ -1,3 +1,9 @@
+<%- |  String $group_install = 'oinstall', 
+       String $oraInventory, 
+       String $oracle_home, 
+       String $oracle_base | -%>
+
+
 ###############################################################################
 ## Copyright(c) Oracle Corporation 1998,2008. All rights reserved.           ##
 ##                                                                           ##
@@ -23,10 +29,10 @@ oracle.install.responseFileVersion=/oracle/install/rspfmt_clientinstall_response
 ORACLE_HOSTNAME=
 #-------------------------------------------------------------------------------
 # Unix group to be set for the inventory directory.
-UNIX_GROUP_NAME=<%= @group_install %>
+UNIX_GROUP_NAME=<%= $group_install %>
 #-------------------------------------------------------------------------------
 # Inventory location.
-INVENTORY_LOCATION=<%= @oraInventory %>
+INVENTORY_LOCATION=<%= $oraInventory %>
 #-------------------------------------------------------------------------------
 # Languages in which the components will be installed.
 #
@@ -59,10 +65,10 @@ INVENTORY_LOCATION=<%= @oraInventory %>
 SELECTED_LANGUAGES=en
 #-------------------------------------------------------------------------------
 # Complete path of the Oracle Home
-ORACLE_HOME=<%= @oracle_home %>
+ORACLE_HOME=<%= $oracle_home %>
 #-------------------------------------------------------------------------------
 # Complete path of the Oracle Base.
-ORACLE_BASE=<%= @oracle_base %>
+ORACLE_BASE=<%= $oracle_base %>
 #-------------------------------------------------------------------------------
 #Name       : INSTALL_TYPE
 #Datatype   : String

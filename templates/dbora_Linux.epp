@@ -1,3 +1,8 @@
+<%- |  String $oracle_home,
+       String $user,
+       String $service_name
+ | -%>
+
 #!/bin/sh
 # chkconfig: 345 98 10
 # description: Oracle auto start-stop script.
@@ -8,9 +13,9 @@
 # Set ORA_OWNER to the user id of the owner of the
 # Oracle database in ORA_HOME.
 
-ORA_HOME=<%= @oracle_home %>
-ORA_OWNER=<%= @user %>
-LOCK_FILE=/var/lock/subsys/<%= @service_name %>
+ORA_HOME=<%= $oracle_home %>
+ORA_OWNER=<%= $user %>
+LOCK_FILE=/var/lock/subsys/<%= $service_name %>
 
 if [ ! -f $ORA_HOME/bin/dbstart ]
 then

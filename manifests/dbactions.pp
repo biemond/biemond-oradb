@@ -6,7 +6,7 @@
 #
 define oradb::dbactions(
   Enum["database", "grid", "asm"] $db_type          = 'database',
-  $oracle_home                                      = undef,
+  Optional[String] $oracle_home                     = undef,
   String $user                                      = lookup('oradb::user'),
   String $group                                     = lookup('oradb::group'),
   Enum["start", "stop", "running", "abort"] $action = 'start',

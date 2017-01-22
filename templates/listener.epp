@@ -1,0 +1,21 @@
+<%- |  String $title,
+       Hash   $server,
+       Optional[String] $loadbalance,
+       Optional[String] $failover,
+       Optional[String] $connect_server,
+       Optional[String] $connect_service_name,
+       Integer $size | -%>
+
+<%= $title %> =
+  <%- if $size == 1 {-%>
+    <%- $server.each |$key, $server2| { -%>
+    (ADDRESS = (PROTOCOL = <%= $server2['protocol'] %>)(HOST = <%= $server2['host'] %>)(PORT = <%= $server2['port'] %>))
+    <%- } -%>
+  <%- } -%>
+  <%- unless $size == 1 { -%>
+  (ADDRESS_LIST=
+    <%- $server.each |$key, $server2| { -%>
+    (ADDRESS = (PROTOCOL = <%= $server2['protocol'] %>)(HOST = <%= $server2['host'] %>)(PORT = <%= $server2['port'] %>))
+    <%- } -%>
+    )
+  <%- } -%>

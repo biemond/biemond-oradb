@@ -7,41 +7,31 @@
 #
 #
 define oradb::installdb(
-  String $version                   = undef,
-  String $file                      = undef,
+  String $version                          = undef,
+  String $file                             = undef,
   Enum["SE", "EE", "SEONE"] $database_type = lookup('oradb:installdb:database_type'),
-  $ora_inventory_dir                = undef,
-  String $oracle_base               = undef,
-  String $oracle_home               = undef,
-  Boolean $ee_options_selection     = false,
-  $ee_optional_components           = undef, # 'oracle.rdbms.partitioning:11.2.0.4.0,oracle.oraolap:11.2.0.4.0,oracle.rdbms.dm:11.2.0.4.0,oracle.rdbms.dv:11.2.0.4.0,oracle.rdbms.lbac:11.2.0.4.0,oracle.rdbms.rat:11.2.0.4.0'
-  Boolean $create_user              = false,
-  Boolean $bash_profile             = true,
-  String $user                      = lookup('oradb::user'),
-  String $user_base_dir             = lookup('oradb::user_base_dir'),
-  String $group                     = lookup('oradb::group'),
-  String $group_install             = lookup('oradb::group_install'),
-  String $group_oper                = lookup('oradb::group_oper'),
-  String $download_dir              = lookup('oradb::download_dir'),
-  Boolean $zip_extract              = true,
-  String $puppet_download_mnt_point = lookup('oradb::module_mountpoint'),
-  Boolean $remote_file              = true,
-  $cluster_nodes                    = undef,
-  Boolean $cleanup_install_files    = true,
-  Boolean $is_rack_one_install      = false,
-  String $temp_dir                  = '/tmp',
-  $remote_node                      = undef,   # hostname or ip address
-
+  Optional[String] $ora_inventory_dir      = undef,
+  String $oracle_base                      = undef,
+  String $oracle_home                      = undef,
+  Boolean $ee_options_selection            = false,
+  Optional[String] $ee_optional_components = undef, # 'oracle.rdbms.partitioning:11.2.0.4.0,oracle.oraolap:11.2.0.4.0,oracle.rdbms.dm:11.2.0.4.0,oracle.rdbms.dv:11.2.0.4.0,oracle.rdbms.lbac:11.2.0.4.0,oracle.rdbms.rat:11.2.0.4.0'
+  Boolean $bash_profile                    = true,
+  String $user                             = lookup('oradb::user'),
+  String $user_base_dir                    = lookup('oradb::user_base_dir'),
+  String $group                            = lookup('oradb::group'),
+  String $group_install                    = lookup('oradb::group_install'),
+  String $group_oper                       = lookup('oradb::group_oper'),
+  String $download_dir                     = lookup('oradb::download_dir'),
+  Boolean $zip_extract                     = true,
+  String $puppet_download_mnt_point        = lookup('oradb::module_mountpoint'),
+  Boolean $remote_file                     = true,
+  Optional[String] $cluster_nodes          = undef,
+  Boolean $cleanup_install_files           = true,
+  Boolean $is_rack_one_install             = false,
+  String $temp_dir                         = '/tmp',
+  Optional[String] $remote_node            = undef,   # hostname or ip address
 )
 {
-  if ( $create_user == true ){
-    fail("create_user parameter on installdb ${title} is removed from this oradb module, you need to create the oracle user and its groups yourself")
-  }
-
-  if ( $create_user == false ){
-    notify {"create_user parameter on installdb ${title} can be removed, create_user feature is removed from this oradb module":}
-  }
-
   $supported_db_versions = join( lookup('oradb::versions'), '|')
   if ( $version in $supported_db_versions == false ){
     fail("Unrecognized database install version, use ${supported_db_versions}")
@@ -173,7 +163,17 @@ define oradb::installdb(
     if ! defined(File["${download_dir}/db_install_${version}_${title}.rsp"]) {
       file { "${download_dir}/db_install_${version}_${title}.rsp":
         ensure  => present,
-        content => template("oradb/db_install_${version}.rsp.erb"),
+        content => epp("oradb/db_install_${version}.rsp.epp", {'cluster_nodes'          => $cluster_nodes,
+                                                               'group_install'          => $group_install,
+                                                               'oraInventory'           => $oraInventory,
+                                                               'oracle_home'            => $oracle_home,
+                                                               'oracle_base'            => $oracle_base,
+                                                               'group_oper'             => $group_oper,
+                                                               'group'                  => $group,
+                                                               'database_type'          => $database_type,
+                                                               'is_rack_one_install'    => $is_rack_one_install,
+                                                               'ee_optional_components' => $ee_optional_components,
+                                                               'ee_options_selection'   => $ee_options_selection }),
         mode    => '0775',
         owner   => $user,
         group   => $group,
@@ -202,7 +202,9 @@ define oradb::installdb(
         file { "${user_base_dir}/${user}/.bash_profile":
           ensure  => present,
           # content => template('oradb/bash_profile.erb'),
-          content => regsubst(template('oradb/bash_profile.erb'), '\r\n', "\n", 'EMG'),
+          content => regsubst(epp('oradb/bash_profile.epp', { 'oracle_home' => $oracle_home,
+                                                              'oracle_base' => $oracle_base,
+                                                              'temp_dir'    => $temp_dir }), '\r\n', "\n", 'EMG'),
           mode    => '0775',
           owner   => $user,
           group   => $group,

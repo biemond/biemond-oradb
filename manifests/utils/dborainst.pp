@@ -23,7 +23,8 @@ define oradb::utils::dborainst
   if !defined(File["${ora_inst_path}/oraInst.loc"]) {
     file { "${ora_inst_path}/oraInst.loc":
       ensure  => present,
-      content => template('oradb/oraInst.loc.erb'),
+      content => epp('oradb/oraInst.loc.epp',{ 'ora_inventory_dir' => $ora_inventory_dir,
+                                               'os_group'          => $os_group}),
       mode    => '0755',
     }
   }

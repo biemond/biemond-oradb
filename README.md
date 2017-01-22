@@ -749,7 +749,7 @@ or delete a database
       oracle_home          => '/oracle/product/11.2/db',
       user                 => 'oracle',
       group                => 'dba',
-      server               => { myserver => { host => soadb.example.nl, port => '1525', protocol => 'TCP' }, { host => soadb2.example.nl, port => '1526', protocol => 'TCP' }},
+      server               => { myserver => { host => soadb.example.nl, port => '1525', protocol => 'TCP' }, myserver2 => { host => soadb2.example.nl, port => '1526', protocol => 'TCP' }},
       connect_service_name => 'soarepos.example.nl',
       connect_server       => 'DEDICATED',
       require              => Oradb::Dbactions['start oraDb'],

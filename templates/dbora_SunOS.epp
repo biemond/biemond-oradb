@@ -1,6 +1,10 @@
+<%- |  String $oracle_home,
+       String $user
+ | -%>
+
 #!/bin/sh
-ORA_HOME=<%= @oracle_home %>
-ORA_OWNER=<%= @user %>
+ORA_HOME=<%= $oracle_home %>
+ORA_OWNER=<%= $user %>
 
 export ORA_HOME
 export ORA_OWNER

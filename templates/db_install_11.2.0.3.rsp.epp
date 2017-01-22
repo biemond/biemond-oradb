@@ -1,3 +1,16 @@
+<%- |  String $group_install = 'oinstall', 
+       String $oraInventory, 
+       String $oracle_home, 
+       String $oracle_base, 
+       String $group_oper = 'oper',
+       String $group = 'dba',
+       Optional[String] $cluster_nodes,
+       String $database_type,
+       Optional[String] $ee_optional_components, 
+       Boolean $ee_options_selection = false,
+       Boolean $is_rack_one_install = false | -%>
+
+
 #------------------------------------------------------------------------------
 # Do not change the following system generated value.
 #------------------------------------------------------------------------------
@@ -23,14 +36,14 @@ ORACLE_HOSTNAME=
 #-------------------------------------------------------------------------------
 # Specify the Unix group to be set for the inventory directory.
 #-------------------------------------------------------------------------------
-UNIX_GROUP_NAME=<%= @group_install %>
+UNIX_GROUP_NAME=<%= $group_install %>
 
 #-------------------------------------------------------------------------------
 # Specify the location which holds the inventory files.
 # This is an optional parameter if installing on
 # Windows based Operating System.
 #-------------------------------------------------------------------------------
-INVENTORY_LOCATION=<%= @oraInventory %>
+INVENTORY_LOCATION=<%= $oraInventory %>
 
 #-------------------------------------------------------------------------------
 # Specify the languages in which the components will be installed.
@@ -72,12 +85,12 @@ SELECTED_LANGUAGES=en
 #------------------------------------------------------------------------------
 # Specify the complete path of the Oracle Home.
 #------------------------------------------------------------------------------
-ORACLE_HOME=<%= @oracle_home %>
+ORACLE_HOME=<%= $oracle_home %>
 
 #------------------------------------------------------------------------------
 # Specify the complete path of the Oracle Base.
 #------------------------------------------------------------------------------
-ORACLE_BASE=<%= @oracle_base %>
+ORACLE_BASE=<%= $oracle_base %>
 
 #------------------------------------------------------------------------------
 # Specify the installation edition of the component.
@@ -88,7 +101,7 @@ ORACLE_BASE=<%= @oracle_base %>
 # SEONE  : Standard Edition One
 # PE     : Personal Edition (WINDOWS ONLY)
 #------------------------------------------------------------------------------
-oracle.install.db.InstallEdition=<%= @database_type %>
+oracle.install.db.InstallEdition=<%= $database_type %>
 
 #------------------------------------------------------------------------------
 # This variable is used to enable or disable custom install and is considered
@@ -99,7 +112,7 @@ oracle.install.db.InstallEdition=<%= @database_type %>
 # false : Value for 'optionalComponents' is not considered.
 #------------------------------------------------------------------------------
 #oracle.install.db.EEOptionsSelection=false
-oracle.install.db.EEOptionsSelection=<%= @ee_options_selection %>
+oracle.install.db.EEOptionsSelection=<%= $ee_options_selection %>
 
 #------------------------------------------------------------------------------
 # This variable is considered only if 'ee_options_selection' is set to true.
@@ -119,7 +132,7 @@ oracle.install.db.EEOptionsSelection=<%= @ee_options_selection %>
 #              oracle.rdbms.rat:11.2.0.3.0 - Oracle Real Application Testing
 #------------------------------------------------------------------------------
 #oracle.install.db.optionalComponents=oracle.rdbms.partitioning:11.2.0.3.0,oracle.oraolap:11.2.0.3.0,oracle.rdbms.dm:11.2.0.3.0,oracle.rdbms.dv:11.2.0.3.0,oracle.rdbms.lbac:11.2.0.3.0,oracle.rdbms.rat:11.2.0.3.0
-oracle.install.db.optionalComponents=<%= @ee_optional_components %>
+oracle.install.db.optionalComponents=<%= $ee_optional_components %>
 
 ###############################################################################
 #                                                                             #
@@ -137,19 +150,19 @@ oracle.install.db.optionalComponents=<%= @ee_optional_components %>
 #------------------------------------------------------------------------------
 # The DBA_GROUP is the OS group which is to be granted OSDBA privileges.
 #------------------------------------------------------------------------------
-oracle.install.db.DBA_GROUP=<%= @group %>
+oracle.install.db.DBA_GROUP=<%= $group %>
 
 #------------------------------------------------------------------------------
 # The OPER_GROUP is the OS group which is to be granted OSOPER privileges.
 # The value to be specified for OSOPER group is optional.
 #------------------------------------------------------------------------------
-oracle.install.db.OPER_GROUP=<%= @group_oper %>
+oracle.install.db.OPER_GROUP=<%= $group_oper %>
 
 #------------------------------------------------------------------------------
 # Specify the cluster node names selected during the installation.
 # Example : oracle.install.db.CLUSTER_NODES=node1,node2
 #------------------------------------------------------------------------------
-oracle.install.db.CLUSTER_NODES=<%= @cluster_nodes %>
+oracle.install.db.CLUSTER_NODES=<%= $cluster_nodes %>
 
 #------------------------------------------------------------------------------
 # This variable is used to enable or disable RAC One Node install.

@@ -1,0 +1,30 @@
+<%- |  String $title,
+       Hash   $server,
+       String $loadbalance,
+       String $failover,
+       String $connect_server,
+       String $connect_service_name,
+       Integer $size | -%>
+
+<%= $title %> =
+  (DESCRIPTION =
+  <%- if $size == 1 { -%>
+    <%- $server.each |$key, $server2| { -%>
+    (ADDRESS = (PROTOCOL = <%= $server2['protocol'] %>)(HOST = <%= $server2['host'] %>)(PORT = <%= $server2['port'] %>))
+    <%- } -%>
+  <%- } -%>
+  <%- unless $size == 1 { -%>
+    (ADDRESS_LIST=
+     (LOAD_BALANCE = <%= $loadbalance %>)
+     (FAILOVER = <%= $failover %>)
+     <%- $server.each |$key, $server2| { -%>
+     (ADDRESS = (PROTOCOL = <%= $server2['protocol'] %>)(HOST = <%= $server2['host'] %>)(PORT = <%= $server2['port'] %>))
+     <%- } -%>
+    )
+  <%- } -%>
+    (CONNECT_DATA =
+      (SERVER = <%= $connect_server %>)
+      (SERVICE_NAME = <%= $connect_service_name %>)
+    )
+  )
+

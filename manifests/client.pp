@@ -2,22 +2,22 @@
 #
 #
 define oradb::client(
-  String $version                   = undef,
-  String $file                      = undef,
-  String $oracle_base               = undef,
-  String $oracle_home               = undef,
-  $ora_inventory_dir                = undef,
-  Integer $db_port                  = lookup('oradb::listener_port'),
-  String $user                      = lookup('oradb::user'),
-  String $user_base_dir             = lookup('oradb::user_base_dir'),
-  String $group                     = lookup('oradb::group'),
-  String $group_install             = lookup('oradb::group_install'),
-  String $download_dir              = lookup('oradb::download_dir'),
-  Boolean $bash_profile             = true,
-  String $puppet_download_mnt_point = lookup('oradb::module_mountpoint'),
-  Boolean $remote_file              = true,
-  Boolean $logoutput                = true,
-  String $temp_dir                  = '/tmp',
+  String $version                     = undef,
+  String $file                        = undef,
+  String $oracle_base                 = undef,
+  String $oracle_home                 = undef,
+  Optional[String] $ora_inventory_dir = undef,
+  Integer $db_port                    = lookup('oradb::listener_port'),
+  String $user                        = lookup('oradb::user'),
+  String $user_base_dir               = lookup('oradb::user_base_dir'),
+  String $group                       = lookup('oradb::group'),
+  String $group_install               = lookup('oradb::group_install'),
+  String $download_dir                = lookup('oradb::download_dir'),
+  Boolean $bash_profile               = true,
+  String $puppet_download_mnt_point   = lookup('oradb::module_mountpoint'),
+  Boolean $remote_file                = true,
+  Boolean $logoutput                  = true,
+  String $temp_dir                    = '/tmp',
 )
 {
   validate_absolute_path($oracle_home)
@@ -90,7 +90,10 @@ define oradb::client(
     if ! defined(File["${download_dir}/db_client_${version}.rsp"]) {
       file { "${download_dir}/db_client_${version}.rsp":
         ensure  => present,
-        content => template("oradb/db_client_${version}.rsp.erb"),
+        content => epp("oradb/db_client_${version}.rsp.epp", { 'group_install' => $group_install,
+                                                               'oraInventory'  => $oraInventory,
+                                                               'oracle_home'   => $oracle_home,
+                                                               'oracle_base'   => $oracle_base }),
         mode    => '0775',
         owner   => $user,
         group   => $group,
@@ -126,7 +129,7 @@ define oradb::client(
 
     file { "${download_dir}/netca_client_${version}.rsp":
       ensure  => present,
-      content => template("oradb/netca_client_${version}.rsp.erb"),
+      content => epp("oradb/netca_client_${version}.rsp.epp", { 'db_port' => $db_port }),
       require => Exec["run root.sh script ${title}"],
       mode    => '0775',
       owner   => $user,
@@ -148,7 +151,9 @@ define oradb::client(
         file { "${user_base_dir}/${user}/.bash_profile":
           ensure  => present,
           # content => template('oradb/bash_profile.erb'),
-          content => regsubst(template('oradb/bash_profile.erb'), '\r\n', "\n", 'EMG'),
+          content => regsubst(epp('oradb/bash_profile.epp', { 'oracle_home' => $oracle_home,
+                                                              'oracle_base' => $oracle_base,
+                                                              'temp_dir'    => $temp_dir }), '\r\n', "\n", 'EMG'),
           mode    => '0775',
           owner   => $user,
           group   => $group,

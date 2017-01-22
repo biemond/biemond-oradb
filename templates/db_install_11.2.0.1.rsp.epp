@@ -1,3 +1,32 @@
+<%- |  String $group_install = 'oinstall', 
+       String $oraInventory, 
+       String $oracle_home, 
+       String $oracle_base, 
+       String $group_oper = 'oper',
+       String $group = 'dba',
+       Optional[String] $cluster_nodes,
+       String $database_type,
+       Optional[String] $ee_optional_components, 
+       Boolean $ee_options_selection = false,
+       Boolean $is_rack_one_install = false | -%>
+
+
+####################################################################
+## Copyright(c) Oracle Corporation 1998,2008. All rights reserved.##
+##                                                                ##
+## Specify values for the variables listed below to customize     ##
+## your installation.                                             ##
+##                                                                ##
+## Each variable is associated with a comment. The comment        ##
+## can help to populate the variables with the appropriate        ##
+## values.							  ##
+##                                                                ##
+## IMPORTANT NOTE: This file contains plain text passwords and    ##
+## should be secured to have read permission only by oracle user  ##
+## or db administrator who owns this installation.                ##
+##                                                                ##
+####################################################################
+
 #------------------------------------------------------------------------------
 # Do not change the following system generated value.
 #------------------------------------------------------------------------------
@@ -23,14 +52,12 @@ ORACLE_HOSTNAME=
 #-------------------------------------------------------------------------------
 # Specify the Unix group to be set for the inventory directory.
 #-------------------------------------------------------------------------------
-UNIX_GROUP_NAME=<%= @group_install %>
+UNIX_GROUP_NAME=<%= $group_install %>
 
 #-------------------------------------------------------------------------------
 # Specify the location which holds the inventory files.
-# This is an optional parameter if installing on
-# Windows based Operating System.
 #-------------------------------------------------------------------------------
-INVENTORY_LOCATION=<%= @oraInventory %>
+INVENTORY_LOCATION=<%= $oraInventory %>
 
 #-------------------------------------------------------------------------------
 # Specify the languages in which the components will be installed.
@@ -59,25 +86,19 @@ INVENTORY_LOCATION=<%= @oraInventory %>
 # in   : Indonesian               vi   : Vietnamese
 # it   : Italian
 #
-# all_langs   : All languages
-#
-# Specify value as the following to select any of the languages.
 # Example : SELECTED_LANGUAGES=en,fr,ja
-#
-# Specify value as the following to select all the languages.
-# Example : SELECTED_LANGUAGES=all_langs
 #------------------------------------------------------------------------------
 SELECTED_LANGUAGES=en
 
 #------------------------------------------------------------------------------
 # Specify the complete path of the Oracle Home.
 #------------------------------------------------------------------------------
-ORACLE_HOME=<%= @oracle_home %>
+ORACLE_HOME=<%= $oracle_home %>
 
 #------------------------------------------------------------------------------
 # Specify the complete path of the Oracle Base.
 #------------------------------------------------------------------------------
-ORACLE_BASE=<%= @oracle_base %>
+ORACLE_BASE=<%= $oracle_base %>
 
 #------------------------------------------------------------------------------
 # Specify the installation edition of the component.
@@ -88,37 +109,37 @@ ORACLE_BASE=<%= @oracle_base %>
 # SEONE  : Standard Edition One
 # PE     : Personal Edition (WINDOWS ONLY)
 #------------------------------------------------------------------------------
-oracle.install.db.InstallEdition=<%= @database_type %>
+oracle.install.db.InstallEdition=<%= $database_type %>
 
 #------------------------------------------------------------------------------
-# This variable is used to enable or disable custom install and is considered
-# only if InstallEdition is EE.
+# This variable is used to enable or disable custom install.
 #
-# true  : Components mentioned as part of 'optionalComponents' property
+# true  : Components mentioned as part of 'customComponents' property
 #         are considered for install.
-# false : Value for 'optionalComponents' is not considered.
+# false : Value for 'customComponents' is not considered.
 #------------------------------------------------------------------------------
-oracle.install.db.EEOptionsSelection=<%= @ee_options_selection %>
+#oracle.install.db.isCustomInstall=false
+oracle.install.db.isCustomInstall=<%= $ee_options_selection %>
 
 #------------------------------------------------------------------------------
-# This variable is considered only if 'EEOptionsSelection' is set to true.
+# This variable is considered only if 'IsCustomInstall' is set to true.
 #
-# Description: List of Enterprise Edition Options you would like to enable.
+# Description: List of Enterprise Edition Options you would like to install.
 #
 #              The following choices are available. You may specify any
 #              combination of these choices.  The components you choose should
 #              be specified in the form "internal-component-name:version"
-#              Below is a list of components you may specify to enable.
+#              Below is a list of components you may specify to install.
 #
-#              oracle.oraolap:11.2.0.4.0 - Oracle OLAP
-#              oracle.rdbms.dm:11.2.0.4.0 - Oracle Data Mining
-#              oracle.rdbms.dv:11.2.0.4.0 - Oracle Database Vault
-#              oracle.rdbms.lbac:11.2.0.4.0 - Oracle Label Security
-#              oracle.rdbms.partitioning:11.2.0.4.0 - Oracle Partitioning
-#              oracle.rdbms.rat:11.2.0.4.0 - Oracle Real Application Testing
+#              oracle.rdbms.partitioning:11.2.0.1.0 - Oracle Partitioning
+#              oracle.rdbms.dm:11.2.0.1.0 - Oracle Data Mining
+#              oracle.rdbms.dv:11.2.0.1.0 - Oracle Database Vault
+#              oracle.rdbms.lbac:11.2.0.1.0 - Oracle Label Security
+#              oracle.rdbms.rat:11.2.0.1.0 - Oracle Real Application Testing
+#              oracle.oraolap:11.2.0.1.0 - Oracle OLAP
 #------------------------------------------------------------------------------
-#oracle.install.db.optionalComponents=oracle.rdbms.partitioning:11.2.0.4.0,oracle.oraolap:11.2.0.4.0,oracle.rdbms.dm:11.2.0.4.0,oracle.rdbms.dv:11.2.0.4.0,oracle.rdbms.lbac:11.2.0.4.0,oracle.rdbms.rat:11.2.0.4.0
-oracle.install.db.optionalComponents=<%= @ee_optional_components %>
+#oracle.install.db.customComponents=oracle.server:11.2.0.1.0,oracle.sysman.ccr:10.2.7.0.0,oracle.xdk:11.2.0.1.0,oracle.rdbms.oci:11.2.0.1.0,oracle.network:11.2.0.1.0,oracle.network.listener:11.2.0.1.0,oracle.rdbms:11.2.0.1.0,oracle.options:11.2.0.1.0,oracle.rdbms.partitioning:11.2.0.1.0,oracle.oraolap:11.2.0.1.0,oracle.rdbms.dm:11.2.0.1.0,oracle.rdbms.dv:11.2.0.1.0,orcle.rdbms.lbac:11.2.0.1.0,oracle.rdbms.rat:11.2.0.1.0
+oracle.install.db.customComponents=<%= $ee_optional_components %>
 
 ###############################################################################
 #                                                                             #
@@ -128,42 +149,22 @@ oracle.install.db.optionalComponents=<%= @ee_optional_components %>
 # needs to be granted. If the install is being performed as a member of the   #
 # group "dba", then that will be used unless specified otherwise below.	      #
 #                                                                             #
-# The value to be specified for OSDBA and OSOPER group is only for UNIX based #
-# Operating System.                                                           #
-#                                                                             #
 ###############################################################################
 
 #------------------------------------------------------------------------------
 # The DBA_GROUP is the OS group which is to be granted OSDBA privileges.
 #------------------------------------------------------------------------------
-oracle.install.db.DBA_GROUP=<%= @group %>
+oracle.install.db.DBA_GROUP=<%= $group %>
 
 #------------------------------------------------------------------------------
 # The OPER_GROUP is the OS group which is to be granted OSOPER privileges.
-# The value to be specified for OSOPER group is optional.
 #------------------------------------------------------------------------------
-oracle.install.db.OPER_GROUP=<%= @group_oper %>
+oracle.install.db.OPER_GROUP=<%= $group_oper %>
 
 #------------------------------------------------------------------------------
 # Specify the cluster node names selected during the installation.
-# Example : oracle.install.db.CLUSTER_NODES=node1,node2
 #------------------------------------------------------------------------------
-oracle.install.db.CLUSTER_NODES=<%= @cluster_nodes %>
-
-#------------------------------------------------------------------------------
-# This variable is used to enable or disable RAC One Node install.
-#
-# true  : Value of RAC One Node service name is used.
-# false : Value of RAC One Node service name is not used.
-#
-# If left blank, it will be assumed to be false
-#------------------------------------------------------------------------------
-oracle.install.db.isRACOneInstall=
-
-#------------------------------------------------------------------------------
-# Specify the name for RAC One Node Service.
-#------------------------------------------------------------------------------
-oracle.install.db.racOneServiceName=
+oracle.install.db.CLUSTER_NODES=<%= $cluster_nodes %>
 
 #------------------------------------------------------------------------------
 # Specify the type of database to create.
@@ -214,8 +215,8 @@ oracle.install.db.config.starterdb.memoryOption=true
 oracle.install.db.config.starterdb.memoryLimit=
 
 #------------------------------------------------------------------------------
-# This variable controls whether to load Example Schemas onto
-# the starter database or not.
+# This variable controls whether to load Example Schemas onto the starter
+# database or not.
 #------------------------------------------------------------------------------
 oracle.install.db.config.starterdb.installExampleSchemas=false
 
@@ -280,6 +281,23 @@ oracle.install.db.config.starterdb.control=DB_CONTROL
 #-------------------------------------------------------------------------------
 oracle.install.db.config.starterdb.gridcontrol.gridControlServiceURL=
 
+#-------------------------------------------------------------------------------
+# This variable indicates whether to receive email notification for critical
+# alerts when using DB control.
+#-------------------------------------------------------------------------------
+oracle.install.db.config.starterdb.dbcontrol.enableEmailNotification=false
+
+#-------------------------------------------------------------------------------
+# Specify the email address to which the notifications are to be sent.
+#-------------------------------------------------------------------------------
+oracle.install.db.config.starterdb.dbcontrol.emailAddress=
+
+#-------------------------------------------------------------------------------
+# Specify the SMTP server used for email notifications.
+#-------------------------------------------------------------------------------
+oracle.install.db.config.starterdb.dbcontrol.SMTPServer=
+
+
 ###############################################################################
 #                                                                             #
 # SPECIFY BACKUP AND RECOVERY OPTIONS                                 	      #
@@ -297,18 +315,18 @@ oracle.install.db.config.starterdb.automatedBackup.enable=false
 
 #------------------------------------------------------------------------------
 # Regardless of the type of storage that is chosen for backup and recovery, if
-# automated backups are enabled, a job will be scheduled to run daily to backup
-# the database. This job will run as the operating system user that is
-# specified in this variable.
+# automated backups are enabled, a job will be scheduled to run daily at
+# 2:00 AM to backup the database. This job will run as the operating system
+# user that is specified in this variable.
 #------------------------------------------------------------------------------
 oracle.install.db.config.starterdb.automatedBackup.osuid=
 
 #-------------------------------------------------------------------------------
 # Regardless of the type of storage that is chosen for backup and recovery, if
-# automated backups are enabled, a job will be scheduled to run daily to backup
-# the database. This job will run as the operating system user specified by the
-# above entry. The following entry stores the password for the above operating
-# system user.
+# automated backups are enabled, a job will be scheduled to run daily at
+# 2:00 AM to backup the database. This job will run as the operating system user
+# specified by the above entry. The following entry stores the password for the
+# above operating system user.
 #-------------------------------------------------------------------------------
 oracle.install.db.config.starterdb.automatedBackup.ospwd=
 
@@ -324,35 +342,35 @@ oracle.install.db.config.starterdb.storageType=
 # Specify the database file location which is a directory for datafiles, control
 # files, redo logs.
 #
-# Applicable only when oracle.install.db.config.starterdb.storage=FILE_SYSTEM_STORAGE
+# Applicable only when oracle.install.db.config.starterdb.storage=FILE_SYSTEM
 #-------------------------------------------------------------------------------
 oracle.install.db.config.starterdb.fileSystemStorage.dataLocation=
 
 #-------------------------------------------------------------------------------
 # Specify the backup and recovery location.
 #
-# Applicable only when oracle.install.db.config.starterdb.storage=FILE_SYSTEM_STORAGE
+# Applicable only when oracle.install.db.config.starterdb.storage=FILE_SYSTEM
 #-------------------------------------------------------------------------------
 oracle.install.db.config.starterdb.fileSystemStorage.recoveryLocation=
 
 #-------------------------------------------------------------------------------
 # Specify the existing ASM disk groups to be used for storage.
 #
-# Applicable only when oracle.install.db.config.starterdb.storage=ASM_STORAGE
+# Applicable only when oracle.install.db.config.starterdb.storage=ASM
 #-------------------------------------------------------------------------------
 oracle.install.db.config.asm.diskGroup=
 
 #-------------------------------------------------------------------------------
 # Specify the password for ASMSNMP user of the ASM instance.
 #
-# Applicable only when oracle.install.db.config.starterdb.storage=ASM_STORAGE
+# Applicable only when oracle.install.db.config.starterdb.storage=ASM_SYSTEM
 #-------------------------------------------------------------------------------
 oracle.install.db.config.asm.ASMSNMPPassword=
 
 #------------------------------------------------------------------------------
 # Specify the My Oracle Support Account Username.
 #
-#  Example   : MYORACLESUPPORT_USERNAME=abc@oracle.com
+#  Example   : MYORACLESUPPORT_USERNAME=metalink
 #------------------------------------------------------------------------------
 MYORACLESUPPORT_USERNAME=
 
@@ -373,10 +391,7 @@ MYORACLESUPPORT_PASSWORD=
 SECURITY_UPDATES_VIA_MYORACLESUPPORT=
 
 #------------------------------------------------------------------------------
-# Specify whether user doesn't want to configure Security Updates.
-# The value for this variable should be true if you don't want to configure
-# Security Updates, false otherwise.
-#
+# Specify whether user wants to give any proxy details for connection.
 # The value can be either true or false. If left blank it will be assumed
 # to be false.
 #
@@ -413,45 +428,3 @@ PROXY_USER=
 # Example    : PROXY_PWD=password
 #------------------------------------------------------------------------------
 PROXY_PWD=
-
-#------------------------------------------------------------------------------
-# Specify the proxy realm. This value is used if auto-updates option is selected.
-#
-# Example    : PROXY_REALM=metalink
-#------------------------------------------------------------------------------
-PROXY_REALM=
-
-#------------------------------------------------------------------------------
-# Specify the Oracle Support Hub URL.
-#
-# Example    : COLLECTOR_SUPPORTHUB_URL=https://orasupporthub.company.com:8080/
-#------------------------------------------------------------------------------
-COLLECTOR_SUPPORTHUB_URL=
-
-#------------------------------------------------------------------------------
-# Specify the auto-updates option. It can be one of the following:
-# a.MYORACLESUPPORT_DOWNLOAD
-# b.OFFLINE_UPDATES
-# c.SKIP_UPDATES
-#------------------------------------------------------------------------------
-oracle.installer.autoupdates.option=SKIP_UPDATES
-#------------------------------------------------------------------------------
-# In case MYORACLESUPPORT_DOWNLOAD option is chosen, specify the location where
-# the updates are to be downloaded.
-# In case OFFLINE_UPDATES option is chosen, specify the location where the updates
-# are present.
-oracle.installer.autoupdates.downloadUpdatesLoc=
-#------------------------------------------------------------------------------
-# Specify the My Oracle Support Account Username which has the patches download privileges
-# to be used for software updates.
-#  Example   : AUTOUPDATES_MYORACLESUPPORT_USERNAME=abc@oracle.com
-#------------------------------------------------------------------------------
-AUTOUPDATES_MYORACLESUPPORT_USERNAME=
-
-#------------------------------------------------------------------------------
-# Specify the My Oracle Support Account Username password which has the patches download privileges
-# to be used for software updates.
-#
-# Example    : AUTOUPDATES_MYORACLESUPPORT_PASSWORD=password
-#------------------------------------------------------------------------------
-AUTOUPDATES_MYORACLESUPPORT_PASSWORD=

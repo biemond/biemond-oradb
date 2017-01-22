@@ -1,0 +1,25 @@
+<%- |  String $oracle_home, 
+       String $oracle_base, 
+       String $temp_dir = '/tmp' | -%>
+
+if [ -f ~/.bashrc ]; then
+   . ~/.bashrc
+fi
+
+ORACLE_TERM=xterm; export ORACLE_TERM
+
+LD_LIBRARY_PATH=$<%= $oracle_home %>/lib
+ORACLE_BASE=<%= $oracle_base %>
+ORACLE_HOME=<%= $oracle_home %>
+SQLPLUS_HOME=<%= $oracle_home %>
+PATH=/bin:/usr/local/bin:/usr/bin:/bin:<%= $oracle_home %>/bin
+
+export LD_LIBRARY_PATH
+export ORACLE_BASE
+export ORACLE_HOME
+export SQLPLUS_HOME
+export PATH
+
+export TEMP=<%= $temp_dir %>
+export TMPDIR=<%= $temp_dir %>
+umask 022

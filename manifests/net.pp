@@ -16,7 +16,7 @@ define oradb::net(
 
   file { "${download_dir}/netca_${version}.rsp":
     ensure  => present,
-    content => template("oradb/netca_${version}.rsp.erb"),
+    content => epp("oradb/netca_${version}.rsp.epp", { 'db_port' => $db_port }),
     mode    => '0775',
     owner   => $user,
     group   => $group,

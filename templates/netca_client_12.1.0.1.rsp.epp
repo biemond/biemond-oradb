@@ -1,5 +1,6 @@
+<%- |  Integer $db_port | -%>
 ######################################################################
-## Copyright(c) 1998, 2011 Oracle Corporation. All rights reserved. ##
+## Copyright(c) 1998, 2012 Oracle Corporation. All rights reserved. ##
 ##                                                                  ##
 ## Specify values for the variables listed below to customize your  ##
 ## installation.                                                    ##
@@ -19,17 +20,16 @@
 ##                                                                  ##
 ## This sample response file causes the Oracle Net Configuration    ##
 ## Assistant (NetCA) to complete an Oracle Net configuration during ##
-## a custom install of the Oracle11g server which is similar to     ##
-## what would be created by the NetCA during typical Oracle11g      ##
+## a custom install of the Oracle12c server which is similar to     ##
+## what would be created by the NetCA during typical Oracle12c      ##
 ## install. It also documents all of the NetCA response file        ##
 ## variables so you can create your own response file to configure  ##
 ## Oracle Net during an install the way you wish.                   ##
 ##                                                                  ##
 ######################################################################
-#./netca /silent /responsefile /install/p10404530_112030_Linux-x86-64/database/response/netca.rsp
 
 [GENERAL]
-RESPONSEFILE_VERSION="11.2"
+RESPONSEFILE_VERSION="12.1"
 CREATE_TYPE="CUSTOM"
 
 #-------------------------------------------------------------------------------
@@ -58,22 +58,22 @@ SHOW_GUI=false
 # The command line argument has precedence over the one in this response file.
 # This feature is present since 10.1.0.3.
 #-------------------------------------------------------------------------------
-#LOG_FILE=""/oracle/cfgtoollogs/netca/netca.log""
+#LOG_FILE=""/oracle12cHome/network/tools/log/netca.log""
 
 [oracle.net.ca]
 #INSTALLED_COMPONENTS;StringList;list of installed components
 # The possible values for installed components are:
 # "net8","server","client","aso", "cman", "javavm"
-INSTALLED_COMPONENTS={"server","net8","javavm"}
+INSTALLED_COMPONENTS={"client","net8","javavm"}
 
 #INSTALL_TYPE;String;type of install
 # The possible values for install type are:
 # "typical","minimal" or "custom"
-INSTALL_TYPE=""custom""
+INSTALL_TYPE=""typical""
 
 #LISTENER_NUMBER;Number;Number of Listeners
 # A typical install sets one listener
-LISTENER_NUMBER=1
+LISTENER_NUMBER=0
 
 #LISTENER_NAMES;StringList;list of listener names
 # The values for listener are:
@@ -85,7 +85,7 @@ LISTENER_NAMES={"LISTENER"}
 # The possible values for listener protocols are:
 # "TCP;1521","TCPS;2484","NMP;ORAPIPE","IPC;IPCKEY","VI;1521"
 # A typical install sets only "TCP;1521"
-LISTENER_PROTOCOLS={"TCP;<%= @db_port %>"}
+LISTENER_PROTOCOLS={"TCP;<%= $db_port %>"}
 
 #LISTENER_START;String;name of the listener to start, in double quotes
 LISTENER_START=""LISTENER""
@@ -117,12 +117,17 @@ NSN_NUMBER=1
 # A typical install sets net service name to "EXTPROC_CONNECTION_DATA"
 NSN_NAMES={"EXTPROC_CONNECTION_DATA"}
 
-#NSN_SERVICE;StringList;Oracle11g database's service name
-# A typical install sets Oracle11g database's service name to "PLSExtProc"
+#NSN_SERVICE;StringList;Oracle12c database's service name
+# A typical install sets Oracle12c database's service name to "PLSExtProc"
 NSN_SERVICE={"PLSExtProc"}
 
 #NSN_PROTOCOLS;StringList;list of coma separated strings of Net Service Name protocol parameters
 # The possible values for net service name protocol parameters are:
 # "TCP;HOSTNAME;1521","TCPS;HOSTNAME;2484","NMP;COMPUTERNAME;ORAPIPE","VI;HOSTNAME;1521","IPC;IPCKEY"
 # A typical install sets parameters to "IPC;EXTPROC"
-NSN_PROTOCOLS={"IPC;EXTPROC"}
+NSN_PROTOCOLS={"TCP;HOSTNAME;<%= $db_port %>"}
+
+#SERVICEUSERPASSWORD;String;Windows service user password
+# If the oracle home is installed as secure user, supply the password
+#SERVICEUSERPASSWORD=""svcpassword""
+

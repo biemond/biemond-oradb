@@ -1,3 +1,5 @@
+<%- |  String $dboraLocation,
+       String $service_name | -%>
 <?xml version="1.0" ?>
 <!DOCTYPE service_bundle
   SYSTEM '/usr/share/lib/xml/dtd/service_bundle.dtd.1'>
@@ -13,9 +15,9 @@
             <service_fmri value="svc:/milestone/multi-user"/>
         </dependency>
 
-        <exec_method type="method" name="start" exec="<%= @dboraLocation %>/<%= @service_name %> %m" timeout_seconds="500" />
-        <exec_method type="method" name="stop" exec="<%= @dboraLocation %>/<%= @service_name %> %m" timeout_seconds="500" />
-        <exec_method type="method" name="restart" exec="<%= @dboraLocation %>/<%= @service_name %> %m" timeout_seconds="500" />
+        <exec_method type="method" name="start" exec="<%= $dboraLocation %>/<%= $service_name %> %m" timeout_seconds="500" />
+        <exec_method type="method" name="stop" exec="<%= $dboraLocation %>/<%= $service_name %> %m" timeout_seconds="500" />
+        <exec_method type="method" name="restart" exec="<%= $dboraLocation %>/<%= $service_name %> %m" timeout_seconds="500" />
 
         <instance enabled="true" name="default"/>
         <template>
