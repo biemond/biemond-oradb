@@ -10,8 +10,8 @@ define oradb::opatch(
   String $patch_file                = undef,
   Boolean $clusterware              = false, # opatch auto or opatch apply
   Boolean $use_opatchauto_utility   = false,
-  $bundle_sub_patch_id              = undef,
-  $bundle_sub_folder                = undef,
+  Optional[String] $bundle_sub_patch_id = undef,
+  Optional[String] $bundle_sub_folder   = undef,
   String $user                      = lookup('oradb::user'),
   String $group                     = lookup('oradb::group'),
   String $download_dir              = lookup('oradb::download_dir'),
@@ -30,9 +30,7 @@ define oradb::opatch(
         file { "${download_dir}/${patch_file}":
           ensure => present,
           source => "${puppet_download_mnt_point}/${patch_file}",
-          mode   => '0775',
-          owner  => $user,
-          group  => $group,
+          mode   => '0775'
         }
       }
     }

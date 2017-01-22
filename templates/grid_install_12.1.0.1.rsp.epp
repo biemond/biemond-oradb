@@ -1,3 +1,25 @@
+<%- |  String $group_install = 'oinstall', 
+       String $oraInventory, 
+       String $grid_base, 
+       String $grid_home, 
+       String $group_oper = 'asmoper',
+       String $group = 'asmdba',
+       String $group_asm,
+       Optional[String] $scan_name,
+       Optional[Integer] $scan_port,       
+       String $grid_type,
+       Optional[String] $cluster_name,
+       Optional[String] $cluster_nodes,
+       Optional[String] $network_interface_list,
+       Optional[String] $storage_option,
+       String $sys_asm_password,
+       String $asm_monitor_password,
+       String $asm_diskgroup,
+       String $disk_redundancy = 'NORMAL',
+       Integer $disk_au_size = 1,
+       Optional[String] $disks,
+       Optional[String] $disk_discovery_string | -%>
+
 ###############################################################################
 ## Copyright(c) Oracle Corporation 1998,2013. All rights reserved.           ##
 ##                                                                           ##
@@ -57,7 +79,7 @@ ORACLE_HOSTNAME=
 # This is an optional parameter if installing on
 # Windows based Operating System.
 #-------------------------------------------------------------------------------
-INVENTORY_LOCATION=<%= @oraInventory %>
+INVENTORY_LOCATION=<%= $oraInventory %>
 
 #-------------------------------------------------------------------------------
 # Specify the languages in which the components will be installed.
@@ -107,17 +129,17 @@ SELECTED_LANGUAGES=en
 #   - HA_SWONLY  : To install clusterware files only (can be configured for stand
 #                  alone server later. This is only supported on Windows.)
 #-------------------------------------------------------------------------------
-oracle.install.option=<%= @grid_type %>
+oracle.install.option=<%= $grid_type %>
 
 #-------------------------------------------------------------------------------
 # Specify the complete path of the Oracle Base.
 #-------------------------------------------------------------------------------
-ORACLE_BASE=<%= @grid_base %>
+ORACLE_BASE=<%= $grid_base %>
 
 #-------------------------------------------------------------------------------
 # Specify the complete path of the Oracle Home.
 #-------------------------------------------------------------------------------
-ORACLE_HOME=<%= @grid_home %>
+ORACLE_HOME=<%= $grid_home %>
 
 ################################################################################
 #                                                                              #
@@ -133,19 +155,19 @@ ORACLE_HOME=<%= @grid_home %>
 #-------------------------------------------------------------------------------
 # The DBA_GROUP is the OS group which is to be granted OSDBA privileges.
 #-------------------------------------------------------------------------------
-oracle.install.asm.OSDBA=<%= @group %>
+oracle.install.asm.OSDBA=<%= $group %>
 
 #-------------------------------------------------------------------------------
 # The OPER_GROUP is the OS group which is to be granted OSOPER privileges.
 # The value to be specified for OSOPER group is optional.
 #-------------------------------------------------------------------------------
-oracle.install.asm.OSOPER=<%= @group_oper %>
+oracle.install.asm.OSOPER=<%= $group_oper %>
 
 #-------------------------------------------------------------------------------
 # The OSASM_GROUP is the OS group which is to be granted OSASM privileges. This
 # must be different than the previous two.
 #-------------------------------------------------------------------------------
-oracle.install.asm.OSASM=<%= @group_asm %>
+oracle.install.asm.OSASM=<%= $group_asm %>
 
 ################################################################################
 #                                                                              #
@@ -155,13 +177,13 @@ oracle.install.asm.OSASM=<%= @group_asm %>
 #-------------------------------------------------------------------------------
 # Specify a name for SCAN
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.gpnp.scanName=<%= @scan_name %>
+oracle.install.crs.config.gpnp.scanName=<%= $scan_name %>
 
 #-------------------------------------------------------------------------------
 # Specify a unused port number for SCAN service
 #-------------------------------------------------------------------------------
 
-oracle.install.crs.config.gpnp.scanPort=<%= @scan_port %>
+oracle.install.crs.config.gpnp.scanPort=<%= $scan_port %>
 
 ################################################################################
 #                                                                              #
@@ -182,7 +204,7 @@ oracle.install.crs.config.ClusterType=
 # any combination of lower and uppercase alphabets (A - Z), (0 - 9), hyphen(-)
 # and underscore(_).
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.clusterName=<%= @cluster_name %>
+oracle.install.crs.config.clusterName=<%= $cluster_name %>
 
 #-------------------------------------------------------------------------------
 # Specify 'true' if you would like to configure Grid Naming Service(GNS), else
@@ -242,7 +264,7 @@ oracle.install.crs.config.gpnp.gnsVIPAddress=
 #
 #
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.clusterNodes=<%= @cluster_nodes %>
+oracle.install.crs.config.clusterNodes=<%= $cluster_nodes %>
 
 #-------------------------------------------------------------------------------
 # The value should be a comma separated strings where each string is as shown below
@@ -258,7 +280,7 @@ oracle.install.crs.config.clusterNodes=<%= @cluster_nodes %>
 # For example: eth0:140.87.24.0:1,eth1:10.2.1.0:2,eth2:140.87.52.0:3
 #
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.networkInterfaceList=<%= @network_interface_list %>
+oracle.install.crs.config.networkInterfaceList=<%= $network_interface_list %>
 
 #-------------------------------------------------------------------------------
 # Specify 'true' if you would like to configure Management Database Option, else
@@ -280,7 +302,7 @@ oracle.install.crs.managementdb.configure=
 #   - FILE_SYSTEM_STORAGE
 # If configuring a Flex Cluster, FLEX_ASM_STORAGE is the only allowed value
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.storageOption=<%= @storage_option %>
+oracle.install.crs.config.storageOption=<%= $storage_option %>
 
 #-------------------------------------------------------------------------------
 # These properties are applicable only if FILE_SYSTEM_STORAGE is chosen for
@@ -330,7 +352,7 @@ oracle.install.crs.config.ipmi.bmcPassword=
 #-------------------------------------------------------------------------------
 # Specify a password for SYSASM user of the ASM instance
 #-------------------------------------------------------------------------------
-oracle.install.asm.SYSASMPassword=<%= @sys_asm_password %>
+oracle.install.asm.SYSASMPassword=<%= $sys_asm_password %>
 
 #-------------------------------------------------------------------------------
 # The ASM DiskGroup
@@ -338,7 +360,7 @@ oracle.install.asm.SYSASMPassword=<%= @sys_asm_password %>
 # Example: oracle.install.asm.diskGroup.name=data
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.diskGroup.name=<%= @asm_diskgroup %>
+oracle.install.asm.diskGroup.name=<%= $asm_diskgroup %>
 
 #-------------------------------------------------------------------------------
 # Redundancy level to be used by ASM.
@@ -349,7 +371,7 @@ oracle.install.asm.diskGroup.name=<%= @asm_diskgroup %>
 # Example: oracle.install.asm.diskGroup.redundancy=NORMAL
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.diskGroup.redundancy=<%= @disk_redundancy %>
+oracle.install.asm.diskGroup.redundancy=<%= $disk_redundancy %>
 
 #-------------------------------------------------------------------------------
 # Allocation unit size to be used by ASM.
@@ -365,7 +387,7 @@ oracle.install.asm.diskGroup.redundancy=<%= @disk_redundancy %>
 # size unit is MB
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.diskGroup.AUSize=<%= @disk_au_size %> 
+oracle.install.asm.diskGroup.AUSize=<%= $disk_au_size %> 
 
 #-------------------------------------------------------------------------------
 # List of disks to create a ASM DiskGroup
@@ -377,7 +399,7 @@ oracle.install.asm.diskGroup.AUSize=<%= @disk_au_size %>
 #     oracle.install.asm.diskGroup.disks=\\.\ORCLDISKDATA0,\\.\ORCLDISKDATA1
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.diskGroup.disks=<%= @disks %>
+oracle.install.asm.diskGroup.disks=<%= $disks %>
 
 #-------------------------------------------------------------------------------
 # The disk discovery string to be used to discover the disks used create a ASM DiskGroup
@@ -389,12 +411,12 @@ oracle.install.asm.diskGroup.disks=<%= @disks %>
 #     oracle.install.asm.diskGroup.diskDiscoveryString=\\.\ORCLDISK*
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.diskGroup.diskDiscoveryString=<%= @disk_discovery_string %>
+oracle.install.asm.diskGroup.diskDiscoveryString=<%= $disk_discovery_string %>
 
 #-------------------------------------------------------------------------------
 # oracle.install.asm.monitorPassword=password
 #-------------------------------------------------------------------------------
-oracle.install.asm.monitorPassword=<%= @asm_monitor_password %>
+oracle.install.asm.monitorPassword=<%= $asm_monitor_password %>
 
 
 ################################################################################

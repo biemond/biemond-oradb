@@ -14,7 +14,7 @@
        Optional[String] $recovery_diskgroup,
        String $character_set,
        Optional[String] $nationalcharacter_set,
-       String $sanitizedInitParams,
+       Optional[String] $sanitizedInitParams,
        Optional[String] $sample_schema,
        Integer $memory_percentage,
        String $database_type,

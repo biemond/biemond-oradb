@@ -180,7 +180,29 @@ define oradb::installasm(
     if ! defined(File["${download_dir}/grid_install_${version}.rsp"]) {
       file { "${download_dir}/grid_install_${version}.rsp":
         ensure  => present,
-        content => template("oradb/grid_install_${version}.rsp.erb"),
+        content => epp("oradb/grid_install_${version}.rsp.epp", {
+          'group_install' =>  $group_install, 
+          'oraInventory'  =>  $oraInventory, 
+          'grid_base'     =>  $grid_base, 
+          'grid_home'     =>  $grid_home, 
+          'group_oper'    =>  $group_oper,
+          'group'         =>  $group,
+          'group_asm'     =>  $group_asm,
+          'scan_name'     =>  $scan_name,
+          'scan_port'     =>  $scan_port,       
+          'grid_type'     =>  $grid_type,
+          'cluster_name'           =>  $cluster_name,
+          'cluster_nodes'          =>  $cluster_nodes,
+          'network_interface_list' =>  $network_interface_list,
+          'storage_option'         =>  $storage_option,
+          'sys_asm_password'       =>  $sys_asm_password,
+          'asm_monitor_password'   =>  $asm_monitor_password,
+          'asm_diskgroup'          =>  $asm_diskgroup,
+          'disk_redundancy'        =>  $disk_redundancy,
+          'disk_au_size'           =>  $disk_au_size,
+          'disks'                  =>  $disks,
+          'disk_discovery_string'  =>  $disk_discovery_string
+          }),
         mode    => '0770',
         owner   => $user,
         group   => $group,
@@ -209,9 +231,10 @@ define oradb::installasm(
         file { "${user_base_dir}/${user}/.bash_profile":
           ensure  => present,
           # content => template('oradb/grid_bash_profile.erb'),
-          content => regsubst(epp('oradb/grid_bash_profile.epp', { 'oracle_home' => $oracle_home,
-                                                                   'oracle_base' => $oracle_base,
-                                                                   'temp_dir'    => $temp_dir }), '\r\n', "\n", 'EMG'),
+          content => regsubst(epp('oradb/grid_bash_profile.epp', { 'grid_home' => $grid_home,
+                                                                   'grid_base' => $grid_base,
+                                                                   'grid_type' => $grid_type,
+                                                                   'temp_dir'  => $temp_dir }), '\r\n', "\n", 'EMG'),
           mode    => '0775',
           owner   => $user,
           group   => $group,
@@ -224,7 +247,7 @@ define oradb::installasm(
     {
       file {'/etc/systemd/system/oracle-ohasd.service':
         ensure  => 'file',
-        content => template('oradb/ohas.service.erb'),
+        content => epp('oradb/ohas.service.epp'),
         mode    => '0644',
         require => Exec["install oracle grid ${title}"],
       } ->
@@ -310,7 +333,7 @@ define oradb::installasm(
     } else {
       file { "${download_dir}/cfgrsp.properties":
         ensure  => present,
-        content => template('oradb/grid_password.properties.erb'),
+        content => epp('oradb/grid_password.properties.epp', { 'sys_asm_password' => $sys_asm_password } ),
         mode    => '0600',
         owner   => $user,
         group   => $group,

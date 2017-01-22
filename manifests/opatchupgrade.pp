@@ -6,8 +6,8 @@
 define oradb::opatchupgrade(
   String $oracle_home               = undef,
   String $patch_file                = undef,
-  $csi_number                       = undef,
-  $support_id                       = undef,
+  Optional[Integer] $csi_number     = undef,
+  Optional[String] $support_id      = undef,
   String $opversion                 = undef,
   String $user                      = lookup('oradb::user'),
   String $group                     = lookup('oradb::group'),
@@ -81,7 +81,7 @@ define oradb::opatchupgrade(
 
           file { "${download_dir}/opatch_upgrade_${title}_${opversion}.ksh":
             ensure  => present,
-            content => template('oradb/ocm.rsp.erb'),
+            content => epp('oradb/ocm.rsp.epp', { 'patchDir' => $patchDir }),
             mode    => '0775',
             owner   => $user,
             group   => $group,

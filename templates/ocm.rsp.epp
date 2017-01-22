@@ -1,6 +1,7 @@
+<%- |  String $patchDir | -%>
 #!/usr/bin/ksh
 
-EMOCMRSP=<%= @patchDir %>/ocm/bin/emocmrsp
+EMOCMRSP=<%= $patchDir %>/ocm/bin/emocmrsp
 
 /usr/bin/expect - <<EOF
 spawn $EMOCMRSP -no_banner
