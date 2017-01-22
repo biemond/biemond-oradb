@@ -1,5 +1,8 @@
 # Version updates
 
+## 2.0.10
+- add read permissions on extract opatch directories
+
 ## 2.0.9
 - variables support for dbt templates with parameter template_variables
 - bash_profile also loads bashrc when it exists
