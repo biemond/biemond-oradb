@@ -11,6 +11,7 @@ describe 'oradb::database', :type => :define do
                    :group                   => 'dba',
                    :download_dir             => '/install',
                    :action                  => 'create',
+                   :db_domain               => 'xxxxx',
     }}
     let(:title) {'testDb_Create'}
     let(:facts) {{ :operatingsystem => 'CentOS' ,
@@ -24,27 +25,6 @@ describe 'oradb::database', :type => :define do
 
   end
 
-  describe "wrong OS" do
-    let(:params){{
-                   :oracle_base              => '/oracle',
-                   :oracle_home              => '/oracle/product/11.2/db',
-                   :version                 => '11.2',
-                   :user                    => 'oracle',
-                   :group                   => 'dba',
-                   :download_dir             => '/install',
-                   :action                  => 'create',
-    }}
-    let(:title) {'testDb_Create'}
-    let(:facts) {{ :operatingsystem => 'Windows' ,
-                   :kernel          => 'Windows',
-                   :osfamily        => 'Windows' }}
-
-    it do
-      expect { should contain_file("/install/database_testDb_Create.rsp")
-               }.to raise_error(Puppet::Error, /Unrecognized operating system/)
-    end
-
-  end
 
   describe "wrong action" do
     let(:params){{
@@ -55,6 +35,7 @@ describe 'oradb::database', :type => :define do
                    :group                   => 'dba',
                    :download_dir             => '/install',
                    :action                  => 'xxxxx',
+                   :db_domain               => 'xxxxx',
     }}
     let(:title) {'testDb_Create'}
     let(:facts) {{ :operatingsystem => 'CentOS' ,
@@ -86,7 +67,7 @@ describe 'oradb::database', :type => :define do
 
     it do
       expect { should contain_file("/install/database_testDb_Create.rsp")
-               }.to raise_error(Puppet::Error, /Unrecognized database_type/)
+               }.to raise_error(Puppet::Error, /for Enum/)
     end
 
   end
@@ -109,7 +90,7 @@ describe 'oradb::database', :type => :define do
 
     it do
       expect { should contain_file("/install/database_testDb_Create.rsp")
-               }.to raise_error(Puppet::Error, /Unrecognized em_configuration/)
+               }.to raise_error(Puppet::Error, /match for Enum/)
     end
 
   end
@@ -132,7 +113,7 @@ describe 'oradb::database', :type => :define do
 
     it do
       expect { should contain_file("/install/database_testDb_Create.rsp")
-               }.to raise_error(Puppet::Error, /Unrecognized storage_type/)
+               }.to raise_error(Puppet::Error, /expects a match for Enum/)
     end
 
   end
@@ -147,6 +128,7 @@ describe 'oradb::database', :type => :define do
                    :download_dir             => '/install',
                    :action                  => 'create',
                    :container_database       => true,
+                   :db_domain               => 'a'
     }}
     let(:title) {'testDb_Create'}
     let(:facts) {{ :operatingsystem => 'CentOS' ,
@@ -174,7 +156,8 @@ describe 'oradb::database', :type => :define do
                          :user                    => 'oracle',
                          :group                   => 'dba',
                          :download_dir             => '/install',
-                         :action                  => 'create'
+                         :action                  => 'create',
+                         :db_domain               => 'a'
     }}
 
     describe "specified as a String" do
@@ -183,7 +166,7 @@ describe 'oradb::database', :type => :define do
 
       it "should pass" do
         expect { should contain_file("/install/database_testDb_Create.rsp")
-                 }.not_to raise_error()
+                 }.to raise_error(Puppet::Error, /expects a Hash value/)
       end
 
     end
@@ -204,7 +187,7 @@ describe 'oradb::database', :type => :define do
 
       it "should fail" do
         expect { should contain_file("/install/database_testDb_Create.rsp")
-                 }.to raise_error(Puppet::Error, /init_params only supports a String or a Hash as value type/)
+                 }.to raise_error(Puppet::Error, /expects a Hash value/)
       end
 
     end

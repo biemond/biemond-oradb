@@ -47,7 +47,7 @@ describe 'oradb::database_pluggable', :type => :define do
 
     it do
       expect { should contain_exec("dbca pdb execute pdb1")
-               }.to raise_error(Puppet::Error, /Unrecognized ensure value, use present or absent/)
+               }.to raise_error(Puppet::Error, /expects a match for Enum/)
     end
 
   end
@@ -71,7 +71,7 @@ describe 'oradb::database_pluggable', :type => :define do
 
     it do
       expect { should contain_exec("dbca pdb execute pdb1")
-               }.to raise_error(Puppet::Error, /You must specify an pdb_datafile_destination/)
+               }.to raise_error(Puppet::Error, /expects a String value, got Undef/)
     end
 
   end
@@ -95,7 +95,7 @@ describe 'oradb::database_pluggable', :type => :define do
 
     it do
       expect { should contain_exec("dbca pdb execute pdb1")
-               }.to raise_error(Puppet::Error, /You must specify an pdb_admin_password/)
+               }.to raise_error(Puppet::Error, /expects a String value, got Undef/)
     end
 
   end
@@ -119,7 +119,7 @@ describe 'oradb::database_pluggable', :type => :define do
 
     it do
       expect { should contain_exec("dbca pdb execute pdb1")
-               }.to raise_error(Puppet::Error, /You must specify an pdb_name/)
+               }.to raise_error(Puppet::Error, /expects a String value, got Undef/)
     end
 
   end
@@ -143,7 +143,7 @@ describe 'oradb::database_pluggable', :type => :define do
 
     it do
       expect { should contain_exec("dbca pdb execute pdb1")
-               }.to raise_error(Puppet::Error, /You must specify an source_db/)
+               }.to raise_error(Puppet::Error, /expects a String value, got Undef/)
     end
 
   end
@@ -158,6 +158,7 @@ describe 'oradb::database_pluggable', :type => :define do
          :group                    => 'dba',
          :source_db                => 'orcl',
          :pdb_name                 => 'pdb1',
+         :pdb_admin_password       => 'Welcome01'
     }}
     let(:title) {'pdb1'}
     let(:facts) {{ :operatingsystem => 'CentOS',
@@ -166,7 +167,7 @@ describe 'oradb::database_pluggable', :type => :define do
 
     it do
       expect { should contain_exec("dbca pdb execute pdb1")
-               }.to raise_error(Puppet::Error, /You must specify an pdb_datafile_destination/)
+               }.to raise_error(Puppet::Error, /expects a String value, got Undef/)
     end
 
   end

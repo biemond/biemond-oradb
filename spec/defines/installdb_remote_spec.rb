@@ -9,6 +9,7 @@ describe 'oradb::installdb', :type => :define do
           :database_type             => 'SE',
           :oracle_base               => '/u01/app/oracle',
           :oracle_home               => '/u01/app/oracle/product/12.1/db',
+          :ora_inventory_dir         => '/u01/app',
           :user                      => 'oracle',
           :group                     => 'dba',
           :group_install             => 'oinstall',
@@ -79,7 +80,7 @@ describe 'oradb::installdb', :type => :define do
     context 'with oracle base = /oracle' do
       params = default_params.merge( { :oracle_base => '/oracle' } )
       let(:params) { params }
-      it { is_expected.to contain_db_directory_structure("oracle structure 12.1.0.1_12.1.0.1_Linux-x86-64").with_ora_inventory_dir('/oraInventory') }
+      it { is_expected.to contain_db_directory_structure("oracle structure 12.1.0.1_12.1.0.1_Linux-x86-64").with_ora_inventory_dir('/u01/app/oraInventory') }
     end
 
     describe "oradb response file" do
@@ -167,6 +168,7 @@ describe 'oradb::installdb', :type => :define do
           :database_type             => 'SE',
           :oracle_base               => '/u01/app/oracle',
           :oracle_home               => '/u01/app/oracle/product/11.2/db',
+          :ora_inventory_dir         => '/u01/app',
           :user                      => 'oracle',
           :group                     => 'dba',
           :group_install             => 'oinstall',
@@ -272,6 +274,7 @@ describe 'oradb::installdb', :type => :define do
           :database_type             => 'EE',
           :oracle_base               => '/u01/app/oracle',
           :oracle_home               => '/u01/app/oracle/product/11.2/db',
+          :ora_inventory_dir         => '/u01/app',
           :user                      => 'oracle',
           :group                     => 'dba',
           :group_install             => 'oinstall',

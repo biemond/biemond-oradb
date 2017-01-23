@@ -30,33 +30,6 @@ describe 'oradb::installdb', :type => :define do
 
   end
 
-  describe "wrong O.S." do
-    let(:params){{
-          :version                 => '11.2.0.4',
-          :file                    => 'linuxamd64_11gR2_database',
-          :database_type            => 'SE',
-          :oracle_base              => '/oracle',
-          :oracle_home              => '/oracle/product/11.2/db',
-          :user                    => 'oracle',
-          :group                   => 'dba',
-          :group_install           => 'oinstall',
-          :group_oper              => 'oper',
-          :remote_file              => false,
-          :zip_extract              => false,
-          :download_dir             => '/install',
-          :puppet_download_mnt_point  => '/software',
-                }}
-    let(:title) {'11.2.0.4_Linux-x86-64'}
-    let(:facts) {{ :operatingsystem => 'Windows' ,
-                   :kernel          => 'Windows',
-                   :osfamily        => 'Windows' }}
-
-    it do
-      expect { should contain_notify("oradb::installdb /oracle/product/11.2/db does not exists")
-             }.to raise_error(Puppet::Error, /Unrecognized operating system, please use it on a Linux or SunOS host/)
-    end
-
-  end
 
   describe "wrong db type" do
     let(:params){{
@@ -108,7 +81,7 @@ describe 'oradb::installdb', :type => :define do
 
     it do
       expect { should contain_notify("oradb::installdb /oracle/product/11.2/db does not exists")
-             }.to raise_error(Puppet::Error, /You must specify an oracle_base/)
+             }.to raise_error(Puppet::Error, /expects a String value, got Undef/)
     end
 
   end
@@ -136,7 +109,7 @@ describe 'oradb::installdb', :type => :define do
 
     it do
       expect { should contain_notify("oradb::installdb /oracle/product/11.2/db does not exists")
-             }.to raise_error(Puppet::Error, /You must specify an oracle_base/)
+             }.to raise_error(Puppet::Error, /expects a String value, got Integer/)
     end
 
   end
@@ -163,7 +136,7 @@ describe 'oradb::installdb', :type => :define do
 
     it do
       expect { should contain_notify("oradb::installdb /oracle/product/11.2/db does not exists")
-             }.to raise_error(Puppet::Error, /You must specify an oracle_home/)
+             }.to raise_error(Puppet::Error, /expects a String value, got Undef/)
     end
 
   end
@@ -192,7 +165,7 @@ describe 'oradb::installdb', :type => :define do
 
     it do
       expect { should contain_notify("oradb::installdb /oracle/product/11.2/db does not exists")
-             }.to raise_error(Puppet::Error, /You must specify an oracle_home/)
+             }.to raise_error(Puppet::Error, /expects a String value, got Integer/)
     end
 
   end
