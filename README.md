@@ -1168,6 +1168,7 @@ or
       group                       => 'dba',
       download_dir                => '/var/tmp/install',
       log_output                  => true,
+      oracle_hostname             => 'emdb.example.com', # FQDN hostname where to install on
     }
 
     oradb::installem_agent{ 'em12104_agent2':

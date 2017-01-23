@@ -1,0 +1,21 @@
+<%- |  Optional[String] $agent_instance_home_dir, 
+       Optional[String] $oms_host, 
+       Optional[Integer] $oms_port, 
+       Optional[Integer] $agent_port, 
+       Optional[Integer] $em_upload_port | -%>
+
+<% if $agent_instance_home_dir { %>
+AGENT_INSTANCE_HOME=<%= $agent_instance_home_dir %>
+<% } %>
+<% if $oms_host { %>
+OMS_HOST=<%= $oms_host %>
+<% } %>
+<% if $oms_port { %>
+OMS_PORT=<%= $oms_port %>
+<% } %>
+<% if $agent_port { %>
+AGENT_PORT=<%= $agent_port %>
+<% } %>
+<% if $em_upload_port { %>
+EM_UPLOAD_PORT=<%= $em_upload_port %>
+<% } %>

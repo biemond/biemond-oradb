@@ -5,7 +5,7 @@ define oradb::rcu(
   String $rcu_file                  = undef,
   Enum["soasuite", "webcenter", "oam", "oim", "all"] $product = 'soasuite',
   String $version                   = '11.1.1.7',
-  $oracle_home                      = undef,
+  Optional[String] $oracle_home     = undef,
   String $user                      = lookup('oradb::user'),
   String $group                     = lookup('oradb::group'),
   String $download_dir              = lookup('oradb::download_dir'),
@@ -16,7 +16,7 @@ define oradb::rcu(
   String $sys_password              = undef,
   String $schema_prefix             = undef,
   String $repos_password            = undef,
-  $temp_tablespace                  = undef,
+  Optional[String] $temp_tablespace = undef,
   String $puppet_download_mnt_point = lookup('oradb::module_mountpoint'),
   Boolean $remote_file              = true,
   Boolean $logoutput                = false,
@@ -56,12 +56,12 @@ define oradb::rcu(
 
   if ! defined(Exec["extract ${rcu_file}"]) {
     exec { "extract ${rcu_file}":
-      command   => "unzip ${source}/${rcu_file} -d ${download_dir}/rcu_${version}",
+      command   => "unzip -o ${source}/${rcu_file} -d ${download_dir}/rcu_${version}",
       creates   => "${download_dir}/rcu_${version}/rcuHome",
       path      => $execPath,
       user      => $user,
       group     => $group,
-      logoutput => false,
+      logoutput => true,
     }
   }
 
@@ -104,7 +104,9 @@ define oradb::rcu(
   file { "${download_dir}/rcu_${version}/rcu_passwords_${title}.txt":
     ensure  => present,
     require => Exec["extract ${rcu_file}"],
-    content => template('oradb/rcu_passwords.txt.erb'),
+    content => epp('oradb/rcu_passwords.txt.epp',
+                    { 'sys_password'        => $sys_password,
+                      'componentsPasswords' => $componentsPasswords } ),
     mode    => '0775',
     owner   => $user,
     group   => $group,

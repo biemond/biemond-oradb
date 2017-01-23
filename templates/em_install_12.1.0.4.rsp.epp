@@ -1,3 +1,20 @@
+<%- |  String $group_install = 'oinstall', 
+       String $oraInventory, 
+       String $oracle_home_dir, 
+       String $agent_base_dir, 
+       String $weblogic_user,
+       String $weblogic_password,
+       String $database_hostname,
+       Integer $database_listener_port,
+       String $database_service_sid_name, 
+       String $database_sys_password,
+       String $sysman_password,
+       String $software_library_dir,
+       String $deployment_size,
+       String $agent_registration_password,
+       String $download_dir,
+       String $version | -%>
+
 ####################################################################
 ## copyright (c) 1999, 2011, 2012 Oracle. All rights reserved.    ##
 ##                                                                ##
@@ -37,8 +54,8 @@ RESPONSEFILE_VERSION=2.2.1.0.0
 #INVENTORY_LOCATION:<String>  INVENTORY LOCATION.
 #       Example    : INVENTORY_LOCATION="/scratch/oracle/oraInventory"
 #-------------------------------------------------------------------------------
-UNIX_GROUP_NAME=<%= @group_install %>
-INVENTORY_LOCATION=<%= @oraInventory %>
+UNIX_GROUP_NAME=<%= $group_install %>
+INVENTORY_LOCATION=<%= $oraInventory %>
 
 #################################################################################
 # Inputs for Oracle Configuration Manager
@@ -96,7 +113,7 @@ PROXY_PORT=<Value Unspecified>
 #-------------------------------------------------------------------------------
 #ORACLE_MIDDLEWARE_HOME_LOCATION:<String> Middleware home location.
 #-------------------------------------------------------------------------------
-ORACLE_MIDDLEWARE_HOME_LOCATION=<%= @oracle_home_dir %>
+ORACLE_MIDDLEWARE_HOME_LOCATION=<%= $oracle_home_dir %>
 
 #-------------------------------------------------------------------------------
 #ORACLE_HOSTNAME:<String> Current Host name where the installer is invoked.
@@ -108,7 +125,7 @@ ORACLE_HOSTNAME=<Value Unspecified>
 #-------------------------------------------------------------------------------
 #AGENT_BASE_DIR:<String> Agent home location.
 #-------------------------------------------------------------------------------
-AGENT_BASE_DIR=<%= @agent_base_dir %>
+AGENT_BASE_DIR=<%= $gent_base_dir %>
 
 #-------------------------------------------------------------------------------
 #WLS_ADMIN_SERVER_USERNAME:<String> Weblogic server user name.
@@ -118,12 +135,12 @@ AGENT_BASE_DIR=<%= @agent_base_dir %>
 #       Password and Node Manager Confirm Password
 #ORACLE_INSTANCE_HOME_LOCATION:<String> Oracle instance home location.
 #-------------------------------------------------------------------------------
-WLS_ADMIN_SERVER_USERNAME=<%= @weblogic_user %>
-WLS_ADMIN_SERVER_PASSWORD=<%= @weblogic_password %>
-WLS_ADMIN_SERVER_CONFIRM_PASSWORD=<%= @weblogic_password %>
-NODE_MANAGER_PASSWORD=<%= @weblogic_password %>
-NODE_MANAGER_CONFIRM_PASSWORD=<%= @weblogic_password %>
-ORACLE_INSTANCE_HOME_LOCATION=<%= @oracle_home_dir %>/db
+WLS_ADMIN_SERVER_USERNAME=<%= $weblogic_user %>
+WLS_ADMIN_SERVER_PASSWORD=<%= $weblogic_password %>
+WLS_ADMIN_SERVER_CONFIRM_PASSWORD=<%= $weblogic_password %>
+NODE_MANAGER_PASSWORD=<%= $weblogic_password %>
+NODE_MANAGER_CONFIRM_PASSWORD=<%= $weblogic_password %>
+ORACLE_INSTANCE_HOME_LOCATION=<%= $oracle_home_dir %>/db
 
 #-------------------------------------------------------------------------------
 #CONFIGURE_ORACLE_SOFTWARE_LIBRARY:<Boolean>
@@ -146,7 +163,7 @@ CONFIGURE_ORACLE_SOFTWARE_LIBRARY=true
 #shared location on the OMS host. This helps when you install additional OMS
 #instances that can use the same shared Software Library location.
 #-------------------------------------------------------------------------------
-SOFTWARE_LIBRARY_LOCATION=<%= @software_library_dir %>
+SOFTWARE_LIBRARY_LOCATION=<%= $software_library_dir %>
 
 #-------------------------------------------------------------------------------
 #DATABASE_HOSTNAME :<String> Hostname of the Repository database.
@@ -161,17 +178,17 @@ SOFTWARE_LIBRARY_LOCATION=<%= @software_library_dir %>
 #       Example: SYSMAN_PASSWORD="password"
 #                SYSMAN_CONFIRM_PASSWORD="password"
 #-------------------------------------------------------------------------------
-DATABASE_HOSTNAME=<%= @database_hostname %>
-LISTENER_PORT=<%= @database_listener_port %>
-SERVICENAME_OR_SID=<%= @database_service_sid_name %>
-SYS_PASSWORD=<%= @database_sys_password %>
-SYSMAN_PASSWORD=<%= @sysman_password %>
-SYSMAN_CONFIRM_PASSWORD=<%= @sysman_password %>
+DATABASE_HOSTNAME=<%= $database_hostname %>
+LISTENER_PORT=<%= $database_listener_port %>
+SERVICENAME_OR_SID=<%= $database_service_sid_name %>
+SYS_PASSWORD=<%= $database_sys_password %>
+SYSMAN_PASSWORD=<%= $sysman_password %>
+SYSMAN_CONFIRM_PASSWORD=<%= $sysman_password %>
 #-------------------------------------------------------------------------------
 #DEPLOYMENT_SIZE:<String> If you are planning to do simple install then us following
 #DEPLOYMENT_SIZE=<String> Can be "SMALL","MEDIUM" or "LARGE"
 #-------------------------------------------------------------------------------
-DEPLOYMENT_SIZE="<%= @deployment_size %>"
+DEPLOYMENT_SIZE="<%= $deployment_size %>"
 
 #-------------------------------------------------------------------------------
 #MANAGEMENT_TABLESPACE_LOCATION:<String> Management table space location.
@@ -189,9 +206,9 @@ JVM_DIAGNOSTICS_TABLESPACE_LOCATION=<Value Unspecified>
 #AGENT_REGISTRATION_PASSWORD/AGENT_REGISTRATION_CONFIRM_PASSWORD:<String> Registration Password.
 #STATIC_PORTS_FILE:<String> Location of the static_ports.ini file
 #-------------------------------------------------------------------------------
-AGENT_REGISTRATION_PASSWORD=<%= @agent_registration_password %>
-AGENT_REGISTRATION_CONFIRM_PASSWORD=<%= @agent_registration_password %>
-STATIC_PORTS_FILE=<%= @download_dir %>/em_install_static_<%= @version %>.ini
+AGENT_REGISTRATION_PASSWORD=<%= $agent_registration_password %>
+AGENT_REGISTRATION_CONFIRM_PASSWORD=<%= $agent_registration_password %>
+STATIC_PORTS_FILE=<%= $download_dir %>/em_install_static_<%= $version %>.ini
 
 #-------------------------------------------------------------------------------
 #PLUGIN_SELECTION:<StringList>  list of extra plugins to deployed.
