@@ -90,10 +90,11 @@ define oradb::client(
     if ! defined(File["${download_dir}/db_client_${version}.rsp"]) {
       file { "${download_dir}/db_client_${version}.rsp":
         ensure  => present,
-        content => epp("oradb/db_client_${version}.rsp.epp", { 'group_install' => $group_install,
-                                                               'oraInventory'  => $oraInventory,
-                                                               'oracle_home'   => $oracle_home,
-                                                               'oracle_base'   => $oracle_base }),
+        content => epp("oradb/db_client_${version}.rsp.epp",
+                      { 'group_install'=> $group_install,
+                        'oraInventory' => $oraInventory,
+                        'oracle_home'  => $oracle_home,
+                        'oracle_base'  => $oracle_base }),
         mode    => '0775',
         owner   => $user,
         group   => $group,
