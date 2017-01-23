@@ -14,7 +14,7 @@ class oradb::prepareautostart(
     ensure  => present,
     mode    => '0755',
     owner   => 'root',
-    content => regsubst(epp("oradb/dbora_${::kernel}.epp",
+    content => regsubst(epp("oradb/dbora_${facts['kernel']}.epp",
                             { 'oracle_home'  => $oracle_home,
                               'user'         => $user,
                               'service_name' => $service_name } ),

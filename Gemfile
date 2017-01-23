@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-puppetversion = ENV.key?('PUPPET_VERSION') ? "= #{ENV['PUPPET_VERSION']}" : ['>= 3.0']
+puppetversion = ENV.key?('PUPPET_VERSION') ? "= #{ENV['PUPPET_VERSION']}" : ['>= 4.3']
 
 
 gem 'coveralls', :require => false
@@ -12,7 +12,7 @@ gem 'rspec-puppet-utils', :git => 'https://github.com/Accuity/rspec-puppet-utils
 gem 'hiera-puppet-helper', :git => 'https://github.com/bobtfish/hiera-puppet-helper.git'
 gem 'puppet-lint'
 gem 'puppet', puppetversion
-gem 'rspec-puppet', '= 2.3.2'
+gem 'rspec-puppet'
 gem 'rspec-system-puppet'
 gem 'puppetlabs_spec_helper'
 gem 'puppet-syntax'

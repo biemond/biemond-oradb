@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'shared_contexts'
 
-describe 'oradb::prepareautostart' do
+describe 'oradb::prepareautostart', :type => :class do
   # by default the hiera integration uses hiera data from the shared_contexts.rb file
   # but basically to mock hiera you first need to add a key/value pair
   # to the specific context in the spec/shared_contexts.rb file
@@ -19,23 +19,21 @@ describe 'oradb::prepareautostart' do
   # below is a list of the resource parameters that you can override.
   # By default all non-required parameters are commented out,
   # while all required parameters will require you to add a value
-  let(:params) do
-    {
-      #:oracle_home => undef,
-      #:user => "oracle",
-      :service_name => "oracle",
-    }
-  end
+  let(:params) {{
+      :oracle_home => '/opt/oracle',
+      :user => "oracle",
+      :service_name => "oracle"
+  }}
+
+
   # add these two lines in a single test block to enable puppet and hiera debug mode
   # Puppet::Util::Log.level = :debug
   # Puppet::Util::Log.newdestination(:console)
   describe 'Solaris' do
-    let(:facts) do
-      {
+    let(:facts) {{
         :kernel => 'SunOS',
-        :operatingsystem => 'Solaris',
-      }
-    end
+        :operatingsystem => 'Solaris'
+    }}
 
     it do
       is_expected.to contain_file('/etc/oracle')
@@ -61,7 +59,7 @@ describe 'oradb::prepareautostart' do
           'command'   => 'svccfg -v import /tmp/oradb_smf.xml',
           'user'      => 'root',
           'logoutput' => true,
-          'path'      => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:',
+          'path'      => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin',
           'unless'    => 'svccfg list | grep oracledatabase',
           'require'   => ['File[/tmp/oradb_smf.xml]','File[/etc/oracle]'],
         )
@@ -102,7 +100,7 @@ describe 'oradb::prepareautostart' do
                'require'   => 'File[/etc/init.d/oracle]',
                'user'      => 'root',
                'unless'    => "chkconfig --list | /bin/grep \'oracle\'",
-               'path'      => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:',
+               'path'      => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin',
                'logoutput' => true,
              )
         end
@@ -125,7 +123,7 @@ describe 'oradb::prepareautostart' do
                  'require'   => 'File[/etc/init.d/oracle]',
                  'user'      => 'root',
                  'unless'    => "ls /etc/rc3.d/*oracle | /bin/grep \'oracle\'",
-                 'path'      => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:',
+                 'path'      => '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin',
                  'logoutput' => true,
                )
         end

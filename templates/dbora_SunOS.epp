@@ -1,5 +1,6 @@
 <%- |  String $oracle_home,
-       String $user
+       String $user,
+       Optional[String] $service_name
  | -%>
 
 #!/bin/sh
