@@ -9,6 +9,7 @@ For Puppet >= 4.3 which uses the latest puppet 4 features like
 - Internal hiera module data
 - uses Facts array
 - epp templating instead of erb
+
 you have to use the latest 3.x version of this oradb module
 
 created by Edwin Biemond
