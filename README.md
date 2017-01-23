@@ -2,6 +2,17 @@
 
 [![Build Status](https://travis-ci.org/biemond/biemond-oradb.svg?branch=master)](https://travis-ci.org/biemond/biemond-oradb) ![Puppet Forge Version](https://img.shields.io/puppetforge/v/biemond/oradb.svg) ![Puppet Forge Score](https://img.shields.io/puppetforge/f/biemond/oradb.svg) ![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/biemond/oradb.svg) [![Coverage Status](https://coveralls.io/repos/biemond/biemond-oradb/badge.svg?branch=master&service=github)](https://coveralls.io/github/biemond/biemond-oradb?branch=master)
 
+This version works for Puppet 3, 4
+
+For Puppet >= 4.3 which uses the latest puppet 4 features like
+- Strong data typing
+- Internal hiera module data
+- uses Facts array
+- epp templating instead of erb
+you have to use the latest 3.x version of this oradb module
+
+
+
 Latest puppet 4 version (It cannot be used with puppet 3) is located at [puppet4_3_data branch](https://github.com/biemond/biemond-oradb/tree/puppet4_3_data) and uses the latest features of puppet 4 like
 - Strong data typing
 - Internal hiera module data
