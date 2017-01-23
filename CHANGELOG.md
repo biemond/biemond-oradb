@@ -1,5 +1,8 @@
 # Version updates
 
+## 3.0.0
+- Puppet 4 new features, removed support for Puppet 3, please use latest version 2.X of oradb
+
 ## 2.0.9
 - variables support for dbt templates with parameter template_variables
 - bash_profile also loads bashrc when it exists
