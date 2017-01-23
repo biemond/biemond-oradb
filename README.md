@@ -11,13 +11,6 @@ For Puppet >= 4.3 which uses the latest puppet 4 features like
 - epp templating instead of erb
 you have to use the latest 3.x version of this oradb module
 
-
-
-Latest puppet 4 version (It cannot be used with puppet 3) is located at [puppet4_3_data branch](https://github.com/biemond/biemond-oradb/tree/puppet4_3_data) and uses the latest features of puppet 4 like
-- Strong data typing
-- Internal hiera module data
-
-
 created by Edwin Biemond
 [biemond.blogspot.com](http://biemond.blogspot.com)
 [Github homepage](https://github.com/biemond/puppet)
