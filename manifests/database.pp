@@ -157,7 +157,7 @@ define oradb::database(
     }
     exec { "oracle database ${title}":
       command     => $command,
-      creates     => "${oracle_home}/dbs/spfile$db_name[0,8].ora",
+      creates     => "${oracle_home}/dbs/spfile${db_name[0,8]}.ora",
       timeout     => 0,
       path        => $execPath,
       user        => "root",
