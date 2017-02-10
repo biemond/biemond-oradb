@@ -4,9 +4,9 @@
        String $oracle_base, 
        String $group_oper = 'oper',
        String $group = 'dba',
-       Optional[String] $cluster_nodes,
+       Optional[String] $cluster_nodes = undef, 
        String $database_type,
-       Optional[String] $ee_optional_components, 
+       Optional[String] $ee_optional_components = undef, 
        Boolean $ee_options_selection = false,
        Boolean $is_rack_one_install = false | -%>
 
