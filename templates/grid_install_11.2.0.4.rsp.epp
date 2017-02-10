@@ -5,20 +5,20 @@
        String $group_oper = 'asmoper',
        String $group = 'asmdba',
        String $group_asm,
-       Optional[String] $scan_name,
-       Optional[Integer] $scan_port,       
+       Optional[String] $scan_name = undef,
+       Optional[Integer] $scan_port = undef,   
        String $grid_type,
-       Optional[String] $cluster_name,
-       Optional[String] $cluster_nodes,
-       Optional[String] $network_interface_list,
-       Optional[String] $storage_option,
+       Optional[String] $cluster_name = undef,
+       Optional[String] $cluster_nodes = undef,
+       Optional[String] $network_interface_list = undef,
+       Optional[String] $storage_option = undef,
        String $sys_asm_password,
        String $asm_monitor_password,
        String $asm_diskgroup,
        String $disk_redundancy = 'NORMAL',
        Integer $disk_au_size = 1,
-       Optional[String] $disks,
-       Optional[String] $disk_discovery_string | -%>
+       Optional[String] $disks = undef,
+       Optional[String] $disk_discovery_string = undef | -%>
 
 ###############################################################################
 ## Copyright(c) Oracle Corporation 1998,2013. All rights reserved.           ##

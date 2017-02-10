@@ -1,5 +1,8 @@
 # Version updates
 
+## 3.0.1
+- Epp template fixes for optional fields on grid, installdb & database.pp
+
 ## 3.0.0
 - Puppet 4 new features, removed support for Puppet 3, please use latest version 2.X of oradb
 
