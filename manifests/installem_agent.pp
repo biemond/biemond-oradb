@@ -116,12 +116,12 @@ define oradb::installem_agent(
 
       file { "${download_dir}/em_agent.properties":
         ensure  => present,
-        content => epp('oradb/em_agent_pull.properties.epp',
-                      {'agent_instance_home_dir'=> $agent_instance_home_dir,
-                        'oms_host'              => $oms_host,
-                        'oms_port'              => $oms_port,
-                        'agent_port'            => $agent_port,
-                        'em_upload_port'        => $em_upload_port } ),
+        content => epp('oradb/em_agent_pull.properties.epp', {
+                        'agent_instance_home_dir' => $agent_instance_home_dir,
+                        'oms_host'                => $oms_host,
+                        'oms_port'                => $oms_port,
+                        'agent_port'              => $agent_port,
+                        'em_upload_port'          => $em_upload_port } ),
         mode    => '0755',
         owner   => $user,
         group   => $group,
