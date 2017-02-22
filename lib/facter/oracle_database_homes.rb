@@ -51,6 +51,7 @@ def get_opatch_patches(name)
 
   opatch_out.each_line.collect do |line|
     next unless line =~ /^\d+;/
+    # Puppet.info "-patches- #{line}" 
     split_line = line.split(';')
     { 'patch_id' => split_line[0], 'patch_desc' => split_line[1].chomp }
   end.compact
@@ -96,12 +97,15 @@ def get_orainst_products(path)
                 opatchver
               end
             end
+
             patches = get_opatch_patches(str)
+            # Puppet.info "-patches hash- #{patches}"
             patches_fact[str] = patches unless patches.nil?
           end
         end
       end
       Facter.add('opatch_patches') do
+        # Puppet.info "-all patches hash- #{patches_fact}"
         setcode { patches_fact }
       end
       return software

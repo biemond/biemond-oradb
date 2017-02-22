@@ -24,7 +24,7 @@ define oradb::client(
   validate_absolute_path($oracle_base)
 
   # check if the oracle software already exists
-  $found = oracle_exists( $oracle_home )
+  $found = oradb::oracle_exists( $oracle_home )
 
   if $found == undef {
     $continue = true
@@ -38,7 +38,7 @@ define oradb::client(
   }
 
   if $ora_inventory_dir == undef {
-    $oraInventory = oradb_cleanpath("${oracle_base}/../oraInventory")
+    $oraInventory = oradb::cleanpath("${oracle_base}/../oraInventory")
   } else {
     validate_absolute_path($ora_inventory_dir)
     $oraInventory = "${ora_inventory_dir}/oraInventory"

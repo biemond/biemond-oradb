@@ -23,7 +23,7 @@ define oradb::opatchupgrade(
   }
 
   # check the opatch version
-  $installedVersion  = opatch_version($oracle_home)
+  $installedVersion  = oradb::opatch_version($oracle_home)
 
   if $installedVersion == $opversion {
     $continue = false

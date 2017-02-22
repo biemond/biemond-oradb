@@ -1,5 +1,9 @@
 # Version updates
 
+## 3.0.2
+- migrated to puppet 4 functions
+- Fix ASM disk does not exist error during database creation
+
 ## 3.0.1
 - Epp template fixes for optional fields on grid, installdb & database.pp
 

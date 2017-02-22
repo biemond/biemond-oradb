@@ -50,7 +50,7 @@ define oradb::installem(
   }
 
   # check if the oracle software already exists
-  $found = oracle_exists( $oracle_home_dir )
+  $found = oradb::oracle_exists( $oracle_home_dir )
 
   if $found == undef {
     $continue = true
@@ -64,7 +64,7 @@ define oradb::installem(
   }
 
   if $ora_inventory_dir == undef {
-    $oraInventory = oradb_cleanpath("${oracle_base_dir}/../oraInventory")
+    $oraInventory = oradb::cleanpath("${oracle_base_dir}/../oraInventory")
   } else {
     validate_absolute_path($ora_inventory_dir)
     $oraInventory = "${ora_inventory_dir}/oraInventory"

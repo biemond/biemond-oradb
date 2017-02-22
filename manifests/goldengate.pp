@@ -37,7 +37,7 @@ define oradb::goldengate(
     if ( $oracle_base == undef or is_string($oracle_base) == false) {fail('You must specify an oracle_base') }
     if ( $manager_port == undef or is_integer($manager_port) == false) {fail('You must specify a manager_port') }
 
-    $found = oracle_exists( $goldengate_home )
+    $found = oradb::oracle_exists( $goldengate_home )
 
     if $found == undef {
       $continue = true
@@ -56,7 +56,7 @@ define oradb::goldengate(
 
   if ( $version == '12.1.2' ) {
     if $ora_inventory_dir == undef {
-      $oraInventory = oradb_cleanpath("${oracle_base}/../oraInventory")
+      $oraInventory = oradb::cleanpath("${oracle_base}/../oraInventory")
     } else {
       validate_absolute_path($ora_inventory_dir)
       $oraInventory = "${ora_inventory_dir}/oraInventory"

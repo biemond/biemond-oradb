@@ -74,7 +74,7 @@ define oradb::installasm(
   if ( $grid_home == undef or is_string($grid_home) == false) {fail('You must specify an grid_home') }
 
   # check if the oracle software already exists
-  $found = oracle_exists( $grid_home )
+  $found = oradb::oracle_exists( $grid_home )
 
   if $found == undef {
     $continue = true
@@ -88,7 +88,7 @@ define oradb::installasm(
   }
 
   if $ora_inventory_dir == undef {
-    $oraInventory = oradb_cleanpath("${grid_base}/../oraInventory")
+    $oraInventory = oradb::cleanpath("${grid_base}/../oraInventory")
   } else {
     validate_absolute_path($ora_inventory_dir)
     $oraInventory = "${ora_inventory_dir}/oraInventory"
