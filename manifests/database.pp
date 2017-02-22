@@ -163,7 +163,7 @@ define oradb::database(
       user        => "root",
       group       => "root",
       cwd         => $oracle_base,
-      environment => ["USER=${user}",],
+      environment => ["USER=${user}"],
       logoutput   => true,
     }
   } elsif $action == 'delete' {
@@ -175,7 +175,7 @@ define oradb::database(
       user        => $user,
       group       => $group,
       cwd         => $oracle_base,
-      environment => ["USER=${user}",],
+      environment => ["USER=${user}"],
       logoutput   => true,
     }
   }
