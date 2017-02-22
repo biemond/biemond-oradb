@@ -134,7 +134,7 @@ define oradb::database(
     $templatename = undef
   }
 
-  $elevation_prefix = "su - $user -c \"/bin/ksh -c \\\""
+  $elevation_prefix = "su - ${user} -c \"/bin/ksh -c \\\""
   $elevation_suffix = "\\\"\""
 
   if $action == 'create' {
@@ -157,13 +157,13 @@ define oradb::database(
     }
     exec { "oracle database ${title}":
       command     => $command,
-      creates     => "${oracle_home}/dbs/spfile${db_name[0,8]}.ora",
+      creates     => "${oracle_home}/dbs/spfile${db_name}.ora",
       timeout     => 0,
       path        => $execPath,
-      user        => "root",
-      group       => "root",
+      user        => 'root',
+      group       => 'root',
       cwd         => $oracle_base,
-      environment => ["USER=${user}"],
+      environment => ["USER=${user}",],
       logoutput   => true,
     }
   } elsif $action == 'delete' {
@@ -175,7 +175,7 @@ define oradb::database(
       user        => $user,
       group       => $group,
       cwd         => $oracle_base,
-      environment => ["USER=${user}"],
+      environment => ["USER=${user}",],
       logoutput   => true,
     }
   }
