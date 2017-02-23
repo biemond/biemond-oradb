@@ -72,9 +72,13 @@
 <div class="docstring">
   <div class="discussion">
     
-<p>== Define: orautils::nodemanagerautostart</p>
+<p>autostartdatabase</p>
 
 <p>autostart of the nodemanager for linux</p>
+
+<p>@example configuration  oradb::autostartdatabase{ :  oracle_home =&gt;
+&#39;/opt/oracle/product/11g&#39;,  db_name =&gt; &#39;ORCL&#39;,  user
+=&gt; &#39;oracle&#39;,  service_name =&gt; &#39;dbora&#39;,  }</p>
 
   </div>
 </div>
@@ -144,20 +148,6 @@
         <pre class="lines">
 
 
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
 19
 20
 21
@@ -181,10 +171,24 @@
 39
 40
 41
-42</pre>
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/autostartdatabase.pp', line 5</span>
+        <pre class="code"><span class="info file"># File 'manifests/autostartdatabase.pp', line 19</span>
 
 define oradb::autostartdatabase(
   String $oracle_home  = undef,
@@ -231,7 +235,7 @@ define oradb::autostartdatabase(
 </div>
 
       <div id="footer">
-  Generated on Thu Feb 23 22:37:39 2017 by
+  Generated on Thu Feb 23 22:58:20 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

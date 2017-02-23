@@ -87,7 +87,7 @@ href="https://www.enterprisemodules.com/shop/products/puppet-ora_install-module"
 from <a href="https://www.enterprisemodules.com/">Enterprise Modules</a></p>
 
 <p><a href="https://www.enterprisemodules.com"><img
-src="https://raw.githubusercontent.com/enterprisemodules/public_images/master/banner1.jpg"></a></p>
+src="https://www.enterprisemodules.com/images/puppet-logo.png"></a></p>
 
 <p>With version &gt;= 2.0.0 all manifest parameters are in lowercase and in
 snakestyle instead of camelcase</p>
@@ -879,6 +879,7 @@ oradb::autostartdatabase{ &#39;autostart oracle&#39;:
   oracle_home             =&gt; &#39;/oracle/product/12.1/db&#39;,
   user                    =&gt; &#39;oracle&#39;,
   db_name                 =&gt; &#39;test&#39;,
+  service_name            =&gt; &#39;dbora&#39;,
   require                 =&gt; Oradb::Dbactions[&#39;start testDb&#39;],
 }</code></pre>
 
@@ -1806,7 +1807,7 @@ exec { &quot;ulimit -H&quot;:
 </div></div>
 
       <div id="footer">
-  Generated on Thu Feb 23 22:37:38 2017 by
+  Generated on Thu Feb 23 22:58:19 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

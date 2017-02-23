@@ -1,13 +1,25 @@
-# == Class: oradb::prepareautostart
 #
-#  prepare autostart of the nodemanager for linux
+# prepareautostart
+#
+# prepare autostart of the nodemanager for linux or solaris
+#
+# @example configuration
+#   class{'oradb::prepareautostart':
+#     oracle_home  => '/opt/oracle/product/11g',
+#     user         => 'oracle',
+#     service_name => 'dbora',
+#   }
+#
+# @param oracle_home
+# @param user
+# @param service_name
 #
 class oradb::prepareautostart(
   String $oracle_home  = undef,
   String $user         = lookup('oradb::user'),
   String $service_name = lookup('oradb::host::service_name'),
 ){
-  $exec_path     = lookup('oradb::exec_path')
+  $exec_path      = lookup('oradb::exec_path')
   $dbora_location = lookup('oradb::dbora_dir')
 
   file { "${dbora_location}/${service_name}" :

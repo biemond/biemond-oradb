@@ -1,3 +1,4 @@
+#
 # utils::dborainst
 #
 # creates oraInst.loc for oracle products
