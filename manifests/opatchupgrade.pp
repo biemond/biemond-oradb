@@ -14,8 +14,8 @@ define oradb::opatchupgrade(
   String $download_dir              = lookup('oradb::download_dir'),
   String $puppet_download_mnt_point = lookup('oradb::module_mountpoint'),
 ){
-  $execPath = lookup('oradb::exec_path')
-  $patchDir = "${oracle_home}/OPatch"
+  $exec_path = lookup('oradb::exec_path')
+  $patch_dir = "${oracle_home}/OPatch"
 
   $supported_db_kernels = join( lookup('oradb::kernels'), '|')
   if ( $facts['kernel'] in $supported_db_kernels == false){
@@ -23,12 +23,12 @@ define oradb::opatchupgrade(
   }
 
   # check the opatch version
-  $installedVersion  = oradb::opatch_version($oracle_home)
+  $installed_version  = oradb::opatch_version($oracle_home)
 
-  if $installedVersion == $opversion {
+  if $installed_version == $opversion {
     $continue = false
   } else {
-    notify {"oradb::opatchupgrade ${title} ${installedVersion} installed - performing upgrade":}
+    notify {"oradb::opatchupgrade ${title} ${installed_version} installed - performing upgrade":}
     $continue = true
   }
 
@@ -47,14 +47,14 @@ define oradb::opatchupgrade(
 
     case $facts['kernel'] {
       'Linux', 'SunOS': {
-        file { $patchDir:
+        file { $patch_dir:
           ensure  => absent,
           recurse => true,
           force   => true,
         } ->
         exec { "extract opatch ${title} ${patch_file}":
           command   => "unzip -o ${download_dir}/${patch_file} -d ${oracle_home}",
-          path      => $execPath,
+          path      => $exec_path,
           user      => $user,
           group     => $group,
           logoutput => false,
@@ -63,9 +63,9 @@ define oradb::opatchupgrade(
 
         if ( $csi_number != undef and support_id != undef ) {
           exec { "exec emocmrsp ${title} ${opversion}":
-            cwd       => $patchDir,
-            command   => "${patchDir}/ocm/bin/emocmrsp -repeater NONE ${csi_number} ${support_id}",
-            path      => $execPath,
+            cwd       => $patch_dir,
+            command   => "${patch_dir}/ocm/bin/emocmrsp -repeater NONE ${csi_number} ${support_id}",
+            path      => $exec_path,
             user      => $user,
             group     => $group,
             logoutput => true,
@@ -81,15 +81,15 @@ define oradb::opatchupgrade(
 
           file { "${download_dir}/opatch_upgrade_${title}_${opversion}.ksh":
             ensure  => present,
-            content => epp('oradb/ocm.rsp.epp', { 'patchDir' => $patchDir }),
+            content => epp('oradb/ocm.rsp.epp', { 'patchDir' => $patch_dir }),
             mode    => '0775',
             owner   => $user,
             group   => $group,
           }
 
           exec { "ksh ${download_dir}/opatch_upgrade_${title}_${opversion}.ksh":
-            cwd       => $patchDir,
-            path      => $execPath,
+            cwd       => $patch_dir,
+            path      => $exec_path,
             user      => $user,
             group     => $group,
             logoutput => true,

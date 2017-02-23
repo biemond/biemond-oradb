@@ -1,32 +1,32 @@
 # == Class: oradb::database
 #
 define oradb::database(
-  String $oracle_base                         = undef,
-  String $oracle_home                         = undef,
-  String $version                             = lookup('oradb::version'),
-  String $user                                = lookup('oradb::user'),
-  String $group                               = lookup('oradb::group'),
-  String $download_dir                        = lookup('oradb::download_dir'),
-  String $action                              = lookup('oradb::database::action'),
-  Optional[String] $template                  = undef,
-  Optional[String] $template_seeded           = undef,
-  String $template_variables                  = 'dummy=/tmp', # for dbt template
-  String $db_name                             = lookup('oradb::database_name'),
-  String $db_domain                           = undef,
-  Integer $db_port                            = lookup('oradb::listener_port'),
-  String $sys_password                        = lookup('oradb::default::password'),
-  String $system_password                     = lookup('oradb::default::password'),
-  Optional[String] $data_file_destination     = undef,
-  Optional[String] $recovery_area_destination = undef,
+  String $oracle_base                                             = undef,
+  String $oracle_home                                             = undef,
+  String $version                                                 = lookup('oradb::version'),
+  String $user                                                    = lookup('oradb::user'),
+  String $group                                                   = lookup('oradb::group'),
+  String $download_dir                                            = lookup('oradb::download_dir'),
+  String $action                                                  = lookup('oradb::database::action'),
+  Optional[String] $template                                      = undef,
+  Optional[String] $template_seeded                               = undef,
+  String $template_variables                                      = 'dummy=/tmp', # for dbt template
+  String $db_name                                                 = lookup('oradb::database_name'),
+  String $db_domain                                               = undef,
+  Integer $db_port                                                = lookup('oradb::listener_port'),
+  String $sys_password                                            = lookup('oradb::default::password'),
+  String $system_password                                         = lookup('oradb::default::password'),
+  Optional[String] $data_file_destination                         = undef,
+  Optional[String] $recovery_area_destination                     = undef,
   String $character_set                                           = lookup('oradb::database::character_set'),
   String $nationalcharacter_set                                   = lookup('oradb::database::nationalcharacter_set'),
   Optional[Hash] $init_params                                     = undef,
   String $sample_schema                                           = lookup('oradb::database::sample_schema'),
   Integer $memory_percentage                                      = lookup('oradb::database::memory_percentage'),
   Integer $memory_total                                           = lookup('oradb::database::memory_total'),
-  Enum["MULTIPURPOSE", "DATA_WAREHOUSING", "OLTP"] $database_type = lookup('oradb::database::database_type'),
-  Enum["NONE", "CENTRAL", "LOCAL", "ALL"] $em_configuration       = lookup('oradb::database::em_configuration'),
-  Enum["FS", "CFS", "ASM"] $storage_type                          = lookup('oradb::database::storage_type'),
+  Enum['MULTIPURPOSE', 'DATA_WAREHOUSING', 'OLTP'] $database_type = lookup('oradb::database::database_type'),
+  Enum['NONE', 'CENTRAL', 'LOCAL', 'ALL'] $em_configuration       = lookup('oradb::database::em_configuration'),
+  Enum['FS', 'CFS', 'ASM'] $storage_type                          = lookup('oradb::database::storage_type'),
   String $asm_snmp_password                                       = lookup('oradb::default::password'),
   String $db_snmp_password                                        = lookup('oradb::default::password'),
   String $asm_diskgroup                                           = lookup('oradb::database::asm_diskgroup'),
@@ -46,9 +46,9 @@ define oradb::database(
   }
 
   if $action == 'create' {
-    $operationType = 'createDatabase'
+    $operation_type = 'createDatabase'
   } elsif $action == 'delete' {
-    $operationType = 'deleteDatabase'
+    $operation_type = 'deleteDatabase'
   } else {
     fail('Unrecognized database action')
   }
@@ -75,10 +75,10 @@ define oradb::database(
 
   if (is_hash($init_params) or is_string($init_params)) {
     if is_hash($init_params) {
-      $initParamsArray = sort(join_keys_to_values($init_params, '='))
-      $sanitizedInitParams = join($initParamsArray,',')
+      $init_params_array = sort(join_keys_to_values($init_params, '='))
+      $sanitized_init_params = join($init_params_array,',')
     } else {
-      $sanitizedInitParams = $init_params
+      $sanitized_init_params = $init_params
     }
   } else {
     fail 'init_params only supports a String or a Hash as value type'
@@ -96,7 +96,7 @@ define oradb::database(
     file { "${download_dir}/database_${sanitized_title}.rsp":
       ensure  => present,
       content => epp("oradb/dbca_${version}.rsp.epp",
-                    { 'operationType'             => $operationType,
+                    { 'operationType'             => $operation_type,
                       'globaldb_name'             => $globaldb_name,
                       'db_name'                   => $db_name,
                       'cluster_nodes'             => $cluster_nodes,
@@ -112,7 +112,7 @@ define oradb::database(
                       'recovery_diskgroup'        => $recovery_diskgroup,
                       'character_set'             => $character_set,
                       'nationalcharacter_set'     => $nationalcharacter_set,
-                      'sanitizedInitParams'       => $sanitizedInitParams,
+                      'sanitizedInitParams'       => $sanitized_init_params,
                       'sample_schema'             => $sample_schema,
                       'memory_percentage'         => $memory_percentage,
                       'database_type'             => $database_type,

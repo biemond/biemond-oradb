@@ -5,11 +5,11 @@
 #
 #
 define oradb::dbactions(
-  Enum["database", "grid", "asm"] $db_type          = 'database',
+  Enum['database', 'grid', 'asm'] $db_type          = 'database',
   Optional[String] $oracle_home                     = undef,
   String $user                                      = lookup('oradb::user'),
   String $group                                     = lookup('oradb::group'),
-  Enum["start", "stop", "running", "abort"] $action = 'start',
+  Enum['start', 'stop', 'running', 'abort'] $action = 'start',
   String $db_name                                   = lookup('oradb::database_name'),
   String $provider                                  = 'sqlplus',
 ){

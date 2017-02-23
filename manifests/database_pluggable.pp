@@ -1,18 +1,18 @@
 #
 #
 define oradb::database_pluggable(
-  Enum["present", "absent"] $ensure = 'present',
-  String $version                  = lookup('oradb::version'),
-  String $oracle_home_dir          = undef,
-  String $user                     = lookup('oradb::user'),
-  String $group                    = lookup('oradb::group'),
-  String $source_db                = undef,
-  String $pdb_name                 = undef,
-  String $pdb_datafile_destination = undef,
-  String $pdb_admin_username       = 'pdb_adm',
-  String $pdb_admin_password       = undef,
-  Boolean $create_user_tablespace  = true,
-  Boolean $log_output              = false,
+  Enum['present', 'absent'] $ensure = 'present',
+  String $version                   = lookup('oradb::version'),
+  String $oracle_home_dir           = undef,
+  String $user                      = lookup('oradb::user'),
+  String $group                     = lookup('oradb::group'),
+  String $source_db                 = undef,
+  String $pdb_name                  = undef,
+  String $pdb_datafile_destination  = undef,
+  String $pdb_admin_username        = 'pdb_adm',
+  String $pdb_admin_password        = undef,
+  Boolean $create_user_tablespace   = true,
+  Boolean $log_output               = false,
 ){
 
   if ( $version in lookup('oradb::database_pluggable_versions') == false ){
@@ -28,7 +28,7 @@ define oradb::database_pluggable(
     if ( $pdb_admin_password == undef or is_string($pdb_admin_password) == false) {fail('You must specify an pdb_admin_password') }
   }
 
-  $execPath = lookup('oradb::exec_path')
+  $exec_path = lookup('oradb::exec_path')
 
   if ( $ensure == 'present') {
     $command = "${oracle_home_dir}/bin/dbca -silent -createPluggableDatabase -sourceDB ${source_db} -pdbName ${pdb_name} -createPDBFrom DEFAULT -pdbAdminUserName ${pdb_admin_username} -pdbAdminPassword ${pdb_admin_password} -pdbDatafileDestination ${pdb_datafile_destination} -createUserTableSpace ${create_user_tablespace}"
@@ -36,7 +36,7 @@ define oradb::database_pluggable(
     exec { "dbca pdb execute ${title}":
       command   => $command,
       timeout   => 0,
-      path      => $execPath,
+      path      => $exec_path,
       cwd       => $oracle_home_dir,
       user      => $user,
       group     => $group,
@@ -49,7 +49,7 @@ define oradb::database_pluggable(
     exec { "dbca pdb execute ${title}":
       command   => $command,
       timeout   => 0,
-      path      => $execPath,
+      path      => $exec_path,
       cwd       => $oracle_home_dir,
       user      => $user,
       group     => $group,

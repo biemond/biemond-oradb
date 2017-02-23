@@ -8,9 +8,9 @@ class oradb::prepareautostart(
   String $service_name = lookup('oradb::host::service_name'),
 ){
   $exec_path     = lookup('oradb::exec_path')
-  $dboraLocation = lookup('oradb::dbora_dir')
+  $dbora_location = lookup('oradb::dbora_dir')
 
-  file { "${dboraLocation}/${service_name}" :
+  file { "${dbora_location}/${service_name}" :
     ensure  => present,
     mode    => '0755',
     owner   => 'root',
@@ -48,12 +48,12 @@ class oradb::prepareautostart(
         mode    => '0755',
         owner   => 'root',
         content => epp('oradb/oradb_smf.xml.epp', {
-                        'dboraLocation' => $dboraLocation,
+                        'dboraLocation' => $dbora_location,
                         'service_name'  => $service_name } ),
       }
       exec { "enable service ${service_name}":
         command   => 'svccfg -v import /tmp/oradb_smf.xml',
-        require   => File['/tmp/oradb_smf.xml',"${dboraLocation}/${service_name}"],
+        require   => File['/tmp/oradb_smf.xml',"${dbora_location}/${service_name}"],
         user      => 'root',
         unless    => 'svccfg list | grep oracledatabase',
         path      => $exec_path,

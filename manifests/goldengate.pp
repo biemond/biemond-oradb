@@ -2,21 +2,21 @@
 #
 #
 define oradb::goldengate(
-  String $version            = '12.1.2',
-  $file                      = undef,
-  $tar_file                  = undef,     # only for < 12.1.2
-  String $database_type      = 'Oracle',  # only for > 12.1.2
-  Enum["ORA11g", "ORA12c"]$database_version = 'ORA11g', # ORA12c'  only for > 12.1.2
-  $database_home             = undef,     # only for > 12.1.2
-  $oracle_base               = undef,     # only for > 12.1.2
-  $ora_inventory_dir         = undef,
-  $goldengate_home           = undef,
-  $manager_port              = undef,
-  String $user                      = 'ggate',
-  String $group                     = lookup('oradb::group'),
-  String $group_install             = lookup('oradb::group_install'),
-  String $download_dir              = lookup('oradb::download_dir'),
-  String $puppet_download_mnt_point = lookup('oradb::module_mountpoint'),
+  String $version                            = '12.1.2',
+  $file                                      = undef,
+  $tar_file                                  = undef,     # only for < 12.1.2
+  String $database_type                      = 'Oracle',  # only for > 12.1.2
+  Enum['ORA11g', 'ORA12c'] $database_version = 'ORA11g', # ORA12c'  only for > 12.1.2
+  $database_home                             = undef,     # only for > 12.1.2
+  $oracle_base                               = undef,     # only for > 12.1.2
+  $ora_inventory_dir                         = undef,
+  $goldengate_home                           = undef,
+  $manager_port                              = undef,
+  String $user                               = 'ggate',
+  String $group                              = lookup('oradb::group'),
+  String $group_install                      = lookup('oradb::group_install'),
+  String $download_dir                       = lookup('oradb::download_dir'),
+  String $puppet_download_mnt_point          = lookup('oradb::module_mountpoint'),
 )
 {
   if ( $goldengate_home == undef or is_string($goldengate_home) == false) {fail('You must specify a goldengate_home') }
@@ -56,16 +56,16 @@ define oradb::goldengate(
 
   if ( $version == '12.1.2' ) {
     if $ora_inventory_dir == undef {
-      $oraInventory = oradb::cleanpath("${oracle_base}/../oraInventory")
+      $ora_inventory = oradb::cleanpath("${oracle_base}/../oraInventory")
     } else {
       validate_absolute_path($ora_inventory_dir)
-      $oraInventory = "${ora_inventory_dir}/oraInventory"
+      $ora_inventory = "${ora_inventory_dir}/oraInventory"
     }
 
     db_directory_structure{"oracle goldengate structure ${version}":
       ensure            => present,
       oracle_base_dir   => $oracle_base,
-      ora_inventory_dir => $oraInventory,
+      ora_inventory_dir => $ora_inventory,
       download_dir      => $download_dir,
       os_user           => $user,
       os_group          => $group_install,
@@ -75,7 +75,7 @@ define oradb::goldengate(
   # only for 12.1.2
   if ( $continue == true ) {
 
-    $ggateInstallDir = 'fbo_ggs_Linux_x64_shiphome'
+    $ggate_install_dir = 'fbo_ggs_Linux_x64_shiphome'
 
     file { "${download_dir}/${file}":
       source  => "${puppet_download_mnt_point}/${file}",
@@ -86,7 +86,7 @@ define oradb::goldengate(
 
     exec { 'extract gg':
       command   => "unzip -o ${download_dir}/${file} -d ${download_dir}",
-      creates   => "${download_dir}/${ggateInstallDir}",
+      creates   => "${download_dir}/${ggate_install_dir}",
       timeout   => 0,
       path      => $exec_path,
       user      => $user,
@@ -103,12 +103,12 @@ define oradb::goldengate(
     }
 
     oradb::utils::dborainst{"ggate orainst ${version}":
-      ora_inventory_dir => $oraInventory,
+      ora_inventory_dir => $ora_inventory,
       os_group          => $group_install,
     }
 
     exec { 'install oracle goldengate':
-      command   => "/bin/sh -c 'unset DISPLAY;${download_dir}/${ggateInstallDir}/Disk1/runInstaller -silent -waitforcompletion -responseFile ${download_dir}/oggcore.rsp'",
+      command   => "/bin/sh -c 'unset DISPLAY;${download_dir}/${ggate_install_dir}/Disk1/runInstaller -silent -waitforcompletion -responseFile ${download_dir}/oggcore.rsp'",
       require   => [File["${download_dir}/oggcore.rsp"],
                     Oradb::Utils::Dborainst["ggate orainst ${version}"],
                     Exec['extract gg'],],

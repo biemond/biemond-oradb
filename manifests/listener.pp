@@ -1,12 +1,12 @@
 # == Class: oradb::listener
 #
 #
-define oradb::listener( String $oracle_base   = undef,
-                        String $oracle_home   = undef,
-                        String $user          = lookup('oradb::user'),
-                        String $group         = lookup('oradb::group'),
-                        Enum["running", "start", "abort", "stop"] $action = 'start',
-                        String $listener_name = 'listener',
+define oradb::listener( String $oracle_base                               = undef,
+                        String $oracle_home                               = undef,
+                        String $user                                      = lookup('oradb::user'),
+                        String $group                                     = lookup('oradb::group'),
+                        Enum['running', 'start', 'abort', 'stop'] $action = 'start',
+                        String $listener_name                             = 'listener',
 )
 {
 

@@ -9,7 +9,7 @@
 define oradb::installdb(
   String $version                          = undef,
   String $file                             = undef,
-  Enum["SE", "EE", "SEONE"] $database_type = lookup('oradb:installdb:database_type'),
+  Enum['SE', 'EE', 'SEONE'] $database_type = lookup('oradb:installdb:database_type'),
   Optional[String] $ora_inventory_dir      = undef,
   String $oracle_base                      = undef,
   String $oracle_home                      = undef,
@@ -71,22 +71,22 @@ define oradb::installdb(
   $exec_path = lookup('oradb::exec_path')
 
   if $puppet_download_mnt_point == undef {
-    $mountPoint     = 'puppet:///modules/oradb/'
+    $mount_point     = 'puppet:///modules/oradb/'
   } else {
-    $mountPoint     = $puppet_download_mnt_point
+    $mount_point     = $puppet_download_mnt_point
   }
 
   if $ora_inventory_dir == undef {
-    $oraInventory = oradb::cleanpath("${oracle_base}/../oraInventory")
+    $ora_inventory = oradb::cleanpath("${oracle_base}/../oraInventory")
   } else {
     validate_absolute_path($ora_inventory_dir)
-    $oraInventory = "${ora_inventory_dir}/oraInventory"
+    $ora_inventory = "${ora_inventory_dir}/oraInventory"
   }
 
   db_directory_structure{"oracle structure ${version}_${title}":
     ensure            => present,
     oracle_base_dir   => $oracle_base,
-    ora_inventory_dir => $oraInventory,
+    ora_inventory_dir => $ora_inventory,
     download_dir      => $download_dir,
     os_user           => $user,
     os_group          => $group_install,
@@ -111,7 +111,7 @@ define oradb::installdb(
 
         file { "${download_dir}/${file1}":
           ensure  => present,
-          source  => "${mountPoint}/${file1}",
+          source  => "${mount_point}/${file1}",
           mode    => '0775',
           owner   => $user,
           group   => $group,
@@ -121,7 +121,7 @@ define oradb::installdb(
         # db file 2 installer zip
         file { "${download_dir}/${file2}":
           ensure  => present,
-          source  => "${mountPoint}/${file2}",
+          source  => "${mount_point}/${file2}",
           mode    => '0775',
           owner   => $user,
           group   => $group,
@@ -130,7 +130,7 @@ define oradb::installdb(
         }
         $source = $download_dir
       } else {
-        $source = $mountPoint
+        $source = $mount_point
       }
 
       exec { "extract ${download_dir}/${file1}":
@@ -156,7 +156,7 @@ define oradb::installdb(
     }
 
     oradb::utils::dborainst{"database orainst ${version}_${title}":
-      ora_inventory_dir => $oraInventory,
+      ora_inventory_dir => $ora_inventory,
       os_group          => $group_install,
     }
 
@@ -166,7 +166,7 @@ define oradb::installdb(
         content => epp("oradb/db_install_${version}.rsp.epp",
                       { 'cluster_nodes'          => $cluster_nodes,
                         'group_install'          => $group_install,
-                        'oraInventory'           => $oraInventory,
+                        'oraInventory'           => $ora_inventory,
                         'oracle_home'            => $oracle_home,
                         'oracle_base'            => $oracle_base,
                         'group_oper'             => $group_oper,

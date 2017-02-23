@@ -2,38 +2,38 @@
 #
 #
 define oradb::installasm(
-  String $version                   = undef,
-  String $file                      = undef,
-  Enum["HA_CONFIG", "CRS_CONFIG", "UPGRADE", "CRS_SWONLY"] $grid_type  = 'HA_CONFIG',
-  Boolean $stand_alone              = true, # in case of 'CRS_SWONLY' and used as stand alone or in RAC
-  String $grid_base                 = undef,
-  String $grid_home                 = undef,
-  Optional[String] $ora_inventory_dir = undef,
-  String $user                      = lookup('oradb::grid::user'),
-  String $user_base_dir             = lookup('oradb::user_base_dir'),
-  String $group                     = lookup('oradb::grid::group'),
-  String $group_install             = lookup('oradb::grid::group_install'),
-  String $group_oper                = lookup('oradb::grid::group_oper'),
-  String $group_asm                 = lookup('oradb::grid::group_asm'),
-  String $download_dir              = lookup('oradb::download_dir'),
-  Boolean $zip_extract              = true,
-  String $puppet_download_mnt_point = lookup('oradb::module_mountpoint'),
-  String $sys_asm_password          = lookup('oradb::grid::default::password'),
-  String $asm_monitor_password      = lookup('oradb::grid::default::password'),
-  String $asm_diskgroup             = 'DATA',
-  Optional[String] $disk_discovery_string = undef,
-  String $disk_redundancy           = 'NORMAL',
-  Integer $disk_au_size             = 1,
-  Optional[String] $disks           = undef,
-  Boolean $remote_file              = true,
-  Optional[String] $cluster_name    = undef,
-  Optional[String] $scan_name       = undef,
-  Optional[Integer] $scan_port      = undef,
-  Optional[String] $cluster_nodes   = undef,
-  Optional[String] $network_interface_list = undef,
-  Optional[String] $storage_option  = undef,
-  String $temp_dir                  = '/tmp',
-  Boolean $bash_profile             = true,
+  String $version                                                      = undef,
+  String $file                                                         = undef,
+  Enum['HA_CONFIG', 'CRS_CONFIG', 'UPGRADE', 'CRS_SWONLY'] $grid_type  = 'HA_CONFIG',
+  Boolean $stand_alone                                                 = true, # in case of 'CRS_SWONLY' and used as stand alone or in RAC
+  String $grid_base                                                    = undef,
+  String $grid_home                                                    = undef,
+  Optional[String] $ora_inventory_dir                                  = undef,
+  String $user                                                         = lookup('oradb::grid::user'),
+  String $user_base_dir                                                = lookup('oradb::user_base_dir'),
+  String $group                                                        = lookup('oradb::grid::group'),
+  String $group_install                                                = lookup('oradb::grid::group_install'),
+  String $group_oper                                                   = lookup('oradb::grid::group_oper'),
+  String $group_asm                                                    = lookup('oradb::grid::group_asm'),
+  String $download_dir                                                 = lookup('oradb::download_dir'),
+  Boolean $zip_extract                                                 = true,
+  String $puppet_download_mnt_point                                    = lookup('oradb::module_mountpoint'),
+  String $sys_asm_password                                             = lookup('oradb::grid::default::password'),
+  String $asm_monitor_password                                         = lookup('oradb::grid::default::password'),
+  String $asm_diskgroup                                                = 'DATA',
+  Optional[String] $disk_discovery_string                              = undef,
+  String $disk_redundancy                                              = 'NORMAL',
+  Integer $disk_au_size                                                = 1,
+  Optional[String] $disks                                              = undef,
+  Boolean $remote_file                                                 = true,
+  Optional[String] $cluster_name                                       = undef,
+  Optional[String] $scan_name                                          = undef,
+  Optional[Integer] $scan_port                                         = undef,
+  Optional[String] $cluster_nodes                                      = undef,
+  Optional[String] $network_interface_list                             = undef,
+  Optional[String] $storage_option                                     = undef,
+  String $temp_dir                                                     = '/tmp',
+  Boolean $bash_profile                                                = true,
 )
 {
 
@@ -88,16 +88,16 @@ define oradb::installasm(
   }
 
   if $ora_inventory_dir == undef {
-    $oraInventory = oradb::cleanpath("${grid_base}/../oraInventory")
+    $ora_inventory = oradb::cleanpath("${grid_base}/../oraInventory")
   } else {
     validate_absolute_path($ora_inventory_dir)
-    $oraInventory = "${ora_inventory_dir}/oraInventory"
+    $ora_inventory = "${ora_inventory_dir}/oraInventory"
   }
 
   db_directory_structure{"grid structure ${version}":
     ensure            => present,
     oracle_base_dir   => $grid_base,
-    ora_inventory_dir => $oraInventory,
+    ora_inventory_dir => $ora_inventory,
     download_dir      => $download_dir,
     os_user           => $user,
     os_group          => $group_install,
@@ -173,7 +173,7 @@ define oradb::installasm(
     }
 
     oradb::utils::dborainst{"grid orainst ${version}":
-      ora_inventory_dir => $oraInventory,
+      ora_inventory_dir => $ora_inventory,
       os_group          => $group_install,
     }
 
@@ -182,7 +182,7 @@ define oradb::installasm(
         ensure  => present,
         content => epp("oradb/grid_install_${version}.rsp.epp",
                       { 'group_install'          =>  $group_install,
-                        'oraInventory'           =>  $oraInventory,
+                        'oraInventory'           =>  $ora_inventory,
                         'grid_base'              =>  $grid_base,
                         'grid_home'              =>  $grid_home,
                         'group_oper'             =>  $group_oper,

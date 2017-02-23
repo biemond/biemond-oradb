@@ -38,16 +38,16 @@ define oradb::client(
   }
 
   if $ora_inventory_dir == undef {
-    $oraInventory = oradb::cleanpath("${oracle_base}/../oraInventory")
+    $ora_inventory = oradb::cleanpath("${oracle_base}/../oraInventory")
   } else {
     validate_absolute_path($ora_inventory_dir)
-    $oraInventory = "${ora_inventory_dir}/oraInventory"
+    $ora_inventory = "${ora_inventory_dir}/oraInventory"
   }
 
   db_directory_structure{"client structure ${version}":
     ensure            => present,
     oracle_base_dir   => $oracle_base,
-    ora_inventory_dir => $oraInventory,
+    ora_inventory_dir => $ora_inventory,
     download_dir      => $download_dir,
     os_user           => $user,
     os_group          => $group_install,
@@ -83,7 +83,7 @@ define oradb::client(
     }
 
     oradb::utils::dborainst{"oracle orainst ${version}":
-      ora_inventory_dir => $oraInventory,
+      ora_inventory_dir => $ora_inventory,
       os_group          => $group_install,
     }
 
@@ -92,7 +92,7 @@ define oradb::client(
         ensure  => present,
         content => epp("oradb/db_client_${version}.rsp.epp", {
                         'group_install' => $group_install,
-                        'oraInventory'  => $oraInventory,
+                        'oraInventory'  => $ora_inventory,
                         'oracle_home'   => $oracle_home,
                         'oracle_base'   => $oracle_base }),
         mode    => '0775',

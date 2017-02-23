@@ -10,7 +10,7 @@ gem 'codeclimate-test-reporter', :require => false
 
 gem 'rspec-puppet-utils', :git => 'https://github.com/Accuity/rspec-puppet-utils.git'
 gem 'hiera-puppet-helper', :git => 'https://github.com/bobtfish/hiera-puppet-helper.git'
-gem 'puppet-lint'
+gem 'puppet-lint', :git => 'https://github.com/rodjek/puppet-lint'
 gem 'puppet', '4.8.2' #puppetversion
 gem 'rspec-puppet'
 gem 'rspec-system-puppet'
