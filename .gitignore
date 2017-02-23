@@ -5,3 +5,4 @@ spec/reports
 spec/fixtures
 pkg
 .DS_Store
+.yardoc

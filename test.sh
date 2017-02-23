@@ -27,6 +27,8 @@ bundle exec rake ci:setup:rspec spec
 
 # Release the Puppet module, doing a clean, build, tag, push, bump_commit
 rake module:clean
+bundle exec puppet strings generate ./\*\*/*.pp ./lib/puppet/functions/**/*.rb
+
 rake build
 
 rake module:push

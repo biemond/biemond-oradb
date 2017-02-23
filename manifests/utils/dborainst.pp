@@ -1,9 +1,16 @@
-# == define: oradb::utils::dborainst
+# utils::dborainst
 #
-#  creates oraInst.loc for oracle products
+# creates oraInst.loc for oracle products
 #
+# @example dborainst call
+#   oradb::utils::dborainst{'myOraInst':
+#     ora_inventory_dir => '/opt/oracle',
+#     os_group          => 'oinstall',
+#   }
 #
-##
+# @param ora_inventory_dir full path to the ora inventory directory
+# @param os_group groupb
+#
 define oradb::utils::dborainst
 (
   String $ora_inventory_dir = undef,
