@@ -511,10 +511,6 @@ to use the new opatchauto utility(12.1) instead of opatch auto(11.2) use this pa
       require                   => Oradb::Listener['start listener'],
     }
 
-you can also use a comma separated string for init_params
-
-      init_params              => "open_cursors=1000,processes=600,job_queue_processes=4",
-
 
 ### template (not seeded)
 based on your own dbt template ( not seeded )

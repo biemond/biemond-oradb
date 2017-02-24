@@ -72,12 +72,79 @@
 <div class="docstring">
   <div class="discussion">
     
-<p>== Class: oradb::database</p>
+<p>database</p>
+
+<p>add or destroys a (container) database</p>
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>creates a database</p>
+</div></p>
+      
+      <pre class="example code"><code>
+oradb::database{ &#39;testDb&#39;:
+  oracle_base               =&gt; &#39;/oracle&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/11.2/db&#39;,
+  version                   =&gt; &#39;11.2&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;,
+  download_dir              =&gt; &#39;/var/tmp/install&#39;,
+  action                    =&gt; &#39;create&#39;,
+  db_name                   =&gt; &#39;test&#39;,
+  db_domain                 =&gt; &#39;oracle.com&#39;,
+  db_port                   =&gt; &#39;1521&#39;,
+  sys_password              =&gt; &#39;Welcome01&#39;,
+  system_password           =&gt; &#39;Welcome01&#39;,
+  data_file_destination     =&gt; &quot;/oracle/oradata&quot;,
+  recovery_area_destination =&gt; &quot;/oracle/flash_recovery_area&quot;,
+  character_set             =&gt; &quot;AL32UTF8&quot;,
+  nationalcharacter_set     =&gt; &quot;UTF8&quot;,
+  init_params               =&gt; {&#39;open_cursors&#39;        =&gt; &#39;1000&#39;,
+                                &#39;processes&#39;           =&gt; &#39;600&#39;,
+                                &#39;job_queue_processes&#39; =&gt; &#39;4&#39; },
+  sample_schema             =&gt; &#39;TRUE&#39;,
+  memory_percentage         =&gt; 40,
+  memory_total              =&gt; 800,
+  database_type             =&gt; &quot;MULTIPURPOSE&quot;,
+  em_configuration          =&gt; &quot;NONE&quot;,
+}
+
+oradb::database{ &#39;oraDb&#39;:
+  oracle_base               =&gt; &#39;/oracle&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/12.1/db&#39;,
+  version                   =&gt; &#39;12.1&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;
+  download_dir              =&gt; &#39;/var/tmp/install&#39;,
+  action                    =&gt; &#39;create&#39;,
+  db_name                   =&gt; &#39;orcl&#39;,
+  db_domain                 =&gt; &#39;example.com&#39;,
+  sys_password              =&gt; &#39;Welcome01&#39;,
+  system_password           =&gt; &#39;Welcome01&#39;,
+  character_set             =&gt; &#39;AL32UTF8&#39;,
+  nationalcharacter_set     =&gt; &#39;UTF8&#39;,
+  sample_schema             =&gt; &#39;FALSE&#39;,
+  memory_percentage         =&gt; 40,
+  memory_total              =&gt; 800,
+  database_type             =&gt; &#39;MULTIPURPOSE&#39;,
+  em_configuration          =&gt; &#39;NONE&#39;,
+  data_file_destination     =&gt; &#39;/oracle/oradata&#39;,
+  recovery_area_destination =&gt; &#39;/oracle/flash_recovery_area&#39;,
+  init_params               =&gt; {&#39;open_cursors&#39;        =&gt; &#39;1000&#39;,
+                                &#39;processes&#39;           =&gt; &#39;600&#39;,
+                                &#39;job_queue_processes&#39; =&gt; &#39;4&#39; },
+  container_database        =&gt; true,
+}</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -90,6 +157,11 @@
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Base directory</p>
+</div>
       
     </li>
   
@@ -104,18 +176,44 @@
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Home directory inside Oracle Base</p>
+</div>
+      
     </li>
   
     <li>
       
-        <span class='name'>version</span>
+        <span class='name'>ora_inventory_dir</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'></span>
       
       
-        <em class="default">(defaults to: <tt>lookup(&#39;oradb::version&#39;)</tt>)</em>
       
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Inventory location directory</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>db_port</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::listener_port&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>database listener port number</p>
+</div>
       
     </li>
   
@@ -130,6 +228,11 @@
         <em class="default">(defaults to: <tt>lookup(&#39;oradb::user&#39;)</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>operating system user</p>
+</div>
+      
     </li>
   
     <li>
@@ -143,6 +246,11 @@
         <em class="default">(defaults to: <tt>lookup(&#39;oradb::group&#39;)</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>the operating group name for using the oracle software</p>
+</div>
+      
     </li>
   
     <li>
@@ -154,6 +262,58 @@
       
       
         <em class="default">(defaults to: <tt>lookup(&#39;oradb::download_dir&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>location for installation files used by this module</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>logoutput</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>log all output</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>puppet_download_mnt_point</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::module_mountpoint&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the location where the installation software is available</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>version</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::version&#39;)</tt>)</em>
       
       
     </li>
@@ -232,19 +392,6 @@
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>db_port</span>
-      
-      
-        <span class='type'>(<tt>Integer</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>lookup(&#39;oradb::listener_port&#39;)</tt>)</em>
       
       
     </li>
@@ -496,19 +643,6 @@
       
     </li>
   
-    <li>
-      
-        <span class='name'>puppet_download_mnt_point</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>lookup(&#39;oradb::module_mountpoint&#39;)</tt>)</em>
-      
-      
-    </li>
-  
 </ul>
 
 
@@ -519,75 +653,6 @@
         <pre class="lines">
 
 
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
 72
 73
 74
@@ -706,10 +771,79 @@
 187
 188
 189
-190</pre>
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/database.pp', line 3</span>
+        <pre class="code"><span class="info file"># File 'manifests/database.pp', line 72</span>
 
 define oradb::database(
   String $oracle_base                                             = undef,
@@ -906,7 +1040,7 @@ define oradb::database(
 </div>
 
       <div id="footer">
-  Generated on Thu Feb 23 22:58:20 2017 by
+  Generated on Fri Feb 24 12:45:42 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

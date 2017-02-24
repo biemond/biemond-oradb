@@ -13,6 +13,7 @@ oradb::grid::group_install: 'oinstall'
 oradb::grid::group_oper:    'asmoper'
 oradb::grid::group_asm:     'asmadmin'
 
+oradb::tmp_dir:      '/var/tmp/install'
 oradb::download_dir:      '/var/tmp/install'
 oradb::module_mountpoint: 'puppet:///modules/oradb/'
 

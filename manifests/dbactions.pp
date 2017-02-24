@@ -1,8 +1,20 @@
-# == Class: oradb::dbactions
 #
+# dbactions
 #
-# action        =  stop|start|mount
+# Oracle database control like stop, start & mount
 #
+# @example dbactions
+#
+#    oradb::dbactions{ 'start testDb':
+#      oracle_home             => '/oracle/product/11.2/db',
+#      user                    => 'oracle',
+#      group                   => 'dba',
+#      action                  => 'start',
+#      db_name                 => 'test',
+#    }
+#
+# @param user operating system user
+# @param group the operating group name for using the oracle software
 #
 define oradb::dbactions(
   Enum['database', 'grid', 'asm'] $db_type          = 'database',

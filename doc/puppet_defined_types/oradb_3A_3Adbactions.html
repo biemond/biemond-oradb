@@ -72,15 +72,70 @@
 <div class="docstring">
   <div class="discussion">
     
-<p>== Class: oradb::dbactions</p>
+<p>dbactions</p>
 
-<p>action = stop|start|mount</p>
+<p>Oracle database control like stop, start &amp; mount</p>
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>dbactions</p>
+</div></p>
+      
+      <pre class="example code"><code>
+oradb::dbactions{ &#39;start testDb&#39;:
+  oracle_home             =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user                    =&gt; &#39;oracle&#39;,
+  group                   =&gt; &#39;dba&#39;,
+  action                  =&gt; &#39;start&#39;,
+  db_name                 =&gt; &#39;test&#39;,
+}</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
+  
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::user&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>operating system user</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::group&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the operating group name for using the oracle software</p>
+</div>
+      
+    </li>
   
     <li>
       
@@ -104,32 +159,6 @@
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>user</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>lookup(&#39;oradb::user&#39;)</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>group</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>lookup(&#39;oradb::group&#39;)</tt>)</em>
       
       
     </li>
@@ -183,18 +212,6 @@
         <pre class="lines">
 
 
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
 19
 20
 21
@@ -210,10 +227,22 @@
 31
 32
 33
-34</pre>
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/dbactions.pp', line 7</span>
+        <pre class="code"><span class="info file"># File 'manifests/dbactions.pp', line 19</span>
 
 define oradb::dbactions(
   Enum[&#39;database&#39;, &#39;grid&#39;, &#39;asm&#39;] $db_type          = &#39;database&#39;,
@@ -250,7 +279,7 @@ define oradb::dbactions(
 </div>
 
       <div id="footer">
-  Generated on Thu Feb 23 22:58:20 2017 by
+  Generated on Fri Feb 24 12:45:42 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

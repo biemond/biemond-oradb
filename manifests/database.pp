@@ -1,4 +1,73 @@
-# == Class: oradb::database
+#
+# database
+#
+# add or destroys a (container) database
+#
+# @example creates a database
+#
+#    oradb::database{ 'testDb':
+#      oracle_base               => '/oracle',
+#      oracle_home               => '/oracle/product/11.2/db',
+#      version                   => '11.2',
+#      user                      => 'oracle',
+#      group                     => 'dba',
+#      download_dir              => '/var/tmp/install',
+#      action                    => 'create',
+#      db_name                   => 'test',
+#      db_domain                 => 'oracle.com',
+#      db_port                   => '1521',
+#      sys_password              => 'Welcome01',
+#      system_password           => 'Welcome01',
+#      data_file_destination     => "/oracle/oradata",
+#      recovery_area_destination => "/oracle/flash_recovery_area",
+#      character_set             => "AL32UTF8",
+#      nationalcharacter_set     => "UTF8",
+#      init_params               => {'open_cursors'        => '1000',
+#                                    'processes'           => '600',
+#                                    'job_queue_processes' => '4' },
+#      sample_schema             => 'TRUE',
+#      memory_percentage         => 40,
+#      memory_total              => 800,
+#      database_type             => "MULTIPURPOSE",
+#      em_configuration          => "NONE",
+#    }
+#
+#    oradb::database{ 'oraDb':
+#      oracle_base               => '/oracle',
+#      oracle_home               => '/oracle/product/12.1/db',
+#      version                   => '12.1',
+#      user                      => 'oracle',
+#      group                     => 'dba'
+#      download_dir              => '/var/tmp/install',
+#      action                    => 'create',
+#      db_name                   => 'orcl',
+#      db_domain                 => 'example.com',
+#      sys_password              => 'Welcome01',
+#      system_password           => 'Welcome01',
+#      character_set             => 'AL32UTF8',
+#      nationalcharacter_set     => 'UTF8',
+#      sample_schema             => 'FALSE',
+#      memory_percentage         => 40,
+#      memory_total              => 800,
+#      database_type             => 'MULTIPURPOSE',
+#      em_configuration          => 'NONE',
+#      data_file_destination     => '/oracle/oradata',
+#      recovery_area_destination => '/oracle/flash_recovery_area',
+#      init_params               => {'open_cursors'        => '1000',
+#                                    'processes'           => '600',
+#                                    'job_queue_processes' => '4' },
+#      container_database        => true,
+#    }
+#
+# @param oracle_base full path to the Oracle Base directory
+# @param oracle_home full path to the Oracle Home directory inside Oracle Base
+# @param ora_inventory_dir full path to the Oracle Inventory location directory
+# @param db_port database listener port number
+# @param user operating system user
+# @param group the operating group name for using the oracle software
+# @param download_dir location for installation files used by this module
+# @param logoutput log all output
+# @param puppet_download_mnt_point the location where the installation software is available
 #
 define oradb::database(
   String $oracle_base                                             = undef,

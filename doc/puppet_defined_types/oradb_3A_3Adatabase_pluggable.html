@@ -72,24 +72,41 @@
 <div class="docstring">
   <div class="discussion">
     
+<p>database_pluggable</p>
+
+<p>add or delete a pluggable database to a container database</p>
+
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
       
-        <span class='name'>ensure</span>
+        <p class="example_title"><div class='inline'>
+<p>pluggable database</p>
+</div></p>
       
-      
-        <span class='type'>(<tt>Enum['present', 'absent']</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>&#39;present&#39;</tt>)</em>
-      
-      
-    </li>
+      <pre class="example code"><code>
+oradb::database_pluggable{&#39;pdb1&#39;:
+  ensure                   =&gt; &#39;present&#39;,
+  version                  =&gt; &#39;12.1&#39;,
+  oracle_home_dir          =&gt; &#39;/oracle/product/12.1/db&#39;,
+  user                     =&gt; &#39;oracle&#39;,
+  group                    =&gt; &#39;dba&#39;,
+  source_db                =&gt; &#39;orcl&#39;,
+  pdb_name                 =&gt; &#39;pdb1&#39;,
+  pdb_admin_username       =&gt; &#39;pdb_adm&#39;,
+  pdb_admin_password       =&gt; &#39;Welcome01&#39;,
+  pdb_datafile_destination =&gt; &quot;/oracle/oradata/orcl/pdb1&quot;,
+  create_user_tablespace   =&gt; true,
+  log_output               =&gt; true,
+}</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
   
     <li>
       
@@ -101,6 +118,11 @@
       
         <em class="default">(defaults to: <tt>lookup(&#39;oradb::version&#39;)</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>Oracle installation version</p>
+</div>
       
     </li>
   
@@ -115,6 +137,27 @@
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Home directory inside Oracle Base</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ora_inventory_dir</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Inventory location directory</p>
+</div>
+      
     </li>
   
     <li>
@@ -128,6 +171,11 @@
         <em class="default">(defaults to: <tt>lookup(&#39;oradb::user&#39;)</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>operating system user</p>
+</div>
+      
     </li>
   
     <li>
@@ -139,6 +187,40 @@
       
       
         <em class="default">(defaults to: <tt>lookup(&#39;oradb::group&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the operating group name for using the oracle software</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>logoutput</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>log all output</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ensure</span>
+      
+      
+        <span class='type'>(<tt>Enum['present', 'absent']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;present&#39;</tt>)</em>
       
       
     </li>
@@ -244,33 +326,6 @@
         <pre class="lines">
 
 
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
 30
 31
 32
@@ -302,10 +357,37 @@
 58
 59
 60
-61</pre>
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/database_pluggable.pp', line 3</span>
+        <pre class="code"><span class="info file"># File 'manifests/database_pluggable.pp', line 30</span>
 
 define oradb::database_pluggable(
   Enum[&#39;present&#39;, &#39;absent&#39;] $ensure = &#39;present&#39;,
@@ -373,7 +455,7 @@ define oradb::database_pluggable(
 </div>
 
       <div id="footer">
-  Generated on Thu Feb 23 22:58:20 2017 by
+  Generated on Fri Feb 24 12:45:43 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>
