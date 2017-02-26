@@ -1,39 +1,92 @@
-# == Class: oradb::installasm
 #
+# installasm
+#
+# install grid/asm
+#
+# @example install asm
+#
+#  oradb::installasm{ 'db_linux-x64':
+#      version                => '11.2.0.4',
+#      file                   => 'p13390677_112040_Linux-x86-64_3of7.zip',
+#      grid_type              => 'HA_CONFIG',
+#      grid_base              => '/app/grid',
+#      grid_home              => '/app/grid/product/11.2/grid',
+#      ora_inventory_dir      => '/app',
+#      user                   => 'grid',
+#      asm_diskgroup          => 'DATA',
+#      disk_discovery_string  => '/nfs_client/asm*',
+#      disks                  => '/nfs_client/asm_sda_nfs_b1,/nfs_client/asm_sda_nfs_b2',
+#      disk_redundancy        => 'EXTERNAL',
+#      remote_file            => false,
+#      puppet_download_mnt_point => "/software",
+#  }
+#
+# @param version Oracle installation version
+# @param file filename of the installation software
+# @param grid_base full path to the Oracle Grid Base directory
+# @param grid_home full path to the Oracle Grid Home directory inside Oracle Grid Base
+# @param ora_inventory_dir full path to the Oracle Inventory location directory
+# @param user operating system user
+# @param user_base_dir the location of the base user homes
+# @param group the operating group name for using the oracle software
+# @param download_dir location for installation files used by this module
+# @param bash_profile add a bash profile to the operating user
+# @param puppet_download_mnt_point the location where the installation software is available
+# @param remote_file the installation is remote accessiable or not
+# @param temp_dir location for temporaray file used by the installer
+# @param grid_type
+# @param stand_alone
+# @param group_install
+# @param group_oper
+# @param group_asm
+# @param zip_extract
+# @param sys_asm_password
+# @param asm_monitor_password
+# @param asm_diskgroup
+# @param disk_discovery_string
+# @param disk_redundancy
+# @param disk_au_size
+# @param disks
+# @param cluster_name
+# @param scan_name
+# @param scan_port
+# @param cluster_nodes
+# @param network_interface_list
+# @param storage_option
 #
 define oradb::installasm(
-  String $version                                                      = undef,
-  String $file                                                         = undef,
-  Enum['HA_CONFIG', 'CRS_CONFIG', 'UPGRADE', 'CRS_SWONLY'] $grid_type  = 'HA_CONFIG',
-  Boolean $stand_alone                                                 = true, # in case of 'CRS_SWONLY' and used as stand alone or in RAC
-  String $grid_base                                                    = undef,
-  String $grid_home                                                    = undef,
-  Optional[String] $ora_inventory_dir                                  = undef,
-  String $user                                                         = lookup('oradb::grid::user'),
-  String $user_base_dir                                                = lookup('oradb::user_base_dir'),
-  String $group                                                        = lookup('oradb::grid::group'),
-  String $group_install                                                = lookup('oradb::grid::group_install'),
-  String $group_oper                                                   = lookup('oradb::grid::group_oper'),
-  String $group_asm                                                    = lookup('oradb::grid::group_asm'),
-  String $download_dir                                                 = lookup('oradb::download_dir'),
-  Boolean $zip_extract                                                 = true,
-  String $puppet_download_mnt_point                                    = lookup('oradb::module_mountpoint'),
-  String $sys_asm_password                                             = lookup('oradb::grid::default::password'),
-  String $asm_monitor_password                                         = lookup('oradb::grid::default::password'),
-  String $asm_diskgroup                                                = 'DATA',
-  Optional[String] $disk_discovery_string                              = undef,
-  String $disk_redundancy                                              = 'NORMAL',
-  Integer $disk_au_size                                                = 1,
-  Optional[String] $disks                                              = undef,
-  Boolean $remote_file                                                 = true,
-  Optional[String] $cluster_name                                       = undef,
-  Optional[String] $scan_name                                          = undef,
-  Optional[Integer] $scan_port                                         = undef,
-  Optional[String] $cluster_nodes                                      = undef,
-  Optional[String] $network_interface_list                             = undef,
-  Optional[String] $storage_option                                     = undef,
-  String $temp_dir                                                     = '/tmp',
-  Boolean $bash_profile                                                = true,
+  Enum['11.2.0.1','11.2.0.3','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1'] $version = undef,
+  String $file                                                                     = undef,
+  Enum['HA_CONFIG', 'CRS_CONFIG', 'UPGRADE', 'CRS_SWONLY'] $grid_type              = 'HA_CONFIG',
+  Boolean $stand_alone                                                             = true, # in case of 'CRS_SWONLY' and used as stand alone or in RAC
+  String $grid_base                                                                = undef,
+  String $grid_home                                                                = undef,
+  Optional[String] $ora_inventory_dir                                              = undef,
+  String $user                                                                     = lookup('oradb::grid::user'),
+  String $user_base_dir                                                            = lookup('oradb::user_base_dir'),
+  String $group                                                                    = lookup('oradb::grid::group'),
+  String $group_install                                                            = lookup('oradb::grid::group_install'),
+  String $group_oper                                                               = lookup('oradb::grid::group_oper'),
+  String $group_asm                                                                = lookup('oradb::grid::group_asm'),
+  String $download_dir                                                             = lookup('oradb::download_dir'),
+  Boolean $zip_extract                                                             = true,
+  String $puppet_download_mnt_point                                                = lookup('oradb::module_mountpoint'),
+  String $sys_asm_password                                                         = lookup('oradb::grid::default::password'),
+  String $asm_monitor_password                                                     = lookup('oradb::grid::default::password'),
+  String $asm_diskgroup                                                            = 'DATA',
+  Optional[String] $disk_discovery_string                                          = undef,
+  String $disk_redundancy                                                          = 'NORMAL',
+  Integer $disk_au_size                                                            = 1,
+  Optional[String] $disks                                                          = undef,
+  Boolean $remote_file                                                             = true,
+  Optional[String] $cluster_name                                                   = undef,
+  Optional[String] $scan_name                                                      = undef,
+  Optional[Integer] $scan_port                                                     = undef,
+  Optional[String] $cluster_nodes                                                  = undef,
+  Optional[String] $network_interface_list                                         = undef,
+  Optional[String] $storage_option                                                 = undef,
+  String $temp_dir                                                                 = lookup('oradb::tmp_dir'),
+  Boolean $bash_profile                                                            = true,
 )
 {
 

@@ -20,7 +20,7 @@ describe 'oradb::database', :type => :define do
 
     it do
       expect { should contain_file("/install/database_testDb_Create.rsp")
-               }.to raise_error(Puppet::Error, /Unrecognized version/)
+               }.to raise_error(Puppet::Error, /expects a match for Enum/)
     end
 
   end
@@ -44,7 +44,7 @@ describe 'oradb::database', :type => :define do
 
     it do
       expect { should contain_file("/install/database_testDb_Create.rsp")
-               }.to raise_error(Puppet::Error, /Unrecognized database action/)
+               }.to raise_error(Puppet::Error, /expects a match for Enum/)
     end
 
   end

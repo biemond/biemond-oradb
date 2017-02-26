@@ -22,7 +22,7 @@ describe 'oradb::database_pluggable', :type => :define do
 
     it do
       expect { should contain_exec("dbca pdb execute pdb1")
-               }.to raise_error(Puppet::Error, /Unrecognized version, use 12.1/)
+               }.to raise_error(Puppet::Error, /expects a match for Enum/)
     end
 
   end

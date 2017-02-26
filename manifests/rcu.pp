@@ -1,5 +1,44 @@
-# == Class: oradb::rcu
-#    rcu for soa suite, webcenter
+#
+# rcu
+#
+# 11g repository creation utility for soa suite, webcenter
+#
+# @example soa rcu
+#
+#  oradb::rcu{'DEV_PS6':
+#    rcu_file       => 'ofm_rcu_linux_11.1.1.7.0_32_disk1_1of1.zip',
+#    product        => 'soasuite',
+#    version        => '11.1.1.7',
+#    oracle_home    => '/oracle/product/11.2/db',
+#    user           => 'oracle',
+#    group          => 'dba',
+#    download_dir   => '/install',
+#    action         => 'create',
+#    db_server      => 'dbagent1.alfa.local:1521',
+#    db_service     => 'test.oracle.com',
+#    sys_password   => 'Welcome01',
+#    schema_prefix  => 'DEV',
+#    repos_password => 'Welcome02',
+#  }
+#
+# @param version Oracle installation version
+# @param rcu_file filename of the installation software
+# @param oracle_home full path to the Oracle Home directory inside Oracle Base
+# @param user operating system user
+# @param group the operating group name for using the oracle software
+# @param puppet_download_mnt_point the location where the installation software is available
+# @param remote_file the installation is remote accessiable or not
+# @param product kind of rcu, for which oracle product
+# @param log_output log all output
+# @param download_dir location for installation files used by this module
+# @param action rcu action on the database
+# @param db_server the database server
+# @param db_service the database service name
+# @param sys_user the sys username
+# @param sys_password the sys username password
+# @param schema_prefix prefix of the rcu schemas
+# @param repos_password the rcu schemas password
+# @param temp_tablespace shared temp tablespace used by the rcu schemas
 #
 define oradb::rcu(
   String $rcu_file                                            = undef,
@@ -19,7 +58,7 @@ define oradb::rcu(
   Optional[String] $temp_tablespace                           = undef,
   String $puppet_download_mnt_point                           = lookup('oradb::module_mountpoint'),
   Boolean $remote_file                                        = true,
-  Boolean $logoutput                                          = false,
+  Boolean $log_output                                         = false,
 ){
   $exec_path = lookup('oradb::exec_path')
 
@@ -61,7 +100,7 @@ define oradb::rcu(
       path      => $exec_path,
       user      => $user,
       group     => $group,
-      logoutput => true,
+      logoutput => $log_output,
     }
   }
 

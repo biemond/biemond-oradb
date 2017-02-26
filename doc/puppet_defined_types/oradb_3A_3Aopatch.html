@@ -72,15 +72,146 @@
 <div class="docstring">
   <div class="discussion">
     
-<p>== Define: oradb::opatch</p>
+<p>opatch</p>
 
 <p>installs oracle patches for Oracle products</p>
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>opatch</p>
+</div></p>
+      
+      <pre class="example code"><code>
+oradb::opatch{&#39;19121551_db_patch&#39;:
+  ensure                    =&gt; &#39;present&#39;,
+  oracle_product_home       =&gt; /app/oracle/product/11.2/db&#39;,
+  patch_id                  =&gt; &#39;19121551&#39;,
+  patch_file                =&gt; &#39;p19121551_112040_Linux-x86-64.zip&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;oinstall&#39;,
+  download_dir              =&gt; &#39;/var/tmp/install&#39;,
+  ocmrf                     =&gt; true,
+  puppet_download_mnt_point =&gt; &#39;/software&#39;,
+}</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
+  
+    <li>
+      
+        <span class='name'>oracle_product_home</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Home directory</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::user&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>operating system user</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::group&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the operating group name for using the oracle software</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>download_dir</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::download_dir&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>location for installation files used by this module</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>puppet_download_mnt_point</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::module_mountpoint&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the location where the installation software is available</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>remote_file</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the installation is remote accessiable or not</p>
+</div>
+      
+    </li>
   
     <li>
       
@@ -93,18 +224,10 @@
         <em class="default">(defaults to: <tt>&#39;present&#39;</tt>)</em>
       
       
-    </li>
-  
-    <li>
-      
-        <span class='name'>oracle_product_home</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>undef</tt>)</em>
-      
+        &mdash;
+        <div class='inline'>
+<p>patch should be applied or removed</p>
+</div>
       
     </li>
   
@@ -119,6 +242,11 @@
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>the opatch id</p>
+</div>
+      
     </li>
   
     <li>
@@ -132,6 +260,11 @@
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>the opatch patch file</p>
+</div>
+      
     </li>
   
     <li>
@@ -144,6 +277,11 @@
       
         <em class="default">(defaults to: <tt>false</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>use opatch auto</p>
+</div>
       
     </li>
   
@@ -171,6 +309,12 @@
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>sub opatch id in case of a bundle patch to check if the bundle patch is
+already applied</p>
+</div>
+      
     </li>
   
     <li>
@@ -184,44 +328,10 @@
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
-    </li>
-  
-    <li>
-      
-        <span class='name'>user</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>lookup(&#39;oradb::user&#39;)</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>group</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>lookup(&#39;oradb::group&#39;)</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>download_dir</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>lookup(&#39;oradb::download_dir&#39;)</tt>)</em>
-      
+        &mdash;
+        <div class='inline'>
+<p>just apply a patch from a bundle</p>
+</div>
       
     </li>
   
@@ -238,32 +348,6 @@
       
     </li>
   
-    <li>
-      
-        <span class='name'>puppet_download_mnt_point</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>lookup(&#39;oradb::module_mountpoint&#39;)</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>remote_file</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-    </li>
-  
 </ul>
 
 
@@ -274,35 +358,6 @@
         <pre class="lines">
 
 
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
 35
 36
 37
@@ -374,10 +429,39 @@
 103
 104
 105
-106</pre>
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/opatch.pp', line 6</span>
+        <pre class="code"><span class="info file"># File 'manifests/opatch.pp', line 35</span>
 
 define oradb::opatch(
   Enum[&#39;present&#39;, &#39;absent&#39;] $ensure     = &#39;present&#39;,
@@ -487,7 +571,7 @@ define oradb::opatch(
 </div>
 
       <div id="footer">
-  Generated on Fri Feb 24 12:45:42 2017 by
+  Generated on Sun Feb 26 10:48:45 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

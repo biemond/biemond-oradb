@@ -1,8 +1,72 @@
-# == Class: oradb::installem
-#s
-
+#
+# installem
+#
+# install enterprise manager
+#
+# @example install EM
+#
+#  oradb::installem{ 'em12104':
+#      version                     => '12.1.0.4',
+#      file                        => 'em12104_linux64',
+#      oracle_base_dir             => '/oracle',
+#      oracle_home_dir             => '/oracle/product/12.1/em',
+#      agent_base_dir              => '/oracle/product/12.1/agent',
+#      software_library_dir        => '/oracle/product/12.1/swlib',
+#      weblogic_user               => 'weblogic',
+#      weblogic_password           => 'Welcome01',
+#      database_hostname           => 'emdb.example.com',
+#      database_listener_port      => 1521,
+#      database_service_sid_name   => 'emrepos.example.com',
+#      database_sys_password       => 'Welcome01',
+#      sysman_password             => 'Welcome01',
+#      agent_registration_password => 'Welcome01',
+#      deployment_size             => 'SMALL',
+#      user                        => 'oracle',
+#      group                       => 'oinstall',
+#      download_dir                => '/install',
+#      zip_extract                 => true,
+#      puppet_download_mnt_point   => '/software',
+#      remote_file                 => false,
+#      log_output                  => true,
+#  }
+#
+# @param version Oracle installation version
+# @param file filename of the installation software
+# @param oracle_base_dir full path to the Oracle Base directory
+# @param oracle_home_dir full path to the Oracle Home directory inside Oracle Base
+# @param ora_inventory_dir full path to the Oracle Inventory location directory
+# @param user operating system user
+# @param group the operating group name for using the oracle software
+# @param download_dir location for installation files used by this module
+# @param puppet_download_mnt_point the location where the installation software is available
+# @param remote_file the installation is remote accessiable or not
+# @param log_output log all output
+# @param agent_base_dir
+# @param software_library_dir
+# @param weblogic_user
+# @param weblogic_password
+# @param database_hostname
+# @param database_listener_port
+# @param database_service_sid_name
+# @param database_sys_password
+# @param sysman_password
+# @param agent_registration_password
+# @param deployment_size
+# @param zip_extract
+# @param admin_server_https_port
+# @param managed_server_http_port
+# @param managed_server_https_port
+# @param em_upload_http_port
+# @param em_upload_https_port
+# @param em_central_console_http_port
+# @param em_central_console_https_port
+# @param bi_publisher_http_port
+# @param bi_publisher_https_port
+# @param nodemanager_https_port
+# @param agent_port
+#
 define oradb::installem(
-  String $version                                   = '12.1.0.5',
+  Enum['12.1.0.4','12.1.0.5'] $version              = '12.1.0.5',
   String $file                                      = undef,
   Optional[String] $ora_inventory_dir               = undef,
   String $oracle_base_dir                           = undef,

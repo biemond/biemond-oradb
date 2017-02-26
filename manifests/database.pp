@@ -61,22 +61,46 @@
 #
 # @param oracle_base full path to the Oracle Base directory
 # @param oracle_home full path to the Oracle Home directory inside Oracle Base
-# @param ora_inventory_dir full path to the Oracle Inventory location directory
 # @param db_port database listener port number
 # @param user operating system user
 # @param group the operating group name for using the oracle software
 # @param download_dir location for installation files used by this module
-# @param logoutput log all output
 # @param puppet_download_mnt_point the location where the installation software is available
+# @param version Oracle installation version
+# @param action create or delete the database
+# @param template dbt template for your own full database configution
+# @param template_seeded seeded template name
+# @param template_variables variables which you can use in your dbt template
+# @param db_name database name
+# @param db_domain database domain name
+# @param sys_password sys username password
+# @param system_password system username password
+# @param data_file_destination full path to for the Datafiles location
+# @param recovery_area_destination full path to for the recovery area destination location
+# @param character_set
+# @param nationalcharacter_set
+# @param init_params database parameters
+# @param sample_schema add sample schemas
+# @param memory_percentage
+# @param memory_total
+# @param database_type
+# @param em_configuration
+# @param storage_type
+# @param asm_snmp_password
+# @param db_snmp_password
+# @param asm_diskgroup
+# @param recovery_diskgroup
+# @param cluster_nodes
+# @param container_database configure as a 12c container database which allows plugleable databases
 #
 define oradb::database(
   String $oracle_base                                             = undef,
   String $oracle_home                                             = undef,
-  String $version                                                 = lookup('oradb::version'),
+  Enum['11.2', '12.1', '12.2'] $version                           = lookup('oradb::version'),
   String $user                                                    = lookup('oradb::user'),
   String $group                                                   = lookup('oradb::group'),
   String $download_dir                                            = lookup('oradb::download_dir'),
-  String $action                                                  = lookup('oradb::database::action'),
+  Enum['create','delete'] $action                                 = lookup('oradb::database::action'),
   Optional[String] $template                                      = undef,
   Optional[String] $template_seeded                               = undef,
   String $template_variables                                      = 'dummy=/tmp', # for dbt template
@@ -105,9 +129,6 @@ define oradb::database(
   String $puppet_download_mnt_point                               = lookup('oradb::module_mountpoint'),
 )
 {
-  if ( $version in lookup('oradb::database_versions') == false ) {
-    fail('Unrecognized version for oradb::database')
-  }
 
   $supported_db_kernels = join( lookup('oradb::kernels'), '|')
   if ( $::kernel in $supported_db_kernels == false){
@@ -230,7 +251,11 @@ define oradb::database(
         }
       }
     } else {
-      $command = "${elevation_prefix}${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp${elevation_suffix}"
+      if ( $version == '12.2' ) {
+        $command = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -responseFile ${download_dir}/database_${sanitized_title}.rsp${elevation_suffix}"
+      } else {
+        $command = "${elevation_prefix}${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp${elevation_suffix}"
+      }
     }
     exec { "oracle database ${title}":
       command     => $command,
@@ -244,8 +269,13 @@ define oradb::database(
       logoutput   => true,
     }
   } elsif $action == 'delete' {
+    if ( $version == '12.2' ) {
+      $command = "${oracle_home}/bin/dbca -silent -deleteDatabase -sourceDB ${db_name} -sysDBAUserName sys -sysDBAPassword ${sys_password}"
+    } else {
+      $command = "${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp"
+    }
     exec { "oracle database ${title}":
-      command     => "${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp",
+      command     => $command,
       onlyif      => "ls ${oracle_base}/admin/${db_name}",
       timeout     => 0,
       path        => $exec_path,

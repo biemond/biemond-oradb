@@ -74,16 +74,30 @@
     
 <p>autostartdatabase</p>
 
-<p>autostart of the nodemanager for linux</p>
-
-<p>@example configuration  oradb::autostartdatabase{ :  oracle_home =&gt;
-&#39;/opt/oracle/product/11g&#39;,  db_name =&gt; &#39;ORCL&#39;,  user
-=&gt; &#39;oracle&#39;,  service_name =&gt; &#39;dbora&#39;,  }</p>
+<p>autostart of the nodemanager for linux &amp; Solaris</p>
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>configuration</p>
+</div></p>
+      
+      <pre class="example code"><code>
+oradb::autostartdatabase{&#39;dbora&#39;:
+  oracle_home  =&gt; &#39;/opt/oracle/product/11g&#39;,
+  db_name      =&gt; &#39;ORCL&#39;,
+  user         =&gt; &#39;oracle&#39;,
+  service_name =&gt; &#39;dbora&#39;,
+}</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -148,7 +162,6 @@
         <pre class="lines">
 
 
-19
 20
 21
 22
@@ -185,10 +198,11 @@
 53
 54
 55
-56</pre>
+56
+57</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/autostartdatabase.pp', line 19</span>
+        <pre class="code"><span class="info file"># File 'manifests/autostartdatabase.pp', line 20</span>
 
 define oradb::autostartdatabase(
   String $oracle_home  = undef,
@@ -235,7 +249,7 @@ define oradb::autostartdatabase(
 </div>
 
       <div id="footer">
-  Generated on Fri Feb 24 12:45:42 2017 by
+  Generated on Sun Feb 26 10:48:46 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

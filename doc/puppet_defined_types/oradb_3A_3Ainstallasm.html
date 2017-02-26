@@ -72,12 +72,41 @@
 <div class="docstring">
   <div class="discussion">
     
-<p>== Class: oradb::installasm</p>
+<p>installasm</p>
+
+<p>install grid/asm</p>
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>install asm</p>
+</div></p>
+      
+      <pre class="example code"><code>
+oradb::installasm{ &#39;db_linux-x64&#39;:
+    version                =&gt; &#39;11.2.0.4&#39;,
+    file                   =&gt; &#39;p13390677_112040_Linux-x86-64_3of7.zip&#39;,
+    grid_type              =&gt; &#39;HA_CONFIG&#39;,
+    grid_base              =&gt; &#39;/app/grid&#39;,
+    grid_home              =&gt; &#39;/app/grid/product/11.2/grid&#39;,
+    ora_inventory_dir      =&gt; &#39;/app&#39;,
+    user                   =&gt; &#39;grid&#39;,
+    asm_diskgroup          =&gt; &#39;DATA&#39;,
+    disk_discovery_string  =&gt; &#39;/nfs_client/asm*&#39;,
+    disks                  =&gt; &#39;/nfs_client/asm_sda_nfs_b1,/nfs_client/asm_sda_nfs_b2&#39;,
+    disk_redundancy        =&gt; &#39;EXTERNAL&#39;,
+    remote_file            =&gt; false,
+    puppet_download_mnt_point =&gt; &quot;/software&quot;,
+}</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -85,11 +114,16 @@
         <span class='name'>version</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt>Enum['11.2.0.1','11.2.0.3','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1']</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>Oracle installation version</p>
+</div>
       
     </li>
   
@@ -103,6 +137,209 @@
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>filename of the installation software</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>grid_base</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Grid Base directory</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>grid_home</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Grid Home directory inside Oracle Grid Base</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ora_inventory_dir</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Inventory location directory</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::grid::user&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>operating system user</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user_base_dir</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::user_base_dir&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the location of the base user homes</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::grid::group&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the operating group name for using the oracle software</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>download_dir</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::download_dir&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>location for installation files used by this module</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>bash_profile</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>add a bash profile to the operating user</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>puppet_download_mnt_point</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::module_mountpoint&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the location where the installation software is available</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>remote_file</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the installation is remote accessiable or not</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>temp_dir</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::tmp_dir&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>location for temporaray file used by the installer</p>
+</div>
       
     </li>
   
@@ -128,84 +365,6 @@
       
       
         <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>grid_base</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>undef</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>grid_home</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>undef</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>ora_inventory_dir</span>
-      
-      
-        <span class='type'>(<tt>Optional[String]</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>undef</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>user</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>lookup(&#39;oradb::grid::user&#39;)</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>user_base_dir</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>lookup(&#39;oradb::user_base_dir&#39;)</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>group</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>lookup(&#39;oradb::grid::group&#39;)</tt>)</em>
       
       
     </li>
@@ -251,19 +410,6 @@
   
     <li>
       
-        <span class='name'>download_dir</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>lookup(&#39;oradb::download_dir&#39;)</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
         <span class='name'>zip_extract</span>
       
       
@@ -271,19 +417,6 @@
       
       
         <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>puppet_download_mnt_point</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>lookup(&#39;oradb::module_mountpoint&#39;)</tt>)</em>
       
       
     </li>
@@ -381,19 +514,6 @@
   
     <li>
       
-        <span class='name'>remote_file</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
         <span class='name'>cluster_name</span>
       
       
@@ -470,32 +590,6 @@
       
     </li>
   
-    <li>
-      
-        <span class='name'>temp_dir</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>&#39;/tmp&#39;</tt>)</em>
-      
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>bash_profile</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
-      
-      
-    </li>
-  
 </ul>
 
 
@@ -506,59 +600,6 @@
         <pre class="lines">
 
 
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
 57
 58
 59
@@ -864,44 +905,97 @@
 359
 360
 361
-362</pre>
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/installasm.pp', line 4</span>
+        <pre class="code"><span class="info file"># File 'manifests/installasm.pp', line 57</span>
 
 define oradb::installasm(
-  String $version                                                      = undef,
-  String $file                                                         = undef,
-  Enum[&#39;HA_CONFIG&#39;, &#39;CRS_CONFIG&#39;, &#39;UPGRADE&#39;, &#39;CRS_SWONLY&#39;] $grid_type  = &#39;HA_CONFIG&#39;,
-  Boolean $stand_alone                                                 = true, # in case of &#39;CRS_SWONLY&#39; and used as stand alone or in RAC
-  String $grid_base                                                    = undef,
-  String $grid_home                                                    = undef,
-  Optional[String] $ora_inventory_dir                                  = undef,
-  String $user                                                         = lookup(&#39;oradb::grid::user&#39;),
-  String $user_base_dir                                                = lookup(&#39;oradb::user_base_dir&#39;),
-  String $group                                                        = lookup(&#39;oradb::grid::group&#39;),
-  String $group_install                                                = lookup(&#39;oradb::grid::group_install&#39;),
-  String $group_oper                                                   = lookup(&#39;oradb::grid::group_oper&#39;),
-  String $group_asm                                                    = lookup(&#39;oradb::grid::group_asm&#39;),
-  String $download_dir                                                 = lookup(&#39;oradb::download_dir&#39;),
-  Boolean $zip_extract                                                 = true,
-  String $puppet_download_mnt_point                                    = lookup(&#39;oradb::module_mountpoint&#39;),
-  String $sys_asm_password                                             = lookup(&#39;oradb::grid::default::password&#39;),
-  String $asm_monitor_password                                         = lookup(&#39;oradb::grid::default::password&#39;),
-  String $asm_diskgroup                                                = &#39;DATA&#39;,
-  Optional[String] $disk_discovery_string                              = undef,
-  String $disk_redundancy                                              = &#39;NORMAL&#39;,
-  Integer $disk_au_size                                                = 1,
-  Optional[String] $disks                                              = undef,
-  Boolean $remote_file                                                 = true,
-  Optional[String] $cluster_name                                       = undef,
-  Optional[String] $scan_name                                          = undef,
-  Optional[Integer] $scan_port                                         = undef,
-  Optional[String] $cluster_nodes                                      = undef,
-  Optional[String] $network_interface_list                             = undef,
-  Optional[String] $storage_option                                     = undef,
-  String $temp_dir                                                     = &#39;/tmp&#39;,
-  Boolean $bash_profile                                                = true,
+  Enum[&#39;11.2.0.1&#39;,&#39;11.2.0.3&#39;,&#39;11.2.0.4&#39;,&#39;12.1.0.1&#39;,&#39;12.1.0.2&#39;,&#39;12.2.0.1&#39;] $version = undef,
+  String $file                                                                     = undef,
+  Enum[&#39;HA_CONFIG&#39;, &#39;CRS_CONFIG&#39;, &#39;UPGRADE&#39;, &#39;CRS_SWONLY&#39;] $grid_type              = &#39;HA_CONFIG&#39;,
+  Boolean $stand_alone                                                             = true, # in case of &#39;CRS_SWONLY&#39; and used as stand alone or in RAC
+  String $grid_base                                                                = undef,
+  String $grid_home                                                                = undef,
+  Optional[String] $ora_inventory_dir                                              = undef,
+  String $user                                                                     = lookup(&#39;oradb::grid::user&#39;),
+  String $user_base_dir                                                            = lookup(&#39;oradb::user_base_dir&#39;),
+  String $group                                                                    = lookup(&#39;oradb::grid::group&#39;),
+  String $group_install                                                            = lookup(&#39;oradb::grid::group_install&#39;),
+  String $group_oper                                                               = lookup(&#39;oradb::grid::group_oper&#39;),
+  String $group_asm                                                                = lookup(&#39;oradb::grid::group_asm&#39;),
+  String $download_dir                                                             = lookup(&#39;oradb::download_dir&#39;),
+  Boolean $zip_extract                                                             = true,
+  String $puppet_download_mnt_point                                                = lookup(&#39;oradb::module_mountpoint&#39;),
+  String $sys_asm_password                                                         = lookup(&#39;oradb::grid::default::password&#39;),
+  String $asm_monitor_password                                                     = lookup(&#39;oradb::grid::default::password&#39;),
+  String $asm_diskgroup                                                            = &#39;DATA&#39;,
+  Optional[String] $disk_discovery_string                                          = undef,
+  String $disk_redundancy                                                          = &#39;NORMAL&#39;,
+  Integer $disk_au_size                                                            = 1,
+  Optional[String] $disks                                                          = undef,
+  Boolean $remote_file                                                             = true,
+  Optional[String] $cluster_name                                                   = undef,
+  Optional[String] $scan_name                                                      = undef,
+  Optional[Integer] $scan_port                                                     = undef,
+  Optional[String] $cluster_nodes                                                  = undef,
+  Optional[String] $network_interface_list                                         = undef,
+  Optional[String] $storage_option                                                 = undef,
+  String $temp_dir                                                                 = lookup(&#39;oradb::tmp_dir&#39;),
+  Boolean $bash_profile                                                            = true,
 )
 {
 
@@ -1235,7 +1329,7 @@ define oradb::installasm(
 </div>
 
       <div id="footer">
-  Generated on Fri Feb 24 12:45:42 2017 by
+  Generated on Sun Feb 26 10:48:46 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

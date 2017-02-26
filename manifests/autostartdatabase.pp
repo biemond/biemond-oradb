@@ -1,15 +1,16 @@
 #
-#  autostartdatabase
+# autostartdatabase
 #
-#  autostart of the nodemanager for linux
+# autostart of the nodemanager for linux & Solaris
 #
-#  @example configuration
-#    oradb::autostartdatabase{ :
-#      oracle_home  => '/opt/oracle/product/11g',
-#      db_name      => 'ORCL',
-#      user         => 'oracle',
-#      service_name => 'dbora',
-#    }
+# @example configuration
+#
+#  oradb::autostartdatabase{'dbora':
+#    oracle_home  => '/opt/oracle/product/11g',
+#    db_name      => 'ORCL',
+#    user         => 'oracle',
+#    service_name => 'dbora',
+#  }
 #
 # @param oracle_home
 # @param db_name

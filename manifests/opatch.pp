@@ -1,7 +1,36 @@
-# == Define: oradb::opatch
+#
+# opatch
 #
 # installs oracle patches for Oracle products
 #
+# @example opatch
+#
+#  oradb::opatch{'19121551_db_patch':
+#    ensure                    => 'present',
+#    oracle_product_home       => /app/oracle/product/11.2/db',
+#    patch_id                  => '19121551',
+#    patch_file                => 'p19121551_112040_Linux-x86-64.zip',
+#    user                      => 'oracle',
+#    group                     => 'oinstall',
+#    download_dir              => '/var/tmp/install',
+#    ocmrf                     => true,
+#    puppet_download_mnt_point => '/software',
+#  }
+#
+# @param oracle_product_home full path to the Oracle Home directory
+# @param user operating system user
+# @param group the operating group name for using the oracle software
+# @param download_dir location for installation files used by this module
+# @param puppet_download_mnt_point the location where the installation software is available
+# @param remote_file the installation is remote accessiable or not
+# @param ensure patch should be applied or removed
+# @param patch_id the opatch id
+# @param patch_file the opatch patch file
+# @param clusterware use opatch auto
+# @param use_opatchauto_utility 
+# @param bundle_sub_patch_id sub opatch id in case of a bundle patch to check if the bundle patch is already applied
+# @param bundle_sub_folder just apply a patch from a bundle
+# @param ocmrf
 #
 define oradb::opatch(
   Enum['present', 'absent'] $ensure     = 'present',

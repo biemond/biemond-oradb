@@ -185,22 +185,6 @@ oradb::database{ &#39;oraDb&#39;:
   
     <li>
       
-        <span class='name'>ora_inventory_dir</span>
-      
-      
-        <span class='type'></span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>full path to the Oracle Inventory location directory</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
         <span class='name'>db_port</span>
       
       
@@ -273,22 +257,6 @@ oradb::database{ &#39;oraDb&#39;:
   
     <li>
       
-        <span class='name'>logoutput</span>
-      
-      
-        <span class='type'></span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>log all output</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
         <span class='name'>puppet_download_mnt_point</span>
       
       
@@ -310,11 +278,16 @@ oradb::database{ &#39;oraDb&#39;:
         <span class='name'>version</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt>Enum['11.2', '12.1', '12.2']</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>lookup(&#39;oradb::version&#39;)</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>Oracle installation version</p>
+</div>
       
     </li>
   
@@ -323,11 +296,16 @@ oradb::database{ &#39;oraDb&#39;:
         <span class='name'>action</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt>Enum['create','delete']</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>lookup(&#39;oradb::database::action&#39;)</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>create or delete the database</p>
+</div>
       
     </li>
   
@@ -342,6 +320,11 @@ oradb::database{ &#39;oraDb&#39;:
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>dbt template for your own full database configution</p>
+</div>
+      
     </li>
   
     <li>
@@ -354,6 +337,11 @@ oradb::database{ &#39;oraDb&#39;:
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>seeded template name</p>
+</div>
       
     </li>
   
@@ -368,6 +356,11 @@ oradb::database{ &#39;oraDb&#39;:
         <em class="default">(defaults to: <tt>&#39;dummy=/tmp&#39;</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>variables which you can use in your dbt template</p>
+</div>
+      
     </li>
   
     <li>
@@ -380,6 +373,11 @@ oradb::database{ &#39;oraDb&#39;:
       
         <em class="default">(defaults to: <tt>lookup(&#39;oradb::database_name&#39;)</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>database name</p>
+</div>
       
     </li>
   
@@ -394,6 +392,11 @@ oradb::database{ &#39;oraDb&#39;:
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>database domain name</p>
+</div>
+      
     </li>
   
     <li>
@@ -406,6 +409,11 @@ oradb::database{ &#39;oraDb&#39;:
       
         <em class="default">(defaults to: <tt>lookup(&#39;oradb::default::password&#39;)</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>sys username password</p>
+</div>
       
     </li>
   
@@ -420,6 +428,11 @@ oradb::database{ &#39;oraDb&#39;:
         <em class="default">(defaults to: <tt>lookup(&#39;oradb::default::password&#39;)</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>system username password</p>
+</div>
+      
     </li>
   
     <li>
@@ -433,6 +446,11 @@ oradb::database{ &#39;oraDb&#39;:
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>full path to for the Datafiles location</p>
+</div>
+      
     </li>
   
     <li>
@@ -445,6 +463,11 @@ oradb::database{ &#39;oraDb&#39;:
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to for the recovery area destination location</p>
+</div>
       
     </li>
   
@@ -485,6 +508,11 @@ oradb::database{ &#39;oraDb&#39;:
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>database parameters</p>
+</div>
+      
     </li>
   
     <li>
@@ -497,6 +525,11 @@ oradb::database{ &#39;oraDb&#39;:
       
         <em class="default">(defaults to: <tt>lookup(&#39;oradb::database::sample_schema&#39;)</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>add sample schemas</p>
+</div>
       
     </li>
   
@@ -641,6 +674,11 @@ oradb::database{ &#39;oraDb&#39;:
         <em class="default">(defaults to: <tt>false</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>configure as a 12c container database which allows plugleable databases</p>
+</div>
+      
     </li>
   
 </ul>
@@ -653,30 +691,6 @@ oradb::database{ &#39;oraDb&#39;:
         <pre class="lines">
 
 
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94
-95
 96
 97
 98
@@ -840,19 +854,49 @@ oradb::database{ &#39;oraDb&#39;:
 256
 257
 258
-259</pre>
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/database.pp', line 72</span>
+        <pre class="code"><span class="info file"># File 'manifests/database.pp', line 96</span>
 
 define oradb::database(
   String $oracle_base                                             = undef,
   String $oracle_home                                             = undef,
-  String $version                                                 = lookup(&#39;oradb::version&#39;),
+  Enum[&#39;11.2&#39;, &#39;12.1&#39;, &#39;12.2&#39;] $version                           = lookup(&#39;oradb::version&#39;),
   String $user                                                    = lookup(&#39;oradb::user&#39;),
   String $group                                                   = lookup(&#39;oradb::group&#39;),
   String $download_dir                                            = lookup(&#39;oradb::download_dir&#39;),
-  String $action                                                  = lookup(&#39;oradb::database::action&#39;),
+  Enum[&#39;create&#39;,&#39;delete&#39;] $action                                 = lookup(&#39;oradb::database::action&#39;),
   Optional[String] $template                                      = undef,
   Optional[String] $template_seeded                               = undef,
   String $template_variables                                      = &#39;dummy=/tmp&#39;, # for dbt template
@@ -881,9 +925,6 @@ define oradb::database(
   String $puppet_download_mnt_point                               = lookup(&#39;oradb::module_mountpoint&#39;),
 )
 {
-  if ( $version in lookup(&#39;oradb::database_versions&#39;) == false ) {
-    fail(&#39;Unrecognized version for oradb::database&#39;)
-  }
 
   $supported_db_kernels = join( lookup(&#39;oradb::kernels&#39;), &#39;|&#39;)
   if ( $::kernel in $supported_db_kernels == false){
@@ -1006,7 +1047,11 @@ define oradb::database(
         }
       }
     } else {
-      $command = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp${elevation_suffix}&quot;
+      if ( $version == &#39;12.2&#39; ) {
+        $command = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -responseFile ${download_dir}/database_${sanitized_title}.rsp${elevation_suffix}&quot;
+      } else {
+        $command = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp${elevation_suffix}&quot;
+      }
     }
     exec { &quot;oracle database ${title}&quot;:
       command     =&gt; $command,
@@ -1020,8 +1065,13 @@ define oradb::database(
       logoutput   =&gt; true,
     }
   } elsif $action == &#39;delete&#39; {
+    if ( $version == &#39;12.2&#39; ) {
+      $command = &quot;${oracle_home}/bin/dbca -silent -deleteDatabase -sourceDB ${db_name} -sysDBAUserName sys -sysDBAPassword ${sys_password}&quot;
+    } else {
+      $command = &quot;${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp&quot;
+    }
     exec { &quot;oracle database ${title}&quot;:
-      command     =&gt; &quot;${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp&quot;,
+      command     =&gt; $command,
       onlyif      =&gt; &quot;ls ${oracle_base}/admin/${db_name}&quot;,
       timeout     =&gt; 0,
       path        =&gt; $exec_path,
@@ -1040,7 +1090,7 @@ define oradb::database(
 </div>
 
       <div id="footer">
-  Generated on Fri Feb 24 12:45:42 2017 by
+  Generated on Sun Feb 26 10:48:45 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

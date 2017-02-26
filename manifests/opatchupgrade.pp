@@ -1,7 +1,31 @@
-# == Define: oradb::opatchupgrade
 #
-# upgrades oracle opatch
+# opatchupgrade
 #
+# upgrades oracle opatch of an Oracle Home
+#
+# @example opatch upgrade
+#
+#  oradb::opatchupgrade{'112000_opatch_upgrade':
+#    oracle_home               => '/oracle/product/11.2/db',
+#    patch_file                => 'p6880880_112000_Linux-x86-64.zip',
+#    csi_number                => undef,
+#    support_id                => undef,
+#    opversion                 => '11.2.0.3.6',
+#    user                      => 'oracle',
+#    group                     => 'dba',
+#    download_dir              => '/install',
+#    puppet_download_mnt_point => $puppet_download_mnt_point,
+#  }
+#
+# @param oracle_home full path to the Oracle Home directory
+# @param user operating system user
+# @param group the operating group name for using the oracle software
+# @param download_dir location for installation files used by this module
+# @param puppet_download_mnt_point the location where the installation software is available
+# @param patch_file the opatch upgrade patch file
+# @param csi_number oracle support csi number
+# @param support_id oracle support id
+# @param opversion opatch version of current patch
 #
 define oradb::opatchupgrade(
   String $oracle_home               = undef,

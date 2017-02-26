@@ -1,17 +1,66 @@
 #
+# goldengate
 #
+# install goldengate version 12.1.2 or 11.2
+#
+# @example goldengate install
+#
+#  oradb::goldengate{ 'ggate12.1.2':
+#    version                    => '12.1.2',
+#    file                       => '121210_fbo_ggs_Linux_x64_shiphome.zip',
+#    database_type              => 'Oracle',
+#    database_version           => 'ORA12c',
+#    database_home              => '/oracle/product/12.1/db',
+#    oracle_base                => '/oracle',
+#    goldengate_home            => '/oracle/product/12.1/ggate',
+#    manager_port               => 16000,
+#    user                       => 'oracle',
+#    group                      => 'dba',
+#    group_install              => 'oinstall',
+#    download_dir               => '/var/tmp/install',
+#    puppet_download_mnt_point  => '/software',
+#  }
+#
+#  oradb::goldengate{ 'ggate11.2.1':
+#    version                    => '11.2.1',
+#    file                       => 'ogg112101_fbo_ggs_Linux_x64_ora11g_64bit.zip',
+#    tar_file                   => 'fbo_ggs_Linux_x64_ora11g_64bit.tar',
+#    goldengate_home            => "/oracle/product/11.2.1/ggate",
+#    user                       => 'oracle',
+#    group                      => 'dba',
+#    download_dir               => '/var/tmp/install',
+#    puppet_download_mnt_point  => '/software',
+#
+# @param version goldengate software version
+# @param file goldengate installation file
+# @param tar_file tar file inside zip for 11g version
+# @param database_type goldengate db version only for 12c
+# @param database_version for oracle database 11g or 12c only for 12c
+# @param oracle_base oracle base directory only for 12c
+# @param ora_inventory_dir full path to the oracle inventory directory only for 12c
+# @param database_version for oracle database 11g or 12c only for 12c
+# @param oracle_base oracle base directory only for 12c
+# @param ora_inventory_dir full path to the oracle inventory directory only for 12c
+# @param manager_port manager port number
+# @param goldengate_home full path to the goldengate home under oracle base
+# @param user operating system username
+# @param group operating system group name
+# @param group_install operating system group install name
+# @param puppet_download_mnt_point the location where the installation software is available
+# @param download_dir location for installation files used by this module
+# @param database_home the oracle database home for connecting goldengat only for 12c
 #
 define oradb::goldengate(
-  String $version                            = '12.1.2',
-  $file                                      = undef,
-  $tar_file                                  = undef,     # only for < 12.1.2
-  String $database_type                      = 'Oracle',  # only for > 12.1.2
-  Enum['ORA11g', 'ORA12c'] $database_version = 'ORA11g', # ORA12c'  only for > 12.1.2
-  $database_home                             = undef,     # only for > 12.1.2
-  $oracle_base                               = undef,     # only for > 12.1.2
-  $ora_inventory_dir                         = undef,
-  $goldengate_home                           = undef,
-  $manager_port                              = undef,
+  String $version                            = '12.2.1',
+  String $file                               = undef,
+  Optional[String] $tar_file                 = undef,     # only for < 12.1.2
+  Enum['Oracle'] $database_type              = 'Oracle',  # only for > 12.1.2
+  Enum['ORA11g', 'ORA12c'] $database_version = 'ORA11g',  # only for > 12.1.2
+  Optional[String] $database_home            = undef,     # only for > 12.1.2
+  Optional[String] $oracle_base              = undef,     # only for > 12.1.2
+  Optional[String] $ora_inventory_dir        = undef,     # only for > 12.1.2
+  String $goldengate_home                    = undef,
+  Optional[Integer] $manager_port            = undef,
   String $user                               = 'ggate',
   String $group                              = lookup('oradb::group'),
   String $group_install                      = lookup('oradb::group_install'),
@@ -19,20 +68,10 @@ define oradb::goldengate(
   String $puppet_download_mnt_point          = lookup('oradb::module_mountpoint'),
 )
 {
-  if ( $goldengate_home == undef or is_string($goldengate_home) == false) {fail('You must specify a goldengate_home') }
-  if ( $file == undef or is_string($file) == false) {fail('You must specify a file') }
-  if ( $puppet_download_mnt_point == undef or is_string($puppet_download_mnt_point) == false) {fail('You must specify a puppet_download_mnt_point') }
-
   $exec_path = lookup('oradb::exec_path')
 
-  if ( $version == '12.1.2' ) {
+  if ( $version in ['12.1.2', '12.2.1'] ) {
     # check if the oracle software already exists
-    if (!( $database_type in ['Oracle'] )) {
-      fail('Unrecognized database_type')
-    }
-    if (!( $database_version in ['ORA11g','ORA12c'] )) {
-      fail('Unrecognized database_version')
-    }
     if ( $database_home == undef or is_string($database_home) == false) {fail('You must specify a database_home') }
     if ( $oracle_base == undef or is_string($oracle_base) == false) {fail('You must specify an oracle_base') }
     if ( $manager_port == undef or is_integer($manager_port) == false) {fail('You must specify a manager_port') }
@@ -53,8 +92,7 @@ define oradb::goldengate(
     $continue = false
   }
 
-
-  if ( $version == '12.1.2' ) {
+  if ( $version in ['12.1.2', '12.2.1'] ) {
     if $ora_inventory_dir == undef {
       $ora_inventory = oradb::cleanpath("${oracle_base}/../oraInventory")
     } else {
@@ -96,7 +134,13 @@ define oradb::goldengate(
     }
 
     file { "${download_dir}/oggcore.rsp":
-      content => template("oradb/oggcore_${version}.rsp.erb"),
+      content => epp("oradb/oggcore_${version}.rsp.epp", {
+                      'database_version' => $database_version,
+                      'goldengate_home'  => $goldengate_home,
+                      'database_home'    => $database_home,
+                      'ora_inventory'    => $ora_inventory,
+                      'group_install'    => $group_install,
+                      'manager_port'     => $manager_port }),
       owner   => $user,
       group   => $group,
       require => Db_directory_structure["oracle goldengate structure ${version}"],
@@ -123,7 +167,7 @@ define oradb::goldengate(
 
   }
 
-  if ( $version != '12.1.2' ){
+  if ( $version != '12.1.2' and $version != '12.2.1'){
 
     if ( $tar_file == undef or is_string($tar_file) == false) {fail("${title} You must specify a tar_file") }
 

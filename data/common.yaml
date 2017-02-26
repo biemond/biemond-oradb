@@ -33,13 +33,15 @@ oradb::versions:
  - '11.2.0.4'
  - '12.1.0.1'
  - '12.1.0.2'
+ - '12.2.0.1'
 
 # check on all supported grid versions
 oradb::grid_versions:
  - '11.2.0.4'
  - '12.1.0.1'
  - '12.1.0.2'
-
+ - '12.2.0.1'
+ 
 # check on all supported enterprise manager versions
 oradb::enterprise_manager_versions:
  - '12.1.0.4'
@@ -53,13 +55,16 @@ oradb::enterprise_manager_agent_versions:
 oradb::net_versions:
  - '11.2'
  - '12.1'
+ - '12.2'
 
 oradb::database_versions:
  - '11.2'
  - '12.1'
+ - '12.2'
 
 oradb::database_pluggable_versions:
  - '12.1'
+ - '12.2'
 
 # check on supported kernels
 oradb::kernels:

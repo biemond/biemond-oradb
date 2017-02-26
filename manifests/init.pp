@@ -1,9 +1,7 @@
-# == Class: oradb
 #
-class oradb ($shout = false) {
-
-  if $::oradb::shout {
-    notify {'oradb init.pp':}
-  }
-
+# oradb
+#
+# oradb init class
+#
+class oradb() {
 }

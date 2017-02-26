@@ -27,32 +27,24 @@ Dependency with
 - puppetlabs/stdlib >= 4.0.0
 
 Should work on Docker, for Solaris and on all Linux version like RedHat, CentOS, Ubuntu, Debian, Suse SLES or OracleLinux
+- CentOS 7.3 vagrant box with Oracle Database 12.2.0.1 with pluggable databases [12c pluggable db puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.2-CDB-puppet4_3)
 - Docker image of Oracle Database 12.1 SE [Docker Oracle Database 12.1.0.1](https://github.com/biemond/docker-database-puppet)
-- CentOS 6.7 vagrant box with Oracle Database 12.1 and Enterprise Manager 12.1.0.5 [Enterprise vagrant box](https://github.com/biemond/biemond-em-12c)
-- CentOS 7.2 vagrant box with Oracle Database 12.1.0.2 on NFS ASM [ASM vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-ASM)
-- CentOS 6.6 vagrant box with Oracle Database 11.2.0.4 on NFS ASM [ASM vagrant box](https://github.com/biemond/biemond-oradb-vagrant-11.2-ASM)
-- CentOS 6.6 vagrant box with Oracle Database 12.1.0.2 with pluggable databases [12c pluggable db vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-CDB)
-- Solaris 11.2 vagrant box with Oracle Database 12.1 [solaris 11.2 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-solaris11.2)
-- Solaris 10 vagrant box with Oracle Database 12.1 [solaris 10 vagrant box](https://github.com/biemond/biemond-orawls-vagrant-solaris-soa)
+- CentOS 6.7 vagrant box with Oracle Database 12.1 and Enterprise Manager 12.1.0.5 [Enterprise puppet 4 vagrant box](https://github.com/biemond/biemond-em-12c-puppet4_3)
+- CentOS 7.2 vagrant box with Oracle Database 12.1.0.2 on NFS ASM [ASM puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-ASM-puppet4_3)
+- CentOS 6.6 vagrant box with Oracle Database 11.2.0.4 on NFS ASM [ASM puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-11.2-ASM-puppet4_3)
+- CentOS 6.6 vagrant box with Oracle Database 12.1.0.2 with pluggable databases [12c pluggable db puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-CDB-puppet4_3)
 - CentOS 6.5 vagrant box with Oracle Database 11.2.0.4 and GoldenGate 12.1.2 [coherence goldengate vagrant box]( https://github.com/biemond/vagrant-wls12.1.2-coherence-goldengate)
 
-Puppet 4.3
-- CentOS 7.2 vagrant box with Oracle Database 12.1.0.2 on NFS ASM [ASM vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-ASM-puppet4_3)
-- CentOS 7.2 vagrant box with Oracle Database 12.1.0.2 with pluggable databases [12c pluggable db vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-CDB-puppet4_3)
-
-
-Example of Opensource Puppet 3.4.3 Puppet master configuration in a vagrant box [puppet master](https://github.com/biemond/vagrant-puppetmaster)
-- oradb (oracle database 11.2.0.1 ) with GoldenGate 12.1.2
 
 Should work for Puppet >=  4.0
 
 ## Oracle Database Features
 
-- Oracle Grid 11.2.0.4, 12.1.0.1 Linux / Solaris installation
-- Oracle Database 12.1.0.1,12.1.0.2 Linux / Solaris installation
-- Oracle Database 11.2.0.1,11.2.0.3,11.2.0.4 Linux / Solaris installation
+- Oracle Grid 11.2.0.4, 12.1.0.1, 12.1.0.2, 12.2.0.1 Linux / Solaris installation
+- Oracle Database 12.1.0.1, 12.1.0.2, 12.2.0.1  Linux / Solaris installation
+- Oracle Database 11.2.0.1, 11.2.0.3, 11.2.0.4 Linux / Solaris installation
 - Oracle Database Instance 11.2 & 12.1 with pluggable database or provide your own db template
-- Oracle Database Client 12.1.0.1,12.1.0.2,11.2.0.4,11.2.0.1 Linux / Solaris installation
+- Oracle Database Client 12.2.0.1, 12.1.0.1, 12.1.0.2, 11.2.0.4, 11.2.0.1 Linux / Solaris installation
 - Oracle Database Net configuration
 - Oracle Database Listener
 - Tnsnames entry
@@ -65,11 +57,11 @@ Should work for Puppet >=  4.0
 - Stop/Start database instances with db_control puppet resource type
 
 ## Enterprise Manager
-- Enterprise Manager Server 12.1.0.4 12c cloud installation / configuration
+- Enterprise Manager Server 12.1.0.4, 12.1.0.5, 12c cloud installation / configuration
 - Agent installation via AgentPull.sh & AgentDeploy.sh
 
 ## GoldenGate
-- GoldenGate 12.1.2, 11.2.1
+- GoldenGate 12.2.1, 12.1.2, 11.2.1
 
 ## Repository Creation Utility (RCU)
 - Installs RCU repositoy for Oracle SOA Suite / Webcenter ( 11.1.1.6.0 and 11.1.1.7.0 ) / Oracle Identity Management ( 11.1.2.1 )
@@ -224,6 +216,22 @@ install the following module to set the database user limits parameters
 ## Database install
 
     $puppet_download_mnt_point = "puppet:///modules/oradb/"
+
+    oradb::installdb{ '12.2.0.1_Linux-x86-64':
+      version                   => '12.2.0.1',
+      file                      => 'V839960-01',
+      database_type             => 'EE',
+      oracle_base               => '/oracle',
+      oracle_home               => '/oracle/product/12.2/db',
+      bash_profile              => true,
+      user                      => 'oracle',
+      group                     => 'dba',
+      group_install             => 'oinstall',
+      group_oper                => 'oper',
+      download_dir              => '/data/install',
+      zip_extract               => true,
+      puppet_download_mnt_point => $puppet_download_mnt_point,
+    }
 
     oradb::installdb{ '12.1.0.2_Linux-x86-64':
       version                   => '12.1.0.2',
@@ -1088,6 +1096,18 @@ or delete a database
       }
 
 ## Oracle Database Client
+
+    oradb::client{ '12.2.0.1_Linux-x86-64':
+      version                   => '12.2.0.1',
+      file                      => 'V839967-01.zip',
+      oracle_base               => '/oracle',
+      oracle_home               => '/oracle/product/12.2/client',
+      remote_file               => false,
+      log_output                => true,
+      puppet_download_mnt_point => lookup('oracle_source'),
+    }
+
+or
 
     oradb::client{ '12.1.0.1_Linux-x86-64':
       version                   => '12.1.0.1',

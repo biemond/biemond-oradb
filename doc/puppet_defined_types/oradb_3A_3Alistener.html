@@ -72,12 +72,34 @@
 <div class="docstring">
   <div class="discussion">
     
-<p>== Class: oradb::listener</p>
+<p>listener</p>
+
+<p>Oracle listener control</p>
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>listener configuration</p>
+</div></p>
+      
+      <pre class="example code"><code>
+oradb::listener{&#39;start listener&#39;:
+  action        =&gt; &#39;start&#39;,
+  oracle_base   =&gt; &#39;/oracle&#39;,
+  oracle_home   =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user          =&gt; &#39;oracle&#39;,
+  group         =&gt; &#39;dba&#39;,
+  listener_name =&gt; &#39;listener&#39;,
+}</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -90,6 +112,11 @@
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Base directory</p>
+</div>
       
     </li>
   
@@ -104,6 +131,11 @@
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Home directory inside Oracle Base</p>
+</div>
+      
     </li>
   
     <li>
@@ -116,6 +148,11 @@
       
         <em class="default">(defaults to: <tt>lookup(&#39;oradb::user&#39;)</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>operating system user</p>
+</div>
       
     </li>
   
@@ -130,6 +167,11 @@
         <em class="default">(defaults to: <tt>lookup(&#39;oradb::group&#39;)</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>the operating group name for using the oracle software</p>
+</div>
+      
     </li>
   
     <li>
@@ -142,6 +184,11 @@
       
         <em class="default">(defaults to: <tt>&#39;start&#39;</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>listener control action</p>
+</div>
       
     </li>
   
@@ -156,6 +203,11 @@
         <em class="default">(defaults to: <tt>&#39;listener&#39;</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>the name of the listener</p>
+</div>
+      
     </li>
   
 </ul>
@@ -168,26 +220,26 @@
         <pre class="lines">
 
 
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20</pre>
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/listener.pp', line 4</span>
+        <pre class="code"><span class="info file"># File 'manifests/listener.pp', line 24</span>
 
 define oradb::listener( String $oracle_base                               = undef,
                         String $oracle_home                               = undef,
@@ -213,7 +265,7 @@ define oradb::listener( String $oracle_base                               = unde
 </div>
 
       <div id="footer">
-  Generated on Fri Feb 24 12:45:42 2017 by
+  Generated on Sun Feb 26 10:48:45 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

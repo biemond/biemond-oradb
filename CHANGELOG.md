@@ -1,5 +1,11 @@
 # Version updates
 
+## 3.0.3
+- added docs
+- added goldengate 12.2.1 for Oracle Database
+- 12.2.0.1 installdb + database + pluggable db support
+- 12.2.0.1 client support
+
 ## 3.0.2
 - migrated to puppet 4 functions
 - Fix ASM disk does not exist error during database creation

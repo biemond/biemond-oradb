@@ -113,7 +113,7 @@ oradb::database_pluggable{&#39;pdb1&#39;:
         <span class='name'>version</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt>Enum['12.1', '12.2']</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>lookup(&#39;oradb::version&#39;)</tt>)</em>
@@ -140,22 +140,6 @@ oradb::database_pluggable{&#39;pdb1&#39;:
         &mdash;
         <div class='inline'>
 <p>full path to the Oracle Home directory inside Oracle Base</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>ora_inventory_dir</span>
-      
-      
-        <span class='type'></span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>full path to the Oracle Inventory location directory</p>
 </div>
       
     </li>
@@ -198,11 +182,13 @@ oradb::database_pluggable{&#39;pdb1&#39;:
   
     <li>
       
-        <span class='name'>logoutput</span>
+        <span class='name'>log_output</span>
       
       
-        <span class='type'></span>
+        <span class='type'>(<tt>Boolean</tt>)</span>
       
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
       
       
         &mdash;
@@ -223,6 +209,11 @@ oradb::database_pluggable{&#39;pdb1&#39;:
         <em class="default">(defaults to: <tt>&#39;present&#39;</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>add or delete the pluggable container</p>
+</div>
+      
     </li>
   
     <li>
@@ -235,6 +226,11 @@ oradb::database_pluggable{&#39;pdb1&#39;:
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>the source container database</p>
+</div>
       
     </li>
   
@@ -249,6 +245,11 @@ oradb::database_pluggable{&#39;pdb1&#39;:
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>the pluggable DB name</p>
+</div>
+      
     </li>
   
     <li>
@@ -261,6 +262,11 @@ oradb::database_pluggable{&#39;pdb1&#39;:
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>the pluggable DB datafile location</p>
+</div>
       
     </li>
   
@@ -275,6 +281,11 @@ oradb::database_pluggable{&#39;pdb1&#39;:
         <em class="default">(defaults to: <tt>&#39;pdb_adm&#39;</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>the pluggable DB admin username</p>
+</div>
+      
     </li>
   
     <li>
@@ -287,6 +298,11 @@ oradb::database_pluggable{&#39;pdb1&#39;:
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>the pluggable DB admin password</p>
+</div>
       
     </li>
   
@@ -301,18 +317,10 @@ oradb::database_pluggable{&#39;pdb1&#39;:
         <em class="default">(defaults to: <tt>true</tt>)</em>
       
       
-    </li>
-  
-    <li>
-      
-        <span class='name'>log_output</span>
-      
-      
-        <span class='type'>(<tt>Boolean</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>false</tt>)</em>
-      
+        &mdash;
+        <div class='inline'>
+<p>create user tablespace for the pluggable DB</p>
+</div>
       
     </li>
   
@@ -326,12 +334,6 @@ oradb::database_pluggable{&#39;pdb1&#39;:
         <pre class="lines">
 
 
-30
-31
-32
-33
-34
-35
 36
 37
 38
@@ -376,22 +378,14 @@ oradb::database_pluggable{&#39;pdb1&#39;:
 77
 78
 79
-80
-81
-82
-83
-84
-85
-86
-87
-88</pre>
+80</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/database_pluggable.pp', line 30</span>
+        <pre class="code"><span class="info file"># File 'manifests/database_pluggable.pp', line 36</span>
 
 define oradb::database_pluggable(
   Enum[&#39;present&#39;, &#39;absent&#39;] $ensure = &#39;present&#39;,
-  String $version                   = lookup(&#39;oradb::version&#39;),
+  Enum[&#39;12.1&#39;, &#39;12.2&#39;] $version     = lookup(&#39;oradb::version&#39;),
   String $oracle_home_dir           = undef,
   String $user                      = lookup(&#39;oradb::user&#39;),
   String $group                     = lookup(&#39;oradb::group&#39;),
@@ -403,20 +397,6 @@ define oradb::database_pluggable(
   Boolean $create_user_tablespace   = true,
   Boolean $log_output               = false,
 ){
-
-  if ( $version in lookup(&#39;oradb::database_pluggable_versions&#39;) == false ){
-    fail(&#39;Unrecognized version, use 12.1&#39;)
-  }
-
-  if ( $source_db == undef or is_string($source_db) == false) {fail(&#39;You must specify an source_db&#39;) }
-  if ( $pdb_name == undef or is_string($pdb_name) == false) {fail(&#39;You must specify an pdb_name&#39;) }
-  if ( $pdb_datafile_destination == undef or is_string($pdb_datafile_destination) == false) {fail(&#39;You must specify an pdb_datafile_destination&#39;) }
-
-  if ( $ensure == &#39;present&#39;) {
-    if ( $pdb_admin_username == undef or is_string($pdb_admin_username) == false) {fail(&#39;You must specify an pdb_admin_username&#39;) }
-    if ( $pdb_admin_password == undef or is_string($pdb_admin_password) == false) {fail(&#39;You must specify an pdb_admin_password&#39;) }
-  }
-
   $exec_path = lookup(&#39;oradb::exec_path&#39;)
 
   if ( $ensure == &#39;present&#39;) {
@@ -455,7 +435,7 @@ define oradb::database_pluggable(
 </div>
 
       <div id="footer">
-  Generated on Fri Feb 24 12:45:43 2017 by
+  Generated on Sun Feb 26 10:48:46 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

@@ -1,8 +1,74 @@
 #
+# installem_agent
 #
+# install the enterprise manager agent
+#
+# @example em agent install
+#
+#  oradb::installem_agent{ 'em12104_agent':
+#      version                     => '12.1.0.4',
+#      source                      => 'https://10.10.10.25:7802/em/install/getAgentImage',
+#      install_type                => 'agentPull',
+#      install_platform            => 'Linux x86-64',
+#      oracle_base_dir             => '/oracle',
+#      agent_base_dir              => '/oracle/product/12.1/agent',
+#      agent_instance_home_dir     => '/oracle/product/12.1/agent/agent_inst',
+#      sysman_user                 => 'sysman',
+#      sysman_password             => 'Welcome01',
+#      agent_registration_password => 'Welcome01',
+#      agent_port                  => 1830,
+#      oms_host                    => '10.10.10.25',
+#      oms_port                    => 7802,
+#      em_upload_port              => 4903,
+#      user                        => 'oracle',
+#      group                       => 'dba',
+#      download_dir                => '/var/tmp/install',
+#      log_output                  => true,
+#      oracle_hostname             => 'emdb.example.com',
+#  }
+#
+#  oradb::installem_agent{ 'em12104_agent2':
+#      version                     => '12.1.0.4',
+#      source                      => '/var/tmp/install/agent.zip',
+#      install_type                => 'agentDeploy',
+#      oracle_base_dir             => '/oracle',
+#      agent_base_dir              => '/oracle/product/12.1/agent2',
+#      agent_instance_home_dir     => '/oracle/product/12.1/agent2/agent_inst',
+#      agent_registration_password => 'Welcome01',
+#      agent_port                  => 1832,
+#      oms_host                    => '10.10.10.25',
+#      em_upload_port              => 4903,
+#      user                        => 'oracle',
+#      group                       => 'dba',
+#      download_dir                => '/var/tmp/install',
+#      log_output                  => true,
+#  }
+#
+# @param version Oracle installation EM version
+# @param install_type
+# @param oracle_base_dir full path to the Oracle Base directory
+# @param agent_base_dir full path to the Oracle Agent Home directory inside Oracle Base
+# @param ora_inventory_dir full path to the Oracle Inventory location directory
+# @param user operating system user
+# @param group the operating group name for using the oracle software# @param group_install the operating group name for the installed software
+# @param download_dir location for installation files used by this module
+# @param log_output log all output
+# @param install_version EM agent version
+# @param install_platform EM agent OS install
+# @param source url or local install file
+# @param agent_instance_home_dir oracle em agent home
+# @param agent_registration_password em registration password
+# @param agent_port agent listen port
+# @param sysman_user sysman username 
+# @param sysman_password sysman user password
+# @param oms_host oms host
+# @param oms_port oms port number
+# @param em_upload_port em upload port
+# @param oracle_hostname the FQDN hostname to install the agent on
+# @param manage_curl download curl package
 #
 define oradb::installem_agent(
-  String $version                                = '12.1.0.5',
+  Enum['12.1.0.4','12.1.0.5'] $version           = '12.1.0.5',
   Enum['agentPull', 'agentDeploy'] $install_type = undef,
   String $install_version                        = '12.1.0.5.0',
   String $install_platform                       = 'Linux x86-64',

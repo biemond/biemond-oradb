@@ -161,6 +161,11 @@ oradb::dbactions{ &#39;start testDb&#39;:
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Home directory inside Oracle Base</p>
+</div>
+      
     </li>
   
     <li>
@@ -168,11 +173,16 @@ oradb::dbactions{ &#39;start testDb&#39;:
         <span class='name'>action</span>
       
       
-        <span class='type'>(<tt>Enum['start', 'stop', 'running', 'abort']</tt>)</span>
+        <span class='type'>(<tt>Enum['start', 'stop', 'running', 'abort','mount']</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>&#39;start&#39;</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>start, mount or stop the database</p>
+</div>
       
     </li>
   
@@ -194,7 +204,7 @@ oradb::dbactions{ &#39;start testDb&#39;:
         <span class='name'>provider</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt>Enum['srvctl','sqlplus']</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>&#39;sqlplus&#39;</tt>)</em>
@@ -212,11 +222,6 @@ oradb::dbactions{ &#39;start testDb&#39;:
         <pre class="lines">
 
 
-19
-20
-21
-22
-23
 24
 25
 26
@@ -239,19 +244,24 @@ oradb::dbactions{ &#39;start testDb&#39;:
 43
 44
 45
-46</pre>
+46
+47
+48
+49
+50
+51</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/dbactions.pp', line 19</span>
+        <pre class="code"><span class="info file"># File 'manifests/dbactions.pp', line 24</span>
 
 define oradb::dbactions(
-  Enum[&#39;database&#39;, &#39;grid&#39;, &#39;asm&#39;] $db_type          = &#39;database&#39;,
-  Optional[String] $oracle_home                     = undef,
-  String $user                                      = lookup(&#39;oradb::user&#39;),
-  String $group                                     = lookup(&#39;oradb::group&#39;),
-  Enum[&#39;start&#39;, &#39;stop&#39;, &#39;running&#39;, &#39;abort&#39;] $action = &#39;start&#39;,
-  String $db_name                                   = lookup(&#39;oradb::database_name&#39;),
-  String $provider                                  = &#39;sqlplus&#39;,
+  Enum[&#39;database&#39;, &#39;grid&#39;, &#39;asm&#39;] $db_type                  = &#39;database&#39;,
+  Optional[String] $oracle_home                             = undef,
+  String $user                                              = lookup(&#39;oradb::user&#39;),
+  String $group                                             = lookup(&#39;oradb::group&#39;),
+  Enum[&#39;start&#39;, &#39;stop&#39;, &#39;running&#39;, &#39;abort&#39;,&#39;mount&#39;] $action = &#39;start&#39;,
+  String $db_name                                           = lookup(&#39;oradb::database_name&#39;),
+  Enum[&#39;srvctl&#39;,&#39;sqlplus&#39;] $provider                        = &#39;sqlplus&#39;,
 ){
   if ( $db_type in [&#39;grid&#39;,&#39;asm&#39;] and $provider != &#39;srvctl&#39;) {
     fail(&#39;Provider must be srvctl if db_type is grid or asm&#39;)
@@ -279,7 +289,7 @@ define oradb::dbactions(
 </div>
 
       <div id="footer">
-  Generated on Fri Feb 24 12:45:42 2017 by
+  Generated on Sun Feb 26 10:48:45 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

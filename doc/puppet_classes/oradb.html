@@ -74,29 +74,14 @@
 <div class="docstring">
   <div class="discussion">
     
-<p>== Class: oradb</p>
+<p>oradb</p>
+
+<p>oradb init class</p>
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>shout</span>
-      
-      
-        <span class='type'>(<tt>Any</tt>)</span>
-      
-      
-        <em class="default">(defaults to: <tt>false</tt>)</em>
-      
-      
-    </li>
-  
-</ul>
-
 
 </div><div class="method_details_list">
   <table class="source_code">
@@ -105,23 +90,13 @@
         <pre class="lines">
 
 
-3
-4
-5
 6
-7
-8
-9</pre>
+7</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/init.pp', line 3</span>
+        <pre class="code"><span class="info file"># File 'manifests/init.pp', line 6</span>
 
-class oradb ($shout = false) {
-
-  if $::oradb::shout {
-    notify {&#39;oradb init.pp&#39;:}
-  }
-
+class oradb() {
 }</pre>
       </td>
     </tr>
@@ -130,7 +105,7 @@ class oradb ($shout = false) {
 </div>
 
       <div id="footer">
-  Generated on Fri Feb 24 12:45:42 2017 by
+  Generated on Sun Feb 26 10:48:45 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>
