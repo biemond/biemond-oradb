@@ -155,7 +155,7 @@ define oradb::installem_agent(
 
       if $manage_curl and !defined(Package['curl']) {
         package { 'curl':
-          ensure  => present,
+          ensure => present,
         }
       }
 
@@ -224,7 +224,7 @@ define oradb::installem_agent(
 
       if !defined(Package['unzip']) {
         package { 'unzip':
-          ensure  => present,
+          ensure => present,
         }
       }
 

@@ -20,7 +20,8 @@
        String $database_type,
        Integer $memory_total,
        Optional[Integer] $db_port,
-       Boolean $container_database
+       Boolean $container_database,
+       Boolean $automatic_memory_management
  | -%>
 
 ##############################################################################
@@ -560,7 +561,7 @@ DATABASETYPE = "<%= $database_type %>"
 # Default value : TRUE
 # Mandatory     : NO
 #-----------------------------------------------------------------------------
-#AUTOMATICMEMORYMANAGEMENT = "TRUE"
+AUTOMATICMEMORYMANAGEMENT = "<%= $automatic_memory_management %>"
 
 #-----------------------------------------------------------------------------
 # Name          : TOTALMEMORY

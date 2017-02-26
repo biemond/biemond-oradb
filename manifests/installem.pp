@@ -157,9 +157,9 @@ define oradb::installem(
       # In $download_dir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
 
       if ( $version in ['12.1.0.4', '12.1.0.5']) {
-        $file1 =  "${file}_disk1.zip"
-        $file2 =  "${file}_disk2.zip"
-        $file3 =  "${file}_disk3.zip"
+        $file1 = "${file}_disk1.zip"
+        $file2 = "${file}_disk2.zip"
+        $file3 = "${file}_disk3.zip"
       }
 
       if $remote_file == true {

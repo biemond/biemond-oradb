@@ -831,7 +831,7 @@ define oradb::installem_agent(
 
       if $manage_curl and !defined(Package[&#39;curl&#39;]) {
         package { &#39;curl&#39;:
-          ensure  =&gt; present,
+          ensure =&gt; present,
         }
       }
 
@@ -900,7 +900,7 @@ define oradb::installem_agent(
 
       if !defined(Package[&#39;unzip&#39;]) {
         package { &#39;unzip&#39;:
-          ensure  =&gt; present,
+          ensure =&gt; present,
         }
       }
 
@@ -955,7 +955,7 @@ define oradb::installem_agent(
 </div>
 
       <div id="footer">
-  Generated on Sun Feb 26 10:48:46 2017 by
+  Generated on Mon Feb 27 00:39:27 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

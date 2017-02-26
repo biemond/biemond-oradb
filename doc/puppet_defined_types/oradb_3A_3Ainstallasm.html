@@ -114,7 +114,7 @@ oradb::installasm{ &#39;db_linux-x64&#39;:
         <span class='name'>version</span>
       
       
-        <span class='type'>(<tt>Enum['11.2.0.1','11.2.0.3','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1']</tt>)</span>
+        <span class='type'>(<tt>Enum['11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1']</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
@@ -958,13 +958,75 @@ oradb::installasm{ &#39;db_linux-x64&#39;:
 412
 413
 414
-415</pre>
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/installasm.pp', line 57</span>
 
 define oradb::installasm(
-  Enum[&#39;11.2.0.1&#39;,&#39;11.2.0.3&#39;,&#39;11.2.0.4&#39;,&#39;12.1.0.1&#39;,&#39;12.1.0.2&#39;,&#39;12.2.0.1&#39;] $version = undef,
+  Enum[&#39;11.2.0.4&#39;,&#39;12.1.0.1&#39;,&#39;12.1.0.2&#39;,&#39;12.2.0.1&#39;] $version                       = undef,
   String $file                                                                     = undef,
   Enum[&#39;HA_CONFIG&#39;, &#39;CRS_CONFIG&#39;, &#39;UPGRADE&#39;, &#39;CRS_SWONLY&#39;] $grid_type              = &#39;HA_CONFIG&#39;,
   Boolean $stand_alone                                                             = true, # in case of &#39;CRS_SWONLY&#39; and used as stand alone or in RAC
@@ -1071,13 +1133,20 @@ define oradb::installasm(
 
     if ( $zip_extract ) {
       # In $download_dir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
-
-      if versioncmp($version, &#39;12.1.0.1&#39;) &gt;= 0 {
-        $file1 =  &quot;${file}_1of2.zip&quot;
-        $file2 =  &quot;${file}_2of2.zip&quot;
+      if ( $version in [&#39;12.2.0.1&#39;]) {
+        $file1 = &quot;${file}.zip&quot;
+        $total_files = 1
       }
-      if ( $version  == &#39;11.2.0.4&#39; ) {
-        $file1 =  $file
+
+      if ( $version in [&#39;12.1.0.1&#39;,&#39;12.1.0.2&#39;]) {
+        $file1 = &quot;${file}_1of2.zip&quot;
+        $file2 = &quot;${file}_2of2.zip&quot;
+        $total_files = 2
+      }
+
+      if ( $version in [&#39;11.2.0.4&#39;]) {
+        $file1 = $file
+        $total_files = 1
       }
 
       if $remote_file == true {
@@ -1092,7 +1161,7 @@ define oradb::installasm(
           before  =&gt; Exec[&quot;extract ${download_dir}/${file1}&quot;],
         }
 
-        if versioncmp($version, &#39;12.1.0.1&#39;) &gt;= 0 {
+        if ( $total_files &gt; 1 ) {
           file { &quot;${download_dir}/${file2}&quot;:
             ensure  =&gt; present,
             source  =&gt; &quot;${puppet_download_mnt_point}/${file2}&quot;,
@@ -1109,27 +1178,61 @@ define oradb::installasm(
         $source = $puppet_download_mnt_point
       }
 
-      exec { &quot;extract ${download_dir}/${file1}&quot;:
-        command   =&gt; &quot;unzip -o ${source}/${file1} -d ${download_dir}/${file_without_ext}&quot;,
-        timeout   =&gt; 0,
-        logoutput =&gt; false,
-        path      =&gt; $exec_path,
-        user      =&gt; $user,
-        group     =&gt; $group,
-        creates   =&gt; &quot;${download_dir}/${file_without_ext}&quot;,
-        require   =&gt; Db_directory_structure[&quot;grid structure ${version}&quot;],
-        before    =&gt; Exec[&quot;install oracle grid ${title}&quot;],
-      }
-      if versioncmp($version, &#39;12.1.0.1&#39;) &gt;= 0 {
-        exec { &quot;extract ${download_dir}/${file2}&quot;:
-          command   =&gt; &quot;unzip -o ${source}/${file2} -d ${download_dir}/${file_without_ext}&quot;,
+      if ($version == &#39;12.2.0.1&#39;) {
+        exec { &quot;make ${grid_home}&quot;:
+          command   =&gt; &quot;mkdir -p ${grid_home}&quot;,
           timeout   =&gt; 0,
           logoutput =&gt; false,
           path      =&gt; $exec_path,
           user      =&gt; $user,
           group     =&gt; $group,
-          require   =&gt; Exec[&quot;extract ${download_dir}/${file1}&quot;],
+          creates   =&gt; $grid_home,
+          require   =&gt; Db_directory_structure[&quot;grid structure ${version}&quot;],
           before    =&gt; Exec[&quot;install oracle grid ${title}&quot;],
+        }
+        file { $grid_home:
+          ensure  =&gt; directory,
+          recurse =&gt; false,
+          replace =&gt; false,
+          mode    =&gt; &#39;0775&#39;,
+          owner   =&gt; $user,
+          group   =&gt; $group_install,
+          require =&gt; [Db_directory_structure[&quot;grid structure ${version}&quot;], Exec[&quot;make ${grid_home}&quot;]],
+        }
+        exec { &quot;extract ${download_dir}/${file1}&quot;:
+          command   =&gt; &quot;unzip -o ${source}/${file1} -d ${grid_home}&quot;,
+          timeout   =&gt; 0,
+          logoutput =&gt; false,
+          path      =&gt; $exec_path,
+          user      =&gt; $user,
+          group     =&gt; $group,
+          creates   =&gt; &quot;${grid_home}/bin&quot;,
+          require   =&gt; [Db_directory_structure[&quot;grid structure ${version}&quot;], File[$grid_home]],
+          before    =&gt; Exec[&quot;install oracle grid ${title}&quot;],
+        }
+      } else {
+        exec { &quot;extract ${download_dir}/${file1}&quot;:
+          command   =&gt; &quot;unzip -o ${source}/${file1} -d ${download_dir}/${file_without_ext}&quot;,
+          timeout   =&gt; 0,
+          logoutput =&gt; false,
+          path      =&gt; $exec_path,
+          user      =&gt; $user,
+          group     =&gt; $group,
+          creates   =&gt; &quot;${download_dir}/${file_without_ext}&quot;,
+          require   =&gt; Db_directory_structure[&quot;grid structure ${version}&quot;],
+          before    =&gt; Exec[&quot;install oracle grid ${title}&quot;],
+        }
+        if ( $total_files &gt; 1 ) {
+          exec { &quot;extract ${download_dir}/${file2}&quot;:
+            command   =&gt; &quot;unzip -o ${source}/${file2} -d ${download_dir}/${file_without_ext}&quot;,
+            timeout   =&gt; 0,
+            logoutput =&gt; false,
+            path      =&gt; $exec_path,
+            user      =&gt; $user,
+            group     =&gt; $group,
+            require   =&gt; Exec[&quot;extract ${download_dir}/${file1}&quot;],
+            before    =&gt; Exec[&quot;install oracle grid ${title}&quot;],
+          }
         }
       }
     }
@@ -1172,16 +1275,21 @@ define oradb::installasm(
       }
     }
 
+    if ($version == &#39;12.2.0.1&#39;) {
+      $command = &quot;/bin/sh -c &#39;unset DISPLAY;cd ${grid_home};./gridSetup.sh -silent -waitforcompletion -skipPrereqs -responseFile ${download_dir}/grid_install_${version}.rsp&#39;&quot;
+    } else {
+      $command = &quot;/bin/sh -c &#39;unset DISPLAY;cd ${grid_base};${download_dir}/${file_without_ext}/grid/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/grid_install_${version}.rsp&#39;&quot;
+    }
+
     exec { &quot;install oracle grid ${title}&quot;:
-      command     =&gt; &quot;/bin/sh -c &#39;unset DISPLAY;${download_dir}/${file_without_ext}/grid/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/grid_install_${version}.rsp&#39;&quot;,
-      creates     =&gt; &quot;${grid_home}/bin&quot;,
+      command     =&gt; $command,
+      # creates     =&gt; &quot;${grid_home}/bin&quot;,
       environment =&gt; [&quot;USER=${user}&quot;,&quot;LOGNAME=${user}&quot;],
       timeout     =&gt; 0,
       returns     =&gt; [6,0],
       path        =&gt; $exec_path,
       user        =&gt; $user,
       group       =&gt; $group_install,
-      cwd         =&gt; $grid_base,
       logoutput   =&gt; true,
       require     =&gt; [Oradb::Utils::Dborainst[&quot;grid orainst ${version}&quot;],
                       File[&quot;${download_dir}/grid_install_${version}.rsp&quot;]],
@@ -1238,28 +1346,44 @@ define oradb::installasm(
       require   =&gt; Exec[&quot;install oracle grid ${title}&quot;],
     }
 
-    file { $grid_home:
-      ensure  =&gt; directory,
-      recurse =&gt; false,
-      replace =&gt; false,
-      mode    =&gt; &#39;0775&#39;,
-      owner   =&gt; $user,
-      group   =&gt; $group_install,
-      require =&gt; Exec[&quot;install oracle grid ${title}&quot;,&quot;run root.sh grid script ${title}&quot;],
+    if ($version == &#39;12.2.0.1&#39;) {
+      exec { &quot;configure asm ${title}&quot;:
+        timeout   =&gt; 0,
+        command   =&gt; &quot;${grid_home}/gridSetup.sh -executeConfigTools -silent -responseFile ${download_dir}/grid_install_${version}.rsp&quot;,
+        user      =&gt; $user,
+        group     =&gt; $group,
+        path      =&gt; $exec_path,
+        cwd       =&gt; $grid_home,
+        logoutput =&gt; true,
+        require   =&gt; Exec[&quot;install oracle grid ${title}&quot;,&quot;run root.sh grid script ${title}&quot;],
+      }
     }
 
+    if !defined(File[$grid_home]) {
+      file { $grid_home:
+        ensure  =&gt; directory,
+        recurse =&gt; false,
+        replace =&gt; false,
+        mode    =&gt; &#39;0775&#39;,
+        owner   =&gt; $user,
+        group   =&gt; $group_install,
+        require =&gt; Exec[&quot;install oracle grid ${title}&quot;,&quot;run root.sh grid script ${title}&quot;],
+      }
+    }
     # cleanup
     if ( $zip_extract ) {
-      exec { &quot;remove oracle asm extract folder ${title}&quot;:
-        command =&gt; &quot;rm -rf ${download_dir}/${file_without_ext}&quot;,
-        user    =&gt; &#39;root&#39;,
-        group   =&gt; &#39;root&#39;,
-        path    =&gt; $exec_path,
-        require =&gt; Exec[&quot;install oracle grid ${title}&quot;],
+      if ($version != &#39;12.2.0.1&#39;) {
+        exec { &quot;remove oracle asm extract folder ${title}&quot;:
+          command =&gt; &quot;rm -rf ${download_dir}/${file_without_ext}&quot;,
+          user    =&gt; &#39;root&#39;,
+          group   =&gt; &#39;root&#39;,
+          path    =&gt; $exec_path,
+          require =&gt; Exec[&quot;install oracle grid ${title}&quot;],
+        }
       }
 
       if ( $remote_file == true ){
-        if versioncmp($version, &#39;12.1.0.1&#39;) &gt;= 0 {
+        if ( $total_files &gt; 1 ) {
           exec { &quot;remove oracle asm file2 ${file2} ${title}&quot;:
             command =&gt; &quot;rm -rf ${download_dir}/${file2}&quot;,
             user    =&gt; &#39;root&#39;,
@@ -1329,7 +1453,7 @@ define oradb::installasm(
 </div>
 
       <div id="footer">
-  Generated on Sun Feb 26 10:48:46 2017 by
+  Generated on Mon Feb 27 00:39:27 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

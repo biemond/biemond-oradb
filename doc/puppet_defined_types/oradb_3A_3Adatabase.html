@@ -681,6 +681,19 @@ oradb::database{ &#39;oraDb&#39;:
       
     </li>
   
+    <li>
+      
+        <span class='name'>automatic_memory_management</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+    </li>
+  
 </ul>
 
 
@@ -884,7 +897,9 @@ oradb::database{ &#39;oraDb&#39;:
 286
 287
 288
-289</pre>
+289
+290
+291</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/database.pp', line 96</span>
@@ -923,6 +938,7 @@ define oradb::database(
   Optional[String] $cluster_nodes                                 = undef, # comma separated list with at first the local and at second the remode host e.g. &quot;racnode1,racnode2&quot;
   Boolean $container_database                                     = false, # 12.1 feature for pluggable database
   String $puppet_download_mnt_point                               = lookup(&#39;oradb::module_mountpoint&#39;),
+  Boolean $automatic_memory_management                            = true, # for 12.2 , choose false when more than 4gb memory
 )
 {
 
@@ -982,29 +998,30 @@ define oradb::database(
     file { &quot;${download_dir}/database_${sanitized_title}.rsp&quot;:
       ensure  =&gt; present,
       content =&gt; epp(&quot;oradb/dbca_${version}.rsp.epp&quot;,
-                    { &#39;operationType&#39;             =&gt; $operation_type,
-                      &#39;globaldb_name&#39;             =&gt; $globaldb_name,
-                      &#39;db_name&#39;                   =&gt; $db_name,
-                      &#39;cluster_nodes&#39;             =&gt; $cluster_nodes,
-                      &#39;sys_password&#39;              =&gt; $sys_password,
-                      &#39;system_password&#39;           =&gt; $system_password,
-                      &#39;em_configuration&#39;          =&gt; $em_configuration,
-                      &#39;db_snmp_password&#39;          =&gt; $db_snmp_password,
-                      &#39;data_file_destination&#39;     =&gt; $data_file_destination,
-                      &#39;recovery_area_destination&#39; =&gt; $recovery_area_destination,
-                      &#39;storage_type&#39;              =&gt; $storage_type,
-                      &#39;asm_diskgroup&#39;             =&gt; $asm_diskgroup,
-                      &#39;asm_snmp_password&#39;         =&gt; $asm_snmp_password,
-                      &#39;recovery_diskgroup&#39;        =&gt; $recovery_diskgroup,
-                      &#39;character_set&#39;             =&gt; $character_set,
-                      &#39;nationalcharacter_set&#39;     =&gt; $nationalcharacter_set,
-                      &#39;sanitizedInitParams&#39;       =&gt; $sanitized_init_params,
-                      &#39;sample_schema&#39;             =&gt; $sample_schema,
-                      &#39;memory_percentage&#39;         =&gt; $memory_percentage,
-                      &#39;database_type&#39;             =&gt; $database_type,
-                      &#39;memory_total&#39;              =&gt; $memory_total,
-                      &#39;db_port&#39;                   =&gt; $db_port,
-                      &#39;container_database&#39;        =&gt; $container_database }),
+                    { &#39;operationType&#39;               =&gt; $operation_type,
+                      &#39;globaldb_name&#39;               =&gt; $globaldb_name,
+                      &#39;db_name&#39;                     =&gt; $db_name,
+                      &#39;cluster_nodes&#39;               =&gt; $cluster_nodes,
+                      &#39;sys_password&#39;                =&gt; $sys_password,
+                      &#39;system_password&#39;             =&gt; $system_password,
+                      &#39;em_configuration&#39;            =&gt; $em_configuration,
+                      &#39;db_snmp_password&#39;            =&gt; $db_snmp_password,
+                      &#39;data_file_destination&#39;       =&gt; $data_file_destination,
+                      &#39;recovery_area_destination&#39;   =&gt; $recovery_area_destination,
+                      &#39;storage_type&#39;                =&gt; $storage_type,
+                      &#39;asm_diskgroup&#39;               =&gt; $asm_diskgroup,
+                      &#39;asm_snmp_password&#39;           =&gt; $asm_snmp_password,
+                      &#39;recovery_diskgroup&#39;          =&gt; $recovery_diskgroup,
+                      &#39;character_set&#39;               =&gt; $character_set,
+                      &#39;nationalcharacter_set&#39;       =&gt; $nationalcharacter_set,
+                      &#39;sanitizedInitParams&#39;         =&gt; $sanitized_init_params,
+                      &#39;sample_schema&#39;               =&gt; $sample_schema,
+                      &#39;memory_percentage&#39;           =&gt; $memory_percentage,
+                      &#39;database_type&#39;               =&gt; $database_type,
+                      &#39;memory_total&#39;                =&gt; $memory_total,
+                      &#39;db_port&#39;                     =&gt; $db_port,
+                      &#39;container_database&#39;          =&gt; $container_database,
+                      &#39;automatic_memory_management&#39; =&gt; $automatic_memory_management }),
       mode    =&gt; &#39;0770&#39;,
       owner   =&gt; $user,
       group   =&gt; $group,
@@ -1090,7 +1107,7 @@ define oradb::database(
 </div>
 
       <div id="footer">
-  Generated on Sun Feb 26 10:48:45 2017 by
+  Generated on Mon Feb 27 00:39:27 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

@@ -30,6 +30,7 @@ Should work on Docker, for Solaris and on all Linux version like RedHat, CentOS,
 - CentOS 7.3 vagrant box with Oracle Database 12.2.0.1 with pluggable databases [12c pluggable db puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.2-CDB-puppet4_3)
 - Docker image of Oracle Database 12.1 SE [Docker Oracle Database 12.1.0.1](https://github.com/biemond/docker-database-puppet)
 - CentOS 6.7 vagrant box with Oracle Database 12.1 and Enterprise Manager 12.1.0.5 [Enterprise puppet 4 vagrant box](https://github.com/biemond/biemond-em-12c-puppet4_3)
+- CentOS 7.3 vagrant box with Oracle Database 12.2.0.1 on NFS ASM [ASM puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.2-ASM-puppet4_3)
 - CentOS 7.2 vagrant box with Oracle Database 12.1.0.2 on NFS ASM [ASM puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-ASM-puppet4_3)
 - CentOS 6.6 vagrant box with Oracle Database 11.2.0.4 on NFS ASM [ASM puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-11.2-ASM-puppet4_3)
 - CentOS 6.6 vagrant box with Oracle Database 12.1.0.2 with pluggable databases [12c pluggable db puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-CDB-puppet4_3)
@@ -650,6 +651,39 @@ The template must be have the following extension dbc like General_Purpose.dbc
       log_output               => true,
     }
 
+### 12c ASM
+
+    oradb::database{ 'oraDb':
+      oracle_base               => lookup('oracle_base_dir'),
+      oracle_home               => lookup('oracle_home_dir'),
+      version                   => lookup('dbinstance_version'),
+      user                      => lookup('oracle_os_user'),
+      group                     => lookup('oracle_os_group'),
+      download_dir              => lookup('oracle_download_dir'),
+      action                    => 'create',
+      db_name                   => lookup('oracle_database_name'),
+      db_domain                 => lookup('oracle_database_domain_name'),
+      sys_password              => lookup('oracle_database_sys_password'),
+      system_password           => lookup('oracle_database_system_password'),
+      # template                  => 'dbtemplate_12.1_asm',
+      character_set             => 'AL32UTF8',
+      nationalcharacter_set     => 'UTF8',
+      sample_schema             => 'false',
+      memory_percentage         => 40,
+      memory_total              => 2880,
+      automatic_memory_management => false,
+      database_type             => 'MULTIPURPOSE',
+      em_configuration          => 'NONE',
+      storage_type              => 'ASM',
+      asm_snmp_password         => 'Welcome01',
+      asm_diskgroup             => '+DATA/{DB_UNIQUE_NAME}',
+      data_file_destination     => '+DATA/{DB_UNIQUE_NAME}',
+      recovery_diskgroup        => '+RECO',
+      recovery_area_destination => '+RECO',
+      puppet_download_mnt_point => 'oradb/',
+      require                   =>  Ora_asm_diskgroup['RECO@+ASM'],
+    }
+
 or delete a database
 
     oradb::database{ 'testDb_Delete':
@@ -932,6 +966,23 @@ or delete a database
         puppet_download_mnt_point => hiera('oracle_source'),
       }
 
+      # 12.2 
+      oradb::installasm{ 'db_linux-x64':
+        version                => lookup('db_version'),
+        file                   => lookup('asm_file'),
+        grid_type              => 'HA_CONFIG',
+        grid_base              => lookup('grid_base_dir'),
+        grid_home              => lookup('grid_home_dir'),
+        ora_inventory_dir      => lookup('oraInventory_dir'),
+        user                   => lookup('grid_os_user'),
+        asm_diskgroup          => 'DATA',
+        disk_discovery_string  => '/nfs_client/asm*',
+        disks                  => '/nfs_client/asm_sda_nfs_b1,/nfs_client/asm_sda_nfs_b2',
+        disk_redundancy        => 'EXTERNAL',
+        remote_file            => false,
+        puppet_download_mnt_point => lookup('oracle_source'),
+      }
+
       oradb::opatchupgrade{'112000_opatch_upgrade_asm':
         oracle_home               => hiera('grid_home_dir'),
         patch_file                => 'p6880880_112000_Linux-x86-64.zip',
@@ -976,7 +1027,6 @@ or delete a database
         download_dir              => hiera('oracle_download_dir'),
         remote_file               => false,
         puppet_download_mnt_point => hiera('oracle_source'),
-        # require                 => Oradb::Opatch['18706472_grid_patch'],
         require                   => Oradb::Opatch['19791420_grid_patch'],
       }
 
@@ -1095,6 +1145,38 @@ or delete a database
         require                   => Oradb::Opatch['19791420_db_patch_2'],
       }
 
+      # 12.2 on asm
+      oradb::database{ 'oraDb':
+        oracle_base               => lookup('oracle_base_dir'),
+        oracle_home               => lookup('oracle_home_dir'),
+        version                   => lookup('dbinstance_version'),
+        user                      => lookup('oracle_os_user'),
+        group                     => lookup('oracle_os_group'),
+        download_dir              => lookup('oracle_download_dir'),
+        action                    => 'create',
+        db_name                   => lookup('oracle_database_name'),
+        db_domain                 => lookup('oracle_database_domain_name'),
+        sys_password              => lookup('oracle_database_sys_password'),
+        system_password           => lookup('oracle_database_system_password'),
+        # template                  => 'dbtemplate_12.1_asm',
+        character_set             => 'AL32UTF8',
+        nationalcharacter_set     => 'UTF8',
+        sample_schema             => 'false',
+        memory_percentage         => 40,
+        memory_total              => 2880,
+        automatic_memory_management => false,
+        database_type             => 'MULTIPURPOSE',
+        em_configuration          => 'NONE',
+        storage_type              => 'ASM',
+        asm_snmp_password         => 'Welcome01',
+        asm_diskgroup             => '+DATA/{DB_UNIQUE_NAME}',
+        data_file_destination     => '+DATA/{DB_UNIQUE_NAME}',
+        recovery_diskgroup        => '+RECO',
+        recovery_area_destination => '+RECO',
+        puppet_download_mnt_point => 'oradb/',
+        require                   =>  Ora_asm_diskgroup['RECO@+ASM'],
+      }
+
 ## Oracle Database Client
 
     oradb::client{ '12.2.0.1_Linux-x86-64':
@@ -1206,59 +1288,6 @@ or
       download_dir                => '/var/tmp/install',
       log_output                  => true,
     }
-
-## Database configuration
-In combination with the oracle puppet module from hajee you can create/change a database init parameter, tablespace,role or an oracle user
-
-    ora_init_param{'SPFILE/processes@soarepos':
-      ensure => 'present',
-      value  => '1000',
-    }
-
-    ora_init_param{'SPFILE/job_queue_processes@soarepos':
-      ensure  => present,
-      value   => '4',
-    }
-
-    db_control{'soarepos restart':
-      ensure                  => 'running', #running|start|abort|stop
-      instance_name           => hiera('oracle_database_name'),
-      oracle_product_home_dir => hiera('oracle_home_dir'),
-      os_user                 => hiera('oracle_os_user'),
-      refreshonly             => true,
-      subscribe               => [Ora_init_param['SPFILE/processes@soarepos'],
-                                  Ora_init_param['SPFILE/job_queue_processes@soarepos'],],
-    }
-
-    ora_tablespace {'JMS_TS@soarepos':
-      ensure                    => present,
-      datafile                  => 'jms_ts.dbf',
-      size                      => 100M,
-      logging                   => yes,
-      autoextend                => on,
-      next                      => 100M,
-      max_size                  => 1G,
-      extent_management         => local,
-      segment_space_management  => auto,
-    }
-
-    ora_role {'APPS@soarepos':
-      ensure    => present,
-    }
-
-    ora_user{'JMS@soarepos':
-      ensure                    => present,
-      temporary_tablespace      => temp,
-      default_tablespace        => 'JMS_TS',
-      password                  => 'jms',
-      require                   => [Ora_tablespace['JMS_TS@soarepos'],
-                                    Ora_role['APPS@soarepos']],
-      grants                    => ['SELECT ANY TABLE', 'CONNECT', 'CREATE TABLE', 'CREATE TRIGGER','APPS'],
-      quotas                    => {
-                                      "JMS_TS"  => 'unlimited'
-                                    },
-    }
-
 
 ## Oracle GoldenGate 12.1.2 and 11.2.1
 

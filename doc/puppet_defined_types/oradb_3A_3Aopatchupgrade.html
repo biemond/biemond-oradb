@@ -404,7 +404,7 @@ define oradb::opatchupgrade(
   }
 
   # check the opatch version
-  $installed_version  = oradb::opatch_version($oracle_home)
+  $installed_version = oradb::opatch_version($oracle_home)
 
   if $installed_version == $opversion {
     $continue = false
@@ -456,7 +456,7 @@ define oradb::opatchupgrade(
 
           if ! defined(Package[&#39;expect&#39;]) {
             package { &#39;expect&#39;:
-              ensure  =&gt; present,
+              ensure =&gt; present,
             }
           }
 
@@ -494,7 +494,7 @@ define oradb::opatchupgrade(
 </div>
 
       <div id="footer">
-  Generated on Sun Feb 26 10:48:46 2017 by
+  Generated on Mon Feb 27 00:39:27 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

@@ -47,7 +47,7 @@ define oradb::opatchupgrade(
   }
 
   # check the opatch version
-  $installed_version  = oradb::opatch_version($oracle_home)
+  $installed_version = oradb::opatch_version($oracle_home)
 
   if $installed_version == $opversion {
     $continue = false
@@ -99,7 +99,7 @@ define oradb::opatchupgrade(
 
           if ! defined(Package['expect']) {
             package { 'expect':
-              ensure  => present,
+              ensure => present,
             }
           }
 

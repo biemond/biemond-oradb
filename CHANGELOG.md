@@ -1,5 +1,8 @@
 # Version updates
 
+## 3.0.4
+- 12.2.0.1 grid support
+
 ## 3.0.3
 - added docs
 - added goldengate 12.2.1 for Oracle Database
