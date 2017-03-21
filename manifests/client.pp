@@ -51,22 +51,22 @@
 # @param temp_dir location for temporaray file used by the installer
 #
 define oradb::client(
-  Enum['11.2.0.1','11.2.0.3','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1'] $version = undef,
-  String $file                                                                     = undef,
-  String $oracle_base                                                              = undef,
-  String $oracle_home                                                              = undef,
-  Optional[String] $ora_inventory_dir                                              = undef,
-  Integer $db_port                                                                 = lookup('oradb::listener_port'),
-  String $user                                                                     = lookup('oradb::user'),
-  String $user_base_dir                                                            = lookup('oradb::user_base_dir'),
-  String $group                                                                    = lookup('oradb::group'),
-  String $group_install                                                            = lookup('oradb::group_install'),
-  String $download_dir                                                             = lookup('oradb::download_dir'),
-  Boolean $bash_profile                                                            = true,
-  String $puppet_download_mnt_point                                                = lookup('oradb::module_mountpoint'),
-  Boolean $remote_file                                                             = true,
-  Boolean $log_output                                                              = true,
-  String $temp_dir                                                                 = lookup('oradb::tmp_dir'),
+  Enum['11.2.0.1','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1'] $version = undef,
+  String $file                                                          = undef,
+  String $oracle_base                                                   = undef,
+  String $oracle_home                                                   = undef,
+  Optional[String] $ora_inventory_dir                                   = undef,
+  Integer $db_port                                                      = lookup('oradb::listener_port'),
+  String $user                                                          = lookup('oradb::user'),
+  String $user_base_dir                                                 = lookup('oradb::user_base_dir'),
+  String $group                                                         = lookup('oradb::group'),
+  String $group_install                                                 = lookup('oradb::group_install'),
+  String $download_dir                                                  = lookup('oradb::download_dir'),
+  Boolean $bash_profile                                                 = true,
+  String $puppet_download_mnt_point                                     = lookup('oradb::module_mountpoint'),
+  Boolean $remote_file                                                  = true,
+  Boolean $log_output                                                   = true,
+  String $temp_dir                                                      = lookup('oradb::tmp_dir'),
 )
 {
   validate_absolute_path($oracle_home)

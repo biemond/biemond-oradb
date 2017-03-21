@@ -15,7 +15,7 @@ oradb::grid::group_asm:     'asmadmin'
 
 oradb::tmp_dir:      '/var/tmp/install'
 oradb::download_dir:      '/var/tmp/install'
-oradb::module_mountpoint: 'puppet:///modules/oradb/'
+oradb::module_mountpoint: 'oradb/'
 
 oradb::version:           '12.1'
 oradb::listener_port:     1521

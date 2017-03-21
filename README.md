@@ -87,7 +87,7 @@ In combination with the [oracle](http://forge.puppetlabs.com/hajee/oracle) modul
 
 Some manifests like installdb.pp, opatch.pp or rcusoa.pp supports an alternative mountpoint for the big oracle files.
 When not provided it uses the files location of the oradb puppet module
-else you can use $puppet_download_mnt_point => "/mnt" or "puppet:///modules/xxxx/"
+else you can use $puppet_download_mnt_point => "/mnt" or "oradb/" or "xxxx/"
 
 ## Oracle Big files and alternate download location
 Some manifests like oradb:installdb, opatch or rcu supports an alternative mountpoint for the big oracle setup/install files.
@@ -95,8 +95,7 @@ When not provided it uses the files folder located in the orawls puppet module
 else you can use $source =>
 - "/mnt"
 - "/vagrant"
-- "puppet:///modules/oradb/" (default)
-- "puppet:///database/"
+- "oradb/" (default)
 
 when the files are also locally accessible then you can also set $remote_file => false this will not move the files to the download folder, just extract or install
 
@@ -216,7 +215,7 @@ install the following module to set the database user limits parameters
 
 ## Database install
 
-    $puppet_download_mnt_point = "puppet:///modules/oradb/"
+    $puppet_download_mnt_point = "oradb/"
 
     oradb::installdb{ '12.2.0.1_Linux-x86-64':
       version                   => '12.2.0.1',
@@ -339,6 +338,20 @@ For opatchupgrade you need to provide the Oracle support csi_number and supportI
       puppet_download_mnt_point => $puppet_download_mnt_point,
       require                   =>  Oradb::Installdb['112030_Linux-x86-64'],
     }
+
+    oradb::opatchupgrade{'122000_opatch_upgrade_db':
+      oracle_home               => hiera('oracle_home_dir'),
+      patch_file                => 'p6880880_122010_Linux-x86-64.zip',
+      csi_number                => undef,
+      support_id                => undef,
+      opversion                 => '12.2.0.1.8',
+      user                      => hiera('oracle_os_user'),
+      group                     => hiera('oracle_os_group'),
+      download_dir              => hiera('oracle_download_dir'),
+      puppet_download_mnt_point => hiera('oracle_source'),
+      require                   => Oradb::Installdb['db_linux-x64'],
+    }
+
 
 ### Opatch
 
@@ -525,10 +538,12 @@ to use the new opatchauto utility(12.1) instead of opatch auto(11.2) use this pa
 based on your own dbt template ( not seeded )
 
 The template must be have the following extension dbt.erb like dbtemplate_12.1.dbt.erb, use puppet_download_mnt_point parameter for the template location or add your template to the template dir of the oradb module
-- Click here for an [12.1 db instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_12.1.dbt.erb)
-- Click here for an [12.1 db instance variables template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_12.1_vars.dbt.erb)
-- Click here for an [12.1 db asm instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_12.1_asm.dbt.erb)
-- Click here for an [11.2 db asm instance template example](https://github.com/biemond/biemond-oradb/blob/master/templates/dbtemplate_11gR2_asm.dbt.erb)
+- Click here for an [12.2 db instance template example](https://github.com/biemond/biemond-oradb/blob/puppet4_3_data/templates/dbtemplate_12.2.dbt.erb)
+- Click here for an [12.1 db instance template example](https://github.com/biemond/biemond-oradb/blob/
+puppet4_3_data/templates/dbtemplate_12.1.dbt.erb)
+- Click here for an [12.1 db instance variables template example](https://github.com/biemond/biemond-oradb/blob/puppet4_3_data/templates/dbtemplate_12.1_vars.dbt.erb)
+- Click here for an [12.1 db asm instance template example](https://github.com/biemond/biemond-oradb/blob/puppet4_3_data/templates/dbtemplate_12.1_asm.dbt.erb)
+- Click here for an [11.2 db asm instance template example](https://github.com/biemond/biemond-oradb/blob/puppet4_3_data/templates/dbtemplate_11gR2_asm.dbt.erb)
 
 with a template of the oradb module
 
@@ -1202,7 +1217,7 @@ or
       download_dir              => '/install',
       bash_profile              => true,
       remote_file               => true,
-      puppet_download_mnt_point => "puppet:///modules/oradb/",
+      puppet_download_mnt_point => "oradb/",
       logoutput                 => true,
     }
 
