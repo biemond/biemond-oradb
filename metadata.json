@@ -27,7 +27,7 @@
     "11g",
     "11gR2",
     "11.2",
-    "client",    
+    "client",
     "goldengate",
     "rcu",
     "enterprise manager"
@@ -102,5 +102,5 @@
       "version_requirement": ">=4.3.0"
     }
   ],
-  "version": "3.0.5"
+  "version": "3.0.6"
 }
