@@ -68,6 +68,7 @@
     </dd>
   </dl>
 </div>
+
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
@@ -137,7 +138,7 @@ oradb::installem_agent{ &#39;em12104_agent2&#39;:
         <span class='name'>version</span>
       
       
-        <span class='type'>(<tt>Enum['12.1.0.4','12.1.0.5']</tt>)</span>
+        <span class='type'>(<tt>Enum['12.1.0.4', '12.1.0.5', '13.2.0.0']</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>&#39;12.1.0.5&#39;</tt>)</em>
@@ -738,41 +739,45 @@ group_install the operating group name for the installed software</p>
 271
 272
 273
-274</pre>
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/installem_agent.pp', line 70</span>
 
 define oradb::installem_agent(
-  Enum[&#39;12.1.0.4&#39;,&#39;12.1.0.5&#39;] $version           = &#39;12.1.0.5&#39;,
-  Enum[&#39;agentPull&#39;, &#39;agentDeploy&#39;] $install_type = undef,
-  String $install_version                        = &#39;12.1.0.5.0&#39;,
-  String $install_platform                       = &#39;Linux x86-64&#39;,
-  String $source                                 = undef, # &#39;https://&lt;OMS_HOST&gt;:&lt;OMS_PORT&gt;/em/install/getAgentImage&#39;|&#39;/tmp/12.1.0.4.0_AgentCore_226_Linux_x64.zip&#39;
-  Optional[String] $ora_inventory_dir            = undef,
-  String $oracle_base_dir                        = undef,
-  String $agent_base_dir                         = undef,
-  String $agent_instance_home_dir                = undef,
-  String $agent_registration_password            = undef,
-  Integer $agent_port                            = 1830,
-  String $sysman_user                            = &#39;sysman&#39;,
-  Optional[String] $sysman_password              = undef,
-  String $oms_host                               = undef, # &#39;emapp.example.com&#39;
-  Integer $oms_port                              = undef, # 7802
-  Integer $em_upload_port                        = undef, # 14511
-  String $user                                   = lookup(&#39;oradb::user&#39;),
-  String $group                                  = lookup(&#39;oradb::group_install&#39;),
-  String $download_dir                           = lookup(&#39;oradb::download_dir&#39;),
-  Boolean $log_output                            = false,
-  String $oracle_hostname                        = undef, # FQDN hostname where to install on
-  Boolean $manage_curl                           = true,
+  Enum[&#39;12.1.0.4&#39;, &#39;12.1.0.5&#39;, &#39;13.2.0.0&#39;] $version  = &#39;12.1.0.5&#39;,
+  Enum[&#39;agentPull&#39;, &#39;agentDeploy&#39;] $install_type     = undef,
+  String $install_version                            = &#39;12.1.0.5.0&#39;,
+  String $install_platform                           = &#39;Linux x86-64&#39;,
+  String $source                                     = undef, # &#39;https://&lt;OMS_HOST&gt;:&lt;OMS_PORT&gt;/em/install/getAgentImage&#39;|&#39;/tmp/12.1.0.4.0_AgentCore_226_Linux_x64.zip&#39;
+  Optional[String] $ora_inventory_dir                = undef,
+  String $oracle_base_dir                            = undef,
+  String $agent_base_dir                             = undef,
+  String $agent_instance_home_dir                    = undef,
+  String $agent_registration_password                = undef,
+  Integer $agent_port                                = 1830,
+  String $sysman_user                                = &#39;sysman&#39;,
+  Optional[String] $sysman_password                  = undef,
+  String $oms_host                                   = undef, # &#39;emapp.example.com&#39;
+  Integer $oms_port                                  = undef, # 7802
+  Integer $em_upload_port                            = undef, # 14511
+  String $user                                       = lookup(&#39;oradb::user&#39;),
+  String $group                                      = lookup(&#39;oradb::group_install&#39;),
+  String $download_dir                               = lookup(&#39;oradb::download_dir&#39;),
+  Boolean $log_output                                = false,
+  String $oracle_hostname                            = undef, # FQDN hostname where to install on
+  Boolean $manage_curl                               = true,
 )
 {
-
-  $supported_em_versions = join( lookup(&#39;oradb::enterprise_manager_agent_versions&#39;), &#39;|&#39;)
-  if ( $version in $supported_em_versions == false ){
-    fail(&quot;Unrecognized em version, use ${supported_em_versions}&quot;)
-  }
 
   # check if the oracle software already exists
   validate_absolute_path( $agent_base_dir )
@@ -859,11 +864,13 @@ define oradb::installem_agent(
       file { &quot;${download_dir}/em_agent.properties&quot;:
         ensure  =&gt; present,
         content =&gt; epp(&#39;oradb/em_agent_pull.properties.epp&#39;, {
-                        &#39;agent_instance_home_dir&#39; =&gt; $agent_instance_home_dir,
-                        &#39;oms_host&#39;                =&gt; $oms_host,
-                        &#39;oms_port&#39;                =&gt; $oms_port,
-                        &#39;agent_port&#39;              =&gt; $agent_port,
-                        &#39;em_upload_port&#39;          =&gt; $em_upload_port } ),
+                        &#39;agent_instance_home_dir&#39;     =&gt; $agent_instance_home_dir,
+                        &#39;oms_host&#39;                    =&gt; $oms_host,
+                        &#39;oms_port&#39;                    =&gt; $oms_port,
+                        &#39;agent_port&#39;                  =&gt; $agent_port,
+                        &#39;em_upload_port&#39;              =&gt; $em_upload_port,
+                        &#39;agent_registration_password&#39; =&gt; $agent_registration_password,
+                        &#39;agent_base_dir&#39;              =&gt; $agent_base_dir }),
         mode    =&gt; &#39;0755&#39;,
         owner   =&gt; $user,
         group   =&gt; $group,
@@ -886,8 +893,14 @@ define oradb::installem_agent(
                       Oradb::Utils::Dborainst[&quot;em agent orainst ${version}&quot;],],
       }
 
+      if ($version in [&#39;13.2.0.0&#39;]) {
+        $after_command = &quot;${agent_base_dir}/agent_${install_version}/root.sh&quot;
+      } else {
+        $after_command = &quot;${agent_base_dir}/core/${install_version}/root.sh&quot;
+      }
+
       exec { &quot;run em agent root.sh script ${title}&quot;:
-        command   =&gt; &quot;${agent_base_dir}/core/${install_version}/root.sh&quot;,
+        command   =&gt; $after_command,
         user      =&gt; &#39;root&#39;,
         group     =&gt; &#39;root&#39;,
         path      =&gt; $exec_path,
@@ -933,8 +946,14 @@ define oradb::installem_agent(
                       Oradb::Utils::Dborainst[&quot;em agent orainst ${version}&quot;],],
       }
 
+      if ($version in [&#39;13.2.0.0&#39;]) {
+        $after_command = &quot;${agent_base_dir}/agent_${install_version}/root.sh&quot;
+      } else {
+        $after_command = &quot;${agent_base_dir}/core/${install_version}/root.sh&quot;
+      }
+
       exec { &quot;run em agent root.sh script ${title}&quot;:
-        command   =&gt; &quot;${agent_base_dir}/core/${install_version}/root.sh&quot;,
+        command   =&gt; $after_command,
         user      =&gt; &#39;root&#39;,
         group     =&gt; &#39;root&#39;,
         path      =&gt; $exec_path,
@@ -955,7 +974,7 @@ define oradb::installem_agent(
 </div>
 
       <div id="footer">
-  Generated on Sun Mar  5 19:13:55 2017 by
+  Generated on Thu Mar 23 18:23:08 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

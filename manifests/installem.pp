@@ -66,7 +66,7 @@
 # @param agent_port
 #
 define oradb::installem(
-  Enum['12.1.0.4','12.1.0.5'] $version              = '12.1.0.5',
+  Enum['12.1.0.4', '12.1.0.5', '13.2.0.0'] $version = '12.1.0.5',
   String $file                                      = undef,
   Optional[String] $ora_inventory_dir               = undef,
   String $oracle_base_dir                           = undef,
@@ -100,13 +100,9 @@ define oradb::installem(
   Integer $bi_publisher_https_port                  = 9801,
   Integer $nodemanager_https_port                   = 7401,
   Integer $agent_port                               = 3872,
+  String $temp_dir                                  = lookup('oradb::tmp_dir'),# /tmp temporary directory for files extractions
 )
 {
-
-  $supported_em_versions = join( lookup('oradb::enterprise_manager_versions'), '|')
-  if ( $version in $supported_em_versions == false ){
-    fail("Unrecognized em version, use ${supported_em_versions}")
-  }
 
   $supported_db_kernels = join( lookup('oradb::kernels'), '|')
   if ( $::kernel in $supported_db_kernels == false){
@@ -148,88 +144,141 @@ define oradb::installem(
     $exec_path = lookup('oradb::exec_path')
 
     if $puppet_download_mnt_point == undef {
-      $mount_point     = 'puppet:///modules/oradb/'
+      $mount_point = lookup('oradb::module_mountpoint')
     } else {
-      $mount_point     = $puppet_download_mnt_point
+      $mount_point = $puppet_download_mnt_point
+    }
+
+    if ( $version in ['12.1.0.4', '12.1.0.5']) {
+      $file1 = "${file}_disk1.zip"
+      $file2 = "${file}_disk2.zip"
+      $file3 = "${file}_disk3.zip"
+
+      $total_files = 3
+      $oracle_instance_home_dir = "${oracle_home_dir}/db"
+
+    } elsif ($version in ['13.2.0.0']) {
+      $file1 = "${file}.bin"
+      $file2 = "${file}-2.zip"
+      $file3 = "${file}-3.zip"
+      $file4 = "${file}-4.zip"
+      $file5 = "${file}-5.zip"
+      $file6 = "${file}-6.zip"
+      $file7 = "${file}-7.zip"
+
+      $total_files = 7
+      $oracle_instance_home_dir = oradb::cleanpath("${oracle_home_dir}/../db")
+    }
+
+    if $remote_file == true {
+
+      file { "${download_dir}/${file1}":
+        ensure  => present,
+        source  => "${mount_point}/${file1}",
+        mode    => '0775',
+        owner   => $user,
+        group   => $group,
+        require => Db_directory_structure["oracle em structure ${version}"],
+        before  => Exec["extract ${download_dir}/${file1}"],
+      }
+      # db file 2 installer zip
+      file { "${download_dir}/${file2}":
+        ensure  => present,
+        source  => "${mount_point}/${file2}",
+        mode    => '0775',
+        owner   => $user,
+        group   => $group,
+        require => File["${download_dir}/${file1}"],
+        before  => Exec["extract ${download_dir}/${file2}"]
+      }
+      # db file 3 installer zip
+      file { "${download_dir}/${file3}":
+        ensure  => present,
+        source  => "${mount_point}/${file3}",
+        mode    => '0775',
+        owner   => $user,
+        group   => $group,
+        require => File["${download_dir}/${file2}"],
+        before  => Exec["extract ${download_dir}/${file3}"]
+      }
+
+      if ( $total_files == 7 ) {
+        file { "${download_dir}/${file4}":
+          ensure  => present,
+          source  => "${mount_point}/${file4}",
+          mode    => '0775',
+          owner   => $user,
+          group   => $group,
+          require => File["${download_dir}/${file3}"]
+        }
+        # db file 5 installer zip
+        file { "${download_dir}/${file5}":
+          ensure  => present,
+          source  => "${mount_point}/${file5}",
+          mode    => '0775',
+          owner   => $user,
+          group   => $group,
+          require => File["${download_dir}/${file4}"]
+        }
+        # db file 6 installer zip
+        file { "${download_dir}/${file6}":
+          ensure  => present,
+          source  => "${mount_point}/${file6}",
+          mode    => '0775',
+          owner   => $user,
+          group   => $group,
+          require => File["${download_dir}/${file5}"]
+        }
+        # db file 7 installer zip
+        file { "${download_dir}/${file7}":
+          ensure  => present,
+          source  => "${mount_point}/${file7}",
+          mode    => '0775',
+          owner   => $user,
+          group   => $group,
+          require => File["${download_dir}/${file6}"]
+        }
+      }
+      $source = $download_dir
+    } else {
+      $source = $mount_point
     }
 
     if ( $zip_extract ) {
       # In $download_dir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
 
-      if ( $version in ['12.1.0.4', '12.1.0.5']) {
-        $file1 = "${file}_disk1.zip"
-        $file2 = "${file}_disk2.zip"
-        $file3 = "${file}_disk3.zip"
-      }
-
-      if $remote_file == true {
-
-        file { "${download_dir}/${file1}":
-          ensure  => present,
-          source  => "${mount_point}/${file1}",
-          mode    => '0775',
-          owner   => $user,
-          group   => $group,
-          require => Db_directory_structure["oracle em structure ${version}"],
-          before  => Exec["extract ${download_dir}/${file1}"],
+      if ( $version in ['12.1.0.4', '12.1.0.5'] ) {
+        exec { "extract ${download_dir}/${file1}":
+          command   => "unzip -o ${source}/${file1} -d ${download_dir}/${file}",
+          timeout   => 0,
+          logoutput => false,
+          path      => $exec_path,
+          user      => $user,
+          group     => $group,
+          require   => Db_directory_structure["oracle em structure ${version}"],
+          before    => Exec["install oracle em ${title}"],
         }
-        # db file 2 installer zip
-        file { "${download_dir}/${file2}":
-          ensure  => present,
-          source  => "${mount_point}/${file2}",
-          mode    => '0775',
-          owner   => $user,
-          group   => $group,
-          require => File["${download_dir}/${file1}"],
-          before  => Exec["extract ${download_dir}/${file2}"]
+        exec { "extract ${download_dir}/${file2}":
+          command   => "unzip -o ${source}/${file2} -d ${download_dir}/${file}",
+          timeout   => 0,
+          logoutput => false,
+          path      => $exec_path,
+          user      => $user,
+          group     => $group,
+          require   => Exec["extract ${download_dir}/${file1}"],
+          before    => Exec["install oracle em ${title}"],
         }
-        # db file 3 installer zip
-        file { "${download_dir}/${file3}":
-          ensure  => present,
-          source  => "${mount_point}/${file3}",
-          mode    => '0775',
-          owner   => $user,
-          group   => $group,
-          require => File["${download_dir}/${file2}"],
-          before  => Exec["extract ${download_dir}/${file3}"]
+        exec { "extract ${download_dir}/${file3}":
+          command   => "unzip -o ${source}/${file3} -d ${download_dir}/${file}",
+          timeout   => 0,
+          logoutput => false,
+          path      => $exec_path,
+          user      => $user,
+          group     => $group,
+          require   => Exec["extract ${download_dir}/${file2}"],
+          before    => Exec["install oracle em ${title}"],
         }
-
-        $source = $download_dir
-      } else {
-        $source = $mount_point
       }
-
-      exec { "extract ${download_dir}/${file1}":
-        command   => "unzip -o ${source}/${file1} -d ${download_dir}/${file}",
-        timeout   => 0,
-        logoutput => false,
-        path      => $exec_path,
-        user      => $user,
-        group     => $group,
-        require   => Db_directory_structure["oracle em structure ${version}"],
-        before    => Exec["install oracle em ${title}"],
-      }
-      exec { "extract ${download_dir}/${file2}":
-        command   => "unzip -o ${source}/${file2} -d ${download_dir}/${file}",
-        timeout   => 0,
-        logoutput => false,
-        path      => $exec_path,
-        user      => $user,
-        group     => $group,
-        require   => Exec["extract ${download_dir}/${file1}"],
-        before    => Exec["install oracle em ${title}"],
-      }
-      exec { "extract ${download_dir}/${file3}":
-        command   => "unzip -o ${source}/${file3} -d ${download_dir}/${file}",
-        timeout   => 0,
-        logoutput => false,
-        path      => $exec_path,
-        user      => $user,
-        group     => $group,
-        require   => Exec["extract ${download_dir}/${file2}"],
-        before    => Exec["install oracle em ${title}"],
-      }
-
     }
 
     oradb::utils::dborainst{"em orainst ${version}":
@@ -256,7 +305,8 @@ define oradb::installem(
                         'deployment_size'             => $deployment_size,
                         'agent_registration_password' => $agent_registration_password,
                         'download_dir'                => $download_dir,
-                        'version'                     => $version }),
+                        'version'                     => $version,
+                        'oracle_instance_home_dir'    => $oracle_instance_home_dir }),
         mode    => '0775',
         owner   => $user,
         group   => $group,
@@ -278,7 +328,7 @@ define oradb::installem(
                         'bi_publisher_http_port'        => $bi_publisher_http_port,
                         'bi_publisher_https_port'       => $bi_publisher_https_port,
                         'nodemanager_https_port'        => $nodemanager_https_port,
-                        'agent_port'                    => $agent_port } ),
+                        'agent_port'                    => $agent_port }),
         mode    => '0775',
         owner   => $user,
         group   => $group,
@@ -287,8 +337,14 @@ define oradb::installem(
       }
     }
 
+    if ( $version in ['12.1.0.4', '12.1.0.5']) {
+      $command = "/bin/su - ${user} -c 'unset DISPLAY;${download_dir}/${file}/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/em_install_${version}.rsp'"
+    } elsif ($version in ['13.2.0.0']) {
+      $command = "/bin/su - ${user} -c 'unset DISPLAY;${source}/${file1} -J-Djava.io.tmpdir=${temp_dir} -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/em_install_${version}.rsp'"
+    }
+
     exec { "install oracle em ${title}":
-      command   => "/bin/su - ${user} -c 'unset DISPLAY;${download_dir}/${file}/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/em_install_${version}.rsp'",
+      command   => $command,
       creates   => $oracle_home_dir,
       timeout   => 0,
       returns   => [6,0],
@@ -300,35 +356,39 @@ define oradb::installem(
                     File["${download_dir}/em_install_static_${version}.ini"],],
     }
 
-    exec { "run root.sh script ${title}":
-      command   => "${oracle_home_dir}/oms/allroot.sh",
-      user      => 'root',
-      group     => 'root',
-      path      => $exec_path,
-      cwd       => $oracle_base_dir,
-      logoutput => $log_output,
-      require   => Exec["install oracle em ${title}"],
-    }
+    if ( $version in ['12.1.0.4', '12.1.0.5']) {
+      exec { "run root.sh script ${title}":
+        command   => "${oracle_home_dir}/oms/allroot.sh",
+        user      => 'root',
+        group     => 'root',
+        path      => $exec_path,
+        cwd       => $oracle_base_dir,
+        logoutput => $log_output,
+        require   => Exec["install oracle em ${title}"],
+      }
 
-    file { $oracle_home_dir:
-      ensure  => directory,
-      recurse => false,
-      replace => false,
-      mode    => '0775',
-      owner   => $user,
-      group   => $group,
-      require => Exec["install oracle em ${title}","run root.sh script ${title}"],
+
+      file { $oracle_home_dir:
+        ensure  => directory,
+        recurse => false,
+        replace => false,
+        mode    => '0775',
+        owner   => $user,
+        group   => $group,
+        require => Exec["install oracle em ${title}","run root.sh script ${title}"],
+      }
     }
 
     # cleanup
     if ( $zip_extract ) {
-      exec { "remove oracle em extract folder ${title}":
-        command => "rm -rf ${download_dir}/${file}",
-        user    => 'root',
-        group   => 'root',
-        path    => $exec_path,
-        require => [Exec["install oracle em ${title}"],
-                    Exec["run root.sh script ${title}"],],
+      if ( $version in ['12.1.0.4', '12.1.0.5']) {
+        exec { "remove oracle em extract folder ${title}":
+          command => "rm -rf ${download_dir}/${file}",
+          user    => 'root',
+          group   => 'root',
+          path    => $exec_path,
+          require => Exec["install oracle em ${title}"],
+        }
       }
 
       if ( $remote_file == true ){
@@ -353,9 +413,37 @@ define oradb::installem(
           path    => $exec_path,
           require => Exec["install oracle em ${title}"],
         }
-
+        if ( $total_files == 7 ) {
+          exec { "remove oracle em file4 ${file4} ${title}":
+            command => "rm -rf ${download_dir}/${file4}",
+            user    => 'root',
+            group   => 'root',
+            path    => $exec_path,
+            require => Exec["install oracle em ${title}"],
+          }
+          exec { "remove oracle em file5 ${file5} ${title}":
+            command => "rm -rf ${download_dir}/${file5}",
+            user    => 'root',
+            group   => 'root',
+            path    => $exec_path,
+            require => Exec["install oracle em ${title}"],
+          }
+          exec { "remove oracle em file6 ${file6} ${title}":
+            command => "rm -rf ${download_dir}/${file6}",
+            user    => 'root',
+            group   => 'root',
+            path    => $exec_path,
+            require => Exec["install oracle em ${title}"],
+          }
+          exec { "remove oracle em file7 ${file7} ${title}":
+            command => "rm -rf ${download_dir}/${file7}",
+            user    => 'root',
+            group   => 'root',
+            path    => $exec_path,
+            require => Exec["install oracle em ${title}"],
+          }
+        }
       }
     }
-
   }
 }

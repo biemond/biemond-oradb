@@ -68,6 +68,7 @@
     </dd>
   </dl>
 </div>
+
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
@@ -127,7 +128,7 @@ oradb::client{ &#39;11.2.0.1_Linux-x86-64&#39;:
         <span class='name'>version</span>
       
       
-        <span class='type'>(<tt>Enum['11.2.0.1','11.2.0.3','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1']</tt>)</span>
+        <span class='type'>(<tt>Enum['11.2.0.1','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1']</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
@@ -607,22 +608,22 @@ oradb::client{ &#39;11.2.0.1_Linux-x86-64&#39;:
         <pre class="code"><span class="info file"># File 'manifests/client.pp', line 53</span>
 
 define oradb::client(
-  Enum[&#39;11.2.0.1&#39;,&#39;11.2.0.3&#39;,&#39;11.2.0.4&#39;,&#39;12.1.0.1&#39;,&#39;12.1.0.2&#39;,&#39;12.2.0.1&#39;] $version = undef,
-  String $file                                                                     = undef,
-  String $oracle_base                                                              = undef,
-  String $oracle_home                                                              = undef,
-  Optional[String] $ora_inventory_dir                                              = undef,
-  Integer $db_port                                                                 = lookup(&#39;oradb::listener_port&#39;),
-  String $user                                                                     = lookup(&#39;oradb::user&#39;),
-  String $user_base_dir                                                            = lookup(&#39;oradb::user_base_dir&#39;),
-  String $group                                                                    = lookup(&#39;oradb::group&#39;),
-  String $group_install                                                            = lookup(&#39;oradb::group_install&#39;),
-  String $download_dir                                                             = lookup(&#39;oradb::download_dir&#39;),
-  Boolean $bash_profile                                                            = true,
-  String $puppet_download_mnt_point                                                = lookup(&#39;oradb::module_mountpoint&#39;),
-  Boolean $remote_file                                                             = true,
-  Boolean $log_output                                                              = true,
-  String $temp_dir                                                                 = lookup(&#39;oradb::tmp_dir&#39;),
+  Enum[&#39;11.2.0.1&#39;,&#39;11.2.0.4&#39;,&#39;12.1.0.1&#39;,&#39;12.1.0.2&#39;,&#39;12.2.0.1&#39;] $version = undef,
+  String $file                                                          = undef,
+  String $oracle_base                                                   = undef,
+  String $oracle_home                                                   = undef,
+  Optional[String] $ora_inventory_dir                                   = undef,
+  Integer $db_port                                                      = lookup(&#39;oradb::listener_port&#39;),
+  String $user                                                          = lookup(&#39;oradb::user&#39;),
+  String $user_base_dir                                                 = lookup(&#39;oradb::user_base_dir&#39;),
+  String $group                                                         = lookup(&#39;oradb::group&#39;),
+  String $group_install                                                 = lookup(&#39;oradb::group_install&#39;),
+  String $download_dir                                                  = lookup(&#39;oradb::download_dir&#39;),
+  Boolean $bash_profile                                                 = true,
+  String $puppet_download_mnt_point                                     = lookup(&#39;oradb::module_mountpoint&#39;),
+  Boolean $remote_file                                                  = true,
+  Boolean $log_output                                                   = true,
+  String $temp_dir                                                      = lookup(&#39;oradb::tmp_dir&#39;),
 )
 {
   validate_absolute_path($oracle_home)
@@ -795,7 +796,7 @@ define oradb::client(
 </div>
 
       <div id="footer">
-  Generated on Sun Mar  5 19:13:54 2017 by
+  Generated on Thu Mar 23 18:23:07 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

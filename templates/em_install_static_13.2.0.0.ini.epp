@@ -1,0 +1,36 @@
+<%- |  Integer $admin_server_https_port, 
+       Integer $managed_server_http_port, 
+       Integer $managed_server_https_port, 
+       Integer $em_upload_http_port,
+       Integer $em_upload_https_port, 
+       Integer $em_central_console_http_port,
+       Integer $em_central_console_https_port,
+       Integer $bi_publisher_http_port,
+       Integer $bi_publisher_https_port,
+       Integer $nodemanager_https_port,
+       Integer $agent_port | -%>
+# staticports.ini Template File
+
+# This file is a template for specifying port numbers at installation time.
+# To specify a port number, uncomment the appropriate line (remove #) and
+# replace "port_num" with the desired port number.
+# You can then launch Oracle Universal Installer with special options to use this file.
+# Please refer to Enterprise Manager Cloud Control 11gR1 Installation Guide for instructions.
+
+# Enterprise Manager
+
+Admin Server Http SSL Port=<%=$admin_server_https_port %>
+Managed Server Http Port=<%=$managed_server_http_port%>
+Managed Server Http SSL Port=<%=$managed_server_https_port%>
+Enterprise Manager Upload Http Port=<%=$em_upload_http_port%>
+Enterprise Manager Upload Http SSL Port=<%=$em_upload_https_port%>
+Enterprise Manager Central Console Http Port=<%=$em_central_console_http_port%>
+Enterprise Manager Central Console Http SSL Port=<%=$em_central_console_https_port%>
+BI Publisher Http Port=<%=$bi_publisher_http_port%>
+BI Publisher Http SSL Port=<%=$bi_publisher_https_port%>
+Node Manager Http SSL Port=<%=$nodemanager_https_port%>
+
+#For Agent
+
+Oracle Management Agent Port=<%=$agent_port%>
+

@@ -2,11 +2,22 @@
        Optional[String] $oms_host, 
        Optional[Integer] $oms_port, 
        Optional[Integer] $agent_port, 
-       Optional[Integer] $em_upload_port | -%>
+       Optional[Integer] $em_upload_port,
+       Optional[String] $agent_base_dir,
+       Optional[String] $agent_registration_password | -%>
 
 <% if $agent_instance_home_dir { %>
 AGENT_INSTANCE_HOME=<%= $agent_instance_home_dir %>
 <% } %>
+
+<% if $agent_base_dir { %>
+AGENT_BASE_DIR=<%= $agent_base_dir %>
+<% } %>
+
+<% if $agent_registration_password { %>
+AGENT_REGISTRATION_PASSWORD=<%= $agent_registration_password %>
+<% } %>
+
 <% if $oms_host { %>
 OMS_HOST=<%= $oms_host %>
 <% } %>

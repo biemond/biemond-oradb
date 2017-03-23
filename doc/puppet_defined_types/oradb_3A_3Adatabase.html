@@ -68,6 +68,7 @@
     </dd>
   </dl>
 </div>
+
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
@@ -899,7 +900,14 @@ oradb::database{ &#39;oraDb&#39;:
 288
 289
 290
-291</pre>
+291
+292
+293
+294
+295
+296
+297
+298</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/database.pp', line 96</span>
@@ -1045,24 +1053,30 @@ define oradb::database(
     $templatename = undef
   }
 
+  if ($version == &#39;12.2&#39; and $templatename != undef and $storage_type != undef and $data_file_destination == undef ) {
+    fail(&#39;data_file_destination is required on version 12.2 when storage_type and templaten are defined&#39;)
+  }
+
   $elevation_prefix = &quot;su - ${user} -c \&quot;/bin/ksh -c \\\&quot;&quot;
   $elevation_suffix = &quot;\\\&quot;\&quot;&quot;
 
   if $action == &#39;create&#39; {
     if ( $templatename ) {
+
       if ( $version == &#39;11.2&#39; or $container_database == false ) {
-        if ( $cluster_nodes != undef) {
-          $command = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -nodelist ${cluster_nodes} -variables ${template_variables}${elevation_suffix}&quot;
-        } else {
-          $command = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -variables ${template_variables}${elevation_suffix}&quot;
-        }
+        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -variables ${template_variables}${elevation_suffix}&quot;
+      } elsif ( $version == &#39;12.2&#39;) {
+        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -datafileDestination ${data_file_destination} -emConfiguration ${em_configuration} -variables ${template_variables}${elevation_suffix}&quot;
       } else {
-        if( $cluster_nodes != undef) {
-          $command = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -nodelist ${cluster_nodes} -variables ${template_variables}${elevation_suffix}&quot;
-        } else {
-          $command = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -variables ${template_variables}${elevation_suffix}&quot;
-        }
+        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -variables ${template_variables}${elevation_suffix}&quot;
       }
+
+      if ( $cluster_nodes != undef) {
+        $command = &quot;${command_pre} -nodelist ${cluster_nodes}&quot;
+      } else {
+        $command = $command_pre
+      }
+
     } else {
       if ( $version == &#39;12.2&#39; ) {
         $command = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -responseFile ${download_dir}/database_${sanitized_title}.rsp${elevation_suffix}&quot;
@@ -1070,6 +1084,7 @@ define oradb::database(
         $command = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp${elevation_suffix}&quot;
       }
     }
+
     exec { &quot;oracle database ${title}&quot;:
       command     =&gt; $command,
       creates     =&gt; &quot;${oracle_base}/admin/${db_name}&quot;,
@@ -1107,7 +1122,7 @@ define oradb::database(
 </div>
 
       <div id="footer">
-  Generated on Sun Mar  5 19:13:55 2017 by
+  Generated on Thu Mar 23 18:23:07 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

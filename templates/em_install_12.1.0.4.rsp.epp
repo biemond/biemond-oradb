@@ -13,7 +13,8 @@
        String $deployment_size,
        String $agent_registration_password,
        String $download_dir,
-       String $version | -%>
+       String $version,
+       String $oracle_instance_home_dir | -%>
 
 ####################################################################
 ## copyright (c) 1999, 2011, 2012 Oracle. All rights reserved.    ##
@@ -140,7 +141,7 @@ WLS_ADMIN_SERVER_PASSWORD=<%= $weblogic_password %>
 WLS_ADMIN_SERVER_CONFIRM_PASSWORD=<%= $weblogic_password %>
 NODE_MANAGER_PASSWORD=<%= $weblogic_password %>
 NODE_MANAGER_CONFIRM_PASSWORD=<%= $weblogic_password %>
-ORACLE_INSTANCE_HOME_LOCATION=<%= $oracle_home_dir %>/db
+ORACLE_INSTANCE_HOME_LOCATION=<%= $oracle_instance_home_dir %>
 
 #-------------------------------------------------------------------------------
 #CONFIGURE_ORACLE_SOFTWARE_LIBRARY:<Boolean>

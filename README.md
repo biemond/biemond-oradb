@@ -29,6 +29,7 @@ Dependency with
 Should work on Docker, for Solaris and on all Linux version like RedHat, CentOS, Ubuntu, Debian, Suse SLES or OracleLinux
 - CentOS 7.3 vagrant box with Oracle Database 12.2.0.1 with pluggable databases [12c pluggable db puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.2-CDB-puppet4_3)
 - Docker image of Oracle Database 12.1 SE [Docker Oracle Database 12.1.0.1](https://github.com/biemond/docker-database-puppet)
+- CentOS 7.2 vagrant box with Oracle Database 12.1 and Enterprise Manager 13.2.0.0 [Enterprise puppet 4 vagrant box](https://github.com/biemond/biemond-em-13.2-puppet4_3)
 - CentOS 6.7 vagrant box with Oracle Database 12.1 and Enterprise Manager 12.1.0.5 [Enterprise puppet 4 vagrant box](https://github.com/biemond/biemond-em-12c-puppet4_3)
 - CentOS 7.3 vagrant box with Oracle Database 12.2.0.1 on NFS ASM [ASM puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.2-ASM-puppet4_3)
 - CentOS 7.2 vagrant box with Oracle Database 12.1.0.2 on NFS ASM [ASM puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-ASM-puppet4_3)
@@ -58,7 +59,7 @@ Should work for Puppet >=  4.0
 - Stop/Start database instances with db_control puppet resource type
 
 ## Enterprise Manager
-- Enterprise Manager Server 12.1.0.4, 12.1.0.5, 12c cloud installation / configuration
+- Enterprise Manager Server 13.2.0.0, 12.1.0.4, 12.1.0.5, 13 & 12c cloud installation / configuration
 - Agent installation via AgentPull.sh & AgentDeploy.sh
 
 ## GoldenGate
@@ -1265,6 +1266,32 @@ or
       log_output                  => true,
     }
 
+    oradb::installem{ 'em13200':
+      version                     => '13.2.0.0',
+      file                        => 'em13200p1_linux64',
+      oracle_base_dir             => '/oracle',
+      oracle_home_dir             => '/oracle/product/13.2/em',
+      agent_base_dir              => '/oracle/product/13.2/agent',
+      software_library_dir        => '/oracle/product/13.2/swlib',
+      weblogic_user               => 'weblogic',
+      weblogic_password           => 'Welcome01',
+      database_hostname           => 'emdb.example.com',
+      database_listener_port      => 1521,
+      database_service_sid_name   => 'emrepos.example.com',
+      database_sys_password       => 'Welcome01',
+      sysman_password             => 'Welcome01',
+      agent_registration_password => 'Welcome01',
+      deployment_size             => 'SMALL',
+      user                        => 'oracle',
+      group                       => 'oinstall',
+      download_dir                => '/var/tmp/install',
+      zip_extract                 => false,
+      puppet_download_mnt_point   => '/software',
+      remote_file                 => false,
+      log_output                  => true,
+    }
+
+
     oradb::installem_agent{ 'em12104_agent':
       version                     => '12.1.0.4',
       source                      => 'https://10.10.10.25:7802/em/install/getAgentImage',
@@ -1285,6 +1312,29 @@ or
       download_dir                => '/var/tmp/install',
       log_output                  => true,
       oracle_hostname             => 'emdb.example.com', # FQDN hostname where to install on
+    }
+
+    oradb::installem_agent{ 'em13200_agent':
+      version                     => '13.2.0.0',
+      source                      => 'https://10.10.10.25:7799/em/install/getAgentImage',
+      install_type                => 'agentPull',
+      install_platform            => 'Linux x86-64',
+      install_version             => '13.2.0.0.0',
+      oracle_base_dir             => '/oracle',
+      agent_base_dir              => '/oracle/product/13.2/agent',
+      agent_instance_home_dir     => '/oracle/product/13.2/agent/agent_inst',
+      sysman_user                 => 'sysman',
+      sysman_password             => 'Welcome01',
+      agent_registration_password => 'Welcome01',
+      agent_port                  => 1830,
+      oms_host                    => '10.10.10.25',
+      oms_port                    => 7799,
+      em_upload_port              => 4889,
+      oracle_hostname             => 'emdb.example.com',
+      user                        => 'oracle',
+      group                       => 'dba',
+      download_dir                => '/var/tmp/install',
+      log_output                  => true,
     }
 
     oradb::installem_agent{ 'em12104_agent2':

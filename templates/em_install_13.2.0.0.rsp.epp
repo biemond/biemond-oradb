@@ -1,0 +1,392 @@
+<%- |  String $group_install = 'oinstall', 
+       String $oraInventory, 
+       String $oracle_home_dir, 
+       Optional[String] $agent_base_dir, 
+       String $weblogic_user,
+       String $weblogic_password,
+       String $database_hostname,
+       Integer $database_listener_port,
+       String $database_service_sid_name, 
+       String $database_sys_password,
+       String $sysman_password,
+       String $software_library_dir,
+       String $deployment_size,
+       String $agent_registration_password,
+       String $download_dir,
+       String $version,
+       String $oracle_instance_home_dir | -%>
+
+####################################################################
+##                                                                ##
+## Copyright (c) 2015 Oracle. All rights reserved.                ##
+##                                                                ##
+## Specify values for the variables listed below to customize     ##
+## your installation.                                             ##
+##                                                                ##
+## Each variable is associated with a comment. The comment        ##
+## identifies the variable type.                                  ##
+##                                                                ##
+## Specify values in the following format:                        ##
+##                                                                ##
+##         Type         Example                                   ##
+##         ----         -------                                   ##
+##         string       Sample Value                              ##
+##         boolean      TRUE or FALSE                             ##
+##         number       1000                                      ##
+##                                                                ##
+####################################################################
+####################################################################
+
+
+
+
+#------------------------------------------------------------------#
+# Name        : RESPONSEFILE_VERSION
+# Type        : string
+# Description : Response file version
+#------------------------------------------------------------------#
+RESPONSEFILE_VERSION=2.2.1.0.0
+
+#------------------------------------------------------------------#
+# Name        : UNIX_GROUP_NAME
+# Type        : string
+# Description : Specify UNIX GROUP NAME if there is no central inventory and inventory location is not passed using -invptrLoc.
+# Example     : UNIX_GROUP_NAME=dba
+#------------------------------------------------------------------#
+UNIX_GROUP_NAME=<%= $group_install %>
+
+#------------------------------------------------------------------#
+# Name        : INVENTORY_LOCATION
+# Type        : string
+# Description : Specify INENTORY LOCATION if there is no central inventory and inventory location is not passed using -invptrLoc.
+# Example     : INVENTORY_LOCATION=/scratch/oracle/oraInventory
+#------------------------------------------------------------------#
+INVENTORY_LOCATION=<%= $oraInventory %>
+
+#------------------------------------------------------------------#
+# Name        : SECURITY_UPDATES_VIA_MYORACLESUPPORT
+# Type        : boolean
+# Description : Whether security updates are required via My Oracle Support.
+#------------------------------------------------------------------#
+SECURITY_UPDATES_VIA_MYORACLESUPPORT=false
+
+#------------------------------------------------------------------#
+# Name        : DECLINE_SECURITY_UPDATES
+# Type        : boolean
+# Description : Whether security updates should be declined.
+#------------------------------------------------------------------#
+DECLINE_SECURITY_UPDATES=true
+
+#------------------------------------------------------------------#
+# Name        : MYORACLESUPPORT_USERNAME
+# Type        : string
+# Description : User name for My Oracle Support access, these will be effected only when SECURITY_UPDATES_VIA_MYORACLESUPPORT=true.
+#------------------------------------------------------------------#
+MYORACLESUPPORT_USERNAME=<Value Unspecified>
+
+#------------------------------------------------------------------#
+# Name        : MYORACLESUPPORT_PASSWORD
+# Type        : string
+# Description : Password for My Oracle Support access, these will be effected only when SECURITY_UPDATES_VIA_MYORACLESUPPORT=true.
+#------------------------------------------------------------------#
+MYORACLESUPPORT_PASSWORD=<Value Unspecified>
+
+#------------------------------------------------------------------#
+# Name        : INSTALL_UPDATES_SELECTION
+# Type        : string
+# Description : Option 1. If you want to skip the software updates, provide 
+#               INSTALL_UPDATES_SELECTION="skip"
+#               Option 2. If you have already downloaded the updates then provide
+#               INSTALL_UPDATES_SELECTION="staged"
+#               If you choose the Option 2 then make sure you also provide STAGE_LOCATION.
+#------------------------------------------------------------------#
+INSTALL_UPDATES_SELECTION=skip
+
+#------------------------------------------------------------------#
+# Name        : STAGE_LOCATION
+# Type        : string
+# Description : Its for software updates. It will be effected only when INSTALL_UPDATES_SELECTION is  set to "staged".
+#------------------------------------------------------------------#
+STAGE_LOCATION=<Value Unspecified>
+
+#------------------------------------------------------------------#
+# Name        : MYORACLESUPPORT_USERNAME_FOR_SOFTWAREUPDATES
+# Type        : string
+# Description : If you want to download the updates during the installation, make sure you provide
+#               MYORACLESUPPORT_USERNAME_FOR_SOFTWAREUPDATES and MYORACLESUPPORT_PASSWORD_FOR_SOFTWAREUPDATES
+#               and set INSTALL_UPDATES_SELECTION="download".
+#------------------------------------------------------------------#
+MYORACLESUPPORT_USERNAME_FOR_SOFTWAREUPDATES=<Value Unspecified>
+
+#------------------------------------------------------------------#
+# Name        : MYORACLESUPPORT_PASSWORD_FOR_SOFTWAREUPDATES
+# Type        : string
+# Description : If you want to download the updates during the installation, make sure you provide 
+#               MYORACLESUPPORT_PASSWORD_FOR_SOFTWAREUPDATES and MYORACLESUPPORT_PASSWORD_FOR_SOFTWAREUPDATES
+#               and set INSTALL_UPDATES_SELECTION="download".
+#------------------------------------------------------------------#
+MYORACLESUPPORT_PASSWORD_FOR_SOFTWAREUPDATES=<Value Unspecified>
+
+#------------------------------------------------------------------#
+# Name        : PROXY_USER
+# Type        : string
+# Description : User name for proxy access.
+#------------------------------------------------------------------#
+PROXY_USER=<Value Unspecified>
+
+#------------------------------------------------------------------#
+# Name        : PROXY_PWD
+# Type        : string
+# Description : Password for proxy access.
+#------------------------------------------------------------------#
+PROXY_PWD=<Value Unspecified>
+
+#------------------------------------------------------------------#
+# Name        : PROXY_HOST
+# Type        : string
+# Description : Server providing proxy access.
+#------------------------------------------------------------------#
+PROXY_HOST=<Value Unspecified>
+
+#------------------------------------------------------------------#
+# Name        : PROXY_PORT
+# Type        : string
+# Description : Port for proxy access.
+#------------------------------------------------------------------#
+PROXY_PORT=<Value Unspecified>
+
+#------------------------------------------------------------------#
+# Name        : ORACLE_MIDDLEWARE_HOME_LOCATION
+# Type        : string
+# Description : Middleware home location.
+#------------------------------------------------------------------#
+ORACLE_MIDDLEWARE_HOME_LOCATION=<%= $oracle_home_dir %>
+
+#------------------------------------------------------------------#
+# Name        : ORACLE_HOSTNAME
+# Type        : string
+# Description : Current Host name where the installer is invoked.By default the fully qualified hostname of the machine will 
+#               taken(without providing this value)Value for this ORACLE_HOSTNAME has to be provided only if you want to configure with different hostname.
+#------------------------------------------------------------------#
+ORACLE_HOSTNAME=<Value Unspecified>
+
+#------------------------------------------------------------------#
+# Name        : AGENT_BASE_DIR
+# Type        : string
+# Description : Agent home location.
+#------------------------------------------------------------------#
+AGENT_BASE_DIR=<%= $agent_base_dir %>
+#------------------------------------------------------------------#
+# Name        : WLS_ADMIN_SERVER_USERNAME
+# Type        : string
+# Description : Weblogic server user name.
+#------------------------------------------------------------------#
+WLS_ADMIN_SERVER_USERNAME=<%= $weblogic_user %>
+#------------------------------------------------------------------#
+# Name        : WLS_ADMIN_SERVER_PASSWORD
+# Type        : string
+# Description : Weblogic admin server  confirm password.
+#------------------------------------------------------------------#
+WLS_ADMIN_SERVER_PASSWORD=<%= $weblogic_password %>
+
+#------------------------------------------------------------------#
+# Name        : WLS_ADMIN_SERVER_CONFIRM_PASSWORD
+# Type        : string
+# Description : Weblogic admin server password.
+#------------------------------------------------------------------#
+WLS_ADMIN_SERVER_CONFIRM_PASSWORD=<%= $weblogic_password %>
+
+#------------------------------------------------------------------#
+# Name        : NODE_MANAGER_PASSWORD
+# Type        : string
+# Description : Node Manager password.
+#------------------------------------------------------------------#
+NODE_MANAGER_PASSWORD=<%= $weblogic_password %>
+
+#------------------------------------------------------------------#
+# Name        : NODE_MANAGER_CONFIRM_PASSWORD
+# Type        : string
+# Description : Node Manager confirm password.
+#------------------------------------------------------------------#
+NODE_MANAGER_CONFIRM_PASSWORD=<%= $weblogic_password %>
+
+#------------------------------------------------------------------#
+# Name        : ORACLE_INSTANCE_HOME_LOCATION
+# Type        : string
+# Description : Oracle instance home location.
+#------------------------------------------------------------------#
+ORACLE_INSTANCE_HOME_LOCATION=<%= $oracle_instance_home_dir %>
+
+#------------------------------------------------------------------#
+# Name        : CONFIGURE_ORACLE_SOFTWARE_LIBRARY
+# Type        : boolean
+# Description : If you want to configure the Software Library at the time of installation, set this parameter to TRUE. Otherwise, set it to FALSE. 
+#               Even if you do not configure it at the time of installation, your installation will succeed, and you can always configure it later
+#               from the Enterprise Manager Cloud Control Console. However, Oracle recommends that you configure it at the
+#               time of installation so that it is automatically configured by the installer,thus saving your time and effort.
+#------------------------------------------------------------------#
+CONFIGURE_ORACLE_SOFTWARE_LIBRARY=true
+
+#------------------------------------------------------------------#
+# Name        : SOFTWARE_LIBRARY_LOCATION
+# Type        : string
+# Description : If you have set CONFIGURE_ORACLE_SOFTWARE_LIBRARY to TRUE, then enter the absolute path leading up to a unique directory name on the OMS host where the 
+#               Software Library can be configured. Ensure that the location you enter is a shared location on the OMS host. This helps when you install additional OMS
+#               instances that can use the same shared Software Library location.
+#------------------------------------------------------------------#
+SOFTWARE_LIBRARY_LOCATION=<%= $software_library_dir %>
+
+#------------------------------------------------------------------#
+# Name        : DATABASE_HOSTNAME
+# Type        : string
+# Description : Hostname of the Repository database.
+# Example     : DATABASE_HOSTNAME=hostname.domain.com
+#------------------------------------------------------------------#
+DATABASE_HOSTNAME=<%= $database_hostname %>
+
+#------------------------------------------------------------------#
+# Name        : LISTENER_PORT
+# Type        : string
+# Description : Port on which the Repository database is running.
+# Example     : LISTENER_PORT=1521
+#------------------------------------------------------------------#
+LISTENER_PORT=<%= $database_listener_port %>
+
+#------------------------------------------------------------------#
+# Name        : SERVICENAME_OR_SID
+# Type        : string
+# Description : SID or Service name  of the Repository database.
+# Example     : SERVICENAME_OR_SID=emrep
+#------------------------------------------------------------------#
+SERVICENAME_OR_SID=<%= $database_service_sid_name %>
+
+#------------------------------------------------------------------#
+# Name        : SYS_PASSWORD
+# Type        : string
+# Description : Password of DBA user used to create repository schema.
+# Example     : SYS_PASSWORD=password
+#------------------------------------------------------------------#
+SYS_PASSWORD=<%= $database_sys_password %>
+
+#------------------------------------------------------------------#
+# Name        : SYSMAN_PASSWORD
+# Type        : string
+# Description : Password of sysman user.
+# Example     : SYSMAN_PASSWORD=password
+#------------------------------------------------------------------#
+SYSMAN_PASSWORD=<%= $sysman_password %>
+
+#------------------------------------------------------------------#
+# Name        : SYSMAN_CONFIRM_PASSWORD
+# Type        : string
+# Description : Password of sysman user.
+#------------------------------------------------------------------#
+SYSMAN_CONFIRM_PASSWORD=<%= $sysman_password %>
+
+#------------------------------------------------------------------#
+# Name        : DEPLOYMENT_SIZE
+# Type        : string
+# Description : If you are planning to do simple install then use it.
+#------------------------------------------------------------------#
+DEPLOYMENT_SIZE="<%= $deployment_size %>"
+
+#------------------------------------------------------------------#
+# Name        : MANAGEMENT_TABLESPACE_LOCATION
+# Type        : string
+# Description : Management table space location.
+# Example     : MANAGEMENT_TABLESPACE_LOCATION=/scratch/OracleHomes/oradata/mgmt.dbf
+#------------------------------------------------------------------#
+MANAGEMENT_TABLESPACE_LOCATION=<Value Unspecified>
+
+#------------------------------------------------------------------#
+# Name        : CONFIGURATION_DATA_TABLESPACE_LOCATION
+# Type        : string
+# Description : Configuration table space location.
+# Example     : CONFIGURATION_DATA_TABLESPACE_LOCATION=/scratch/OracleHomes/oradata/mgmt_ecm_depot1.dbf
+#------------------------------------------------------------------#
+CONFIGURATION_DATA_TABLESPACE_LOCATION=<Value Unspecified>
+
+#------------------------------------------------------------------#
+# Name        : JVM_DIAGNOSTICS_TABLESPACE_LOCATION
+# Type        : string
+# Description : JVM table space location.
+# Example     : JVM_DIAGNOSTICS_TABLESPACE_LOCATION=/scratch/OracleHomes/oradata/mgmt_deepdive.dbf
+#------------------------------------------------------------------#
+JVM_DIAGNOSTICS_TABLESPACE_LOCATION=<Value Unspecified>
+
+#------------------------------------------------------------------#
+# Name        : AGENT_REGISTRATION_PASSWORD
+# Type        : string
+# Description : Registration Password.
+#------------------------------------------------------------------#
+AGENT_REGISTRATION_PASSWORD=<%= $agent_registration_password %>
+
+#------------------------------------------------------------------#
+# Name        : AGENT_REGISTRATION_CONFIRM_PASSWORD
+# Type        : string
+# Description : Registration Password.
+#------------------------------------------------------------------#
+AGENT_REGISTRATION_CONFIRM_PASSWORD=<%= $agent_registration_password %>
+
+#------------------------------------------------------------------#
+# Name        : STATIC_PORTS_FILE
+# Type        : string
+# Description : Location of the static_ports.ini file
+#------------------------------------------------------------------#
+STATIC_PORTS_FILE=<%= $download_dir %>/em_install_static_<%= $version %>.ini
+
+#------------------------------------------------------------------#
+# Name        : PLUGIN_SELECTION
+# Type        : string
+# Description : list of extra plugins to deployed.
+#               Default/Core plugins like oracle.sysman.db, oracle.sysman.emas, oracle.sysman.mos will be deployed by default.
+#               StringList contains list of strings and each string is PLUGIN_ID of that plugin.
+#               DVD/Disk1/plugins has list of plugins that are shipped as part of DVD.
+#               If you want to install 12.1.0.2.0_oracle.sysman.empa_2000_0.opar and 12.1.0.2.0_oracle.sysman.vt_2000_0.opar then
+# Example     : PLUGIN_SELECTION={"oracle.sysman.empa","oracle.sysman.vt"}
+#------------------------------------------------------------------#
+#PLUGIN_SELECTION={}
+
+#------------------------------------------------------------------#
+# Name        : b_upgrade
+# Type        : boolean
+# Description : To Specify whether it is Normal Install or Upgrade.
+#------------------------------------------------------------------#
+b_upgrade=false
+
+#------------------------------------------------------------------#
+# Name        : EM_INSTALL_TYPE
+# Type        : string
+# Description : Type of Grid Control install being performed.
+#------------------------------------------------------------------#
+EM_INSTALL_TYPE=NOSEED
+
+#------------------------------------------------------------------#
+# Name        : CONFIGURATION_TYPE
+# Type        : string
+# Description : Value can be "ADVANCED" or "LATER".
+#------------------------------------------------------------------#
+CONFIGURATION_TYPE=ADVANCED
+
+#------------------------------------------------------------------#
+# Name        : CONFIGURE_SHARED_LOCATION_BIP
+# Type        : boolean
+# Description : To Specify whether BIP configuration is required or not.
+#------------------------------------------------------------------#
+CONFIGURE_SHARED_LOCATION_BIP=false
+
+#------------------------------------------------------------------#
+# Name        : CONFIG_LOCATION
+# Type        : string
+# Description : BIP Config location.
+# Example     : CONFIG_LOCATION=/scratch/bipconfig
+#------------------------------------------------------------------#
+CONFIG_LOCATION=<Value Unspecified>
+
+#------------------------------------------------------------------#
+# Name        : CLUSTER_LOCATION
+# Type        : string
+# Description : BIP Cluster location.
+# Example     : CLUSTER_LOCATION=/scratch/bipcluster
+#------------------------------------------------------------------#
+CLUSTER_LOCATION=<Value Unspecified>

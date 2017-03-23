@@ -68,6 +68,7 @@
     </dd>
   </dl>
 </div>
+
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
@@ -379,7 +380,8 @@ oradb::opatchupgrade{&#39;112000_opatch_upgrade&#39;:
 129
 130
 131
-132</pre>
+132
+133</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/opatchupgrade.pp', line 30</span>
@@ -442,44 +444,45 @@ define oradb::opatchupgrade(
           require   =&gt; File[&quot;${download_dir}/${patch_file}&quot;],
         }
 
-        if ( $csi_number != undef and support_id != undef ) {
-          exec { &quot;exec emocmrsp ${title} ${opversion}&quot;:
-            cwd       =&gt; $patch_dir,
-            command   =&gt; &quot;${patch_dir}/ocm/bin/emocmrsp -repeater NONE ${csi_number} ${support_id}&quot;,
-            path      =&gt; $exec_path,
-            user      =&gt; $user,
-            group     =&gt; $group,
-            logoutput =&gt; true,
-            require   =&gt; Exec[&quot;extract opatch ${patch_file}&quot;],
-          }
-        } else {
+        if ( $opversion &lt; &#39;12.2.0.1.5&#39;) {
+          if ( $csi_number != undef and support_id != undef ) {
+            exec { &quot;exec emocmrsp ${title} ${opversion}&quot;:
+              cwd       =&gt; $patch_dir,
+              command   =&gt; &quot;${patch_dir}/ocm/bin/emocmrsp -repeater NONE ${csi_number} ${support_id}&quot;,
+              path      =&gt; $exec_path,
+              user      =&gt; $user,
+              group     =&gt; $group,
+              logoutput =&gt; true,
+              require   =&gt; Exec[&quot;extract opatch ${patch_file}&quot;],
+            }
+          } else {
 
-          if ! defined(Package[&#39;expect&#39;]) {
-            package { &#39;expect&#39;:
-              ensure =&gt; present,
+            if ! defined(Package[&#39;expect&#39;]) {
+              package { &#39;expect&#39;:
+                ensure =&gt; present,
+              }
+            }
+
+            file { &quot;${download_dir}/opatch_upgrade_${title}_${opversion}.ksh&quot;:
+              ensure  =&gt; present,
+              content =&gt; epp(&#39;oradb/ocm.rsp.epp&#39;, { &#39;patchDir&#39; =&gt; $patch_dir }),
+              mode    =&gt; &#39;0775&#39;,
+              owner   =&gt; $user,
+              group   =&gt; $group,
+            }
+
+            exec { &quot;ksh ${download_dir}/opatch_upgrade_${title}_${opversion}.ksh&quot;:
+              cwd       =&gt; $patch_dir,
+              path      =&gt; $exec_path,
+              user      =&gt; $user,
+              group     =&gt; $group,
+              logoutput =&gt; true,
+              require   =&gt; [File[&quot;${download_dir}/opatch_upgrade_${title}_${opversion}.ksh&quot;],
+                            Exec[&quot;extract opatch ${title} ${patch_file}&quot;],
+                            Package[&#39;expect&#39;],],
             }
           }
-
-          file { &quot;${download_dir}/opatch_upgrade_${title}_${opversion}.ksh&quot;:
-            ensure  =&gt; present,
-            content =&gt; epp(&#39;oradb/ocm.rsp.epp&#39;, { &#39;patchDir&#39; =&gt; $patch_dir }),
-            mode    =&gt; &#39;0775&#39;,
-            owner   =&gt; $user,
-            group   =&gt; $group,
-          }
-
-          exec { &quot;ksh ${download_dir}/opatch_upgrade_${title}_${opversion}.ksh&quot;:
-            cwd       =&gt; $patch_dir,
-            path      =&gt; $exec_path,
-            user      =&gt; $user,
-            group     =&gt; $group,
-            logoutput =&gt; true,
-            require   =&gt; [File[&quot;${download_dir}/opatch_upgrade_${title}_${opversion}.ksh&quot;],
-                          Exec[&quot;extract opatch ${title} ${patch_file}&quot;],
-                          Package[&#39;expect&#39;],],
-          }
         }
-
       }
       default: {
         fail(&#39;Unrecognized operating system&#39;)
@@ -494,7 +497,7 @@ define oradb::opatchupgrade(
 </div>
 
       <div id="footer">
-  Generated on Sun Mar  5 19:13:55 2017 by
+  Generated on Thu Mar 23 18:23:08 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>
