@@ -696,7 +696,7 @@ db asm instance template example</a></p>
   user                      =&gt; &#39;oracle&#39;,
   group                     =&gt; &#39;dba&#39;,
   template                  =&gt; &#39;dbtemplate_12.1&#39;, # or dbtemplate_12.1_vars, dbtemplate_11gR2_asm, this will use dbtemplate_12.1.dbt.erb example template
-  # template_variables        =&gt; &#39;location01=/oracle/oradata/,location02=/oracle/oradata/&#39;,
+  # template_variables        =&gt; { &#39;location01&#39; =&gt; &#39;/oracle/oradata/&#39; , &#39;location02&#39; =&gt; &#39;/oracle/oradata/&#39; }
   download_dir              =&gt; &#39;/install&#39;,
   action                    =&gt; &#39;create&#39;,
   db_name                   =&gt; &#39;test&#39;,
@@ -1916,7 +1916,7 @@ exec { &quot;ulimit -H&quot;:
 </div></div>
 
       <div id="footer">
-  Generated on Thu Mar 23 18:23:06 2017 by
+  Generated on Wed Mar 29 22:27:07 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

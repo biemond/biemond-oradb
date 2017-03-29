@@ -351,10 +351,10 @@ oradb::database{ &#39;oraDb&#39;:
         <span class='name'>template_variables</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt>Optional[Hash]</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>&#39;dummy=/tmp&#39;</tt>)</em>
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
         &mdash;
@@ -907,7 +907,31 @@ oradb::database{ &#39;oraDb&#39;:
 295
 296
 297
-298</pre>
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/database.pp', line 96</span>
@@ -922,7 +946,7 @@ define oradb::database(
   Enum[&#39;create&#39;,&#39;delete&#39;] $action                                 = lookup(&#39;oradb::database::action&#39;),
   Optional[String] $template                                      = undef,
   Optional[String] $template_seeded                               = undef,
-  String $template_variables                                      = &#39;dummy=/tmp&#39;, # for dbt template
+  Optional[Hash] $template_variables                              = undef, # for dbt template
   String $db_name                                                 = lookup(&#39;oradb::database_name&#39;),
   String $db_domain                                               = undef,
   Integer $db_port                                                = lookup(&#39;oradb::listener_port&#39;),
@@ -1063,19 +1087,43 @@ define oradb::database(
   if $action == &#39;create&#39; {
     if ( $templatename ) {
 
+      if ( $template_variables != undef ) {
+        file { &quot;${download_dir}/vars_${sanitized_title}.txt&quot;:
+          ensure  =&gt; present,
+          content =&gt; epp(&#39;oradb/dbca_vars.epp&#39;, { &#39;vars&#39; =&gt; $template_variables }),
+          mode    =&gt; &#39;0775&#39;,
+          owner   =&gt; $user,
+          group   =&gt; $group,
+          before  =&gt; Exec[&quot;oracle database ${title}&quot;],
+        }
+      }
+
       if ( $version == &#39;11.2&#39; or $container_database == false ) {
-        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -variables ${template_variables}${elevation_suffix}&quot;
+        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -variablesFile ${download_dir}/vars_${sanitized_title}.txt&quot;
       } elsif ( $version == &#39;12.2&#39;) {
-        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -datafileDestination ${data_file_destination} -emConfiguration ${em_configuration} -variables ${template_variables}${elevation_suffix}&quot;
+        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -datafileDestination ${data_file_destination} -emConfiguration ${em_configuration} -variablesFile ${download_dir}/vars_${sanitized_title}.txt&quot;
       } else {
-        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -variables ${template_variables}${elevation_suffix}&quot;
+        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -variablesFile ${download_dir}/vars_${sanitized_title}.txt&quot;
+      }
+
+      if ( $template_variables != undef) {
+        $command_var = &quot; -variablesFile ${download_dir}/vars_${sanitized_title}.txt&quot;
+      } else {
+        $command_var = &#39;&#39;
+      }
+
+      if ( $init_params != undef) {
+        $command_init = &quot; -initParams ${sanitized_init_params}&quot;
+      } else {
+        $command_init = &#39;&#39;
       }
 
       if ( $cluster_nodes != undef) {
-        $command = &quot;${command_pre} -nodelist ${cluster_nodes}&quot;
+        $command_nodes = &quot; -nodelist ${cluster_nodes}&quot;
       } else {
-        $command = $command_pre
+        $command_nodes = &#39;&#39;
       }
+      $command = &quot;${command_pre} ${command_var} ${command_init} ${command_nodes} ${elevation_suffix}&quot;
 
     } else {
       if ( $version == &#39;12.2&#39; ) {
@@ -1122,7 +1170,7 @@ define oradb::database(
 </div>
 
       <div id="footer">
-  Generated on Thu Mar 23 18:23:07 2017 by
+  Generated on Wed Mar 29 22:27:09 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>
