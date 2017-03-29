@@ -103,7 +103,7 @@ define oradb::database(
   Enum['create','delete'] $action                                 = lookup('oradb::database::action'),
   Optional[String] $template                                      = undef,
   Optional[String] $template_seeded                               = undef,
-  String $template_variables                                      = 'dummy=/tmp', # for dbt template
+  Optional[Hash] $template_variables                              = undef, # for dbt template
   String $db_name                                                 = lookup('oradb::database_name'),
   String $db_domain                                               = undef,
   Integer $db_port                                                = lookup('oradb::listener_port'),
@@ -244,19 +244,43 @@ define oradb::database(
   if $action == 'create' {
     if ( $templatename ) {
 
+      if ( $template_variables != undef ) {
+        file { "${download_dir}/vars_${sanitized_title}.txt":
+          ensure  => present,
+          content => epp("oradb/dbca_vars.epp", { 'vars' => $template_variables }),
+          mode    => '0775',
+          owner   => $user,
+          group   => $group,
+          before  => Exec["oracle database ${title}"],
+        }
+      }
+
       if ( $version == '11.2' or $container_database == false ) {
-        $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -variables ${template_variables}${elevation_suffix}"
+        $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -variablesFile ${download_dir}/vars_${sanitized_title}.txt"
       } elsif ( $version == '12.2') {
-        $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -datafileDestination ${data_file_destination} -emConfiguration ${em_configuration} -variables ${template_variables}${elevation_suffix}"
+        $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -datafileDestination ${data_file_destination} -emConfiguration ${em_configuration} -variablesFile ${download_dir}/vars_${sanitized_title}.txt"
       } else {
-        $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -variables ${template_variables}${elevation_suffix}"
+        $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -variablesFile ${download_dir}/vars_${sanitized_title}.txt"
+      }
+
+      if ( $template_variables != undef) {
+        $command_var = " -variablesFile ${download_dir}/vars_${sanitized_title}.txt"
+      } else {
+        $command_var = ""
+      }
+
+      if ( $init_params != undef) {
+        $command_init = " -initParams ${sanitized_init_params}"
+      } else {
+        $command_init = ""
       }
 
       if ( $cluster_nodes != undef) {
-        $command = "${command_pre} -nodelist ${cluster_nodes}"
+        $command_nodes = " -nodelist ${cluster_nodes}"
       } else {
-        $command = $command_pre
+        $command_nodes = ""
       }
+      $command = "${command_pre} ${command_var} ${command_init} ${command_nodes} ${elevation_suffix}"
 
     } else {
       if ( $version == '12.2' ) {

@@ -555,7 +555,7 @@ with a template of the oradb module
       user                      => 'oracle',
       group                     => 'dba',
       template                  => 'dbtemplate_12.1', # or dbtemplate_12.1_vars, dbtemplate_11gR2_asm, this will use dbtemplate_12.1.dbt.erb example template
-      # template_variables        => 'location01=/oracle/oradata/,location02=/oracle/oradata/',
+      # template_variables        => { 'location01' => '/oracle/oradata/' , 'location02' => '/oracle/oradata/' }
       download_dir              => '/install',
       action                    => 'create',
       db_name                   => 'test',
