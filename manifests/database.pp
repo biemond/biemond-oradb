@@ -247,7 +247,7 @@ define oradb::database(
       if ( $template_variables != undef ) {
         file { "${download_dir}/vars_${sanitized_title}.txt":
           ensure  => present,
-          content => epp("oradb/dbca_vars.epp", { 'vars' => $template_variables }),
+          content => epp('oradb/dbca_vars.epp', { 'vars' => $template_variables }),
           mode    => '0775',
           owner   => $user,
           group   => $group,
@@ -266,19 +266,19 @@ define oradb::database(
       if ( $template_variables != undef) {
         $command_var = " -variablesFile ${download_dir}/vars_${sanitized_title}.txt"
       } else {
-        $command_var = ""
+        $command_var = ''
       }
 
       if ( $init_params != undef) {
         $command_init = " -initParams ${sanitized_init_params}"
       } else {
-        $command_init = ""
+        $command_init = ''
       }
 
       if ( $cluster_nodes != undef) {
         $command_nodes = " -nodelist ${cluster_nodes}"
       } else {
-        $command_nodes = ""
+        $command_nodes = ''
       }
       $command = "${command_pre} ${command_var} ${command_init} ${command_nodes} ${elevation_suffix}"
 
