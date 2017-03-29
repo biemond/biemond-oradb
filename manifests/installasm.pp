@@ -349,9 +349,7 @@ define oradb::installasm(
         content => epp('oradb/ohas.service.epp'),
         mode    => '0644',
         require => Exec["install oracle grid ${title}"],
-      } ->
-
-      exec { 'daemon-reload for ohas':
+      } -> exec { 'daemon-reload for ohas':
         command => '/bin/systemctl daemon-reload',
       }
       # ->

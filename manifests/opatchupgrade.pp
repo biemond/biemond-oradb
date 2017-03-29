@@ -75,8 +75,7 @@ define oradb::opatchupgrade(
           ensure  => absent,
           recurse => true,
           force   => true,
-        } ->
-        exec { "extract opatch ${title} ${patch_file}":
+        } -> exec { "extract opatch ${title} ${patch_file}":
           command   => "unzip -o ${download_dir}/${patch_file} -d ${oracle_home}",
           path      => $exec_path,
           user      => $user,
