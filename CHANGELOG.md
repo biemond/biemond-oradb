@@ -1,4 +1,6 @@
 # Version updates
+## 3.0.8
+- 12.2 db rsp template had a listener error
 
 ## 3.0.7
 - database.pp now also use init_params for dbt templates

@@ -549,7 +549,7 @@ walletPassword=
 # Valid values  : The list should be comma separated like "listener1,listener2".
 # Mandatory     : NO
 #-----------------------------------------------------------------------------
-listeners=LISTENER
+#listeners=LISTENER
 
 #-----------------------------------------------------------------------------
 # Name          : variablesFile 
