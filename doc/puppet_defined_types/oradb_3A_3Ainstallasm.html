@@ -1019,9 +1019,7 @@ oradb::installasm{ &#39;db_linux-x64&#39;:
 472
 473
 474
-475
-476
-477</pre>
+475</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/installasm.pp', line 57</span>
@@ -1321,9 +1319,7 @@ define oradb::installasm(
         content =&gt; epp(&#39;oradb/ohas.service.epp&#39;),
         mode    =&gt; &#39;0644&#39;,
         require =&gt; Exec[&quot;install oracle grid ${title}&quot;],
-      } -&gt;
-
-      exec { &#39;daemon-reload for ohas&#39;:
+      } -&gt; exec { &#39;daemon-reload for ohas&#39;:
         command =&gt; &#39;/bin/systemctl daemon-reload&#39;,
       }
       # -&gt;
@@ -1454,7 +1450,7 @@ define oradb::installasm(
 </div>
 
       <div id="footer">
-  Generated on Wed Mar 29 22:27:09 2017 by
+  Generated on Mon Apr 17 21:20:52 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>

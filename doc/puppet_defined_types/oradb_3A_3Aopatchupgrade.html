@@ -380,8 +380,7 @@ oradb::opatchupgrade{&#39;112000_opatch_upgrade&#39;:
 129
 130
 131
-132
-133</pre>
+132</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/opatchupgrade.pp', line 30</span>
@@ -434,8 +433,7 @@ define oradb::opatchupgrade(
           ensure  =&gt; absent,
           recurse =&gt; true,
           force   =&gt; true,
-        } -&gt;
-        exec { &quot;extract opatch ${title} ${patch_file}&quot;:
+        } -&gt; exec { &quot;extract opatch ${title} ${patch_file}&quot;:
           command   =&gt; &quot;unzip -o ${download_dir}/${patch_file} -d ${oracle_home}&quot;,
           path      =&gt; $exec_path,
           user      =&gt; $user,
@@ -497,7 +495,7 @@ define oradb::opatchupgrade(
 </div>
 
       <div id="footer">
-  Generated on Wed Mar 29 22:27:09 2017 by
+  Generated on Mon Apr 17 21:20:52 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.8 (ruby-2.3.1).
 </div>
