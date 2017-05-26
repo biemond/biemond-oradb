@@ -10,24 +10,28 @@
 #    db_name      => 'ORCL',
 #    user         => 'oracle',
 #    service_name => 'dbora',
+#    usershell    => 'sh',
 #  }
 #
 # @param oracle_home
 # @param db_name
 # @param user
 # @param service_name
+# @param usershell
 #
 define oradb::autostartdatabase(
   String $oracle_home  = undef,
   String $db_name      = lookup('oradb::database_name'),
   String $user         = lookup('oradb::user'),
   String $service_name = lookup('oradb::host::service_name'),
+  String $usershell    = undef,
 ){
 
   class { 'oradb::prepareautostart':
     oracle_home  => $oracle_home,
     user         => $user,
     service_name => $service_name,
+    usershell    => $usershell,
   }
 
   $exec_path      = lookup('oradb::exec_path')
@@ -55,4 +59,3 @@ define oradb::autostartdatabase(
   }
 
 }
-

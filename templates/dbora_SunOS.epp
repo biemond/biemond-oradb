@@ -1,9 +1,10 @@
 <%- |  String $oracle_home,
        String $user,
-       Optional[String] $service_name
+       Optional[String] $service_name,
+       String $usershell
  | -%>
 
-#!/bin/sh
+#!/bin/<%= $usershell %>
 ORA_HOME=<%= $oracle_home %>
 ORA_OWNER=<%= $user %>
 
