@@ -28,9 +28,8 @@ define oradb::autostartdatabase(
 ){
 
 if $usershell == undef {
-    $usershell = "sh"
-  } 
-  
+    usershell = "sh"
+  }
   class { 'oradb::prepareautostart':
     oracle_home  => $oracle_home,
     user         => $user,
