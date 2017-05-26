@@ -7,20 +7,17 @@
 #   class{'oradb::prepareautostart':
 #     oracle_home  => '/opt/oracle/product/11g',
 #     user         => 'oracle',
-#     service_name => 'dbora',
-#     usershell    => 'sh',
+#     service_name => 'dbora'
 #   }
 #
 # @param oracle_home
 # @param user
 # @param service_name
-# @param usershell
 #
 class oradb::prepareautostart(
   String $oracle_home  = undef,
   String $user         = lookup('oradb::user'),
   String $service_name = lookup('oradb::host::service_name'),
-  Optional[String] $usershell    = undef,
 ){
   $exec_path      = lookup('oradb::exec_path')
   $dbora_location = lookup('oradb::dbora_dir')
@@ -32,8 +29,7 @@ class oradb::prepareautostart(
     content => regsubst(epp("oradb/dbora_${facts['kernel']}.epp",
                             { 'oracle_home'  => $oracle_home,
                               'user'         => $user,
-                              'service_name' => $service_name,
-                              'usershell'    => $usershell} ),
+                              'service_name' => $service_name} ),
                         '\r\n', "\n", 'EMG'),
   }
 
