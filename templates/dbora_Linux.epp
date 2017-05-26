@@ -1,6 +1,6 @@
 <%- |  String $oracle_home,
        String $user,
-       String $service_name
+       String $service_name,
        String $usershell
  | -%>
 #!/bin/<%= $usershell %>
