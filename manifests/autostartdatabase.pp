@@ -24,7 +24,7 @@ define oradb::autostartdatabase(
   String $db_name      = lookup('oradb::database_name'),
   String $user         = lookup('oradb::user'),
   String $service_name = lookup('oradb::host::service_name'),
-  String $usershell    = undef,
+  Optional[String] $usershell    = undef,
 ){
 
 if $usershell == undef {
