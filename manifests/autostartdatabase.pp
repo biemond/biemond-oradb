@@ -9,7 +9,7 @@
 #    oracle_home  => '/opt/oracle/product/11g',
 #    db_name      => 'ORCL',
 #    user         => 'oracle',
-#    service_name => 'dbora',
+#    service_name => 'dbora'
 #  }
 #
 # @param oracle_home
@@ -21,7 +21,7 @@ define oradb::autostartdatabase(
   String $oracle_home  = undef,
   String $db_name      = lookup('oradb::database_name'),
   String $user         = lookup('oradb::user'),
-  String $service_name = lookup('oradb::host::service_name'),
+  String $service_name = lookup('oradb::host::service_name')
 ){
 
   class { 'oradb::prepareautostart':
@@ -55,4 +55,3 @@ define oradb::autostartdatabase(
   }
 
 }
-

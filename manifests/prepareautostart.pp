@@ -7,7 +7,7 @@
 #   class{'oradb::prepareautostart':
 #     oracle_home  => '/opt/oracle/product/11g',
 #     user         => 'oracle',
-#     service_name => 'dbora',
+#     service_name => 'dbora'
 #   }
 #
 # @param oracle_home
@@ -29,7 +29,7 @@ class oradb::prepareautostart(
     content => regsubst(epp("oradb/dbora_${facts['kernel']}.epp",
                             { 'oracle_home'  => $oracle_home,
                               'user'         => $user,
-                              'service_name' => $service_name } ),
+                              'service_name' => $service_name} ),
                         '\r\n', "\n", 'EMG'),
   }
 

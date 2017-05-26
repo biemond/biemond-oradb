@@ -1,18 +1,20 @@
 <%- |  String $oracle_home,
        String $user,
        String $service_name
- | -%>
-
-#!/bin/sh
-# chkconfig: 345 98 10
-# description: Oracle auto start-stop script.
+| -%>
+#!/bin/bash
+# chkconfig: 35 99 10   
+# description: Starts and stops Oracle processes
 #
 # Set ORA_HOME to be equivalent to the $ORACLE_HOME
 # from which you wish to execute dbstart and dbshut;
 #
 # Set ORA_OWNER to the user id of the owner of the
 # Oracle database in ORA_HOME.
-
+#
+# This script currently handles on ORACLE_HOME and 
+# LISTENER,EMAGENT running on same ORACLE_HOME
+#
 ORA_HOME=<%= $oracle_home %>
 ORA_OWNER=<%= $user %>
 LOCK_FILE=/var/lock/subsys/<%= $service_name %>
@@ -24,20 +26,48 @@ then
 fi
 
 case "$1" in
-    'start')
-        # Start the Oracle databases:
-        # The following command assumes that the oracle login
-        # will not prompt the user for any values
-        #su $ORA_OWNER -c "$ORA_HOME/bin/lsnrctl start"
-        su $ORA_OWNER -c "$ORA_HOME/bin/dbstart $ORA_HOME"
-        touch $LOCK_FILE
-        ;;
-    'stop')
-        # Stop the Oracle databases:
-        # The following command assumes that the oracle login
-        # will not prompt the user for any values
-        su $ORA_OWNER -c "$ORA_HOME/bin/dbshut $ORA_HOME"
-        #su $ORA_OWNER -c "$ORA_HOME/bin/lsnrctl stop"
-        rm -f $LOCK_FILE
-        ;;
+   'start')
+ 
+      # Start the Oracle databases and Listener:
+      # The following command assumes that the oracle login
+      # will not prompt the user for any values
+      su - $ORA_OWNER -c "$ORA_HOME/bin/dbstart $ORA_HOME"
+
+      # Start the Intelligent Agent
+      if [ -f $ORA_HOME/bin/emctl ]; then
+         su - $ORA_OWNER -c "$ORA_HOME/bin/emctl start agent"
+      elif [ -f $ORA_HOME/bin/agentctl ]; then
+         su - $ORA_OWNER -c "$ORA_HOME/bin/agentctl start"
+      else
+         echo "Intelligent Agent startup not required"
+      fi
+
+      # Start Management Server
+      if [ -f $ORA_HOME/bin/emctl ]; then
+         su - $ORA_OWNER -c "$ORA_HOME/bin/emctl start dbconsole"
+      elif [ -f $ORA_HOME/bin/oemctl ]; then
+         su - $ORA_OWNER -c "$ORA_HOME/bin/oemctl start oms"
+      fi
+
+      # Start HTTP Server
+      if [ -f $ORA_HOME/Apache/Apache/bin/apachectl ]; then
+         su - $ORA_OWNER -c "$ORA_HOME/Apache/Apache/bin/apachectl start"
+      fi
+         touch $LOCK_FILE
+      ;;
+
+   'stop')
+      # Stop HTTP Server
+      if [ -f $ORA_HOME/Apache/Apache/bin/apachectl ]; then
+         su - $ORA_OWNER -c "$ORA_HOME/Apache/Apache/bin/apachectl stop"
+      fi
+
+      # Stop the Oracle databases and Listener:
+      # The following command assumes that the oracle login
+      # will not prompt the user for any values
+      su - $ORA_OWNER -c "$ORA_HOME/bin/dbshut $ORA_HOME"
+      rm -f $LOCK_FILE
+      ;;
 esac
+
+ # End of script dbora
