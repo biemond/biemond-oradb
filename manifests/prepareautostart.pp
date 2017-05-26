@@ -24,9 +24,7 @@ class oradb::prepareautostart(
 ){
   $exec_path      = lookup('oradb::exec_path')
   $dbora_location = lookup('oradb::dbora_dir')
-if $usershell == undef {
-    $usershell = 'sh'
-  }
+
   file { "${dbora_location}/${service_name}" :
     ensure  => present,
     mode    => '0755',
