@@ -1,9 +1,8 @@
 <%- |  String $oracle_home,
        String $user,
-       String $service_name,
-       String $usershell
- | -%>
-#!/bin/<%= $usershell %>
+       String $service_name
+| -%>
+#!/bin/bash
 # chkconfig: 35 99 10   
 # description: Starts and stops Oracle processes
 #
