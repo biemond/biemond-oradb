@@ -20,11 +20,13 @@ class oradb::prepareautostart(
   String $oracle_home  = undef,
   String $user         = lookup('oradb::user'),
   String $service_name = lookup('oradb::host::service_name'),
-  String $usershell = undef,
+  Optional[String] $usershell    = undef,
 ){
   $exec_path      = lookup('oradb::exec_path')
   $dbora_location = lookup('oradb::dbora_dir')
-
+if $usershell == undef {
+    $usershell = 'sh'
+  }
   file { "${dbora_location}/${service_name}" :
     ensure  => present,
     mode    => '0755',
