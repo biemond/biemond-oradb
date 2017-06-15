@@ -1,4 +1,12 @@
 # Version updates
+
+## 3.0.9
+- fix database own dbttemplate issue with double -variablesFile error
+- 12.2 db requires always container database = true
+- chown fix on directories without -R
+- opatch facts fix
+- added extra stop & start in dbora_Linux startup script
+
 ## 3.0.8
 - 12.2 db rsp template had a listener error
 
