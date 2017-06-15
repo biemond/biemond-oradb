@@ -15,10 +15,9 @@ Puppet::Type.type(:db_directory_structure).provide(:db_directory_structure) do
     make_directory download_folder
     make_directory ora_inventory
 
-    ownened_by_oracle ora_inventory, user, group
-    ownened_by_oracle oracle_base, user, group
-
-    allow_everybody download_folder
+    owned_by_oracle oracle_base, user, group
+    allow_everybody download_folder, user, group
+    owned_by_oracle ora_inventory, user, group
   end
 
   def make_directory(path)
@@ -26,14 +25,15 @@ Puppet::Type.type(:db_directory_structure).provide(:db_directory_structure) do
     FileUtils.mkdir_p path
   end
 
-  def ownened_by_oracle(path, user, group)
+  def owned_by_oracle(path, user, group)
     Puppet.info "Setting oracle ownership for #{path} with 0775"
     FileUtils.chmod 0775, path
-    FileUtils.chown_R user, group, path
+    FileUtils.chown user, group, path
   end
 
-  def allow_everybody(path)
+  def allow_everybody(path, user, group)
     Puppet.info "Setting public permissions 0777 for #{path}"
     FileUtils.chmod 0777, path
+    FileUtils.chown user, group, path
   end
 end
