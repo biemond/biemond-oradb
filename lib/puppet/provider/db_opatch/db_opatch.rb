@@ -54,7 +54,7 @@ Puppet::Type.type(:db_opatch).provide(:db_opatch) do
     result = false
     output.each_line do |li|
       unless li.nil?
-        if li.include? 'OPatch completed' or li.include? 'OPatch succeeded' or li.include? 'opatch auto succeeded' or li.include? 'opatchauto succeeded'
+        if li.include? 'OPatch completed' or li.include? 'OPatch succeeded' or li.include? 'opatch auto succeeded' or li.include? 'opatchauto succeeded' or li.include?  'OPatchAuto successful' or li.include? 'Patching is completed successfully'
           result = true
         end
       end
