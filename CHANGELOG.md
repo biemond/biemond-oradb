@@ -1,5 +1,8 @@
 # Version updates
 
+## 3.0.10
+- fix opatch for normal patches
+
 ## 3.0.9
 - fix database own dbttemplate issue with double -variablesFile error
 - 12.2 db requires always container database = true

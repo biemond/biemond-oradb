@@ -52,6 +52,13 @@ define oradb::opatch(
   $exec_path     = lookup('oradb::exec_path')
   $ora_inst_path = lookup('oradb::orainst_dir')
 
+  if ! defined(File["${oracle_product_home}/bin/fuser"]) {
+    file { "${oracle_product_home}/bin/fuser":
+      ensure => present,
+      mode   => '0755'
+    }
+  }
+
   if $ensure == 'present' {
     if $remote_file == true {
       # the patch used by the opatch
