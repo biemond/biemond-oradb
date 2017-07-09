@@ -2,6 +2,7 @@
 
 ## 3.0.10
 - fix opatch for normal patches
+- fix opatch success check for grid
 
 ## 3.0.9
 - fix database own dbttemplate issue with double -variablesFile error
