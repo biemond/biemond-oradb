@@ -160,9 +160,9 @@ define oradb::database(
     fail('container or pluggable database is not supported on version 11.2')
   }
 
-  if ( $version >= '12.2' and $container_database == false ){
-    fail('version 12.2 or higher requires container_database = true')
-  }
+#  if ( $version >= '12.2' and $container_database == false ){
+#    fail('version 12.2 or higher requires container_database = true')
+#  }
 
   $exec_path = lookup('oradb::exec_path')
   $user_base = lookup('oradb::user_base_dir')
@@ -259,10 +259,11 @@ define oradb::database(
         }
       }
 
-      if ( $version == '11.2' or $container_database == false ) {
+      if ( $version == '11.2') { # or $container_database == false ) {
         $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} "
       } elsif ( $version == '12.2') {
-        $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -datafileDestination ${data_file_destination} -emConfiguration ${em_configuration} "
+	$command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -datafileDestination ${data_file_destination} -emConfiguration ${em_configuration} "
+#        $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -datafileDestination ${data_file_destination} -emConfiguration ${em_configuration} "
       } else {
         $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} "
       }
