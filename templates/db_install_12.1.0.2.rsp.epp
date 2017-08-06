@@ -4,6 +4,9 @@
        String $oracle_base, 
        String $group_oper = 'oper',
        String $group = 'dba',
+       String $group_backup = 'dba',
+       String $group_dg = 'dba',
+       String $group_km = 'dba',
        Optional[String] $cluster_nodes = undef, 
        String $database_type,
        Optional[String] $ee_optional_components = undef, 
@@ -144,17 +147,17 @@ oracle.install.db.OPER_GROUP=<%= $group_oper %>
 #------------------------------------------------------------------------------
 # The BACKUPDBA_GROUP is the OS group which is to be granted OSBACKUPDBA privileges.
 #------------------------------------------------------------------------------
-oracle.install.db.BACKUPDBA_GROUP=<%= $group %>
+oracle.install.db.BACKUPDBA_GROUP=<%= $group_backup %>
 
 #------------------------------------------------------------------------------
 # The DGDBA_GROUP is the OS group which is to be granted OSDGDBA privileges.
 #------------------------------------------------------------------------------
-oracle.install.db.DGDBA_GROUP=<%= $group %>
+oracle.install.db.DGDBA_GROUP=<%= $group_dg %>
 
 #------------------------------------------------------------------------------
 # The KMDBA_GROUP is the OS group which is to be granted OSKMDBA privileges.
 #------------------------------------------------------------------------------
-oracle.install.db.KMDBA_GROUP=<%= $group %>
+oracle.install.db.KMDBA_GROUP=<%= $group_km %>
 
 
 ###############################################################################

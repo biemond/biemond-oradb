@@ -1,5 +1,10 @@
 # Version updates
 
+## 3.0.11
+- installdb new groups options like group_backup, group_dg ,group_km ,group_rac
+- remove the container restriction on 12.2
+- added LDAP to netca
+
 ## 3.0.10
 - fix opatch for normal patches
 - fix opatch success check for grid

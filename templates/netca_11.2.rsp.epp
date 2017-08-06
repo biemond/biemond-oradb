@@ -97,7 +97,7 @@ LISTENER_START=""LISTENER""
 # LDAP, TNSNAMES, ONAMES, HOSTNAME, NOVELL, NIS, DCE
 # A typical install sets only: "TNSNAMES","ONAMES","HOSTNAMES"
 # or "LDAP","TNSNAMES","ONAMES","HOSTNAMES" for LDAP
-NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}
+NAMING_METHODS={"TNSNAMES","LDAP","ONAMES","HOSTNAME"}
 
 #NOVELL_NAMECONTEXT;String;Novell Directory Service name context, in double quotes
 # A typical install does not use this variable.

@@ -3,7 +3,10 @@
        String $oracle_home, 
        String $oracle_base, 
        String $group_oper = 'oper',
-       String $group = 'dba',
+       String $group_backup = 'dba',
+       String $group_dg = 'dba',
+       String $group_km = 'dba',
+       String $group_rac = 'dba',
        Optional[String] $cluster_nodes = undef, 
        String $database_type,
        Optional[String] $ee_optional_components = undef, 
@@ -102,22 +105,22 @@ oracle.install.db.OSOPER_GROUP=<%= $group_oper %>
 #------------------------------------------------------------------------------
 # The OSBACKUPDBA_GROUP is the OS group which is to be granted SYSBACKUP privileges.
 #------------------------------------------------------------------------------
-oracle.install.db.OSBACKUPDBA_GROUP=<%= $group %>
+oracle.install.db.OSBACKUPDBA_GROUP=<%= $group_backup %>
 
 #------------------------------------------------------------------------------
 # The OSDGDBA_GROUP is the OS group which is to be granted SYSDG privileges.
 #------------------------------------------------------------------------------
-oracle.install.db.OSDGDBA_GROUP=<%= $group %>
+oracle.install.db.OSDGDBA_GROUP=<%= $group_dg %>
 
 #------------------------------------------------------------------------------
 # The OSKMDBA_GROUP is the OS group which is to be granted SYSKM privileges.
 #------------------------------------------------------------------------------
-oracle.install.db.OSKMDBA_GROUP=<%= $group %>
+oracle.install.db.OSKMDBA_GROUP=<%= $group_km %>
 
 #------------------------------------------------------------------------------
 # The OSRACDBA_GROUP is the OS group which is to be granted SYSRAC privileges.
 #------------------------------------------------------------------------------
-oracle.install.db.OSRACDBA_GROUP=<%= $group %>
+oracle.install.db.OSRACDBA_GROUP=<%= $group_rac %>
 
 ###############################################################################
 #                                                                             #
