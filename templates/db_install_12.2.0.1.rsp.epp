@@ -3,6 +3,7 @@
        String $oracle_home, 
        String $oracle_base, 
        String $group_oper = 'oper',
+       String $group = 'dba',
        String $group_backup = 'dba',
        String $group_dg = 'dba',
        String $group_km = 'dba',
