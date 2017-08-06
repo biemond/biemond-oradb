@@ -1,9 +1,9 @@
 <%- |  String $title,
        Hash   $server,
-       Optional[String] $loadbalance,
-       Optional[String] $failover,
-       Optional[String] $connect_server,
-       Optional[String] $connect_service_name,
+       Optional[String] $loadbalance = undef,
+       Optional[String] $failover = undef,
+       Optional[String] $connect_server = undef,
+       Optional[String] $connect_service_name = undef,
        Integer $size | -%>
 
 <%= $title %> =
