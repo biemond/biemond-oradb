@@ -25,6 +25,7 @@
     (CONNECT_DATA =
       (SERVER = <%= $connect_server %>)
       (SERVICE_NAME = <%= $connect_service_name %>)
+      (SID = <%= $sid %>)
     )
   )
 
