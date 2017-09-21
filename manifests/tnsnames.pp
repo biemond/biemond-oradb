@@ -41,6 +41,7 @@ define oradb::tnsnames(
   String $failover                        = 'ON',
   Optional[String] $connect_service_name  = undef,
   String $connect_server                  = 'DEDICATED',
+  String $sid                             = undef,
   Enum['tnsnames','listener'] $entry_type = 'tnsnames',
 )
 {
@@ -72,6 +73,7 @@ define oradb::tnsnames(
                                       'failover'             => $failover,
                                       'connect_server'       => $connect_server,
                                       'connect_service_name' => $connect_service_name,
+                                      'sid'                  => $sid,
                                       'size'                 => $size
                                       }),
   }
