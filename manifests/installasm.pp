@@ -385,7 +385,7 @@ define oradb::installasm(
         logoutput => true,
         require   => Exec["install oracle grid ${title}","run root.sh grid script ${title}"],
       }
-    }   
+    }
 
     if !defined(File[$grid_home]) {
       file { $grid_home:
