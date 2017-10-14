@@ -317,14 +317,16 @@ define oradb::installdb(
             require => [Exec["install oracle database ${title}"],
                           Exec["run root.sh script ${title}"],],
           }
-          exec { "remove oracle db file2 ${file2} ${title}":
-            command => "rm -rf ${download_dir}/${file2}",
-            user    => 'root',
-            group   => 'root',
-            path    => $exec_path,
-            cwd     => $oracle_base,
-            require => [Exec["install oracle database ${title}"],
-                        Exec["run root.sh script ${title}"],],
+          if ( $total_files > 1 ) {
+            exec { "remove oracle db file2 ${file2} ${title}":
+              command => "rm -rf ${download_dir}/${file2}",
+              user    => 'root',
+              group   => 'root',
+              path    => $exec_path,
+              cwd     => $oracle_base,
+              require => [Exec["install oracle database ${title}"],
+                          Exec["run root.sh script ${title}"],],
+            }
           }
         }
       }

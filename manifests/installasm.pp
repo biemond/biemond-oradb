@@ -150,6 +150,7 @@ define oradb::installasm(
   db_directory_structure{"grid structure ${version}":
     ensure            => present,
     oracle_base_dir   => $grid_base,
+    oracle_home_dir   => $grid_home,
     ora_inventory_dir => $ora_inventory,
     download_dir      => $download_dir,
     os_user           => $user,
@@ -373,7 +374,7 @@ define oradb::installasm(
       require   => Exec["install oracle grid ${title}"],
     }
 
-    if ($version == '12.2.0.1') {
+    if ( $version == '12.2.0.1' and $grid_type != 'CRS_SWONLY' ) {
       exec { "configure asm ${title}":
         timeout   => 0,
         command   => "${grid_home}/gridSetup.sh -executeConfigTools -silent -responseFile ${download_dir}/grid_install_${version}.rsp",
@@ -384,7 +385,7 @@ define oradb::installasm(
         logoutput => true,
         require   => Exec["install oracle grid ${title}","run root.sh grid script ${title}"],
       }
-    }
+    }   
 
     if !defined(File[$grid_home]) {
       file { $grid_home:

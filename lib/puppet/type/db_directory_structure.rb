@@ -40,6 +40,12 @@ module Puppet
       end
     end
 
+    newparam(:oracle_home_dir) do
+      desc <<-EOT
+        The oracle home folder.
+      EOT
+    end
+
     newparam(:ora_inventory_dir) do
       desc <<-EOT
         The oracle inventory folder.
