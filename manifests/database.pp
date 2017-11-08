@@ -105,7 +105,7 @@ define oradb::database(
   Optional[String] $template_seeded                               = undef,
   Optional[Hash] $template_variables                              = undef, # for dbt template
   String $db_name                                                 = lookup('oradb::database_name'),
-  String $db_domain                                               = undef,
+  Optional[String] $db_domain                                     = undef,
   Integer $db_port                                                = lookup('oradb::listener_port'),
   String $sys_password                                            = lookup('oradb::default::password'),
   String $system_password                                         = lookup('oradb::default::password'),
