@@ -14,6 +14,7 @@ gem 'hiera-puppet-helper', :git => 'https://github.com/bobtfish/hiera-puppet-hel
 gem 'semantic_puppet'
 gem 'puppet-lint'
 
+gem 'rake', '< 11.0'
 gem 'puppet', '4.8.2' #puppetversion
 gem 'rspec-puppet'
 gem 'rspec-system-puppet'
