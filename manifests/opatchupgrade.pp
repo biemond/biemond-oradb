@@ -84,7 +84,8 @@ define oradb::opatchupgrade(
           require   => File["${download_dir}/${patch_file}"],
         }
 
-        if ( $opversion < '12.2.0.1.5') {
+        # version lower than, do emocmrsp
+        if ( versioncmp($opversion, '12.2.0.1.5') == -1 ) {
           if ( $csi_number != undef and support_id != undef ) {
             exec { "exec emocmrsp ${title} ${opversion}":
               cwd       => $patch_dir,
