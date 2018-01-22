@@ -6,7 +6,7 @@
 <title>
   Defined Type: oradb::database
   
-    &mdash; Documentation by YARD 0.9.8
+    &mdash; Documentation by YARD 0.9.12
   
 </title>
 
@@ -387,7 +387,7 @@ oradb::database{ &#39;oraDb&#39;:
         <span class='name'>db_domain</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
@@ -931,7 +931,15 @@ oradb::database{ &#39;oraDb&#39;:
 319
 320
 321
-322</pre>
+322
+323
+324
+325
+326
+327
+328
+329
+330</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/database.pp', line 96</span>
@@ -948,7 +956,7 @@ define oradb::database(
   Optional[String] $template_seeded                               = undef,
   Optional[Hash] $template_variables                              = undef, # for dbt template
   String $db_name                                                 = lookup(&#39;oradb::database_name&#39;),
-  String $db_domain                                               = undef,
+  Optional[String] $db_domain                                     = undef,
   Integer $db_port                                                = lookup(&#39;oradb::listener_port&#39;),
   String $sys_password                                            = lookup(&#39;oradb::default::password&#39;),
   String $system_password                                         = lookup(&#39;oradb::default::password&#39;),
@@ -1002,6 +1010,10 @@ define oradb::database(
   if ( $version == &#39;11.2&#39; and $container_database == true ){
     fail(&#39;container or pluggable database is not supported on version 11.2&#39;)
   }
+
+#  if ( $version &gt;= &#39;12.2&#39; and $container_database == false ){
+#    fail(&#39;version 12.2 or higher requires container_database = true&#39;)
+#  }
 
   $exec_path = lookup(&#39;oradb::exec_path&#39;)
   $user_base = lookup(&#39;oradb::user_base_dir&#39;)
@@ -1099,17 +1111,21 @@ define oradb::database(
       }
 
       if ( $version == &#39;11.2&#39; or $container_database == false ) {
-        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -variablesFile ${download_dir}/vars_${sanitized_title}.txt&quot;
-      } elsif ( $version == &#39;12.2&#39;) {
-        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -datafileDestination ${data_file_destination} -emConfiguration ${em_configuration} -variablesFile ${download_dir}/vars_${sanitized_title}.txt&quot;
+        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} &quot;
       } else {
-        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} -variablesFile ${download_dir}/vars_${sanitized_title}.txt&quot;
+        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} &quot;
       }
 
       if ( $template_variables != undef) {
         $command_var = &quot; -variablesFile ${download_dir}/vars_${sanitized_title}.txt&quot;
       } else {
         $command_var = &#39;&#39;
+      }
+
+      if ( $data_file_destination != undef) {
+        $command_data_file = &quot; -datafileDestination ${data_file_destination}&quot;
+      } else {
+        $command_data_file = &#39;&#39;
       }
 
       if ( $init_params != undef) {
@@ -1123,7 +1139,7 @@ define oradb::database(
       } else {
         $command_nodes = &#39;&#39;
       }
-      $command = &quot;${command_pre} ${command_var} ${command_init} ${command_nodes} ${elevation_suffix}&quot;
+      $command = &quot;${command_pre} ${data_file_destination} ${command_var} ${command_init} ${command_nodes} ${elevation_suffix}&quot;
 
     } else {
       if ( $version == &#39;12.2&#39; ) {
@@ -1170,9 +1186,7 @@ define oradb::database(
 </div>
 
       <div id="footer">
-  Generated on Mon Apr 17 21:20:51 2017 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.8 (ruby-2.3.1).
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
 </div>
 
     </div>

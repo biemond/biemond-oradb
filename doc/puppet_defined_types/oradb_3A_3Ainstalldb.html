@@ -6,7 +6,7 @@
 <title>
   Defined Type: oradb::installdb
   
-    &mdash; Documentation by YARD 0.9.8
+    &mdash; Documentation by YARD 0.9.12
   
 </title>
 
@@ -480,6 +480,58 @@ oradb::installdb{ &#39;db_linux-x64&#39;:
       
     </li>
   
+    <li>
+      
+        <span class='name'>group_backup</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::group&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group_dg</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::group&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group_km</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::group&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group_rac</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::group&#39;)</tt>)</em>
+      
+      
+    </li>
+  
 </ul>
 
 
@@ -766,7 +818,17 @@ oradb::installdb{ &#39;db_linux-x64&#39;:
 322
 323
 324
-325</pre>
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/installdb.pp', line 49</span>
@@ -786,6 +848,10 @@ define oradb::installdb(
   String $group                                                                    = lookup(&#39;oradb::group&#39;),
   String $group_install                                                            = lookup(&#39;oradb::group_install&#39;),
   String $group_oper                                                               = lookup(&#39;oradb::group_oper&#39;),
+  String $group_backup                                                             = lookup(&#39;oradb::group&#39;),
+  String $group_dg                                                                 = lookup(&#39;oradb::group&#39;),
+  String $group_km                                                                 = lookup(&#39;oradb::group&#39;),
+  String $group_rac                                                                = lookup(&#39;oradb::group&#39;),
   String $download_dir                                                             = lookup(&#39;oradb::download_dir&#39;),
   Boolean $zip_extract                                                             = true,
   String $puppet_download_mnt_point                                                = lookup(&#39;oradb::module_mountpoint&#39;),
@@ -934,6 +1000,10 @@ define oradb::installdb(
                         &#39;oracle_base&#39;            =&gt; $oracle_base,
                         &#39;group_oper&#39;             =&gt; $group_oper,
                         &#39;group&#39;                  =&gt; $group,
+                        &#39;group_backup&#39;           =&gt; $group_backup,
+                        &#39;group_dg&#39;               =&gt; $group_dg,
+                        &#39;group_km&#39;               =&gt; $group_km,
+                        &#39;group_rac&#39;              =&gt; $group_rac,
                         &#39;database_type&#39;          =&gt; $database_type,
                         &#39;is_rack_one_install&#39;    =&gt; $is_rack_one_install,
                         &#39;ee_optional_components&#39; =&gt; $ee_optional_components,
@@ -1034,14 +1104,16 @@ define oradb::installdb(
             require =&gt; [Exec[&quot;install oracle database ${title}&quot;],
                           Exec[&quot;run root.sh script ${title}&quot;],],
           }
-          exec { &quot;remove oracle db file2 ${file2} ${title}&quot;:
-            command =&gt; &quot;rm -rf ${download_dir}/${file2}&quot;,
-            user    =&gt; &#39;root&#39;,
-            group   =&gt; &#39;root&#39;,
-            path    =&gt; $exec_path,
-            cwd     =&gt; $oracle_base,
-            require =&gt; [Exec[&quot;install oracle database ${title}&quot;],
-                        Exec[&quot;run root.sh script ${title}&quot;],],
+          if ( $total_files &gt; 1 ) {
+            exec { &quot;remove oracle db file2 ${file2} ${title}&quot;:
+              command =&gt; &quot;rm -rf ${download_dir}/${file2}&quot;,
+              user    =&gt; &#39;root&#39;,
+              group   =&gt; &#39;root&#39;,
+              path    =&gt; $exec_path,
+              cwd     =&gt; $oracle_base,
+              require =&gt; [Exec[&quot;install oracle database ${title}&quot;],
+                          Exec[&quot;run root.sh script ${title}&quot;],],
+            }
           }
         }
       }
@@ -1055,9 +1127,7 @@ define oradb::installdb(
 </div>
 
       <div id="footer">
-  Generated on Mon Apr 17 21:20:52 2017 by
-  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.8 (ruby-2.3.1).
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
 </div>
 
     </div>
