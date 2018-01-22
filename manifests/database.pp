@@ -272,9 +272,9 @@ define oradb::database(
       }
 
       if ( $data_file_destination != undef) {
-        $command_var = " -datafileDestination ${data_file_destination}"
+        $command_data_file = " -datafileDestination ${data_file_destination}"
       } else {
-        $command_var = ''
+        $command_data_file = ''
       }
 
       if ( $init_params != undef) {
@@ -288,7 +288,7 @@ define oradb::database(
       } else {
         $command_nodes = ''
       }
-      $command = "${command_pre} ${command_var} ${command_init} ${command_nodes} ${elevation_suffix}"
+      $command = "${command_pre} ${data_file_destination} ${command_var} ${command_init} ${command_nodes} ${elevation_suffix}"
 
     } else {
       if ( $version == '12.2' ) {
