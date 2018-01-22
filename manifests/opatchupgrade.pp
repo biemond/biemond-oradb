@@ -37,6 +37,7 @@ define oradb::opatchupgrade(
   String $group                     = lookup('oradb::group'),
   String $download_dir              = lookup('oradb::download_dir'),
   String $puppet_download_mnt_point = lookup('oradb::module_mountpoint'),
+  Boolean $remote_file              = true,
 ){
   $exec_path = lookup('oradb::exec_path')
   $patch_dir = "${oracle_home}/OPatch"
@@ -57,15 +58,16 @@ define oradb::opatchupgrade(
   }
 
   if ( $continue ) {
-
-    if ! defined(File["${download_dir}/${patch_file}"]) {
-      file {"${download_dir}/${patch_file}":
-        ensure => present,
-        path   => "${download_dir}/${patch_file}",
-        source => "${puppet_download_mnt_point}/${patch_file}",
-        mode   => '0775',
-        owner  => $user,
-        group  => $group,
+    if $remote_file == true {
+      if ! defined(File["${download_dir}/${patch_file}"]) {
+        file {"${download_dir}/${patch_file}":
+          ensure => present,
+          path   => "${download_dir}/${patch_file}",
+          source => "${puppet_download_mnt_point}/${patch_file}",
+          mode   => '0775',
+          owner  => $user,
+          group  => $group,
+        }
       }
     }
 
@@ -75,13 +77,26 @@ define oradb::opatchupgrade(
           ensure  => absent,
           recurse => true,
           force   => true,
-        } -> exec { "extract opatch ${title} ${patch_file}":
-          command   => "unzip -o ${download_dir}/${patch_file} -d ${oracle_home}",
-          path      => $exec_path,
-          user      => $user,
-          group     => $group,
-          logoutput => false,
-          require   => File["${download_dir}/${patch_file}"],
+        }
+
+        if $remote_file == true {
+          exec { "extract opatch ${title} ${patch_file}":
+            command   => "unzip -o ${download_dir}/${patch_file} -d ${oracle_home}",
+            path      => $exec_path,
+            user      => $user,
+            group     => $group,
+            logoutput => false,
+            require   => [File["${download_dir}/${patch_file}"],File[$patch_dir]],
+          }
+        } else {
+          exec { "extract opatch ${title} ${patch_file}":
+            command   => "unzip -o ${puppet_download_mnt_point}/${patch_file} -d ${oracle_home}",
+            path      => $exec_path,
+            user      => $user,
+            group     => $group,
+            logoutput => false,
+            require   => File[$patch_dir],
+          }
         }
 
         # version lower than, do emocmrsp

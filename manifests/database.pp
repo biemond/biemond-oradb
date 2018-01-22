@@ -259,16 +259,20 @@ define oradb::database(
         }
       }
 
-      if ( $version == '11.2') { # or $container_database == false ) {
+      if ( $version == '11.2' or $container_database == false ) {
         $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} "
-      } elsif ( $container_database == false ) {
-        $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -datafileDestination ${data_file_destination} -emConfiguration ${em_configuration} "
       } else {
-        $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -datafileDestination ${data_file_destination} -emConfiguration ${em_configuration} "
+        $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} "
       }
 
       if ( $template_variables != undef) {
         $command_var = " -variablesFile ${download_dir}/vars_${sanitized_title}.txt"
+      } else {
+        $command_var = ''
+      }
+
+      if ( $data_file_destination != undef) {
+        $command_var = " -datafileDestination ${data_file_destination}"
       } else {
         $command_var = ''
       }
