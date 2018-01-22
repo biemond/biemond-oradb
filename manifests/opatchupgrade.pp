@@ -94,7 +94,7 @@ define oradb::opatchupgrade(
               user      => $user,
               group     => $group,
               logoutput => true,
-              require   => Exec["extract opatch ${patch_file}"],
+              require   => Exec["extract opatch ${title} ${patch_file}"],
             }
           } else {
 
