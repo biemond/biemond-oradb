@@ -1,5 +1,10 @@
 # Version updates
 
+## 3.0.13
+- opatchupgrade now also has remote_file parameter
+- opatchupgrade fix error when supportid is supplied
+- database.pp check if data_file_destination is provided with a template
+
 ## 3.0.12
 - db_domain is optional again on database.pp
 - opatchupgrade, fixed the version check for doing emocmrsp or not
