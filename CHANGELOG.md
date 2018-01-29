@@ -1,4 +1,8 @@
 # Version updates
+## 3.0.14
+- database.pp & data_file_destination went wrong with dbt templates
+- fix dbt templates for memory_total param
+- Allow 'SE2', 'HP', 'XP', 'PE' as 12.2 database type
 
 ## 3.0.13
 - opatchupgrade now also has remote_file parameter
