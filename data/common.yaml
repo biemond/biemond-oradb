@@ -71,6 +71,10 @@ oradb::database_types:
  - 'EE'
  - 'SE'
  - 'SEONE'
+ - 'SE2'
+ - 'HP'
+ - 'XP'
+ - 'PE'
 
 # full versions which can be downloaded at OTN
 oradb::versions_full:
