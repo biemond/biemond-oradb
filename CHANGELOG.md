@@ -1,4 +1,7 @@
 # Version updates
+## 3.0.15
+- fix autostart and removed the hard dbora reference
+
 ## 3.0.14
 - database.pp & data_file_destination went wrong with dbt templates
 - fix dbt templates for memory_total param
