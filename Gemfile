@@ -9,13 +9,13 @@ gem 'simplecov-console', :require => false
 gem 'codeclimate-test-reporter', :require => false
 
 gem 'rspec-puppet-utils', :git => 'https://github.com/Accuity/rspec-puppet-utils.git'
-gem 'hiera-puppet-helper', :git => 'https://github.com/bobtfish/hiera-puppet-helper.git'
+# gem 'hiera-puppet-helper', :git => 'https://github.com/bobtfish/hiera-puppet-helper.git'
 
 gem 'semantic_puppet'
 gem 'puppet-lint'
 
 gem 'rake', '< 11.0'
-gem 'puppet', '4.8.2' #puppetversion
+gem 'puppet', '4.10.10' #puppetversion
 gem 'rspec-puppet'
 gem 'rspec-system-puppet'
 gem 'puppetlabs_spec_helper'

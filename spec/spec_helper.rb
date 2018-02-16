@@ -1,6 +1,6 @@
 require 'rspec-puppet-utils'
 # if your using puppet4, the following gem seems to causes issues
-require 'hiera-puppet-helper'
+# require 'hiera-puppet-helper'
 
 require 'simplecov'
 require 'coveralls'
