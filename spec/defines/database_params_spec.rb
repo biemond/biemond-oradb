@@ -113,7 +113,7 @@ describe 'oradb::database', :type => :define do
 
     it do
       expect { should contain_file("/install/database_testDb_Create.rsp")
-               }.to raise_error(Puppet::Error, /expects an undef value or a match for Enum/)
+               }.to raise_error(Puppet::Error, /match for Enum/)
     end
 
   end
