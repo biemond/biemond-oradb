@@ -18,7 +18,6 @@ notifications:
     - biemond@gmail.com
 env:
   - PUPPET_VERSION=4.5.3
-  - PUPPET_VERSION=4.7.1
   - PUPPET_VERSION=4.8.2
   - PUPPET_VERSION=4.10.10
- 
+  - PUPPET_VERSION=5.3.5 
