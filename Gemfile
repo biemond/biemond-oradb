@@ -15,7 +15,7 @@ gem 'semantic_puppet'
 gem 'puppet-lint'
 
 gem 'rake', '< 11.0'
-gem 'puppet', '4.10.10' #puppetversion
+gem 'puppet', puppetversion
 gem 'rspec-puppet'
 gem 'rspec-system-puppet'
 gem 'puppetlabs_spec_helper'
