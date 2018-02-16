@@ -166,7 +166,7 @@ describe 'oradb::database', :type => :define do
 
       it "should pass" do
         expect { should contain_file("/install/database_testDb_Create.rsp")
-                 }.to raise_error(Puppet::Error, /expects a value of type Undef or Hash/)
+                 }.to raise_error(Puppet::Error, /Hash/)
       end
 
     end
@@ -187,7 +187,7 @@ describe 'oradb::database', :type => :define do
 
       it "should fail" do
         expect { should contain_file("/install/database_testDb_Create.rsp")
-                 }.to raise_error(Puppet::Error, /expects a value of type Undef or Hash/)
+                 }.to raise_error(Puppet::Error, /Hash/)
       end
 
     end
