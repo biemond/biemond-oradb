@@ -36,6 +36,7 @@
 define oradb::database_pluggable(
   Enum['present', 'absent'] $ensure = 'present',
   Enum['12.1', '12.2'] $version     = lookup('oradb::version'),
+  String $oracle_base               = undef,
   String $oracle_home_dir           = undef,
   String $user                      = lookup('oradb::user'),
   String $group                     = lookup('oradb::group'),
@@ -59,7 +60,7 @@ define oradb::database_pluggable(
       cwd       => $oracle_home_dir,
       user      => $user,
       group     => $group,
-      creates   => $pdb_datafile_destination,
+      creates   => "$oracle_base/cfgtoollogs/dbca/$source_db/$pdb_name/postPDBCreation.log",
       logoutput => $log_output,
     }
   } else {
@@ -72,7 +73,7 @@ define oradb::database_pluggable(
       cwd       => $oracle_home_dir,
       user      => $user,
       group     => $group,
-      onlyif    => "ls ${$pdb_datafile_destination}",
+      onlyif    => "test ! -f $oracle_base/cfgtoollogs/dbca/$source_db/$pdb_name/deletePDB.log",
       logoutput => $log_output,
     }
 
