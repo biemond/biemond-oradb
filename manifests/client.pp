@@ -134,7 +134,7 @@ define oradb::client(
       os_group          => $group_install,
     }
 
-    if ! defined(File["${download_dir}/db_client_${version}.rsp"]) {
+    if ! defined(File["${download_dir}/db_${install_type}_${version}.rsp"]) {
       file { "${download_dir}/db_${install_type}_${version}.rsp":
         ensure  => present,
         content => epp("oradb/db_client_${version}.rsp.epp", {
