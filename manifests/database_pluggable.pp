@@ -19,7 +19,7 @@
 #      create_user_tablespace   => true,
 #      log_output               => true,
 #    }
-# 
+#
 # @param version Oracle installation version
 # @param oracle_home_dir full path to the Oracle Home directory inside Oracle Base
 # @param user operating system user
@@ -60,7 +60,7 @@ define oradb::database_pluggable(
       cwd       => $oracle_home_dir,
       user      => $user,
       group     => $group,
-      creates   => "$oracle_base/cfgtoollogs/dbca/$source_db/$pdb_name/postPDBCreation.log",
+      creates   => "${oracle_base}/cfgtoollogs/dbca/${source_db}/${pdb_name}/postPDBCreation.log",
       logoutput => $log_output,
     }
   } else {
@@ -73,7 +73,7 @@ define oradb::database_pluggable(
       cwd       => $oracle_home_dir,
       user      => $user,
       group     => $group,
-      onlyif    => "test ! -f $oracle_base/cfgtoollogs/dbca/$source_db/$pdb_name/deletePDB.log",
+      onlyif    => "test ! -f ${oracle_base}/cfgtoollogs/dbca/${source_db}/${pdb_name}/deletePDB.log",
       logoutput => $log_output,
     }
 
