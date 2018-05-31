@@ -88,7 +88,7 @@ define oradb::installem_agent(
   String $group                                      = lookup('oradb::group_install'),
   String $download_dir                               = lookup('oradb::download_dir'),
   Boolean $log_output                                = false,
-  String $oracle_hostname                            = undef, # FQDN hostname where to install on
+  String $oracle_hostname                            = lookup('oradb::oracle_hostname',{default_value => $::fqdn}),
   Boolean $manage_curl                               = true,
 )
 {
