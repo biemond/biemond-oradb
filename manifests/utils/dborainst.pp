@@ -23,7 +23,7 @@ define oradb::utils::dborainst
       file { $ora_inst_path:
         ensure => directory,
         before => File["${ora_inst_path}/oraInst.loc"],
-        mode   => '0755',
+        mode   => '0644',
       }
     }
   }
@@ -34,7 +34,7 @@ define oradb::utils::dborainst
       content => epp('oradb/oraInst.loc.epp', {
                       'ora_inventory_dir' => $ora_inventory_dir,
                       'os_group'          => $os_group }),
-      mode    => '0755',
+      mode    => '0644',
     }
   }
 }
