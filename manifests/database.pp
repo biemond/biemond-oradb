@@ -18,8 +18,8 @@ define oradb::database(
   $db_name                   = 'orcl',
   $db_domain                 = undef,
   $db_port                   = '1521',
-  $sys_password              = 'Welcome01',
-  $system_password           = 'Welcome01',
+  $sys_password              = undef,
+  $system_password           = undef,
   $data_file_destination     = undef,
   $recovery_area_destination = undef,
   $character_set             = 'AL32UTF8',
@@ -31,8 +31,8 @@ define oradb::database(
   $database_type             = 'MULTIPURPOSE', # MULTIPURPOSE|DATA_WAREHOUSING|OLTP
   $em_configuration          = 'NONE',  # CENTRAL|LOCAL|ALL|NONE
   $storage_type              = 'FS', #FS|CFS|ASM
-  $asm_snmp_password         = 'Welcome01',
-  $db_snmp_password          = 'Welcome01',
+  $asm_snmp_password         = undef,
+  $db_snmp_password          = undef,
   $asm_diskgroup             = 'DATA',
   $recovery_diskgroup        = undef,
   $cluster_nodes             = undef, # comma separated list with at first the local and at second the remode host e.g. "racnode1,racnode2"
