@@ -21,7 +21,7 @@
 #      remote_file            => false,
 #      puppet_download_mnt_point => '/software',
 #  }
-#    
+#
 # @param version Oracle installation version
 # @param file filename of the installation software
 # @param oracle_base full path to the Oracle Base directory
@@ -47,7 +47,7 @@
 # @param remote_node
 #
 define oradb::installdb(
-  Enum['11.2.0.1','11.2.0.3','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1'] $version = undef,
+  Enum['11.1.0.6', '11.2.0.1','11.2.0.3','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1'] $version = undef,
   String $file                                                                     = undef,
   Enum['SE', 'EE', 'SEONE', 'SE2', 'HP', 'XP', 'PE'] $database_type                = lookup('oradb:installdb:database_type'),
   Optional[String] $ora_inventory_dir                                              = undef,
@@ -128,7 +128,7 @@ define oradb::installdb(
     if ( $zip_extract ) {
       # In $download_dir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
 
-      if ( $version in ['12.2.0.1']) {
+      if ( $version in ['11.1.0.6', '12.2.0.1']) {
         $file1 =  "${file}.zip"
         $total_files = 1
       }
