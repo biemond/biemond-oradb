@@ -96,7 +96,7 @@
 define oradb::database(
   String $oracle_base                                             = undef,
   String $oracle_home                                             = undef,
-  Enum['11.2', '12.1', '12.2'] $version                           = lookup('oradb::version'),
+  Enum['11.1', '11.2', '12.1', '12.2'] $version                   = lookup('oradb::version'),
   String $user                                                    = lookup('oradb::user'),
   String $group                                                   = lookup('oradb::group'),
   String $download_dir                                            = lookup('oradb::download_dir'),
@@ -259,7 +259,10 @@ define oradb::database(
         }
       }
 
-      if ( $version == '11.2' or $container_database == false ) {
+      if ( $version == '11.1' ) {
+        $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -emConfiguration ${em_configuration} "
+      }
+      elsif ( $version == '11.2' or $container_database == false ) {
         $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -emConfiguration ${em_configuration} "
       } else {
         $command_pre = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -emConfiguration ${em_configuration} "
