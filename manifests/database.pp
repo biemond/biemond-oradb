@@ -128,6 +128,7 @@ define oradb::database(
   Boolean $container_database                                     = false, # 12.1 feature for pluggable database
   String $puppet_download_mnt_point                               = lookup('oradb::module_mountpoint'),
   Boolean $automatic_memory_management                            = true, # for 12.2 , choose false when more than 4gb memory
+  Optional[Integer] $timeout                                      = 0,
 )
 {
 
@@ -308,7 +309,7 @@ define oradb::database(
     exec { "oracle database ${title}":
       command     => $command,
       creates     => "${oracle_base}/admin/${db_name}",
-      timeout     => 0,
+      timeout     => $timeout,
       path        => $exec_path,
       user        => 'root',
       group       => 'root',
@@ -326,7 +327,7 @@ define oradb::database(
     exec { "oracle database ${title}":
       command     => $command,
       onlyif      => "ls ${oracle_base}/admin/${db_name}",
-      timeout     => 0,
+      timeout     => $timeout,
       path        => $exec_path,
       user        => $user,
       group       => $group,
