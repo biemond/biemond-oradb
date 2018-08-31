@@ -319,7 +319,7 @@ define oradb::database(
     exec { "oracle database ${title}":
       command     => $command,
       onlyif      => "ls ${oracle_base}/admin/${db_name}",
-      timeout     => $timeoutcommand,
+      timeout     => $timeout,
       path        => $exec_path,
       user        => $user,
       group       => $group,
