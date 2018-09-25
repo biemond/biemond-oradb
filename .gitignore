@@ -22,6 +22,5 @@
 /convert_report.txt
 /update_report.txt
 .DS_Store
-coverage
-spec/reports
-spec/fixtures
+/coverage
+/spec/reports
