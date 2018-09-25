@@ -28,3 +28,5 @@ gem 'puppet-blacksmith'
 #gem 'fog-google', '= 0.1.0'
 #gem 'tins', '= 1.6.0'
 gem 'puppet-strings'
+
+gem 'puppet-module'
