@@ -1,6 +1,9 @@
 # Version updates
+
 ## 3.0.16
 - fix database.pp change parameter storage_type to optional, to use template file without parameter -datafileDestination (issue #197)
+- Modifying database_pluggable so it supports ASM support
+- Adding 32bit Client install.
 
 ## 3.0.15
 - fix autostart and removed the hard dbora reference

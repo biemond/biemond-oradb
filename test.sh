@@ -12,10 +12,6 @@ rvm --version
 rvm install ruby-2.3.6
 rvm use ruby-2.3.6
 
-#rvm install ruby-2.4.3
-#rvm use ruby-2.4.3
-
-
 
 set -e
 
