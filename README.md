@@ -63,7 +63,7 @@ Should work for Puppet >=  4.0
 - Agent installation via AgentPull.sh & AgentDeploy.sh
 
 ## GoldenGate
-- GoldenGate 12.2.1, 12.1.2, 11.2.1
+- GoldenGate 12.3.0, 12.2.1, 12.1.2, 11.2.1
 
 ## Repository Creation Utility (RCU)
 - Installs RCU repositoy for Oracle SOA Suite / Webcenter ( 11.1.1.6.0 and 11.1.1.7.0 ) / Oracle Identity Management ( 11.1.2.1 )
