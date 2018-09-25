@@ -6,6 +6,7 @@
   "license": "Apache-2.0",
   "source": "https://github.com/biemond/biemond-oradb",
   "project_page": "https://github.com/biemond/biemond-oradb",
+  "issues_url": "https://github.com/biemond/biemond-oradb/issues",
   "dependencies": [
     {
       "name": "puppetlabs/concat",

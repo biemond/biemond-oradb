@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Defined Type: oradb::installasm
+  
+    &mdash; Documentation by YARD 0.9.16
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_defined_types::oradb::installasm";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_defined_type_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (o)</a> &raquo;
+    <span class='title'><span class='object_link'>Defined Types</span></span>
+     &raquo; 
+    <span class="title">oradb::installasm</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Defined Type: oradb::installasm</h1>
+<div class="box_info">
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/installasm.pp
+    </dd>
+  </dl>
+</div>
+
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    
+<p>installasm</p>
+
+<p>install grid/asm</p>
+
+  </div>
+</div>
+
+
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>install asm</p>
+</div></p>
+      
+      <pre class="example code"><code>
+oradb::installasm{ &#39;db_linux-x64&#39;:
+    version                =&gt; &#39;11.2.0.4&#39;,
+    file                   =&gt; &#39;p13390677_112040_Linux-x86-64_3of7.zip&#39;,
+    grid_type              =&gt; &#39;HA_CONFIG&#39;,
+    grid_base              =&gt; &#39;/app/grid&#39;,
+    grid_home              =&gt; &#39;/app/grid/product/11.2/grid&#39;,
+    ora_inventory_dir      =&gt; &#39;/app&#39;,
+    user                   =&gt; &#39;grid&#39;,
+    asm_diskgroup          =&gt; &#39;DATA&#39;,
+    disk_discovery_string  =&gt; &#39;/nfs_client/asm*&#39;,
+    disks                  =&gt; &#39;/nfs_client/asm_sda_nfs_b1,/nfs_client/asm_sda_nfs_b2&#39;,
+    disk_redundancy        =&gt; &#39;EXTERNAL&#39;,
+    remote_file            =&gt; false,
+    puppet_download_mnt_point =&gt; &quot;/software&quot;,
+}</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>version</span>
+      
+      
+        <span class='type'>(<tt>Enum['11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Oracle installation version</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>file</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>filename of the installation software</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>grid_base</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Grid Base directory</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>grid_home</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Grid Home directory inside Oracle Grid Base</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ora_inventory_dir</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Inventory location directory</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::grid::user&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>operating system user</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user_base_dir</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::user_base_dir&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the location of the base user homes</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::grid::group&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the operating group name for using the oracle software</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>download_dir</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::download_dir&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>location for installation files used by this module</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>bash_profile</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>add a bash profile to the operating user</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>puppet_download_mnt_point</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::module_mountpoint&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the location where the installation software is available</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>remote_file</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the installation is remote accessiable or not</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>temp_dir</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::tmp_dir&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>location for temporaray file used by the installer</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>grid_type</span>
+      
+      
+        <span class='type'>(<tt>Enum['HA_CONFIG', 'CRS_CONFIG', 'UPGRADE', 'CRS_SWONLY']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;HA_CONFIG&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>stand_alone</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group_install</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::grid::group_install&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group_oper</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::grid::group_oper&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group_asm</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::grid::group_asm&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>zip_extract</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>sys_asm_password</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::grid::default::password&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>asm_monitor_password</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::grid::default::password&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>asm_diskgroup</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;DATA&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>disk_discovery_string</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>disk_redundancy</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;NORMAL&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>disk_au_size</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>1</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>disks</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>cluster_name</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>scan_name</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>scan_port</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>cluster_nodes</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>network_interface_list</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>storage_option</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+</ul>
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/installasm.pp', line 57</span>
+
+define oradb::installasm(
+  Enum[&#39;11.2.0.4&#39;,&#39;12.1.0.1&#39;,&#39;12.1.0.2&#39;,&#39;12.2.0.1&#39;] $version                       = undef,
+  String $file                                                                     = undef,
+  Enum[&#39;HA_CONFIG&#39;, &#39;CRS_CONFIG&#39;, &#39;UPGRADE&#39;, &#39;CRS_SWONLY&#39;] $grid_type              = &#39;HA_CONFIG&#39;,
+  Boolean $stand_alone                                                             = true, # in case of &#39;CRS_SWONLY&#39; and used as stand alone or in RAC
+  String $grid_base                                                                = undef,
+  String $grid_home                                                                = undef,
+  Optional[String] $ora_inventory_dir                                              = undef,
+  String $user                                                                     = lookup(&#39;oradb::grid::user&#39;),
+  String $user_base_dir                                                            = lookup(&#39;oradb::user_base_dir&#39;),
+  String $group                                                                    = lookup(&#39;oradb::grid::group&#39;),
+  String $group_install                                                            = lookup(&#39;oradb::grid::group_install&#39;),
+  String $group_oper                                                               = lookup(&#39;oradb::grid::group_oper&#39;),
+  String $group_asm                                                                = lookup(&#39;oradb::grid::group_asm&#39;),
+  String $download_dir                                                             = lookup(&#39;oradb::download_dir&#39;),
+  Boolean $zip_extract                                                             = true,
+  String $puppet_download_mnt_point                                                = lookup(&#39;oradb::module_mountpoint&#39;),
+  String $sys_asm_password                                                         = lookup(&#39;oradb::grid::default::password&#39;),
+  String $asm_monitor_password                                                     = lookup(&#39;oradb::grid::default::password&#39;),
+  String $asm_diskgroup                                                            = &#39;DATA&#39;,
+  Optional[String] $disk_discovery_string                                          = undef,
+  String $disk_redundancy                                                          = &#39;NORMAL&#39;,
+  Integer $disk_au_size                                                            = 1,
+  Optional[String] $disks                                                          = undef,
+  Boolean $remote_file                                                             = true,
+  Optional[String] $cluster_name                                                   = undef,
+  Optional[String] $scan_name                                                      = undef,
+  Optional[Integer] $scan_port                                                     = undef,
+  Optional[String] $cluster_nodes                                                  = undef,
+  Optional[String] $network_interface_list                                         = undef,
+  Optional[String] $storage_option                                                 = undef,
+  String $temp_dir                                                                 = lookup(&#39;oradb::tmp_dir&#39;),
+  Boolean $bash_profile                                                            = true,
+)
+{
+
+  case $disk_au_size {
+    1, 2, 4, 8, 16, 32, 64: {  } # Do nothing. These are valid values
+    default: {
+      fail(&quot;${disk_au_size} is an invalid disk_au_size. It needs to be one of these values: 1, 2, 4, 8, 16, 32, 64&quot;)
+    }
+  }
+  $file_without_ext = regsubst($file, &#39;(.+?)(\.zip*$|$)&#39;, &#39;\1&#39;)
+  #notify {&quot;oradb::installasm file without extension ${$file_without_ext} &quot;:}
+
+  if($cluster_name){ # We&#39;ve got a RAC cluster. Check the cluster specific parameters
+    if ( $scan_name == undef or is_string($scan_name) == false) {fail(&#39;You must specify scan_name if cluster_name is defined&#39;) }
+    if ( $scan_port == undef or is_integer($scan_port) == false) {fail(&#39;You must specify scan_port if cluster_name is defined&#39;) }
+    if ( $cluster_nodes == undef or is_string($cluster_nodes) == false) {fail(&#39;You must specify cluster_nodes if cluster_name is defined&#39;) }
+    if ( $network_interface_list == undef or is_string($network_interface_list) == false) {fail(&#39;You must specify network_interface_list if cluster_name is defined&#39;) }
+    if ( $storage_option == undef or is_string($storage_option) == false) {fail(&#39;You must specify storage_option if cluster_name is defined&#39;) }
+    unless $storage_option in [&#39;ASM_STORAGE&#39;, &#39;FILE_SYSTEM_STORAGE&#39;] {fail &#39;storage_option must be either ASM_STORAGE of FILE_SYSTEM_STORAGE&#39;}
+  }
+
+  $supported_grid_versions = join( lookup(&#39;oradb::grid_versions&#39;), &#39;|&#39;)
+  if ( $version in $supported_grid_versions == false ){
+    fail(&quot;Unrecognized database grid install version, use ${supported_grid_versions}&quot;)
+  }
+
+  $supported_db_kernels = join( lookup(&#39;oradb::kernels&#39;), &#39;|&#39;)
+  if ( $::kernel in $supported_db_kernels == false){
+    fail(&quot;Unrecognized operating system, please use it on a ${supported_db_kernels} host&quot;)
+  }
+
+  $supported_grid_types = join( lookup(&#39;oradb::grid_type&#39;), &#39;|&#39;)
+  if ($grid_type in $supported_grid_types == false ){
+    fail(&quot;Unrecognized database grid type, please use ${supported_grid_types}&quot;)
+  }
+
+  if ( $grid_base == undef or is_string($grid_base) == false) {fail(&#39;You must specify an grid_base&#39;) }
+  if ( $grid_home == undef or is_string($grid_home) == false) {fail(&#39;You must specify an grid_home&#39;) }
+
+  # check if the oracle software already exists
+  $found = oradb::oracle_exists( $grid_home )
+
+  if $found == undef {
+    $continue = true
+  } else {
+    if ( $found ) {
+      $continue = false
+    } else {
+      notify {&quot;oradb::installasm ${grid_home} does not exists&quot;:}
+      $continue = true
+    }
+  }
+
+  if $ora_inventory_dir == undef {
+    $ora_inventory = oradb::cleanpath(&quot;${grid_base}/../oraInventory&quot;)
+  } else {
+    validate_absolute_path($ora_inventory_dir)
+    $ora_inventory = &quot;${ora_inventory_dir}/oraInventory&quot;
+  }
+
+  db_directory_structure{&quot;grid structure ${version}&quot;:
+    ensure            =&gt; present,
+    oracle_base_dir   =&gt; $grid_base,
+    oracle_home_dir   =&gt; $grid_home,
+    ora_inventory_dir =&gt; $ora_inventory,
+    download_dir      =&gt; $download_dir,
+    os_user           =&gt; $user,
+    os_group          =&gt; $group_install,
+  }
+
+  if ( $continue ) {
+
+    $exec_path = lookup(&#39;oradb::exec_path&#39;)
+
+    if ( $zip_extract ) {
+      # In $download_dir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
+      if ( $version in [&#39;12.2.0.1&#39;]) {
+        $file1 = &quot;${file}.zip&quot;
+        $total_files = 1
+      }
+
+      if ( $version in [&#39;12.1.0.1&#39;,&#39;12.1.0.2&#39;]) {
+        $file1 = &quot;${file}_1of2.zip&quot;
+        $file2 = &quot;${file}_2of2.zip&quot;
+        $total_files = 2
+      }
+
+      if ( $version in [&#39;11.2.0.4&#39;]) {
+        $file1 = $file
+        $total_files = 1
+      }
+
+      if $remote_file == true {
+
+        file { &quot;${download_dir}/${file1}&quot;:
+          ensure  =&gt; present,
+          source  =&gt; &quot;${puppet_download_mnt_point}/${file1}&quot;,
+          mode    =&gt; &#39;0775&#39;,
+          owner   =&gt; $user,
+          group   =&gt; $group,
+          require =&gt; Db_directory_structure[&quot;grid structure ${version}&quot;],
+          before  =&gt; Exec[&quot;extract ${download_dir}/${file1}&quot;],
+        }
+
+        if ( $total_files &gt; 1 ) {
+          file { &quot;${download_dir}/${file2}&quot;:
+            ensure  =&gt; present,
+            source  =&gt; &quot;${puppet_download_mnt_point}/${file2}&quot;,
+            mode    =&gt; &#39;0775&#39;,
+            owner   =&gt; $user,
+            group   =&gt; $group,
+            require =&gt; File[&quot;${download_dir}/${file1}&quot;],
+            before  =&gt; Exec[&quot;extract ${download_dir}/${file2}&quot;]
+          }
+        }
+
+        $source = $download_dir
+      } else {
+        $source = $puppet_download_mnt_point
+      }
+
+      if ($version == &#39;12.2.0.1&#39;) {
+        exec { &quot;make ${grid_home}&quot;:
+          command   =&gt; &quot;mkdir -p ${grid_home}&quot;,
+          timeout   =&gt; 0,
+          logoutput =&gt; false,
+          path      =&gt; $exec_path,
+          user      =&gt; $user,
+          group     =&gt; $group,
+          creates   =&gt; $grid_home,
+          require   =&gt; Db_directory_structure[&quot;grid structure ${version}&quot;],
+          before    =&gt; Exec[&quot;install oracle grid ${title}&quot;],
+        }
+        file { $grid_home:
+          ensure  =&gt; directory,
+          recurse =&gt; false,
+          replace =&gt; false,
+          mode    =&gt; &#39;0775&#39;,
+          owner   =&gt; $user,
+          group   =&gt; $group_install,
+          require =&gt; [Db_directory_structure[&quot;grid structure ${version}&quot;], Exec[&quot;make ${grid_home}&quot;]],
+        }
+        exec { &quot;extract ${download_dir}/${file1}&quot;:
+          command   =&gt; &quot;unzip -o ${source}/${file1} -d ${grid_home}&quot;,
+          timeout   =&gt; 0,
+          logoutput =&gt; false,
+          path      =&gt; $exec_path,
+          user      =&gt; $user,
+          group     =&gt; $group,
+          creates   =&gt; &quot;${grid_home}/bin&quot;,
+          require   =&gt; [Db_directory_structure[&quot;grid structure ${version}&quot;], File[$grid_home]],
+          before    =&gt; Exec[&quot;install oracle grid ${title}&quot;],
+        }
+      } else {
+        exec { &quot;extract ${download_dir}/${file1}&quot;:
+          command   =&gt; &quot;unzip -o ${source}/${file1} -d ${download_dir}/${file_without_ext}&quot;,
+          timeout   =&gt; 0,
+          logoutput =&gt; false,
+          path      =&gt; $exec_path,
+          user      =&gt; $user,
+          group     =&gt; $group,
+          creates   =&gt; &quot;${download_dir}/${file_without_ext}&quot;,
+          require   =&gt; Db_directory_structure[&quot;grid structure ${version}&quot;],
+          before    =&gt; Exec[&quot;install oracle grid ${title}&quot;],
+        }
+        if ( $total_files &gt; 1 ) {
+          exec { &quot;extract ${download_dir}/${file2}&quot;:
+            command   =&gt; &quot;unzip -o ${source}/${file2} -d ${download_dir}/${file_without_ext}&quot;,
+            timeout   =&gt; 0,
+            logoutput =&gt; false,
+            path      =&gt; $exec_path,
+            user      =&gt; $user,
+            group     =&gt; $group,
+            require   =&gt; Exec[&quot;extract ${download_dir}/${file1}&quot;],
+            before    =&gt; Exec[&quot;install oracle grid ${title}&quot;],
+          }
+        }
+      }
+    }
+
+    oradb::utils::dborainst{&quot;grid orainst ${version}&quot;:
+      ora_inventory_dir =&gt; $ora_inventory,
+      os_group          =&gt; $group_install,
+    }
+
+    if ! defined(File[&quot;${download_dir}/grid_install_${version}.rsp&quot;]) {
+      file { &quot;${download_dir}/grid_install_${version}.rsp&quot;:
+        ensure  =&gt; present,
+        content =&gt; epp(&quot;oradb/grid_install_${version}.rsp.epp&quot;,
+                      { &#39;group_install&#39;          =&gt;  $group_install,
+                        &#39;oraInventory&#39;           =&gt;  $ora_inventory,
+                        &#39;grid_base&#39;              =&gt;  $grid_base,
+                        &#39;grid_home&#39;              =&gt;  $grid_home,
+                        &#39;group_oper&#39;             =&gt;  $group_oper,
+                        &#39;group&#39;                  =&gt;  $group,
+                        &#39;group_asm&#39;              =&gt;  $group_asm,
+                        &#39;scan_name&#39;              =&gt;  $scan_name,
+                        &#39;scan_port&#39;              =&gt;  $scan_port,
+                        &#39;grid_type&#39;              =&gt;  $grid_type,
+                        &#39;cluster_name&#39;           =&gt;  $cluster_name,
+                        &#39;cluster_nodes&#39;          =&gt;  $cluster_nodes,
+                        &#39;network_interface_list&#39; =&gt;  $network_interface_list,
+                        &#39;storage_option&#39;         =&gt;  $storage_option,
+                        &#39;sys_asm_password&#39;       =&gt;  $sys_asm_password,
+                        &#39;asm_monitor_password&#39;   =&gt;  $asm_monitor_password,
+                        &#39;asm_diskgroup&#39;          =&gt;  $asm_diskgroup,
+                        &#39;disk_redundancy&#39;        =&gt;  $disk_redundancy,
+                        &#39;disk_au_size&#39;           =&gt;  $disk_au_size,
+                        &#39;disks&#39;                  =&gt;  $disks,
+                        &#39;disk_discovery_string&#39;  =&gt;  $disk_discovery_string }),
+        mode    =&gt; &#39;0770&#39;,
+        owner   =&gt; $user,
+        group   =&gt; $group,
+        require =&gt; [Oradb::Utils::Dborainst[&quot;grid orainst ${version}&quot;],
+                    Db_directory_structure[&quot;grid structure ${version}&quot;],],
+      }
+    }
+
+    if ($version == &#39;12.2.0.1&#39;) {
+      $command = &quot;/bin/sh -c &#39;unset DISPLAY;cd ${grid_home};./gridSetup.sh -silent -waitforcompletion -skipPrereqs -responseFile ${download_dir}/grid_install_${version}.rsp&#39;&quot;
+    } else {
+      $command = &quot;/bin/sh -c &#39;unset DISPLAY;cd ${grid_base};${download_dir}/${file_without_ext}/grid/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/grid_install_${version}.rsp&#39;&quot;
+    }
+
+    exec { &quot;install oracle grid ${title}&quot;:
+      command     =&gt; $command,
+      # creates     =&gt; &quot;${grid_home}/bin&quot;,
+      environment =&gt; [&quot;USER=${user}&quot;,&quot;LOGNAME=${user}&quot;],
+      timeout     =&gt; 0,
+      returns     =&gt; [6,0],
+      path        =&gt; $exec_path,
+      user        =&gt; $user,
+      group       =&gt; $group_install,
+      logoutput   =&gt; true,
+      require     =&gt; [Oradb::Utils::Dborainst[&quot;grid orainst ${version}&quot;],
+                      File[&quot;${download_dir}/grid_install_${version}.rsp&quot;]],
+    }
+
+    if ( $bash_profile == true ) {
+      if ! defined(File[&quot;${user_base_dir}/${user}/.bash_profile&quot;]) {
+        file { &quot;${user_base_dir}/${user}/.bash_profile&quot;:
+          ensure  =&gt; present,
+          # content =&gt; template(&#39;oradb/grid_bash_profile.erb&#39;),
+          content =&gt; regsubst(epp(&#39;oradb/grid_bash_profile.epp&#39;,
+                              { &#39;grid_home&#39; =&gt; $grid_home,
+                                &#39;grid_base&#39; =&gt; $grid_base,
+                                &#39;grid_type&#39; =&gt; $grid_type,
+                                &#39;temp_dir&#39;  =&gt; $temp_dir }), &#39;\r\n&#39;, &quot;\n&quot;, &#39;EMG&#39;),
+          mode    =&gt; &#39;0775&#39;,
+          owner   =&gt; $user,
+          group   =&gt; $group,
+        }
+      }
+    }
+
+    #because of RHEL7 uses systemd we need to create the service differently
+    if ($facts[&#39;osfamily&#39;] == &#39;RedHat&#39; and $facts[&#39;operatingsystemmajrelease&#39;] == &#39;7&#39;)
+    {
+      file {&#39;/etc/systemd/system/oracle-ohasd.service&#39;:
+        ensure  =&gt; &#39;file&#39;,
+        content =&gt; epp(&#39;oradb/ohas.service.epp&#39;),
+        mode    =&gt; &#39;0644&#39;,
+        require =&gt; Exec[&quot;install oracle grid ${title}&quot;],
+      } -&gt; exec { &#39;daemon-reload for ohas&#39;:
+        command =&gt; &#39;/bin/systemctl daemon-reload&#39;,
+      }
+      # -&gt;
+
+      # service { &#39;ohas.service&#39;:
+      #   ensure =&gt; running,
+      #   enable =&gt; true,
+      #   before =&gt; Exec[&quot;run root.sh grid script ${title}&quot;],
+      # }
+
+    }
+
+    exec { &quot;run root.sh grid script ${title}&quot;:
+      timeout   =&gt; 0,
+      command   =&gt; &quot;${grid_home}/root.sh&quot;,
+      user      =&gt; &#39;root&#39;,
+      group     =&gt; &#39;root&#39;,
+      path      =&gt; $exec_path,
+      cwd       =&gt; $grid_base,
+      logoutput =&gt; true,
+      require   =&gt; Exec[&quot;install oracle grid ${title}&quot;],
+    }
+
+    if ( $version == &#39;12.2.0.1&#39; and $grid_type != &#39;CRS_SWONLY&#39; ) {
+      exec { &quot;configure asm ${title}&quot;:
+        timeout   =&gt; 0,
+        command   =&gt; &quot;${grid_home}/gridSetup.sh -executeConfigTools -silent -responseFile ${download_dir}/grid_install_${version}.rsp&quot;,
+        user      =&gt; $user,
+        group     =&gt; $group,
+        path      =&gt; $exec_path,
+        cwd       =&gt; $grid_home,
+        logoutput =&gt; true,
+        require   =&gt; Exec[&quot;install oracle grid ${title}&quot;,&quot;run root.sh grid script ${title}&quot;],
+      }
+    }
+
+    if !defined(File[$grid_home]) {
+      file { $grid_home:
+        ensure  =&gt; directory,
+        recurse =&gt; false,
+        replace =&gt; false,
+        mode    =&gt; &#39;0775&#39;,
+        owner   =&gt; $user,
+        group   =&gt; $group_install,
+        require =&gt; Exec[&quot;install oracle grid ${title}&quot;,&quot;run root.sh grid script ${title}&quot;],
+      }
+    }
+    # cleanup
+    if ( $zip_extract ) {
+      if ($version != &#39;12.2.0.1&#39;) {
+        exec { &quot;remove oracle asm extract folder ${title}&quot;:
+          command =&gt; &quot;rm -rf ${download_dir}/${file_without_ext}&quot;,
+          user    =&gt; &#39;root&#39;,
+          group   =&gt; &#39;root&#39;,
+          path    =&gt; $exec_path,
+          require =&gt; Exec[&quot;install oracle grid ${title}&quot;],
+        }
+      }
+
+      if ( $remote_file == true ){
+        if ( $total_files &gt; 1 ) {
+          exec { &quot;remove oracle asm file2 ${file2} ${title}&quot;:
+            command =&gt; &quot;rm -rf ${download_dir}/${file2}&quot;,
+            user    =&gt; &#39;root&#39;,
+            group   =&gt; &#39;root&#39;,
+            path    =&gt; $exec_path,
+            require =&gt; Exec[&quot;install oracle grid ${title}&quot;],
+          }
+        }
+
+        exec { &quot;remove oracle asm file1 ${file1} ${title}&quot;:
+          command =&gt; &quot;rm -rf ${download_dir}/${file1}&quot;,
+          user    =&gt; &#39;root&#39;,
+          group   =&gt; &#39;root&#39;,
+          path    =&gt; $exec_path,
+          require =&gt; Exec[&quot;install oracle grid ${title}&quot;],
+        }
+      }
+    }
+
+    if ( $grid_type == &#39;CRS_SWONLY&#39; ) {
+      if ( $stand_alone == true ) {
+        exec { &#39;Configuring Grid Infrastructure for a Stand-Alone Server&#39;:
+          command   =&gt; &quot;${grid_home}/perl/bin/perl -I${grid_home}/perl/lib -I${grid_home}/crs/install ${grid_home}/crs/install/roothas.pl&quot;,
+          user      =&gt; &#39;root&#39;,
+          group     =&gt; &#39;root&#39;,
+          path      =&gt; $exec_path,
+          cwd       =&gt; $grid_base,
+          logoutput =&gt; true,
+          require   =&gt; [Exec[&quot;run root.sh grid script ${title}&quot;],
+                        File[$grid_home],],
+        }
+      }
+    } else {
+      file { &quot;${download_dir}/cfgrsp.properties&quot;:
+        ensure  =&gt; present,
+        content =&gt; epp(&#39;oradb/grid_password.properties.epp&#39;, { &#39;sys_asm_password&#39; =&gt; $sys_asm_password } ),
+        mode    =&gt; &#39;0600&#39;,
+        owner   =&gt; $user,
+        group   =&gt; $group,
+        require =&gt; [Exec[&quot;run root.sh grid script ${title}&quot;],
+                    File[$grid_home],],
+      }
+
+      exec { &quot;run configToolAllCommands grid tool ${title}&quot;:
+        timeout   =&gt; 0, # This can sometimes take a long time
+        command   =&gt; &quot;${grid_home}/cfgtoollogs/configToolAllCommands RESPONSE_FILE=${download_dir}/cfgrsp.properties&quot;,
+        user      =&gt; $user,
+        group     =&gt; $group_install,
+        path      =&gt; $exec_path,
+        provider  =&gt; &#39;shell&#39;,
+        cwd       =&gt; &quot;${grid_home}/cfgtoollogs&quot;,
+        logoutput =&gt; true,
+        returns   =&gt; [0,3], # when a scan adress is not defined in the DNS, it fails, buut we can continue
+        require   =&gt; [File[&quot;${download_dir}/cfgrsp.properties&quot;],
+                      Exec[&quot;run root.sh grid script ${title}&quot;],
+                      Exec[&quot;install oracle grid ${title}&quot;],
+                      ],
+      }
+    }
+
+  }
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
+</div>
+
+    </div>
+  </body>
+</html>

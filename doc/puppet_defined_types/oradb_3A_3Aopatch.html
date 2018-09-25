@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Defined Type: oradb::opatch
+  
+    &mdash; Documentation by YARD 0.9.16
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_defined_types::oradb::opatch";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_defined_type_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (o)</a> &raquo;
+    <span class='title'><span class='object_link'>Defined Types</span></span>
+     &raquo; 
+    <span class="title">oradb::opatch</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Defined Type: oradb::opatch</h1>
+<div class="box_info">
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/opatch.pp
+    </dd>
+  </dl>
+</div>
+
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    
+<p>opatch</p>
+
+<p>installs oracle patches for Oracle products</p>
+
+  </div>
+</div>
+
+
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>opatch</p>
+</div></p>
+      
+      <pre class="example code"><code>
+oradb::opatch{&#39;19121551_db_patch&#39;:
+  ensure                    =&gt; &#39;present&#39;,
+  oracle_product_home       =&gt; /app/oracle/product/11.2/db&#39;,
+  patch_id                  =&gt; &#39;19121551&#39;,
+  patch_file                =&gt; &#39;p19121551_112040_Linux-x86-64.zip&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;oinstall&#39;,
+  download_dir              =&gt; &#39;/var/tmp/install&#39;,
+  ocmrf                     =&gt; true,
+  puppet_download_mnt_point =&gt; &#39;/software&#39;,
+}</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>oracle_product_home</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Home directory</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::user&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>operating system user</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::group&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the operating group name for using the oracle software</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>download_dir</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::download_dir&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>location for installation files used by this module</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>puppet_download_mnt_point</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::module_mountpoint&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the location where the installation software is available</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>remote_file</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the installation is remote accessiable or not</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ensure</span>
+      
+      
+        <span class='type'>(<tt>Enum['present', 'absent']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;present&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>patch should be applied or removed</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>patch_id</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the opatch id</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>patch_file</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the opatch patch file</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>clusterware</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>use opatch auto</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>use_opatchauto_utility</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>bundle_sub_patch_id</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>sub opatch id in case of a bundle patch to check if the bundle patch is
+already applied</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>bundle_sub_folder</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>just apply a patch from a bundle</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ocmrf</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+    </li>
+  
+</ul>
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/opatch.pp', line 35</span>
+
+define oradb::opatch(
+  Enum[&#39;present&#39;, &#39;absent&#39;] $ensure     = &#39;present&#39;,
+  String $oracle_product_home           = undef,
+  String $patch_id                      = undef,
+  String $patch_file                    = undef,
+  Boolean $clusterware                  = false, # opatch auto or opatch apply
+  Boolean $use_opatchauto_utility       = false,
+  Optional[String] $bundle_sub_patch_id = undef,
+  Optional[String] $bundle_sub_folder   = undef,
+  String $user                          = lookup(&#39;oradb::user&#39;),
+  String $group                         = lookup(&#39;oradb::group&#39;),
+  String $download_dir                  = lookup(&#39;oradb::download_dir&#39;),
+  Boolean $ocmrf                        = false,
+  String $puppet_download_mnt_point     = lookup(&#39;oradb::module_mountpoint&#39;),
+  Boolean $remote_file                  = true,
+)
+{
+  $exec_path     = lookup(&#39;oradb::exec_path&#39;)
+  $ora_inst_path = lookup(&#39;oradb::orainst_dir&#39;)
+
+  if ! defined(File[&quot;${oracle_product_home}/bin/fuser&quot;]) {
+    file { &quot;${oracle_product_home}/bin/fuser&quot;:
+      ensure =&gt; present,
+      mode   =&gt; &#39;0755&#39;
+    }
+  }
+
+  if $ensure == &#39;present&#39; {
+    if $remote_file == true {
+      # the patch used by the opatch
+      if ! defined(File[&quot;${download_dir}/${patch_file}&quot;]) {
+        file { &quot;${download_dir}/${patch_file}&quot;:
+          ensure =&gt; present,
+          source =&gt; &quot;${puppet_download_mnt_point}/${patch_file}&quot;,
+          mode   =&gt; &#39;0775&#39;
+        }
+      }
+    }
+  }
+
+  case $facts[&#39;kernel&#39;] {
+    &#39;Linux&#39;, &#39;SunOS&#39;: {
+      if $ensure == &#39;present&#39; {
+        if $remote_file == true {
+          exec { &quot;extract opatch ${patch_file} ${title}&quot;:
+            command   =&gt; &quot;unzip -n ${download_dir}/${patch_file} -d ${download_dir}&quot;,
+            require   =&gt; File[&quot;${download_dir}/${patch_file}&quot;],
+            creates   =&gt; &quot;${download_dir}/${patch_id}&quot;,
+            path      =&gt; $exec_path,
+            logoutput =&gt; false,
+            before    =&gt; Db_opatch[&quot;${patch_id} ${title}&quot;],
+          }
+        } else {
+          exec { &quot;extract opatch ${patch_file} ${title}&quot;:
+            command   =&gt; &quot;unzip -n ${puppet_download_mnt_point}/${patch_file} -d ${download_dir}&quot;,
+            creates   =&gt; &quot;${download_dir}/${patch_id}&quot;,
+            path      =&gt; $exec_path,
+            user      =&gt; $user,
+            group     =&gt; $group,
+            logoutput =&gt; false,
+            before    =&gt; Db_opatch[&quot;${patch_id} ${title}&quot;],
+          }
+        }
+      }
+
+      # sometimes the bundle patch inside an other folder
+      if ( $bundle_sub_folder ) {
+        $extracted_patch_dir = &quot;${download_dir}/${patch_id}/${bundle_sub_folder}&quot;
+      } else {
+        $extracted_patch_dir = &quot;${download_dir}/${patch_id}&quot;
+      }
+
+      if $ocmrf == true {
+
+        db_opatch{ &quot;${patch_id} ${title}&quot;:
+          ensure                  =&gt; $ensure,
+          patch_id                =&gt; $patch_id,
+          os_user                 =&gt; $user,
+          oracle_product_home_dir =&gt; $oracle_product_home,
+          orainst_dir             =&gt; $ora_inst_path,
+          extracted_patch_dir     =&gt; $extracted_patch_dir,
+          ocmrf_file              =&gt; &quot;${oracle_product_home}/OPatch/ocm.rsp&quot;,
+          bundle_sub_patch_id     =&gt; $bundle_sub_patch_id,
+          opatch_auto             =&gt; $clusterware,
+          use_opatchauto_utility  =&gt; $use_opatchauto_utility,
+        }
+
+      } else {
+
+        db_opatch{ &quot;${patch_id} ${title}&quot;:
+          ensure                  =&gt; $ensure,
+          patch_id                =&gt; $patch_id,
+          os_user                 =&gt; $user,
+          oracle_product_home_dir =&gt; $oracle_product_home,
+          orainst_dir             =&gt; $ora_inst_path,
+          extracted_patch_dir     =&gt; $extracted_patch_dir,
+          bundle_sub_patch_id     =&gt; $bundle_sub_patch_id,
+          opatch_auto             =&gt; $clusterware,
+          use_opatchauto_utility  =&gt; $use_opatchauto_utility,
+        }
+
+      }
+    }
+    default: {
+      fail(&#39;Unrecognized operating system&#39;)
+    }
+  }
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
+</div>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.9.16
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="file_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'>
+<h1 id="label-Oracle+Database+puppet+module">Oracle Database puppet module</h1>
+
+<p><a href="https://travis-ci.org/biemond/biemond-oradb"><img
+src="https://travis-ci.org/biemond/biemond-oradb.svg?branch=master"></a>
+<img src="https://img.shields.io/puppetforge/v/biemond/oradb.svg"> <img
+src="https://img.shields.io/puppetforge/f/biemond/oradb.svg"> <img
+src="http://img.shields.io/puppetforge/dt/biemond/oradb.svg"> <a
+href="https://coveralls.io/github/biemond/biemond-oradb?branch=master"><img
+src="https://coveralls.io/repos/biemond/biemond-oradb/badge.svg?branch=master&service=github"></a></p>
+
+<p>Only for Puppet &gt;= 4.3 and uses the latest puppet 4 features like -
+Strong data typing - Internal hiera module data - uses Facts array - epp
+templating instead of erb</p>
+
+<p>For Puppet 3, 4 you have to use the latest 2.x version of this oradb module</p>
+
+<p>source code is located at <a
+href="https://github.com/biemond/biemond-oradb/tree/puppet4_3_data">puppet4_3_data
+branch</a></p>
+
+<p>created by Edwin Biemond <a
+href="http://biemond.blogspot.com">biemond.blogspot.com</a> <a
+href="https://github.com/biemond/puppet">Github homepage</a></p>
+
+<p>If you need support, checkout the <a
+href="https://www.enterprisemodules.com/shop/products/puppet-ora_install-module">ora_install</a>
+from <a href="https://www.enterprisemodules.com/">Enterprise Modules</a></p>
+
+<p><a href="https://www.enterprisemodules.com"><img
+src="https://www.enterprisemodules.com/images/puppet-logo.png"></a></p>
+
+<p>With version &gt;= 2.0.0 all manifest parameters are in lowercase and in
+snakestyle instead of camelcase</p>
+
+<p>Dependency with - puppetlabs/concat &gt;= 1.0.0 - puppetlabs/stdlib &gt;=
+4.0.0</p>
+
+<p>Should work on Docker, for Solaris and on all Linux version like RedHat,
+CentOS, Ubuntu, Debian, Suse SLES or OracleLinux - CentOS 7.3 vagrant box
+with Oracle Database 12.2.0.1 with pluggable databases <a
+href="https://github.com/biemond/biemond-oradb-vagrant-12.2-CDB-puppet4_3">12c
+pluggable db puppet 4 vagrant box</a> - Docker image of Oracle Database
+12.1 SE <a href="https://github.com/biemond/docker-database-puppet">Docker
+Oracle Database 12.1.0.1</a> - CentOS 7.2 vagrant box with Oracle Database
+12.1 and Enterprise Manager 13.2.0.0 <a
+href="https://github.com/biemond/biemond-em-13.2-puppet4_3">Enterprise
+puppet 4 vagrant box</a> - CentOS 6.7 vagrant box with Oracle Database 12.1
+and Enterprise Manager 12.1.0.5 <a
+href="https://github.com/biemond/biemond-em-12c-puppet4_3">Enterprise
+puppet 4 vagrant box</a> - CentOS 7.3 vagrant box with Oracle Database
+12.2.0.1 on NFS ASM <a
+href="https://github.com/biemond/biemond-oradb-vagrant-12.2-ASM-puppet4_3">ASM
+puppet 4 vagrant box</a> - CentOS 7.2 vagrant box with Oracle Database
+12.1.0.2 on NFS ASM <a
+href="https://github.com/biemond/biemond-oradb-vagrant-12.1-ASM-puppet4_3">ASM
+puppet 4 vagrant box</a> - CentOS 6.6 vagrant box with Oracle Database
+11.2.0.4 on NFS ASM <a
+href="https://github.com/biemond/biemond-oradb-vagrant-11.2-ASM-puppet4_3">ASM
+puppet 4 vagrant box</a> - CentOS 6.6 vagrant box with Oracle Database
+12.1.0.2 with pluggable databases <a
+href="https://github.com/biemond/biemond-oradb-vagrant-12.1-CDB-puppet4_3">12c
+pluggable db puppet 4 vagrant box</a> - CentOS 6.5 vagrant box with Oracle
+Database 11.2.0.4 and GoldenGate 12.1.2 <a
+href="https://github.com/biemond/vagrant-wls12.1.2-coherence-goldengate">coherence
+goldengate vagrant box</a></p>
+
+<p>Should work for Puppet &gt;= 4.0</p>
+
+<h2 id="label-Oracle+Database+Features">Oracle Database Features</h2>
+<ul><li>
+<p>Oracle Grid 11.2.0.4, 12.1.0.1, 12.1.0.2, 12.2.0.1 Linux / Solaris
+installation</p>
+</li><li>
+<p>Oracle Database 12.1.0.1, 12.1.0.2, 12.2.0.1 Linux / Solaris installation</p>
+</li><li>
+<p>Oracle Database 11.2.0.1, 11.2.0.3, 11.2.0.4 Linux / Solaris installation</p>
+</li><li>
+<p>Oracle Database Instance 11.2, 12.1 &amp; 12.2 with pluggable database or
+provide your own db template</p>
+</li><li>
+<p>Oracle Database Client 12.2.0.1, 12.1.0.1, 12.1.0.2, 11.2.0.4, 11.2.0.1
+Linux / Solaris installation</p>
+</li><li>
+<p>Oracle Database Net configuration</p>
+</li><li>
+<p>Oracle Database Listener</p>
+</li><li>
+<p>Tnsnames entry</p>
+</li><li>
+<p>Listener entry in tnsnames.ora</p>
+</li><li>
+<p>Oracle ASM</p>
+</li><li>
+<p>Oracle RAC</p>
+</li><li>
+<p>OPatch upgrade</p>
+</li><li>
+<p>Apply OPatch also for clusterware</p>
+</li><li>
+<p>Create database instances, also based on your own template or seeded
+template</p>
+</li><li>
+<p>Stop/Start database instances with db_control puppet resource type</p>
+</li></ul>
+
+<h2 id="label-Enterprise+Manager">Enterprise Manager</h2>
+<ul><li>
+<p>Enterprise Manager Server 13.2.0.0, 12.1.0.4, 12.1.0.5, 13 &amp; 12c cloud
+installation / configuration</p>
+</li><li>
+<p>Agent installation via AgentPull.sh &amp; AgentDeploy.sh</p>
+</li></ul>
+
+<h2 id="label-GoldenGate">GoldenGate</h2>
+<ul><li>
+<p>GoldenGate 12.3.0, 12.2.1, 12.1.2, 11.2.1</p>
+</li></ul>
+
+<h2 id="label-Repository+Creation+Utility+-28RCU-29">Repository Creation Utility (RCU)</h2>
+<ul><li>
+<p>Installs RCU repositoy for Oracle SOA Suite / Webcenter ( 11.1.1.6.0 and
+11.1.1.7.0 ) / Oracle Identity Management ( 11.1.2.1 )</p>
+</li></ul>
+
+<h2 id="label-Oracle+RAC">Oracle RAC</h2>
+
+<p>In combination with the <a
+href="https://forge.puppetlabs.com/hajee/ora_rac">ora_rac</a> module of
+Bert Hajee (<a
+href="https://forge.puppetlabs.com/hajee/ora_rac">forge.puppetlabs.com/hajee/ora_rac</a>)</p>
+
+<h2 id="label-Oracle+Database+resource+types">Oracle Database resource types</h2>
+<ul><li>
+<p>db_control, start stop or a restart a database instance also used by
+dbactions manifest.pp</p>
+</li><li>
+<p>db_opatch, used by the opatch.pp manifest</p>
+</li><li>
+<p>db_rcu, used by the rcu.pp manifest</p>
+</li><li>
+<p>db_listener, start stop or a restart the oracle listener ( supports
+refreshonly )</p>
+</li></ul>
+
+<p>In combination with the <a
+href="http://forge.puppetlabs.com/hajee/oracle">oracle</a> module of Bert
+Hajee (<a
+href="http://forge.puppetlabs.com/hajee/oracle">forge.puppetlabs.com/hajee/oracle</a>)
+you can also create - create a tablespace - create a user with the required
+grants and quota&#39;s - create one or more roles - create one or more
+services - change a database init parameter (Memory or SPFILE)</p>
+
+<p>Some manifests like installdb.pp, opatch.pp or rcusoa.pp supports an
+alternative mountpoint for the big oracle files. When not provided it uses
+the files location of the oradb puppet module else you can use
+$puppet_download_mnt_point =&gt; “/mnt” or “oradb/” or “xxxx/”</p>
+
+<h2 id="label-Oracle+Big+files+and+alternate+download+location">Oracle Big files and alternate download location</h2>
+
+<p>Some manifests like oradb:installdb, opatch or rcu supports an alternative
+mountpoint for the big oracle setup/install files. When not provided it
+uses the files folder located in the orawls puppet module else you can use
+$source =&gt; - “/mnt” - “/vagrant” - “oradb/” (default)</p>
+
+<p>when the files are also locally accessible then you can also set
+$remote_file =&gt; false this will not move the files to the download
+folder, just extract or install</p>
+
+<h2 id="label-Virtualbox+5+-26+BCA+Operation+failed">Virtualbox 5 &amp; BCA Operation failed</h2>
+
+<p>You can get this 12c error BCA Operation failed when you use Virtualbox 5</p>
+
+<p>There is an issue related with this - <a
+href="https://forums.virtualbox.org/viewtopic.php?f=8&t=76375">forums.virtualbox.org/viewtopic.php?f=8&t=76375</a></p>
+
+<p>The workaround seems to be here - <a
+href="https://www.virtualbox.org/ticket/14427">www.virtualbox.org/ticket/14427</a></p>
+
+<p>But for the purposes of doing an automatic installation is not a good
+workaround, so I would suggest is someone faces the same problem just
+downgrade to virtualbox 4 the last release until that ticket is closed</p>
+
+<h2 id="label-Installation-2C+Disk+or+memory+issues">Installation, Disk or memory issues</h2>
+
+<pre class="code ruby"><code class="ruby"># hiera
+hosts:
+  &#39;emdb.example.com&#39;:
+    ip:                &quot;10.10.10.15&quot;
+    host_aliases:      &#39;emdb&#39;
+  &#39;localhost&#39;:
+    ip:                &quot;127.0.0.1&quot;
+    host_aliases:      &#39;localhost.localdomain,localhost4,localhost4.localdomain4&#39;
+
+$host_instances = hiera(&#39;hosts&#39;, {})
+create_resources(&#39;host&#39;,$host_instances)
+
+# disable the firewall
+service { iptables:
+  enable    =&gt; false,
+  ensure    =&gt; false,
+  hasstatus =&gt; true,
+}
+
+# set the swap ,forge puppet module petems-swap_file
+class { &#39;swap_file&#39;:
+  swapfile     =&gt; &#39;/var/swap.1&#39;,
+  swapfilesize =&gt; &#39;8192000000&#39;
+}
+
+# set the tmpfs
+mount { &#39;/dev/shm&#39;:
+  ensure      =&gt; present,
+  atboot      =&gt; true,
+  device      =&gt; &#39;tmpfs&#39;,
+  fstype      =&gt; &#39;tmpfs&#39;,
+  options     =&gt; &#39;size=3500m&#39;,
+}</code></pre>
+
+<p>see this chapter “Linux kernel, ulimits and required packages” for more
+important information</p>
+
+<h2 id="label-Linux+kernel-2C+ulimits+and+required+packages">Linux kernel, ulimits and required packages</h2>
+
+<p>install the following module to set the database kernel parameters
+<em>puppet module install fiddyspence-sysctl</em></p>
+
+<p>install the following module to set the database user limits parameters
+<em>puppet module install erwbgy-limits</em></p>
+
+<pre class="code ruby"><code class="ruby">   $all_groups = [&#39;oinstall&#39;,&#39;dba&#39; ,&#39;oper&#39;]
+
+   group { $all_groups :
+     ensure      =&gt; present,
+   }
+
+   user { &#39;oracle&#39; :
+     ensure      =&gt; present,
+     uid         =&gt; 500,
+     gid         =&gt; &#39;oinstall&#39;,
+     groups      =&gt; [&#39;oinstall&#39;,&#39;dba&#39;,&#39;oper&#39;],
+     shell       =&gt; &#39;/bin/bash&#39;,
+     password    =&gt; &#39;$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.&#39;,
+     home        =&gt; &quot;/home/oracle&quot;,
+     comment     =&gt; &quot;This user oracle was created by Puppet&quot;,
+     require     =&gt; Group[$all_groups],
+     managehome  =&gt; true,
+   }
+
+   sysctl { &#39;kernel.msgmnb&#39;:                 ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;65536&#39;,}
+   sysctl { &#39;kernel.msgmax&#39;:                 ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;65536&#39;,}
+   sysctl { &#39;kernel.shmmax&#39;:                 ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;2588483584&#39;,}
+   sysctl { &#39;kernel.shmall&#39;:                 ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;2097152&#39;,}
+   sysctl { &#39;fs.file-max&#39;:                   ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;6815744&#39;,}
+   sysctl { &#39;net.ipv4.tcp_keepalive_time&#39;:   ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;1800&#39;,}
+   sysctl { &#39;net.ipv4.tcp_keepalive_intvl&#39;:  ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;30&#39;,}
+   sysctl { &#39;net.ipv4.tcp_keepalive_probes&#39;: ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;5&#39;,}
+   sysctl { &#39;net.ipv4.tcp_fin_timeout&#39;:      ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;30&#39;,}
+   sysctl { &#39;kernel.shmmni&#39;:                 ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;4096&#39;, }
+   sysctl { &#39;fs.aio-max-nr&#39;:                 ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;1048576&#39;,}
+   sysctl { &#39;kernel.sem&#39;:                    ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;250 32000 100 128&#39;,}
+   sysctl { &#39;net.ipv4.ip_local_port_range&#39;:  ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;9000 65500&#39;,}
+   sysctl { &#39;net.core.rmem_default&#39;:         ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;262144&#39;,}
+   sysctl { &#39;net.core.rmem_max&#39;:             ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;4194304&#39;, }
+   sysctl { &#39;net.core.wmem_default&#39;:         ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;262144&#39;,}
+   sysctl { &#39;net.core.wmem_max&#39;:             ensure =&gt; &#39;present&#39;, permanent =&gt; &#39;yes&#39;, value =&gt; &#39;1048576&#39;,}
+
+   class { &#39;limits&#39;:
+     config =&gt; {
+                &#39;*&#39;       =&gt; { &#39;nofile&#39;  =&gt; { soft =&gt; &#39;2048&#39;   , hard =&gt; &#39;8192&#39;,   },},
+                &#39;oracle&#39;  =&gt; { &#39;nofile&#39;  =&gt; { soft =&gt; &#39;65536&#39;  , hard =&gt; &#39;65536&#39;,  },
+                                &#39;nproc&#39;  =&gt; { soft =&gt; &#39;2048&#39;   , hard =&gt; &#39;16384&#39;,  },
+                                &#39;stack&#39;  =&gt; { soft =&gt; &#39;10240&#39;  ,},},
+                },
+     use_hiera =&gt; false,
+   }
+
+   $install = [ &#39;binutils.x86_64&#39;, &#39;compat-libstdc++-33.x86_64&#39;, &#39;glibc.x86_64&#39;,&#39;ksh.x86_64&#39;,&#39;libaio.x86_64&#39;,
+                &#39;libgcc.x86_64&#39;, &#39;libstdc++.x86_64&#39;, &#39;make.x86_64&#39;,&#39;compat-libcap1.x86_64&#39;, &#39;gcc.x86_64&#39;,
+                &#39;gcc-c++.x86_64&#39;,&#39;glibc-devel.x86_64&#39;,&#39;libaio-devel.x86_64&#39;,&#39;libstdc++-devel.x86_64&#39;,
+                &#39;sysstat.x86_64&#39;,&#39;unixODBC-devel&#39;,&#39;glibc.i686&#39;,&#39;libXext.x86_64&#39;,&#39;libXtst.x86_64&#39;]
+
+   package { $install:
+     ensure  =&gt; present,
+   }</code></pre>
+
+<h2 id="label-Database+install">Database install</h2>
+
+<pre class="code ruby"><code class="ruby">$puppet_download_mnt_point = &quot;oradb/&quot;
+
+oradb::installdb{ &#39;12.2.0.1_Linux-x86-64&#39;:
+  version                   =&gt; &#39;12.2.0.1&#39;,
+  file                      =&gt; &#39;V839960-01&#39;,
+  database_type             =&gt; &#39;EE&#39;,
+  oracle_base               =&gt; &#39;/oracle&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/12.2/db&#39;,
+  bash_profile              =&gt; true,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;,
+  group_install             =&gt; &#39;oinstall&#39;,
+  group_oper                =&gt; &#39;oper&#39;,
+  download_dir              =&gt; &#39;/data/install&#39;,
+  zip_extract               =&gt; true,
+  puppet_download_mnt_point =&gt; $puppet_download_mnt_point,
+}
+
+oradb::installdb{ &#39;12.1.0.2_Linux-x86-64&#39;:
+  version                   =&gt; &#39;12.1.0.2&#39;,
+  file                      =&gt; &#39;V46095-01&#39;,
+  database_type             =&gt; &#39;SE&#39;,
+  oracle_base               =&gt; &#39;/oracle&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/12.1/db&#39;,
+  bash_profile              =&gt; true,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;,
+  group_install             =&gt; &#39;oinstall&#39;,
+  group_oper                =&gt; &#39;oper&#39;,
+  download_dir              =&gt; &#39;/data/install&#39;,
+  zip_extract               =&gt; true,
+  puppet_download_mnt_point =&gt; $puppet_download_mnt_point,
+}</code></pre>
+
+<p>or with zip_extract ( does not download or extract , software is in
+/install/linuxamd64_12c_database )</p>
+
+<pre class="code ruby"><code class="ruby">oradb::installdb{ &#39;12.1.0.1_Linux-x86-64&#39;:
+  version                 =&gt; &#39;12.1.0.1&#39;,
+  file                    =&gt; &#39;linuxamd64_12c_database&#39;,
+  database_type           =&gt; &#39;SE&#39;,
+  oracle_base             =&gt; &#39;/oracle&#39;,
+  oracle_home             =&gt; &#39;/oracle/product/12.1/db&#39;,
+  bash_profile            =&gt; true,
+  user                    =&gt; &#39;oracle&#39;,
+  group                   =&gt; &#39;dba&#39;,
+  group_install           =&gt; &#39;oinstall&#39;,
+  group_oper              =&gt; &#39;oper&#39;,
+  download_dir            =&gt; &#39;/install&#39;,
+  zip_extract             =&gt; false,
+}</code></pre>
+
+<p>or</p>
+
+<pre class="code ruby"><code class="ruby">oradb::installdb{ &#39;112040_Linux-x86-64&#39;:
+  version                   =&gt; &#39;11.2.0.4&#39;,
+  file                      =&gt; &#39;p13390677_112040_Linux-x86-64&#39;,
+  database_type             =&gt; &#39;SE&#39;,
+  oracle_base               =&gt; &#39;/oracle&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/11.2/db&#39;,
+  ee_options_selection      =&gt; true,
+  ee_optional_components    =&gt; &#39;oracle.rdbms.partitioning:11.2.0.4.0,oracle.oraolap:11.2.0.4.0,oracle.rdbms.dm:11.2.0.4.0,oracle.rdbms.dv:11.2.0.4.0,oracle.rdbms.lbac:11.2.0.4.0,oracle.rdbms.rat:11.2.0.4.0&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;,
+  group_install             =&gt; &#39;oinstall&#39;,
+  group_oper                =&gt; &#39;oper&#39;,
+  download_dir              =&gt; &#39;/install&#39;,
+  zip_extract               =&gt; true,
+  puppet_download_mnt_point =&gt; $puppet_download_mnt_point,
+}</code></pre>
+
+<p>or</p>
+
+<pre class="code ruby"><code class="ruby">oradb::installdb{ &#39;112030_Linux-x86-64&#39;:
+  version                   =&gt; &#39;11.2.0.3&#39;,
+  file                      =&gt; &#39;p10404530_112030_Linux-x86-64&#39;,
+  database_type             =&gt; &#39;SE&#39;,
+  oracle_base               =&gt; &#39;/oracle&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;,
+  group_install             =&gt; &#39;oinstall&#39;,
+  group_oper                =&gt; &#39;oper&#39;,
+  download_dir              =&gt; &#39;/install&#39;,
+  zip_extract               =&gt; true,
+  puppet_download_mnt_point =&gt; $puppet_download_mnt_point,
+}</code></pre>
+
+<p>or</p>
+
+<pre class="code ruby"><code class="ruby">oradb::installdb{ &#39;112010_Linux-x86-64&#39;:
+  version       =&gt; &#39;11.2.0.1&#39;,
+  file          =&gt; &#39;linux.x64_11gR2_database&#39;,
+  database_type =&gt; &#39;SE&#39;,
+  oracle_base   =&gt; &#39;/oracle&#39;,
+  oracle_home   =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user          =&gt; &#39;oracle&#39;,
+  group         =&gt; &#39;dba&#39;,
+  group_install =&gt; &#39;oinstall&#39;,
+  group_oper    =&gt; &#39;oper&#39;,
+  download_dir  =&gt; &#39;/install&#39;,
+  zip_extract   =&gt; true,
+ }</code></pre>
+
+<h2 id="label-Patching">Patching</h2>
+
+<h3 id="label-Opatchupgrade">Opatchupgrade</h3>
+
+<p>For opatchupgrade you need to provide the Oracle support csi_number and
+supportId and need to be online. Or leave them empty but it needs the
+Expect rpm to emulate OCM</p>
+
+<pre class="code ruby"><code class="ruby"># use this on a Grid or Database home
+oradb::opatchupgrade{&#39;112000_opatch_upgrade&#39;:
+  oracle_home               =&gt; &#39;/oracle/product/11.2/db&#39;,
+  patch_file                =&gt; &#39;p6880880_112000_Linux-x86-64.zip&#39;,
+  #  csi_number             =&gt; &#39;11111&#39;,
+  #  support_id             =&gt; &#39;biemond@gmail.com&#39;,
+  csi_number                =&gt; undef,
+  support_id                =&gt; undef,
+  opversion                 =&gt; &#39;11.2.0.3.6&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;,
+  download_dir              =&gt; &#39;/install&#39;,
+  puppet_download_mnt_point =&gt; $puppet_download_mnt_point,
+  require                   =&gt;  Oradb::Installdb[&#39;112030_Linux-x86-64&#39;],
+}
+
+oradb::opatchupgrade{&#39;122000_opatch_upgrade_db&#39;:
+  oracle_home               =&gt; hiera(&#39;oracle_home_dir&#39;),
+  patch_file                =&gt; &#39;p6880880_122010_Linux-x86-64.zip&#39;,
+  csi_number                =&gt; undef,
+  support_id                =&gt; undef,
+  opversion                 =&gt; &#39;12.2.0.1.8&#39;,
+  user                      =&gt; hiera(&#39;oracle_os_user&#39;),
+  group                     =&gt; hiera(&#39;oracle_os_group&#39;),
+  download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+  puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+  require                   =&gt; Oradb::Installdb[&#39;db_linux-x64&#39;],
+}</code></pre>
+
+<h3 id="label-Opatch">Opatch</h3>
+
+<pre class="code ruby"><code class="ruby"># october 2014 11.2.0.4.4 patch
+oradb::opatch{&#39;19121551_db_patch&#39;:
+  ensure                    =&gt; &#39;present&#39;,
+  oracle_product_home       =&gt; hiera(&#39;oracle_home_dir&#39;),
+  patch_id                  =&gt; &#39;19121551&#39;,
+  patch_file                =&gt; &#39;p19121551_112040_Linux-x86-64.zip&#39;,
+  user                      =&gt; hiera(&#39;oracle_os_user&#39;),
+  group                     =&gt; &#39;oinstall&#39;,
+  download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+  ocmrf                     =&gt; true,
+  require                   =&gt; Oradb::Opatchupgrade[&#39;112000_opatch_upgrade_db&#39;],
+  puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+}</code></pre>
+
+<h3 id="label-Clusterware+aka+opatch+auto">Clusterware aka opatch auto</h3>
+
+<p>to use the new opatchauto utility(12.1) instead of opatch auto(11.2) use
+this parameter use_opatchauto_utility =&gt; true</p>
+
+<pre class="code ruby"><code class="ruby">oradb::opatch{&#39;21523260_grid_patch&#39;:
+  ensure                    =&gt; &#39;present&#39;,
+  oracle_product_home       =&gt; hiera(&#39;grid_home_dir&#39;),
+  patch_id                  =&gt; &#39;21523260&#39;,
+  patch_file                =&gt; &#39;p21523260_121020_Linux-x86-64.zip&#39;,
+  clusterware               =&gt; true,
+  use_opatchauto_utility    =&gt; true,
+  bundle_sub_patch_id       =&gt; &#39;21359755&#39;, # sub patch_id of bundle patch ( else I can&#39;t detect it)
+  user                      =&gt; hiera(&#39;grid_os_user&#39;),
+  group                     =&gt; &#39;oinstall&#39;,
+  download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+  ocmrf                     =&gt; true,
+  puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+  require                   =&gt; Oradb::Opatchupgrade[&#39;121000_opatch_upgrade_asm&#39;],
+}</code></pre>
+
+<h3 id="label-The+old+way+-2811g-29">The old way (11g)</h3>
+
+<pre class="code ruby"><code class="ruby">oradb::opatch{&#39;18706472_grid_patch&#39;:
+  ensure                    =&gt; &#39;present&#39;,
+  oracle_product_home       =&gt; hiera(&#39;grid_home_dir&#39;),
+  patch_id                  =&gt; &#39;18706472&#39;,
+  patch_file                =&gt; &#39;p18706472_112040_Linux-x86-64.zip&#39;,
+  clusterware               =&gt; true,
+  bundle_sub_patch_id       =&gt; &#39;18522515&#39;,  sub patch_id of bundle patch ( else I can&#39;t detect it if it is already applied)
+  user                      =&gt; hiera(&#39;grid_os_user&#39;),
+  group                     =&gt; &#39;oinstall&#39;,
+  download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+  ocmrf                     =&gt; true,
+  require                   =&gt; Oradb::Opatchupgrade[&#39;112000_opatch_upgrade&#39;],
+  puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+}
+
+# this 19791420 patch contains 2 patches (in different sub folders), one bundle and a normal one.
+# we want to apply the bundle and need to provide the right value for bundle_sub_folder
+oradb::opatch{&#39;19791420_grid_patch&#39;:
+  ensure                    =&gt; &#39;present&#39;,
+  oracle_product_home       =&gt; hiera(&#39;grid_home_dir&#39;),
+  patch_id                  =&gt; &#39;19791420&#39;,
+  patch_file                =&gt; &#39;p19791420_112040_Linux-x86-64.zip&#39;,
+  clusterware               =&gt; true,
+  bundle_sub_patch_id       =&gt; &#39;19121552&#39;, # sub patch_id of bundle patch ( else I can&#39;t detect it if it is already applied)
+  bundle_sub_folder         =&gt; &#39;19380115&#39;, # optional subfolder inside the patch zip
+  user                      =&gt; hiera(&#39;grid_os_user&#39;),
+  group                     =&gt; &#39;oinstall&#39;,
+  download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+  ocmrf                     =&gt; true,
+  require                   =&gt; Oradb::Opatchupgrade[&#39;112000_opatch_upgrade_asm&#39;],
+  puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+}
+
+# the same patch applied with opatch auto to an oracle database home, this time we need to use the 19121551 as bundle_sub_patch_id
+# this is the october 2014  11.2.0.4.4 patch
+oradb::opatch{&#39;19791420_grid_patch&#39;:
+  ensure                    =&gt; &#39;present&#39;,
+  oracle_product_home       =&gt; hiera(&#39;oracle_home_dir&#39;),
+  patch_id                  =&gt; &#39;19791420&#39;,
+  patch_file                =&gt; &#39;p19791420_112040_Linux-x86-64.zip&#39;,
+  clusterware               =&gt; true,
+  bundle_sub_patch_id       =&gt; &#39;19121551&#39;, # sub patch_id of bundle patch ( else I can&#39;t detect it if it is already applied)
+  bundle_sub_folder         =&gt; &#39;19380115&#39;, # optional subfolder inside the patch zip
+  user                      =&gt; hiera(&#39;grid_os_user&#39;),
+  group                     =&gt; &#39;oinstall&#39;,
+  download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+  ocmrf                     =&gt; true,
+  require                   =&gt; Oradb::Opatchupgrade[&#39;112000_opatch_upgrade_asm&#39;],
+  puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+}
+
+# same patch 19791420 but then for the oracle db home, this patch requires the bundle patch of 19791420 or
+# 19121551 october 2014  11.2.0.4.4 patch
+oradb::opatch{&#39;19791420_db_patch&#39;:
+  ensure                     =&gt; &#39;present&#39;,
+  oracle_product_home       =&gt; hiera(&#39;oracle_home_dir&#39;),
+  patch_id                  =&gt; &#39;19791420&#39;,
+  patch_file                =&gt; &#39;p19791420_112040_Linux-x86-64.zip&#39;,
+  clusterware               =&gt; false,
+  bundle_sub_patch_id       =&gt; &#39;19282021&#39;, # sub patch_id of bundle patch ( else I can&#39;t detect it)
+  bundle_sub_folder         =&gt; &#39;19282021&#39;, # optional subfolder inside the patch zip
+  user                      =&gt; hiera(&#39;oracle_os_user&#39;),
+  group                     =&gt; &#39;oinstall&#39;,
+  download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+  ocmrf                     =&gt; true,
+  require                   =&gt; Oradb::Opatch[&#39;19121551_db_patch&#39;],
+  puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+}</code></pre>
+
+<h2 id="label-Oracle+net">Oracle net</h2>
+
+<pre class="code ruby"><code class="ruby">oradb::net{ &#39;config net8&#39;:
+  oracle_home   =&gt; &#39;/oracle/product/11.2/db&#39;,
+  version       =&gt; &#39;11.2&#39; or &quot;12.1&quot;,
+  user          =&gt; &#39;oracle&#39;,
+  group         =&gt; &#39;dba&#39;,
+  download_dir  =&gt; &#39;/install&#39;,
+  db_port       =&gt; &#39;1521&#39;, #optional
+  require       =&gt; Oradb::Opatch[&#39;14727310_db_patch&#39;],
+}</code></pre>
+
+<h2 id="label-Listener">Listener</h2>
+
+<pre class="code ruby"><code class="ruby">db_listener{ &#39;startlistener&#39;:
+  ensure          =&gt; &#39;running&#39;,  # running|start|abort|stop
+  oracle_base_dir =&gt; &#39;/oracle&#39;,
+  oracle_home_dir =&gt; &#39;/oracle/product/11.2/db&#39;,
+  os_user         =&gt; &#39;oracle&#39;,
+  listener_name   =&gt; &#39;listener&#39; # which is the default and optional
+}
+
+# subscribe to changes
+db_listener{ &#39;startlistener&#39;:
+  ensure          =&gt; &#39;running&#39;,  # running|start|abort|stop
+  oracle_base_dir =&gt; &#39;/oracle&#39;,
+  oracle_home_dir =&gt; &#39;/oracle/product/11.2/db&#39;,
+  os_user         =&gt; &#39;oracle&#39;,
+  listener_name   =&gt; &#39;listener&#39; # which is the default and optional
+  refreshonly     =&gt; true,
+  subscribe       =&gt; XXXXX,
+}
+
+# the old way which also calls db_listener type
+oradb::listener{&#39;start listener&#39;:
+  action        =&gt; &#39;start&#39;,  # running|start|abort|stop
+  oracle_base   =&gt; &#39;/oracle&#39;,
+  oracle_home   =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user          =&gt; &#39;oracle&#39;,
+  group         =&gt; &#39;dba&#39;,
+  listener_name =&gt; &#39;listener&#39; # which is the default and optional
+}</code></pre>
+
+<h2 id="label-Database+instance">Database instance</h2>
+
+<pre class="code ruby"><code class="ruby">oradb::database{ &#39;testDb_Create&#39;:
+  oracle_base               =&gt; &#39;/oracle&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/11.2/db&#39;,
+  version                   =&gt; &#39;11.2&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;,
+  download_dir              =&gt; &#39;/install&#39;,
+  action                    =&gt; &#39;create&#39;,
+  db_name                   =&gt; &#39;test&#39;,
+  db_domain                 =&gt; &#39;oracle.com&#39;,
+  db_port                   =&gt; &#39;1521&#39;,
+  sys_password              =&gt; &#39;Welcome01&#39;,
+  system_password           =&gt; &#39;Welcome01&#39;,
+  data_file_destination     =&gt; &quot;/oracle/oradata&quot;,
+  recovery_area_destination =&gt; &quot;/oracle/flash_recovery_area&quot;,
+  character_set             =&gt; &quot;AL32UTF8&quot;,
+  nationalcharacter_set     =&gt; &quot;UTF8&quot;,
+  init_params               =&gt; {&#39;open_cursors&#39;        =&gt; &#39;1000&#39;,
+                                &#39;processes&#39;           =&gt; &#39;600&#39;,
+                                &#39;job_queue_processes&#39; =&gt; &#39;4&#39; },
+  sample_schema             =&gt; &#39;TRUE&#39;,
+  memory_percentage         =&gt; 40,
+  memory_total              =&gt; 800,
+  database_type             =&gt; &quot;MULTIPURPOSE&quot;,
+  em_configuration          =&gt; &quot;NONE&quot;,
+  require                   =&gt; Oradb::Listener[&#39;start listener&#39;],
+}</code></pre>
+
+<h3 id="label-template+-28not+seeded-29">template (not seeded)</h3>
+
+<p>based on your own dbt template ( not seeded )</p>
+
+<p>The template must be have the following extension dbt.erb like
+dbtemplate_12.1.dbt.erb, use puppet_download_mnt_point parameter for the
+template location or add your template to the template dir of the oradb
+module - Click here for an <a
+href="https://github.com/biemond/biemond-oradb/blob/puppet4_3_data/templates/dbtemplate_12.2.dbt.erb">12.2
+db instance template example</a> - Click here for an [12.1 db instance
+template example](<a
+href="https://github.com/biemond/biemond-oradb/blob">github.com/biemond/biemond-oradb/blob</a>/
+puppet4_3_data/templates/dbtemplate_12.1.dbt.erb) - Click here for an <a
+href="https://github.com/biemond/biemond-oradb/blob/puppet4_3_data/templates/dbtemplate_12.1_vars.dbt.erb">12.1
+db instance variables template example</a> - Click here for an <a
+href="https://github.com/biemond/biemond-oradb/blob/puppet4_3_data/templates/dbtemplate_12.1_asm.dbt.erb">12.1
+db asm instance template example</a> - Click here for an <a
+href="https://github.com/biemond/biemond-oradb/blob/puppet4_3_data/templates/dbtemplate_11gR2_asm.dbt.erb">11.2
+db asm instance template example</a></p>
+
+<p>with a template of the oradb module</p>
+
+<pre class="code ruby"><code class="ruby">oradb::database{ &#39;testDb_Create&#39;:
+  oracle_base               =&gt; &#39;/oracle&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/12.1/db&#39;,
+  version                   =&gt; &#39;12.1&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;,
+  template                  =&gt; &#39;dbtemplate_12.1&#39;, # or dbtemplate_12.1_vars, dbtemplate_11gR2_asm, this will use dbtemplate_12.1.dbt.erb example template
+  # template_variables        =&gt; { &#39;location01&#39; =&gt; &#39;/oracle/oradata/&#39; , &#39;location02&#39; =&gt; &#39;/oracle/oradata/&#39; }
+  download_dir              =&gt; &#39;/install&#39;,
+  action                    =&gt; &#39;create&#39;,
+  db_name                   =&gt; &#39;test&#39;,
+  db_domain                 =&gt; &#39;oracle.com&#39;,
+  db_port                   =&gt; 1521,
+  sys_password              =&gt; &#39;Welcome01&#39;,
+  system_password           =&gt; &#39;Welcome01&#39;,
+  data_file_destination     =&gt; &quot;/oracle/oradata&quot;,
+  recovery_area_destination =&gt; &quot;/oracle/flash_recovery_area&quot;,
+  character_set             =&gt; &quot;AL32UTF8&quot;,
+  nationalcharacter_set     =&gt; &quot;UTF8&quot;,
+  memory_percentage         =&gt; 40,
+  memory_total              =&gt; 800,
+  require                   =&gt; Oradb::Listener[&#39;start listener&#39;],
+}</code></pre>
+
+<p>or your own template on your own location</p>
+
+<pre class="code ruby"><code class="ruby">  template                   =&gt; &#39;my_dbtemplate_11gR2_asm&#39;,
+  puppet_download_mnt_point  =&gt; &#39;/vagrant&#39;, # &#39;oradb&#39; etc</code></pre>
+
+<h3 id="label-seeded+template">seeded template</h3>
+
+<p>based on a seeded dbc template</p>
+
+<p>use existing or copy all files to $ORACLE_HOME/assistants/dbca/templates</p>
+
+<p>The template must be have the following extension dbc like
+General_Purpose.dbc</p>
+
+<pre class="code ruby"><code class="ruby">oradb::database{ &#39;testDb_Create&#39;:
+  oracle_base               =&gt; &#39;/oracle&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/12.1/db&#39;,
+  version                   =&gt; &#39;12.1&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;,
+  template_seeded           =&gt; &#39;12.1.0.2.0_Database_Template_for_EM12_1_0_5_0_Small_deployment&#39;,
+  download_dir              =&gt; &#39;/install&#39;,
+  action                    =&gt; &#39;create&#39;,
+  db_name                   =&gt; &#39;test&#39;,
+  db_domain                 =&gt; &#39;oracle.com&#39;,
+  db_port                   =&gt; 1521,
+  sys_password              =&gt; &#39;Welcome01&#39;,
+  system_password           =&gt; &#39;Welcome01&#39;,
+  data_file_destination     =&gt; &quot;/oracle/oradata&quot;,
+  recovery_area_destination =&gt; &quot;/oracle/flash_recovery_area&quot;,
+  character_set             =&gt; &quot;AL32UTF8&quot;,
+  nationalcharacter_set     =&gt; &quot;UTF8&quot;,
+  memory_percentage         =&gt; 40,
+  memory_total              =&gt; 800,
+  require                   =&gt; Oradb::Listener[&#39;start listener&#39;],
+}</code></pre>
+
+<h3 id="label-12c+container+and+pluggable+databases">12c container and pluggable databases</h3>
+
+<pre class="code ruby"><code class="ruby">oradb::database{ &#39;oraDb&#39;:
+  oracle_base               =&gt; &#39;/oracle&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/12.1/db&#39;,
+  version                   =&gt; &#39;12.1&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;
+  download_dir              =&gt; &#39;/install&#39;,
+  action                    =&gt; &#39;create&#39;,
+  db_name                   =&gt; &#39;orcl&#39;,
+  db_domain                 =&gt; &#39;example.com&#39;,
+  sys_password              =&gt; &#39;Welcome01&#39;,
+  system_password           =&gt; &#39;Welcome01&#39;,
+  character_set             =&gt; &#39;AL32UTF8&#39;,
+  nationalcharacter_set     =&gt; &#39;UTF8&#39;,
+  sample_schema             =&gt; &#39;FALSE&#39;,
+  memory_percentage         =&gt; 40,
+  memory_total              =&gt; 800,
+  database_type             =&gt; &#39;MULTIPURPOSE&#39;,
+  em_configuration          =&gt; &#39;NONE&#39;,
+  data_file_destination     =&gt; &#39;/oracle/oradata&#39;,
+  recovery_area_destination =&gt; &#39;/oracle/flash_recovery_area&#39;,
+  init_params               =&gt; {&#39;open_cursors&#39;        =&gt; &#39;1000&#39;,
+                                &#39;processes&#39;           =&gt; &#39;600&#39;,
+                                &#39;job_queue_processes&#39; =&gt; &#39;4&#39; },
+  container_database        =&gt; true,   &lt;|-------
+}
+
+oradb::database_pluggable{&#39;pdb1&#39;:
+  ensure                   =&gt; &#39;present&#39;,
+  version                  =&gt; &#39;12.1&#39;,
+  oracle_home_dir          =&gt; &#39;/oracle/product/12.1/db&#39;,
+  user                     =&gt; &#39;oracle&#39;,
+  group                    =&gt; &#39;dba&#39;,
+  source_db                =&gt; &#39;orcl&#39;,
+  pdb_name                 =&gt; &#39;pdb1&#39;,
+  pdb_admin_username       =&gt; &#39;pdb_adm&#39;,
+  pdb_admin_password       =&gt; &#39;Welcome01&#39;,
+  pdb_datafile_destination =&gt; &quot;/oracle/oradata/orcl/pdb1&quot;,
+  create_user_tablespace   =&gt; true,
+  log_output               =&gt; true,
+}
+
+# remove the pluggable database
+oradb::database_pluggable{&#39;pdb1&#39;:
+  ensure                   =&gt; &#39;absent&#39;,
+  version                  =&gt; &#39;12.1&#39;,
+  oracle_home_dir          =&gt; &#39;/oracle/product/12.1/db&#39;,
+  user                     =&gt; &#39;oracle&#39;,
+  group                    =&gt; &#39;dba&#39;,
+  source_db                =&gt; &#39;orcl&#39;,
+  pdb_name                 =&gt; &#39;pdb1&#39;,
+  pdb_datafile_destination =&gt; &quot;/oracle/oradata/orcl/pdb1&quot;,
+  log_output               =&gt; true,
+}</code></pre>
+
+<h3 id="label-12c+ASM">12c ASM</h3>
+
+<pre class="code ruby"><code class="ruby">oradb::database{ &#39;oraDb&#39;:
+  oracle_base               =&gt; lookup(&#39;oracle_base_dir&#39;),
+  oracle_home               =&gt; lookup(&#39;oracle_home_dir&#39;),
+  version                   =&gt; lookup(&#39;dbinstance_version&#39;),
+  user                      =&gt; lookup(&#39;oracle_os_user&#39;),
+  group                     =&gt; lookup(&#39;oracle_os_group&#39;),
+  download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
+  action                    =&gt; &#39;create&#39;,
+  db_name                   =&gt; lookup(&#39;oracle_database_name&#39;),
+  db_domain                 =&gt; lookup(&#39;oracle_database_domain_name&#39;),
+  sys_password              =&gt; lookup(&#39;oracle_database_sys_password&#39;),
+  system_password           =&gt; lookup(&#39;oracle_database_system_password&#39;),
+  # template                  =&gt; &#39;dbtemplate_12.1_asm&#39;,
+  character_set             =&gt; &#39;AL32UTF8&#39;,
+  nationalcharacter_set     =&gt; &#39;UTF8&#39;,
+  sample_schema             =&gt; &#39;false&#39;,
+  memory_percentage         =&gt; 40,
+  memory_total              =&gt; 2880,
+  automatic_memory_management =&gt; false,
+  database_type             =&gt; &#39;MULTIPURPOSE&#39;,
+  em_configuration          =&gt; &#39;NONE&#39;,
+  storage_type              =&gt; &#39;ASM&#39;,
+  asm_snmp_password         =&gt; &#39;Welcome01&#39;,
+  asm_diskgroup             =&gt; &#39;+DATA/{DB_UNIQUE_NAME}&#39;,
+  data_file_destination     =&gt; &#39;+DATA/{DB_UNIQUE_NAME}&#39;,
+  recovery_diskgroup        =&gt; &#39;+RECO&#39;,
+  recovery_area_destination =&gt; &#39;+RECO&#39;,
+  puppet_download_mnt_point =&gt; &#39;oradb/&#39;,
+  require                   =&gt;  Ora_asm_diskgroup[&#39;RECO@+ASM&#39;],
+}</code></pre>
+
+<p>or delete a database</p>
+
+<pre class="code ruby"><code class="ruby">oradb::database{ &#39;testDb_Delete&#39;:
+  oracle_base             =&gt; &#39;/oracle&#39;,
+  oracle_home             =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user                    =&gt; &#39;oracle&#39;,
+  group                   =&gt; &#39;dba&#39;,
+  download_dir            =&gt; &#39;/install&#39;,
+  action                  =&gt; &#39;delete&#39;,
+  db_name                 =&gt; &#39;test&#39;,
+  sys_password            =&gt; &#39;Welcome01&#39;,
+  require                 =&gt; Oradb::Dbactions[&#39;start testDb&#39;],
+}</code></pre>
+
+<h2 id="label-Database+instance+actions">Database instance actions</h2>
+
+<pre class="code ruby"><code class="ruby">db_control{&#39;emrepos start&#39;:
+  ensure                  =&gt; &#39;running&#39;, #running|start|abort|stop
+  instance_name           =&gt; &#39;test&#39;,
+  oracle_product_home_dir =&gt; &#39;/oracle/product/11.2/db&#39;,
+  os_user                 =&gt; &#39;oracle&#39;,
+}
+
+db_control{&#39;emrepos stop&#39;:
+  ensure                  =&gt; &#39;stop&#39;, #running|start|abort|stop
+  instance_name           =&gt; &#39;test&#39;,
+  oracle_product_home_dir =&gt; &#39;/oracle/product/11.2/db&#39;,
+  os_user                 =&gt; &#39;oracle&#39;,
+}
+
+# the old way
+oradb::dbactions{ &#39;stop testDb&#39;:
+  oracle_home             =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user                    =&gt; &#39;oracle&#39;,
+  group                   =&gt; &#39;dba&#39;,
+  action                  =&gt; &#39;stop&#39;,
+  db_name                 =&gt; &#39;test&#39;,
+  require                 =&gt; Oradb::Database[&#39;testDb&#39;],
+}
+
+oradb::dbactions{ &#39;start testDb&#39;:
+  oracle_home             =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user                    =&gt; &#39;oracle&#39;,
+  group                   =&gt; &#39;dba&#39;,
+  action                  =&gt; &#39;start&#39;,
+  db_name                 =&gt; &#39;test&#39;,
+  require                 =&gt; Oradb::Dbactions[&#39;stop testDb&#39;],
+}
+
+# database instance with srvctl
+oradb::dbactions{ &#39;start testDb&#39;:
+  oracle_home             =&gt; hiera(&#39;oracle_home_dir&#39;),
+  user                    =&gt; hiera(&#39;oracle_os_user&#39;),
+  group                   =&gt; hiera(&#39;oracle_os_group&#39;),
+  action                  =&gt; &#39;start&#39;,
+  db_name                 =&gt; &#39;test&#39;,
+  require                 =&gt; Oradb::Dbactions[&#39;stop testDb&#39;],
+}
+
+# grid or asm
+db_control{&#39;instance control asm&#39;:
+  provider                =&gt; &#39;srvctl&#39;,
+  ensure                  =&gt; &#39;start&#39;,
+  instance_name           =&gt; &#39;+ASM&#39;,
+  oracle_product_home_dir =&gt; hiera(&#39;oracle_home_dir&#39;),
+  os_user                 =&gt; hiera(&#39;grid_os_user&#39;),
+  db_type                 =&gt; &#39;grid&#39;,
+}
+
+oradb::dbactions{ &#39;start grid&#39;:
+  db_type                 =&gt; &#39;grid&#39;,
+  oracle_home             =&gt; hiera(&#39;oracle_home_dir&#39;),
+  grid_home               =&gt; hiera(&#39;grid_home_dir&#39;),
+  user                    =&gt; hiera(&#39;grid_os_user&#39;),
+  group                   =&gt; hiera(&#39;oracle_os_group&#39;),
+  action                  =&gt; &#39;start&#39;,
+  db_name                 =&gt; &#39;+ASM&#39;,
+}
+
+# subscribe to changes
+db_control{&#39;emrepos restart&#39;:
+  ensure                  =&gt; &#39;running&#39;, #running|start|abort|stop
+  instance_name           =&gt; &#39;test&#39;,
+  oracle_product_home_dir =&gt; &#39;/oracle/product/11.2/db&#39;,
+  os_user                 =&gt; &#39;oracle&#39;,
+  refreshonly             =&gt; true,
+  subscribe               =&gt; Init_param[&#39;emrepos/memory_target&#39;],
+}
+
+oradb::autostartdatabase{ &#39;autostart oracle&#39;:
+  oracle_home             =&gt; &#39;/oracle/product/12.1/db&#39;,
+  user                    =&gt; &#39;oracle&#39;,
+  db_name                 =&gt; &#39;test&#39;,
+  service_name            =&gt; &#39;dbora&#39;,
+  require                 =&gt; Oradb::Dbactions[&#39;start testDb&#39;],
+}</code></pre>
+
+<h2 id="label-Tnsnames">Tnsnames</h2>
+
+<pre class="code ruby"><code class="ruby">oradb::tnsnames{&#39;orcl&#39;:
+  oracle_home          =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user                 =&gt; &#39;oracle&#39;,
+  group                =&gt; &#39;dba&#39;,
+  server               =&gt; { myserver =&gt; { host =&gt; soadb.example.nl, port =&gt; &#39;1521&#39;, protocol =&gt; &#39;TCP&#39; }},
+  connect_service_name =&gt; &#39;soarepos.example.nl&#39;,
+  require              =&gt; Oradb::Dbactions[&#39;start oraDb&#39;],
+}
+
+oradb::tnsnames{&#39;test&#39;:
+  oracle_home          =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user                 =&gt; &#39;oracle&#39;,
+  group                =&gt; &#39;dba&#39;,
+  server               =&gt; { myserver =&gt; { host =&gt; soadb.example.nl, port =&gt; &#39;1525&#39;, protocol =&gt; &#39;TCP&#39; }, myserver2 =&gt; { host =&gt; soadb2.example.nl, port =&gt; &#39;1526&#39;, protocol =&gt; &#39;TCP&#39; }},
+  connect_service_name =&gt; &#39;soarepos.example.nl&#39;,
+  connect_server       =&gt; &#39;DEDICATED&#39;,
+  require              =&gt; Oradb::Dbactions[&#39;start oraDb&#39;],
+}
+
+oradb::tnsnames{&#39;testlistener&#39;:
+  entry_type         =&gt; &#39;listener&#39;,
+  oracle_home        =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user               =&gt; &#39;oracle&#39;,
+  group              =&gt; &#39;dba&#39;,
+  server             =&gt; { myserver =&gt; { host =&gt; &#39;soadb.example.nl&#39;, port =&gt; &#39;1521&#39;, protocol =&gt; &#39;TCP&#39; }},
+  require            =&gt; Oradb::Dbactions[&#39;start oraDb&#39;],
+}</code></pre>
+
+<h2 id="label-Grid+install+with+ASM">Grid install with ASM</h2>
+
+<pre class="code ruby"><code class="ruby">  $all_groups = [&#39;oinstall&#39;,&#39;dba&#39; ,&#39;oper&#39;,&#39;asmdba&#39;,&#39;asmadmin&#39;,&#39;asmoper&#39;]
+
+  group { $all_groups :
+    ensure      =&gt; present,
+  }
+
+  user { &#39;oracle&#39; :
+    ensure      =&gt; present,
+    uid         =&gt; 500,
+    gid         =&gt; &#39;oinstall&#39;,
+    groups      =&gt; [&#39;oinstall&#39;,&#39;dba&#39;,&#39;oper&#39;,&#39;asmdba&#39;],
+    shell       =&gt; &#39;/bin/bash&#39;,
+    password    =&gt; &#39;$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.&#39;,
+    home        =&gt; &quot;/home/oracle&quot;,
+    comment     =&gt; &quot;This user oracle was created by Puppet&quot;,
+    require     =&gt; Group[$all_groups],
+    managehome  =&gt; true,
+  }
+
+  user { &#39;grid&#39; :
+    ensure      =&gt; present,
+    uid         =&gt; 501,
+    gid         =&gt; &#39;oinstall&#39;,
+    groups      =&gt; [&#39;oinstall&#39;,&#39;dba&#39;,&#39;asmadmin&#39;,&#39;asmdba&#39;,&#39;asmoper&#39;],
+    shell       =&gt; &#39;/bin/bash&#39;,
+    password    =&gt; &#39;$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.&#39;,
+    home        =&gt; &quot;/home/grid&quot;,
+    comment     =&gt; &quot;This user grid was created by Puppet&quot;,
+    require     =&gt; Group[$all_groups],
+    managehome  =&gt; true,
+  }
+
+  ####### NFS example
+
+  file { &#39;/home/nfs_server_data&#39;:
+    ensure  =&gt; directory,
+    recurse =&gt; false,
+    replace =&gt; false,
+    mode    =&gt; &#39;0775&#39;,
+    owner   =&gt; &#39;grid&#39;,
+    group   =&gt; &#39;asmadmin&#39;,
+    require =&gt;  User[&#39;grid&#39;],
+  }
+
+  class { &#39;nfs::server&#39;:
+    package =&gt; latest,
+    service =&gt; running,
+    enable  =&gt; true,
+  }
+
+  nfs::export { &#39;/home/nfs_server_data&#39;:
+    options =&gt; [ &#39;rw&#39;, &#39;sync&#39;, &#39;no_wdelay&#39;,&#39;insecure_locks&#39;,&#39;no_root_squash&#39; ],
+    clients =&gt; [ &quot;*&quot; ],
+    require =&gt; [File[&#39;/home/nfs_server_data&#39;],Class[&#39;nfs::server&#39;],],
+  }
+
+  file { &#39;/nfs_client&#39;:
+    ensure  =&gt; directory,
+    recurse =&gt; false,
+    replace =&gt; false,
+    mode    =&gt; &#39;0775&#39;,
+    owner   =&gt; &#39;grid&#39;,
+    group   =&gt; &#39;asmadmin&#39;,
+    require =&gt;  User[&#39;grid&#39;],
+  }
+
+  mounts { &#39;Mount point for NFS data&#39;:
+    ensure  =&gt; present,
+    source  =&gt; &#39;soadbasm:/home/nfs_server_data&#39;,
+    dest    =&gt; &#39;/nfs_client&#39;,
+    type    =&gt; &#39;nfs&#39;,
+    opts    =&gt; &#39;rw,bg,hard,nointr,tcp,vers=3,timeo=600,rsize=32768,wsize=32768,actimeo=0  0 0&#39;,
+    require =&gt; [File[&#39;/nfs_client&#39;],Nfs::Export[&#39;/home/nfs_server_data&#39;],]
+  }
+
+  exec { &quot;/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b1 bs=1M count=7520&quot;:
+    user      =&gt; &#39;grid&#39;,
+    group     =&gt; &#39;asmadmin&#39;,
+    logoutput =&gt; true,
+    unless    =&gt; &quot;/usr/bin/test -f /nfs_client/asm_sda_nfs_b1&quot;,
+    require   =&gt; Mounts[&#39;Mount point for NFS data&#39;],
+  }
+  exec { &quot;/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b2 bs=1M count=7520&quot;:
+    user      =&gt; &#39;grid&#39;,
+    group     =&gt; &#39;asmadmin&#39;,
+    logoutput =&gt; true,
+    unless    =&gt; &quot;/usr/bin/test -f /nfs_client/asm_sda_nfs_b2&quot;,
+    require   =&gt; [Mounts[&#39;Mount point for NFS data&#39;],
+                  Exec[&quot;/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b1 bs=1M count=7520&quot;]],
+  }
+
+  exec { &quot;/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b3 bs=1M count=7520&quot;:
+    user      =&gt; &#39;grid&#39;,
+    group     =&gt; &#39;asmadmin&#39;,
+    logoutput =&gt; true,
+    unless    =&gt; &quot;/usr/bin/test -f /nfs_client/asm_sda_nfs_b3&quot;,
+    require   =&gt; [Mounts[&#39;Mount point for NFS data&#39;],
+                  Exec[&quot;/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b1 bs=1M count=7520&quot;],
+                  Exec[&quot;/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b2 bs=1M count=7520&quot;],],
+  }
+
+  exec { &quot;/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b4 bs=1M count=7520&quot;:
+    user      =&gt; &#39;grid&#39;,
+    group     =&gt; &#39;asmadmin&#39;,
+    logoutput =&gt; true,
+    unless    =&gt; &quot;/usr/bin/test -f /nfs_client/asm_sda_nfs_b4&quot;,
+    require   =&gt; [Mounts[&#39;Mount point for NFS data&#39;],
+                  Exec[&quot;/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b1 bs=1M count=7520&quot;],
+                  Exec[&quot;/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b2 bs=1M count=7520&quot;],
+                  Exec[&quot;/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b3 bs=1M count=7520&quot;],],
+  }
+
+  $nfs_files = [&#39;/nfs_client/asm_sda_nfs_b1&#39;,&#39;/nfs_client/asm_sda_nfs_b2&#39;,&#39;/nfs_client/asm_sda_nfs_b3&#39;,&#39;/nfs_client/asm_sda_nfs_b4&#39;]
+
+  file { $nfs_files:
+    ensure  =&gt; present,
+    owner   =&gt; &#39;grid&#39;,
+    group   =&gt; &#39;asmadmin&#39;,
+    mode    =&gt; &#39;0664&#39;,
+    require =&gt; Exec[&quot;/bin/dd if=/dev/zero of=/nfs_client/asm_sda_nfs_b4 bs=1M count=7520&quot;],
+  }
+  ###### end of NFS example
+
+
+  oradb::installasm{ &#39;db_linux-x64&#39;:
+    version                   =&gt; hiera(&#39;db_version&#39;),
+    file                      =&gt; hiera(&#39;asm_file&#39;),
+    grid_type                 =&gt; &#39;HA_CONFIG&#39;,
+    grid_base                 =&gt; hiera(&#39;grid_base_dir&#39;),
+    grid_home                 =&gt; hiera(&#39;grid_home_dir&#39;),
+    ora_inventory_dir         =&gt; hiera(&#39;oraInventory_dir&#39;),
+    user_base_dir             =&gt; &#39;/home&#39;,
+    user                      =&gt; hiera(&#39;grid_os_user&#39;),
+    group                     =&gt; &#39;asmdba&#39;,
+    group_install             =&gt; &#39;oinstall&#39;,
+    group_oper                =&gt; &#39;asmoper&#39;,
+    group_asm                 =&gt; &#39;asmadmin&#39;,
+    sys_asm_password          =&gt; &#39;Welcome01&#39;,
+    asm_monitor_password      =&gt; &#39;Welcome01&#39;,
+    asm_diskgroup             =&gt; &#39;DATA&#39;,
+    disk_discovery_string     =&gt; &quot;/nfs_client/asm*&quot;,
+    disks                     =&gt; &quot;/nfs_client/asm_sda_nfs_b1,/nfs_client/asm_sda_nfs_b2&quot;,
+    # disk_discovery_string   =&gt; &quot;ORCL:*&quot;,
+    # disks                   =&gt; &quot;ORCL:DISK1,ORCL:DISK2&quot;,
+    disk_redundancy           =&gt; &quot;EXTERNAL&quot;,
+    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    remote_file               =&gt; false,
+    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+  }
+
+  # 12.2 
+  oradb::installasm{ &#39;db_linux-x64&#39;:
+    version                =&gt; lookup(&#39;db_version&#39;),
+    file                   =&gt; lookup(&#39;asm_file&#39;),
+    grid_type              =&gt; &#39;HA_CONFIG&#39;,
+    grid_base              =&gt; lookup(&#39;grid_base_dir&#39;),
+    grid_home              =&gt; lookup(&#39;grid_home_dir&#39;),
+    ora_inventory_dir      =&gt; lookup(&#39;oraInventory_dir&#39;),
+    user                   =&gt; lookup(&#39;grid_os_user&#39;),
+    asm_diskgroup          =&gt; &#39;DATA&#39;,
+    disk_discovery_string  =&gt; &#39;/nfs_client/asm*&#39;,
+    disks                  =&gt; &#39;/nfs_client/asm_sda_nfs_b1,/nfs_client/asm_sda_nfs_b2&#39;,
+    disk_redundancy        =&gt; &#39;EXTERNAL&#39;,
+    remote_file            =&gt; false,
+    puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
+  }
+
+  oradb::opatchupgrade{&#39;112000_opatch_upgrade_asm&#39;:
+    oracle_home               =&gt; hiera(&#39;grid_home_dir&#39;),
+    patch_file                =&gt; &#39;p6880880_112000_Linux-x86-64.zip&#39;,
+    csi_number                =&gt; undef,
+    support_id                =&gt; undef,
+    opversion                 =&gt; &#39;11.2.0.3.6&#39;,
+    user                      =&gt; hiera(&#39;grid_os_user&#39;),
+    group                     =&gt; &#39;oinstall&#39;,
+    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    require                   =&gt; Oradb::Installasm[&#39;db_linux-x64&#39;],
+  }
+
+  oradb::opatch{&#39;19791420_grid_patch&#39;:
+    ensure                    =&gt; &#39;present&#39;,
+    oracle_product_home       =&gt; hiera(&#39;grid_home_dir&#39;),
+    patch_id                  =&gt; &#39;19791420&#39;,
+    patch_file                =&gt; &#39;p19791420_112040_Linux-x86-64.zip&#39;,
+    clusterware               =&gt; true,
+    bundle_sub_patch_id       =&gt; &#39;19121552&#39;, # sub patch_id of bundle patch ( else I can&#39;t detect it)
+    bundle_sub_folder         =&gt; &#39;19380115&#39;, # optional subfolder inside the patch zip
+    user                      =&gt; hiera(&#39;grid_os_user&#39;),
+    group                     =&gt; &#39;oinstall&#39;,
+    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    ocmrf                     =&gt; true,
+    require                   =&gt; Oradb::Opatchupgrade[&#39;112000_opatch_upgrade_asm&#39;],
+    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+  }
+
+  oradb::installdb{ &#39;db_linux-x64&#39;:
+    version                   =&gt; hiera(&#39;db_version&#39;),
+    file                      =&gt; hiera(&#39;db_file&#39;),
+    database_type             =&gt; &#39;EE&#39;,
+    ora_inventory_dir         =&gt; hiera(&#39;oraInventory_dir&#39;),
+    oracle_base               =&gt; hiera(&#39;oracle_base_dir&#39;),
+    oracle_home               =&gt; hiera(&#39;oracle_home_dir&#39;),
+    user_base_dir             =&gt; &#39;/home&#39;,
+    user                      =&gt; hiera(&#39;oracle_os_user&#39;),
+    group                     =&gt; &#39;dba&#39;,
+    group_install             =&gt; &#39;oinstall&#39;,
+    group_oper                =&gt; &#39;oper&#39;,
+    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    remote_file               =&gt; false,
+    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    require                   =&gt; Oradb::Opatch[&#39;19791420_grid_patch&#39;],
+  }
+
+  oradb::opatchupgrade{&#39;112000_opatch_upgrade_db&#39;:
+    oracle_home               =&gt; hiera(&#39;oracle_home_dir&#39;),
+    patch_file                =&gt; &#39;p6880880_112000_Linux-x86-64.zip&#39;,
+    csi_number                =&gt; undef,
+    support_id                =&gt; undef,
+    opversion                 =&gt; &#39;11.2.0.3.6&#39;,
+    user                      =&gt; hiera(&#39;oracle_os_user&#39;),
+    group                     =&gt; hiera(&#39;oracle_os_group&#39;),
+    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    require                   =&gt; Oradb::Installdb[&#39;db_linux-x64&#39;],
+  }
+
+  oradb::opatch{&#39;19791420_db_patch&#39;:
+    ensure                    =&gt; &#39;present&#39;,
+    oracle_product_home       =&gt; hiera(&#39;oracle_home_dir&#39;),
+    patch_id                  =&gt; &#39;19791420&#39;,
+    patch_file                =&gt; &#39;p19791420_112040_Linux-x86-64.zip&#39;,
+    clusterware               =&gt; true,
+    bundle_sub_patch_id       =&gt; &#39;19121551&#39;, #,&#39;19121552&#39;, # sub patch_id of bundle patch ( else I can&#39;t detect it)
+    bundle_sub_folder         =&gt; &#39;19380115&#39;, # optional subfolder inside the patch zip
+    user                      =&gt; hiera(&#39;oracle_os_user&#39;),
+    group                     =&gt; &#39;oinstall&#39;,
+    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    ocmrf                     =&gt; true,
+    require                   =&gt; Oradb::Opatchupgrade[&#39;112000_opatch_upgrade_db&#39;],
+    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+  }
+
+  oradb::opatch{&#39;19791420_db_patch_2&#39;:
+    ensure                    =&gt; &#39;present&#39;,
+    oracle_product_home       =&gt; hiera(&#39;oracle_home_dir&#39;),
+    patch_id                  =&gt; &#39;19791420&#39;,
+    patch_file                =&gt; &#39;p19791420_112040_Linux-x86-64.zip&#39;,
+    clusterware               =&gt; false,
+    bundle_sub_patch_id       =&gt; &#39;19282021&#39;, # sub patch_id of bundle patch ( else I can&#39;t detect it)
+    bundle_sub_folder         =&gt; &#39;19282021&#39;, # optional subfolder inside the patch zip
+    user                      =&gt; hiera(&#39;oracle_os_user&#39;),
+    group                     =&gt; &#39;oinstall&#39;,
+    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    ocmrf                     =&gt; true,
+    require                   =&gt; Oradb::Opatch[&#39;19791420_db_patch&#39;],
+    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+  }
+
+  # with the help of the oracle and easy-type module of Bert Hajee
+  ora_asm_diskgroup{ &#39;RECO@+ASM&#39;:
+    ensure          =&gt; &#39;present&#39;,
+    au_size         =&gt; &#39;1&#39;,
+    compat_asm      =&gt; &#39;11.2.0.0.0&#39;,
+    compat_rdbms    =&gt; &#39;10.1.0.0.0&#39;,
+    diskgroup_state =&gt; &#39;MOUNTED&#39;,
+    disks           =&gt; {&#39;RECO_0000&#39; =&gt; {&#39;diskname&#39; =&gt; &#39;RECO_0000&#39;, &#39;path&#39; =&gt; &#39;/nfs_client/asm_sda_nfs_b3&#39;},
+                        &#39;RECO_0001&#39; =&gt; {&#39;diskname&#39; =&gt; &#39;RECO_0001&#39;, &#39;path&#39; =&gt; &#39;/nfs_client/asm_sda_nfs_b4&#39;}},
+    redundancy_type =&gt; &#39;EXTERNAL&#39;,
+    require         =&gt; Oradb::Opatch[&#39;19791420_db_patch_2&#39;],
+  }
+
+  # based on a template
+  oradb::database{ &#39;oraDb&#39;:
+    oracle_base               =&gt; hiera(&#39;oracle_base_dir&#39;),
+    oracle_home               =&gt; hiera(&#39;oracle_home_dir&#39;),
+    version                   =&gt; hiera(&#39;dbinstance_version&#39;),
+    user                      =&gt; hiera(&#39;oracle_os_user&#39;),
+    group                     =&gt; hiera(&#39;oracle_os_group&#39;),
+    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    action                    =&gt; &#39;create&#39;,
+    db_name                   =&gt; hiera(&#39;oracle_database_name&#39;),
+    db_domain                 =&gt; hiera(&#39;oracle_database_domain_name&#39;),
+    sys_password              =&gt; hiera(&#39;oracle_database_sys_password&#39;),
+    system_password           =&gt; hiera(&#39;oracle_database_system_password&#39;),
+    template                  =&gt; &#39;dbtemplate_11gR2_asm&#39;,
+    character_set             =&gt; &quot;AL32UTF8&quot;,
+    nationalcharacter_set     =&gt; &quot;UTF8&quot;,
+    sample_schema             =&gt; &#39;FALSE&#39;,
+    memory_percentage         =&gt; &quot;40&quot;,
+    memory_total              =&gt; &quot;800&quot;,
+    database_type             =&gt; &quot;MULTIPURPOSE&quot;,
+    em_configuration          =&gt; &quot;NONE&quot;,
+    storage_type              =&gt; &quot;ASM&quot;,
+    asm_snmp_password         =&gt; &#39;Welcome01&#39;,
+    asm_diskgroup             =&gt; &#39;DATA&#39;,
+    recovery_diskgroup        =&gt; &#39;RECO&#39;,
+    recovery_area_destination =&gt; &#39;RECO&#39;,
+    require                   =&gt; [Oradb::Opatch[&#39;19791420_db_patch_2&#39;],
+                                  Ora_asm_diskgroup[&#39;RECO@+ASM&#39;],],
+  }
+
+  # or not based on a template
+  oradb::database{ &#39;oraDb&#39;:
+    oracle_base               =&gt; hiera(&#39;oracle_base_dir&#39;),
+    oracle_home               =&gt; hiera(&#39;oracle_home_dir&#39;),
+    version                   =&gt; hiera(&#39;dbinstance_version&#39;),
+    user                      =&gt; hiera(&#39;oracle_os_user&#39;),
+    group                     =&gt; hiera(&#39;oracle_os_group&#39;),
+    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    action                    =&gt; &#39;create&#39;,
+    db_name                   =&gt; hiera(&#39;oracle_database_name&#39;),
+    db_domain                 =&gt; hiera(&#39;oracle_database_domain_name&#39;),
+    sys_password              =&gt; hiera(&#39;oracle_database_sys_password&#39;),
+    system_password           =&gt; hiera(&#39;oracle_database_system_password&#39;),
+    character_set             =&gt; &quot;AL32UTF8&quot;,
+    nationalcharacter_set     =&gt; &quot;UTF8&quot;,
+    sample_schema             =&gt; &#39;FALSE&#39;,
+    memory_percentage         =&gt; &quot;40&quot;,
+    memory_total              =&gt; &quot;800&quot;,
+    database_type             =&gt; &quot;MULTIPURPOSE&quot;,
+    em_configuration          =&gt; &quot;NONE&quot;,
+    storage_type              =&gt; &quot;ASM&quot;,
+    asm_snmp_password         =&gt; &#39;Welcome01&#39;,
+    asm_diskgroup             =&gt; &#39;DATA&#39;,
+    recovery_area_destination =&gt; &#39;DATA&#39;,
+    require                   =&gt; Oradb::Opatch[&#39;19791420_db_patch_2&#39;],
+  }
+
+  # 12.2 on asm
+  oradb::database{ &#39;oraDb&#39;:
+    oracle_base               =&gt; lookup(&#39;oracle_base_dir&#39;),
+    oracle_home               =&gt; lookup(&#39;oracle_home_dir&#39;),
+    version                   =&gt; lookup(&#39;dbinstance_version&#39;),
+    user                      =&gt; lookup(&#39;oracle_os_user&#39;),
+    group                     =&gt; lookup(&#39;oracle_os_group&#39;),
+    download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
+    action                    =&gt; &#39;create&#39;,
+    db_name                   =&gt; lookup(&#39;oracle_database_name&#39;),
+    db_domain                 =&gt; lookup(&#39;oracle_database_domain_name&#39;),
+    sys_password              =&gt; lookup(&#39;oracle_database_sys_password&#39;),
+    system_password           =&gt; lookup(&#39;oracle_database_system_password&#39;),
+    # template                  =&gt; &#39;dbtemplate_12.1_asm&#39;,
+    character_set             =&gt; &#39;AL32UTF8&#39;,
+    nationalcharacter_set     =&gt; &#39;UTF8&#39;,
+    sample_schema             =&gt; &#39;false&#39;,
+    memory_percentage         =&gt; 40,
+    memory_total              =&gt; 2880,
+    automatic_memory_management =&gt; false,
+    database_type             =&gt; &#39;MULTIPURPOSE&#39;,
+    em_configuration          =&gt; &#39;NONE&#39;,
+    storage_type              =&gt; &#39;ASM&#39;,
+    asm_snmp_password         =&gt; &#39;Welcome01&#39;,
+    asm_diskgroup             =&gt; &#39;+DATA/{DB_UNIQUE_NAME}&#39;,
+    data_file_destination     =&gt; &#39;+DATA/{DB_UNIQUE_NAME}&#39;,
+    recovery_diskgroup        =&gt; &#39;+RECO&#39;,
+    recovery_area_destination =&gt; &#39;+RECO&#39;,
+    puppet_download_mnt_point =&gt; &#39;oradb/&#39;,
+    require                   =&gt;  Ora_asm_diskgroup[&#39;RECO@+ASM&#39;],
+  }</code></pre>
+
+<h2 id="label-Oracle+Database+Client">Oracle Database Client</h2>
+
+<pre class="code ruby"><code class="ruby">oradb::client{ &#39;12.2.0.1_Linux-x86-64&#39;:
+  version                   =&gt; &#39;12.2.0.1&#39;,
+  file                      =&gt; &#39;V839967-01.zip&#39;,
+  oracle_base               =&gt; &#39;/oracle&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/12.2/client&#39;,
+  remote_file               =&gt; false,
+  log_output                =&gt; true,
+  puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
+}</code></pre>
+
+<p>or</p>
+
+<pre class="code ruby"><code class="ruby">oradb::client{ &#39;12.1.0.1_Linux-x86-64&#39;:
+  version                   =&gt; &#39;12.1.0.1&#39;,
+  file                      =&gt; &#39;linuxamd64_12c_client.zip&#39;,
+  oracle_base               =&gt; &#39;/oracle&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/12.1/client&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;,
+  group_install             =&gt; &#39;oinstall&#39;,
+  download_dir              =&gt; &#39;/install&#39;,
+  bash_profile              =&gt; true,
+  remote_file               =&gt; true,
+  puppet_download_mnt_point =&gt; &quot;oradb/&quot;,
+  logoutput                 =&gt; true,
+}</code></pre>
+
+<p>or</p>
+
+<pre class="code ruby"><code class="ruby">oradb::client{ &#39;11.2.0.1_Linux-x86-64&#39;:
+  version                   =&gt; &#39;11.2.0.1&#39;,
+  file                      =&gt; &#39;linux.x64_11gR2_client.zip&#39;,
+  oracle_base               =&gt; &#39;/oracle&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/11.2/client&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;,
+  group_install             =&gt; &#39;oinstall&#39;,
+  download_dir              =&gt; &#39;/install&#39;,
+  bash_profile              =&gt; true,
+  remote_file               =&gt; false,
+  puppet_download_mnt_point =&gt; &quot;/software&quot;,
+  logoutput                 =&gt; true,
+}</code></pre>
+
+<h2 id="label-Enterprise+Manager">Enterprise Manager</h2>
+
+<pre class="code ruby"><code class="ruby">oradb::installem{ &#39;em12104&#39;:
+  version                     =&gt; &#39;12.1.0.4&#39;,
+  file                        =&gt; &#39;em12104_linux64&#39;,
+  oracle_base_dir             =&gt; &#39;/oracle&#39;,
+  oracle_home_dir             =&gt; &#39;/oracle/product/12.1/em&#39;,
+  agent_base_dir              =&gt; &#39;/oracle/product/12.1/agent&#39;,
+  software_library_dir        =&gt; &#39;/oracle/product/12.1/swlib&#39;,
+  weblogic_user               =&gt; &#39;weblogic&#39;,
+  weblogic_password           =&gt; &#39;Welcome01&#39;,
+  database_hostname           =&gt; &#39;emdb.example.com&#39;,
+  database_listener_port      =&gt; 1521,
+  database_service_sid_name   =&gt; &#39;emrepos.example.com&#39;,
+  database_sys_password       =&gt; &#39;Welcome01&#39;,
+  sysman_password             =&gt; &#39;Welcome01&#39;,
+  agent_registration_password =&gt; &#39;Welcome01&#39;,
+  deployment_size             =&gt; &#39;SMALL&#39;,
+  user                        =&gt; &#39;oracle&#39;,
+  group                       =&gt; &#39;oinstall&#39;,
+  download_dir                =&gt; &#39;/install&#39;,
+  zip_extract                 =&gt; true,
+  puppet_download_mnt_point   =&gt; &#39;/software&#39;,
+  remote_file                 =&gt; false,
+  log_output                  =&gt; true,
+}
+
+oradb::installem{ &#39;em13200&#39;:
+  version                     =&gt; &#39;13.2.0.0&#39;,
+  file                        =&gt; &#39;em13200p1_linux64&#39;,
+  oracle_base_dir             =&gt; &#39;/oracle&#39;,
+  oracle_home_dir             =&gt; &#39;/oracle/product/13.2/em&#39;,
+  agent_base_dir              =&gt; &#39;/oracle/product/13.2/agent&#39;,
+  software_library_dir        =&gt; &#39;/oracle/product/13.2/swlib&#39;,
+  weblogic_user               =&gt; &#39;weblogic&#39;,
+  weblogic_password           =&gt; &#39;Welcome01&#39;,
+  database_hostname           =&gt; &#39;emdb.example.com&#39;,
+  database_listener_port      =&gt; 1521,
+  database_service_sid_name   =&gt; &#39;emrepos.example.com&#39;,
+  database_sys_password       =&gt; &#39;Welcome01&#39;,
+  sysman_password             =&gt; &#39;Welcome01&#39;,
+  agent_registration_password =&gt; &#39;Welcome01&#39;,
+  deployment_size             =&gt; &#39;SMALL&#39;,
+  user                        =&gt; &#39;oracle&#39;,
+  group                       =&gt; &#39;oinstall&#39;,
+  download_dir                =&gt; &#39;/var/tmp/install&#39;,
+  zip_extract                 =&gt; false,
+  puppet_download_mnt_point   =&gt; &#39;/software&#39;,
+  remote_file                 =&gt; false,
+  log_output                  =&gt; true,
+}
+
+
+oradb::installem_agent{ &#39;em12104_agent&#39;:
+  version                     =&gt; &#39;12.1.0.4&#39;,
+  source                      =&gt; &#39;https://10.10.10.25:7802/em/install/getAgentImage&#39;,
+  install_type                =&gt; &#39;agentPull&#39;,
+  install_platform            =&gt; &#39;Linux x86-64&#39;,
+  oracle_base_dir             =&gt; &#39;/oracle&#39;,
+  agent_base_dir              =&gt; &#39;/oracle/product/12.1/agent&#39;,
+  agent_instance_home_dir     =&gt; &#39;/oracle/product/12.1/agent/agent_inst&#39;,
+  sysman_user                 =&gt; &#39;sysman&#39;,
+  sysman_password             =&gt; &#39;Welcome01&#39;,
+  agent_registration_password =&gt; &#39;Welcome01&#39;,
+  agent_port                  =&gt; 1830,
+  oms_host                    =&gt; &#39;10.10.10.25&#39;,
+  oms_port                    =&gt; 7802,
+  em_upload_port              =&gt; 4903,
+  user                        =&gt; &#39;oracle&#39;,
+  group                       =&gt; &#39;dba&#39;,
+  download_dir                =&gt; &#39;/var/tmp/install&#39;,
+  log_output                  =&gt; true,
+  oracle_hostname             =&gt; &#39;emdb.example.com&#39;, # FQDN hostname where to install on
+}
+
+oradb::installem_agent{ &#39;em13200_agent&#39;:
+  version                     =&gt; &#39;13.2.0.0&#39;,
+  source                      =&gt; &#39;https://10.10.10.25:7799/em/install/getAgentImage&#39;,
+  install_type                =&gt; &#39;agentPull&#39;,
+  install_platform            =&gt; &#39;Linux x86-64&#39;,
+  install_version             =&gt; &#39;13.2.0.0.0&#39;,
+  oracle_base_dir             =&gt; &#39;/oracle&#39;,
+  agent_base_dir              =&gt; &#39;/oracle/product/13.2/agent&#39;,
+  agent_instance_home_dir     =&gt; &#39;/oracle/product/13.2/agent/agent_inst&#39;,
+  sysman_user                 =&gt; &#39;sysman&#39;,
+  sysman_password             =&gt; &#39;Welcome01&#39;,
+  agent_registration_password =&gt; &#39;Welcome01&#39;,
+  agent_port                  =&gt; 1830,
+  oms_host                    =&gt; &#39;10.10.10.25&#39;,
+  oms_port                    =&gt; 7799,
+  em_upload_port              =&gt; 4889,
+  oracle_hostname             =&gt; &#39;emdb.example.com&#39;,
+  user                        =&gt; &#39;oracle&#39;,
+  group                       =&gt; &#39;dba&#39;,
+  download_dir                =&gt; &#39;/var/tmp/install&#39;,
+  log_output                  =&gt; true,
+}
+
+oradb::installem_agent{ &#39;em12104_agent2&#39;:
+  version                     =&gt; &#39;12.1.0.4&#39;,
+  source                      =&gt; &#39;/var/tmp/install/agent.zip&#39;,
+  install_type                =&gt; &#39;agentDeploy&#39;,
+  oracle_base_dir             =&gt; &#39;/oracle&#39;,
+  agent_base_dir              =&gt; &#39;/oracle/product/12.1/agent2&#39;,
+  agent_instance_home_dir     =&gt; &#39;/oracle/product/12.1/agent2/agent_inst&#39;,
+  agent_registration_password =&gt; &#39;Welcome01&#39;,
+  agent_port                  =&gt; 1832,
+  oms_host                    =&gt; &#39;10.10.10.25&#39;,
+  em_upload_port              =&gt; 4903,
+  user                        =&gt; &#39;oracle&#39;,
+  group                       =&gt; &#39;dba&#39;,
+  download_dir                =&gt; &#39;/var/tmp/install&#39;,
+  log_output                  =&gt; true,
+}</code></pre>
+
+<h2 id="label-Oracle+GoldenGate+12.1.2+and+11.2.1">Oracle GoldenGate 12.1.2 and 11.2.1</h2>
+
+<pre class="code ruby"><code class="ruby">  $groups = [&#39;oinstall&#39;,&#39;dba&#39;]
+
+  group { $groups :
+    ensure      =&gt; present,
+    before      =&gt; User[&#39;ggate&#39;],
+  }
+
+  user { &#39;ggate&#39; :
+    ensure      =&gt; present,
+    gid         =&gt; &#39;dba&#39;,
+    groups      =&gt; $groups,
+    shell       =&gt; &#39;/bin/bash&#39;,
+    password    =&gt; &#39;$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.&#39;,
+    home        =&gt; &quot;/home/ggate&quot;,
+    comment     =&gt; &quot;This user ggate was created by Puppet&quot;,
+    managehome  =&gt; true,
+  }
+
+  oradb::goldengate{ &#39;ggate12.1.2&#39;:
+    version                   =&gt; &#39;12.1.2&#39;,
+    file                      =&gt; &#39;121200_fbo_ggs_Linux_x64_shiphome.zip&#39;,
+    database_type             =&gt; &#39;Oracle&#39;,
+    database_version          =&gt; &#39;ORA11g&#39;,
+    database_home             =&gt; &#39;/oracle/product/12.1/db&#39;,
+    oracle_base               =&gt; &#39;/oracle&#39;,
+    goldengate_home           =&gt; &quot;/oracle/product/12.1/ggate&quot;,
+    manager_port              =&gt; 16000,
+    user                      =&gt; &#39;ggate&#39;,
+    group                     =&gt; &#39;dba&#39;,
+    group_install             =&gt; &#39;oinstall&#39;,
+    download_dir              =&gt; &#39;/install&#39;,
+    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    require                   =&gt; User[&#39;ggate&#39;],
+  }
+
+  file { &quot;/oracle/product/11.2.1&quot; :
+    ensure        =&gt; directory,
+    recurse       =&gt; false,
+    replace       =&gt; false,
+    mode          =&gt; &#39;0775&#39;,
+    owner         =&gt; &#39;ggate&#39;,
+    group         =&gt; &#39;dba&#39;,
+    require       =&gt; Oradb::Goldengate[&#39;ggate12.1.2&#39;],
+  }
+
+  oradb::goldengate{ &#39;ggate11.2.1&#39;:
+    version                   =&gt; &#39;11.2.1&#39;,
+    file                      =&gt; &#39;ogg112101_fbo_ggs_Linux_x64_ora11g_64bit.zip&#39;,
+    tar_file                  =&gt; &#39;fbo_ggs_Linux_x64_ora11g_64bit.tar&#39;,
+    goldengate_home           =&gt; &quot;/oracle/product/11.2.1/ggate&quot;,
+    user                      =&gt; &#39;ggate&#39;,
+    group                     =&gt; &#39;dba&#39;,
+    download_dir              =&gt; &#39;/install&#39;,
+    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    require                   =&gt; File[&quot;/oracle/product/11.2.1&quot;],
+  }
+
+  oradb::goldengate{ &#39;ggate11.2.1_java&#39;:
+    version                   =&gt; &#39;11.2.1&#39;,
+    file                      =&gt; &#39;V38714-01.zip&#39;,
+    tar_file                  =&gt; &#39;ggs_Adapters_Linux_x64.tar&#39;,
+    goldengate_home           =&gt; &quot;/oracle/product/11.2.1/ggate_java&quot;,
+    user                      =&gt; &#39;ggate&#39;,
+    group                     =&gt; &#39;dba&#39;,
+    group_install             =&gt; &#39;oinstall&#39;,
+    download_dir              =&gt; &#39;/install&#39;,
+    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    require                   =&gt; File[&quot;/oracle/product/11.2.1&quot;],
+  }</code></pre>
+
+<h2 id="label-Oracle+SOA+Suite+Repository+Creation+Utility+-28RCU-29">Oracle SOA Suite Repository Creation Utility (RCU)</h2>
+
+<p>product = - soasuite - webcenter - all</p>
+
+<p>RCU examples</p>
+
+<p>soa suite repository</p>
+
+<pre class="code ruby"><code class="ruby">oradb::rcu{&#39;DEV_PS6&#39;:
+  rcu_file       =&gt; &#39;ofm_rcu_linux_11.1.1.7.0_32_disk1_1of1.zip&#39;,
+  product        =&gt; &#39;soasuite&#39;,
+  version        =&gt; &#39;11.1.1.7&#39;,
+  oracle_home    =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user           =&gt; &#39;oracle&#39;,
+  group          =&gt; &#39;dba&#39;,
+  download_dir   =&gt; &#39;/install&#39;,
+  action         =&gt; &#39;create&#39;,
+  db_server      =&gt; &#39;dbagent1.alfa.local:1521&#39;,
+  db_service     =&gt; &#39;test.oracle.com&#39;,
+  sys_password   =&gt; &#39;Welcome01&#39;,
+  schema_prefix  =&gt; &#39;DEV&#39;,
+  repos_password =&gt; &#39;Welcome02&#39;,
+}</code></pre>
+
+<p>webcenter repository with a fixed temp tablespace</p>
+
+<pre class="code ruby"><code class="ruby">oradb::rcu{&#39;DEV2_PS6&#39;:
+  rcu_file          =&gt; &#39;ofm_rcu_linux_11.1.1.7.0_32_disk1_1of1.zip&#39;,
+  product           =&gt; &#39;webcenter&#39;,
+  version           =&gt; &#39;11.1.1.7&#39;,
+  oracle_home       =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user              =&gt; &#39;oracle&#39;,
+  group             =&gt; &#39;dba&#39;,
+  download_dir      =&gt; &#39;/install&#39;,
+  action            =&gt; &#39;create&#39;,
+  db_server         =&gt; &#39;dbagent1.alfa.local:1521&#39;,
+  db_service        =&gt; &#39;test.oracle.com&#39;,
+  sys_password      =&gt; &#39;Welcome01&#39;,
+  schema_prefix     =&gt; &#39;DEV&#39;,
+  temp_tablespace   =&gt; &#39;TEMP&#39;,
+  repos_password    =&gt; &#39;Welcome02&#39;,
+}</code></pre>
+
+<p>delete a repository</p>
+
+<pre class="code ruby"><code class="ruby">oradb::rcu{&#39;Delete_DEV3_PS5&#39;:
+  rcu_file          =&gt; &#39;ofm_rcu_linux_11.1.1.6.0_disk1_1of1.zip&#39;,
+  product           =&gt; &#39;soasuite&#39;,
+  version           =&gt; &#39;11.1.1.6&#39;,
+  oracle_home       =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user              =&gt; &#39;oracle&#39;,
+  group             =&gt; &#39;dba&#39;,
+  download_dir      =&gt; &#39;/install&#39;,
+  action            =&gt; &#39;delete&#39;,
+  db_server         =&gt; &#39;dbagent1.alfa.local:1521&#39;,
+  db_service        =&gt; &#39;test.oracle.com&#39;,
+  sys_password      =&gt; &#39;Welcome01&#39;,
+  schema_prefix     =&gt; &#39;DEV3&#39;,
+  repos_password    =&gt; &#39;Welcome02&#39;,
+}</code></pre>
+
+<p>OIM, OAM repository, OIM needs an Oracle Enterprise Edition database</p>
+
+<pre class="code ruby"><code class="ruby">oradb::rcu{&#39;DEV_1112&#39;:
+  rcu_file                  =&gt; &#39;V37476-01.zip&#39;,
+  product                   =&gt; &#39;oim&#39;,
+  version                   =&gt; &#39;11.1.2.1&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;,
+  download_dir              =&gt; &#39;/data/install&#39;,
+  action                    =&gt; &#39;create&#39;,
+  db_server                 =&gt; &#39;oimdb.alfa.local:1521&#39;,
+  db_service                =&gt; &#39;oim.oracle.com&#39;,
+  sys_password              =&gt; hiera(&#39;database_test_sys_password&#39;),
+  schema_prefix             =&gt; &#39;DEV&#39;,
+  repos_password            =&gt; hiera(&#39;database_test_rcu_dev_password&#39;),
+  puppet_download_mnt_point =&gt; $puppet_download_mnt_point,
+  logoutput                 =&gt; true,
+  require                   =&gt; Oradb::Dbactions[&#39;start oimDb&#39;],
+ }</code></pre>
+
+<h2 id="label-Solaris+10+kernel-2C+ulimits+and+required+packages">Solaris 10 kernel, ulimits and required packages</h2>
+
+<pre class="code ruby"><code class="ruby">exec { &quot;create /cdrom/unnamed_cdrom&quot;:
+  command =&gt; &quot;/usr/bin/mkdir -p /cdrom/unnamed_cdrom&quot;,
+  creates =&gt; &quot;/cdrom/unnamed_cdrom&quot;,
+}
+
+mount { &quot;/cdrom/unnamed_cdrom&quot;:
+  device   =&gt; &quot;/dev/dsk/c0t1d0s2&quot;,
+  fstype   =&gt; &quot;hsfs&quot;,
+  ensure   =&gt; &quot;mounted&quot;,
+  options  =&gt; &quot;ro&quot;,
+  atboot   =&gt; true,
+  remounts =&gt; false,
+  require  =&gt; Exec[&quot;create /cdrom/unnamed_cdrom&quot;],
+}
+
+$install = [
+             &#39;SUNWarc&#39;,&#39;SUNWbtool&#39;,&#39;SUNWcsl&#39;,
+             &#39;SUNWdtrc&#39;,&#39;SUNWeu8os&#39;,&#39;SUNWhea&#39;,
+             &#39;SUNWi1cs&#39;, &#39;SUNWi15cs&#39;,
+             &#39;SUNWlibC&#39;,&#39;SUNWlibm&#39;,&#39;SUNWlibms&#39;,
+             &#39;SUNWsprot&#39;,&#39;SUNWpool&#39;,&#39;SUNWpoolr&#39;,
+             &#39;SUNWtoo&#39;,&#39;SUNWxwfnt&#39;
+            ]
+
+package { $install:
+  ensure    =&gt; present,
+  adminfile =&gt; &quot;/vagrant/pkgadd_response&quot;,
+  source    =&gt; &quot;/cdrom/unnamed_cdrom/Solaris_10/Product/&quot;,
+  require   =&gt; [Exec[&quot;create /cdrom/unnamed_cdrom&quot;],
+                Mount[&quot;/cdrom/unnamed_cdrom&quot;]
+               ],
+}
+package { &#39;SUNWi1of&#39;:
+  ensure    =&gt; present,
+  adminfile =&gt; &quot;/vagrant/pkgadd_response&quot;,
+  source    =&gt; &quot;/cdrom/unnamed_cdrom/Solaris_10/Product/&quot;,
+  require   =&gt; Package[$install],
+}
+
+
+# pkginfo -i SUNWarc SUNWbtool SUNWhea SUNWlibC SUNWlibm SUNWlibms SUNWsprot SUNWtoo SUNWi1of SUNWi1cs SUNWi15cs SUNWxwfnt SUNWcsl SUNWdtrc
+# pkgadd -d /cdrom/unnamed_cdrom/Solaris_10/Product/ -r response -a response SUNWarc SUNWbtool SUNWhea SUNWlibC SUNWlibm SUNWlibms SUNWsprot SUNWtoo SUNWi1of SUNWi1cs SUNWi15cs SUNWxwfnt SUNWcsl SUNWdtrc
+
+
+$all_groups = [&#39;oinstall&#39;,&#39;dba&#39; ,&#39;oper&#39;]
+
+group { $all_groups :
+  ensure      =&gt; present,
+}
+
+user { &#39;oracle&#39; :
+  ensure      =&gt; present,
+  uid         =&gt; 500,
+  gid         =&gt; &#39;oinstall&#39;,
+  groups      =&gt; [&#39;oinstall&#39;,&#39;dba&#39;,&#39;oper&#39;],
+  shell       =&gt; &#39;/bin/bash&#39;,
+  password    =&gt; &#39;$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.&#39;,
+  home        =&gt; &quot;/home/oracle&quot;,
+  comment     =&gt; &quot;This user oracle was created by Puppet&quot;,
+  require     =&gt; Group[$all_groups],
+  managehome  =&gt; true,
+}
+
+$execPath     = &quot;/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:&quot;
+
+exec { &quot;projadd max-shm-memory&quot;:
+  command =&gt; &quot;projadd -p 102  -c &#39;ORADB&#39; -U oracle -G dba  -K &#39;project.max-shm-memory=(privileged,4G,deny)&#39; ORADB&quot;,
+  require =&gt; [ User[&quot;oracle&quot;],
+               Package[&#39;SUNWi1of&#39;],
+               Package[$install],
+             ],
+  unless  =&gt; &quot;projects -l | grep -c ORADB&quot;,
+  path    =&gt; $execPath,
+}
+
+exec { &quot;projmod max-sem-ids&quot;:
+  command     =&gt; &quot;projmod -s -K &#39;project.max-sem-ids=(privileged,100,deny)&#39; ORADB&quot;,
+  subscribe   =&gt; Exec[&quot;projadd max-shm-memory&quot;],
+  require     =&gt; Exec[&quot;projadd max-shm-memory&quot;],
+  refreshonly =&gt; true,
+  path        =&gt; $execPath,
+}
+
+exec { &quot;projmod max-shm-ids&quot;:
+  command     =&gt; &quot;projmod -s -K &#39;project.max-shm-ids=(privileged,100,deny)&#39; ORADB&quot;,
+  require     =&gt; Exec[&quot;projmod max-sem-ids&quot;],
+  subscribe   =&gt; Exec[&quot;projmod max-sem-ids&quot;],
+  refreshonly =&gt; true,
+  path        =&gt; $execPath,
+}
+
+exec { &quot;projmod max-sem-nsems&quot;:
+  command     =&gt; &quot;projmod -s -K &#39;process.max-sem-nsems=(privileged,256,deny)&#39; ORADB&quot;,
+  require     =&gt; Exec[&quot;projmod max-shm-ids&quot;],
+  subscribe   =&gt; Exec[&quot;projmod max-shm-ids&quot;],
+  refreshonly =&gt; true,
+  path        =&gt; $execPath,
+}
+
+exec { &quot;projmod max-file-descriptor&quot;:
+  command     =&gt; &quot;projmod -s -K &#39;process.max-file-descriptor=(basic,65536,deny)&#39; ORADB&quot;,
+  require     =&gt; Exec[&quot;projmod max-sem-nsems&quot;],
+  subscribe   =&gt; Exec[&quot;projmod max-sem-nsems&quot;],
+  refreshonly =&gt; true,
+  path        =&gt; $execPath,
+}
+
+exec { &quot;projmod max-stack-size&quot;:
+  command     =&gt; &quot;projmod -s -K &#39;process.max-stack-size=(privileged,32MB,deny)&#39; ORADB&quot;,
+  require     =&gt; Exec[&quot;projmod max-file-descriptor&quot;],
+  subscribe   =&gt; Exec[&quot;projmod max-file-descriptor&quot;],
+  refreshonly =&gt; true,
+  path        =&gt; $execPath,
+}
+
+exec { &quot;usermod oracle&quot;:
+  command     =&gt; &quot;usermod -K project=ORADB oracle&quot;,
+  require     =&gt; Exec[&quot;projmod max-stack-size&quot;],
+  subscribe   =&gt; Exec[&quot;projmod max-stack-size&quot;],
+  refreshonly =&gt; true,
+  path        =&gt; $execPath,
+}
+
+exec { &quot;ndd 1&quot;:
+  command =&gt; &quot;ndd -set /dev/tcp tcp_smallest_anon_port 9000&quot;,
+  require =&gt; Exec[&quot;usermod oracle&quot;],
+  path    =&gt; $execPath,
+}
+exec { &quot;ndd 2&quot;:
+  command =&gt; &quot;ndd -set /dev/tcp tcp_largest_anon_port 65500&quot;,
+  require =&gt; Exec[&quot;ndd 1&quot;],
+  path    =&gt; $execPath,
+}
+
+exec { &quot;ndd 3&quot;:
+  command =&gt; &quot;ndd -set /dev/udp udp_smallest_anon_port 9000&quot;,
+  require =&gt; Exec[&quot;ndd 2&quot;],
+  path    =&gt; $execPath,
+}
+
+exec { &quot;ndd 4&quot;:
+  command =&gt; &quot;ndd -set /dev/udp udp_largest_anon_port 65500&quot;,
+  require =&gt; Exec[&quot;ndd 3&quot;],
+  path    =&gt; $execPath,
+}
+
+exec { &quot;ulimit -S&quot;:
+  command =&gt; &quot;ulimit -S -n 4096&quot;,
+  require =&gt; Exec[&quot;ndd 4&quot;],
+  path    =&gt; $execPath,
+}
+
+exec { &quot;ulimit -H&quot;:
+  command =&gt; &quot;ulimit -H -n 65536&quot;,
+  require =&gt; Exec[&quot;ulimit -S&quot;],
+  path    =&gt; $execPath,
+}</code></pre>
+
+<h2 id="label-Solaris+11+kernel-2C+ulimits+and+required+packages">Solaris 11 kernel, ulimits and required packages</h2>
+
+<pre class="code ruby"><code class="ruby">package { [&#39;shell/ksh&#39;, &#39;developer/assembler&#39;]:
+  ensure =&gt; present,
+}
+
+$install  = &quot;pkg:/group/prerequisite/oracle/oracle-rdbms-server-12-1-preinstall&quot;
+
+package { $install:
+  ensure  =&gt; present,
+}
+
+$groups = [&#39;oinstall&#39;,&#39;dba&#39; ,&#39;oper&#39; ]
+
+group { $groups :
+  ensure      =&gt; present,
+}
+
+user { &#39;oracle&#39; :
+  ensure      =&gt; present,
+  uid         =&gt; 500,
+  gid         =&gt; &#39;dba&#39;,
+  groups      =&gt; $groups,
+  shell       =&gt; &#39;/bin/bash&#39;,
+  password    =&gt; &#39;$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.&#39;,
+  home        =&gt; &quot;/export/home/oracle&quot;,
+  comment     =&gt; &quot;This user oracle was created by Puppet&quot;,
+  require     =&gt; Group[$groups],
+  managehome  =&gt; true,
+}
+
+$execPath     = &quot;/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:&quot;
+
+exec { &quot;projadd group.dba&quot;:
+  command =&gt; &quot;projadd -U oracle -G dba -p 104 group.dba&quot;,
+  require =&gt; User[&quot;oracle&quot;],
+  unless  =&gt; &quot;projects -l | grep -c group.dba&quot;,
+  path    =&gt; $execPath,
+}
+
+exec { &quot;usermod oracle&quot;:
+  command =&gt; &quot;usermod -K project=group.dba oracle&quot;,
+  require =&gt; [User[&quot;oracle&quot;],Exec[&quot;projadd group.dba&quot;],],
+  path    =&gt; $execPath,
+}
+
+exec { &quot;projmod max-shm-memory&quot;:
+  command =&gt; &quot;projmod -sK &#39;project.max-shm-memory=(privileged,4G,deny)&#39; group.dba&quot;,
+  require =&gt; [User[&quot;oracle&quot;],Exec[&quot;projadd group.dba&quot;],],
+  path    =&gt; $execPath,
+}
+
+exec { &quot;projmod max-sem-ids&quot;:
+  command     =&gt; &quot;projmod -sK &#39;project.max-sem-ids=(privileged,100,deny)&#39; group.dba&quot;,
+  require     =&gt; Exec[&quot;projadd group.dba&quot;],
+  path        =&gt; $execPath,
+}
+
+exec { &quot;projmod max-shm-ids&quot;:
+  command     =&gt; &quot;projmod -s -K &#39;project.max-shm-ids=(privileged,100,deny)&#39; group.dba&quot;,
+  require     =&gt; Exec[&quot;projadd group.dba&quot;],
+  path        =&gt; $execPath,
+}
+
+exec { &quot;projmod max-sem-nsems&quot;:
+  command     =&gt; &quot;projmod -sK &#39;process.max-sem-nsems=(privileged,256,deny)&#39; group.dba&quot;,
+  require     =&gt; Exec[&quot;projadd group.dba&quot;],
+  path        =&gt; $execPath,
+}
+
+exec { &quot;projmod max-file-descriptor&quot;:
+  command     =&gt; &quot;projmod -sK &#39;process.max-file-descriptor=(basic,65536,deny)&#39; group.dba&quot;,
+  require     =&gt; Exec[&quot;projadd group.dba&quot;],
+  path        =&gt; $execPath,
+}
+
+exec { &quot;projmod max-stack-size&quot;:
+  command     =&gt; &quot;projmod -sK &#39;process.max-stack-size=(privileged,32MB,deny)&#39; group.dba&quot;,
+  require     =&gt; Exec[&quot;projadd group.dba&quot;],
+  path        =&gt; $execPath,
+}
+
+exec { &quot;ipadm smallest_anon_port tcp&quot;:
+  command     =&gt; &quot;ipadm set-prop -p smallest_anon_port=9000 tcp&quot;,
+  path        =&gt; $execPath,
+}
+exec { &quot;ipadm smallest_anon_port udp&quot;:
+  command     =&gt; &quot;ipadm set-prop -p smallest_anon_port=9000 udp&quot;,
+  path        =&gt; $execPath,
+}
+exec { &quot;ipadm largest_anon_port tcp&quot;:
+  command     =&gt; &quot;ipadm set-prop -p largest_anon_port=65500 tcp&quot;,
+  path        =&gt; $execPath,
+}
+exec { &quot;ipadm largest_anon_port udp&quot;:
+  command     =&gt; &quot;ipadm set-prop -p largest_anon_port=65500 udp&quot;,
+  path        =&gt; $execPath,
+}
+
+exec { &quot;ulimit -S&quot;:
+  command =&gt; &quot;ulimit -S -n 4096&quot;,
+  path    =&gt; $execPath,
+}
+
+exec { &quot;ulimit -H&quot;:
+  command =&gt; &quot;ulimit -H -n 65536&quot;,
+  path    =&gt; $execPath,
+}</code></pre>
+</div></div>
+
+      <div id="footer">
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
+</div>
+
+    </div>
+  </body>
+</html>

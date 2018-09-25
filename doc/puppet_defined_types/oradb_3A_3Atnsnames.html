@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Defined Type: oradb::tnsnames
+  
+    &mdash; Documentation by YARD 0.9.16
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_defined_types::oradb::tnsnames";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_defined_type_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (o)</a> &raquo;
+    <span class='title'><span class='object_link'>Defined Types</span></span>
+     &raquo; 
+    <span class="title">oradb::tnsnames</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Defined Type: oradb::tnsnames</h1>
+<div class="box_info">
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/tnsnames.pp
+    </dd>
+  </dl>
+</div>
+
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    
+<p>tnsnames</p>
+
+<p>Configure tnsnames entries</p>
+
+  </div>
+</div>
+
+
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>tnsnames</p>
+</div></p>
+      
+      <pre class="example code"><code>
+oradb::tnsnames{&#39;orcl&#39;:
+  oracle_home          =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user                 =&gt; &#39;oracle&#39;,
+  group                =&gt; &#39;dba&#39;,
+  server               =&gt; { myserver =&gt; { host =&gt; soadb.example.nl, port =&gt; &#39;1521&#39;, protocol =&gt; &#39;TCP&#39; }},
+  connect_service_name =&gt; &#39;soarepos.example.nl&#39;,
+}
+
+oradb::tnsnames{&#39;test&#39;:
+  oracle_home          =&gt; &#39;/oracle/product/11.2/db&#39;,
+  user                 =&gt; &#39;oracle&#39;,
+  group                =&gt; &#39;dba&#39;,
+  server               =&gt; { myserver =&gt; { host =&gt; soadb.example.nl, port =&gt; &#39;1525&#39;, protocol =&gt; &#39;TCP&#39; }, myserver2 =&gt; { host =&gt; soadb2.example.nl, port =&gt; &#39;1526&#39;, protocol =&gt; &#39;TCP&#39; }},
+  connect_service_name =&gt; &#39;soarepos.example.nl&#39;,
+  connect_server       =&gt; &#39;DEDICATED&#39;,
+}</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>oracle_home</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Home directory</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::user&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>operating system user</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::group&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the operating group name for using the oracle software</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>server</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{ myserver =&gt; { host =&gt; undef, port =&gt; &#39;1521&#39;, protocol =&gt; &#39;TCP&#39; }}</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the tnsnames connection details</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>loadbalance</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;ON&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>configure loadbalance on the tnsnames entries</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>failover</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;ON&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>configure failover on the tnsnames entries</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>connect_service_name</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the service name of the database</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>connect_server</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;DEDICATED&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>service connection type</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>entry_type</span>
+      
+      
+        <span class='type'>(<tt>Enum['tnsnames','listener']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;tnsnames&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>type of configuration</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/tnsnames.pp', line 35</span>
+
+define oradb::tnsnames(
+  String $oracle_home                     = undef,
+  String $user                            = lookup(&#39;oradb::user&#39;),
+  String $group                           = lookup(&#39;oradb::group&#39;),
+  Hash   $server                          = { myserver =&gt; { host =&gt; undef, port =&gt; &#39;1521&#39;, protocol =&gt; &#39;TCP&#39; }},
+  String $loadbalance                     = &#39;ON&#39;,
+  String $failover                        = &#39;ON&#39;,
+  Optional[String] $connect_service_name  = undef,
+  String $connect_server                  = &#39;DEDICATED&#39;,
+  Enum[&#39;tnsnames&#39;,&#39;listener&#39;] $entry_type = &#39;tnsnames&#39;,
+)
+{
+  if ! defined(Concat[&quot;${oracle_home}/network/admin/tnsnames.ora&quot;]) {
+    concat { &quot;${oracle_home}/network/admin/tnsnames.ora&quot;:
+      ensure         =&gt; present,
+      owner          =&gt; $user,
+      group          =&gt; $group,
+      mode           =&gt; &#39;0774&#39;,
+      ensure_newline =&gt; true,
+    }
+  }
+
+  case $entry_type {
+    &#39;tnsnames&#39; : { $template_path = &#39;oradb/tnsnames.epp&#39; }
+    &#39;listener&#39; : { $template_path = &#39;oradb/listener.epp&#39; }
+    default    : { fail(&quot;${entry_type} is not a supported entry_type&quot;) }
+  }
+
+  $size = keys($server).size
+
+  # puppet epp render tnsnames.epp --values &quot;{size =&gt; 1 ,title =&gt; &#39;a&#39;, server =&gt; { myserver =&gt; { host =&gt; &#39;dbcdb.example.com&#39;,  port =&gt; &#39;1525&#39;, protocol =&gt; &#39;TCP&#39; }} , loadbalance =&gt; &#39;ON&#39;, failover =&gt; &#39;ON&#39; , connect_server =&gt; &#39;aa&#39; , connect_service_name =&gt; &#39;aaa&#39; }&quot;
+  # puppet epp render tnsnames.epp --values &quot;{size =&gt; 2 , title =&gt; &#39;a&#39;, server =&gt; { myserver =&gt; { host =&gt; &#39;dbcdb.example.com&#39;, port =&gt; &#39;1525&#39;, protocol =&gt; &#39;TCP&#39; }, myserver2 =&gt;  { host =&gt; &#39;dbcdb.example.com&#39;, port =&gt; &#39;1526&#39;, protocol =&gt; &#39;TCP&#39; }  } , loadbalance =&gt; &#39;ON&#39;, failover =&gt; &#39;ON&#39; , connect_server =&gt; &#39;aa&#39; , connect_service_name =&gt; &#39;aaa&#39; }&quot;
+  concat::fragment { $title:
+    target  =&gt; &quot;${oracle_home}/network/admin/tnsnames.ora&quot;,
+    content =&gt; epp($template_path , { &#39;title&#39;                =&gt; $title,
+                                      &#39;server&#39;               =&gt; $server,
+                                      &#39;loadbalance&#39;          =&gt; $loadbalance,
+                                      &#39;failover&#39;             =&gt; $failover,
+                                      &#39;connect_server&#39;       =&gt; $connect_server,
+                                      &#39;connect_service_name&#39; =&gt; $connect_service_name,
+                                      &#39;size&#39;                 =&gt; $size
+                                      }),
+  }
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
+</div>
+
+    </div>
+  </body>
+</html>

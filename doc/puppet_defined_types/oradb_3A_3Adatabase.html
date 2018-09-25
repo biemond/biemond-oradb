@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Defined Type: oradb::database
+  
+    &mdash; Documentation by YARD 0.9.16
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_defined_types::oradb::database";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_defined_type_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (o)</a> &raquo;
+    <span class='title'><span class='object_link'>Defined Types</span></span>
+     &raquo; 
+    <span class="title">oradb::database</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Defined Type: oradb::database</h1>
+<div class="box_info">
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/database.pp
+    </dd>
+  </dl>
+</div>
+
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    
+<p>database</p>
+
+<p>add or destroys a (container) database</p>
+
+  </div>
+</div>
+
+
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>creates a database</p>
+</div></p>
+      
+      <pre class="example code"><code>
+oradb::database{ &#39;testDb&#39;:
+  oracle_base               =&gt; &#39;/oracle&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/11.2/db&#39;,
+  version                   =&gt; &#39;11.2&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;,
+  download_dir              =&gt; &#39;/var/tmp/install&#39;,
+  action                    =&gt; &#39;create&#39;,
+  db_name                   =&gt; &#39;test&#39;,
+  db_domain                 =&gt; &#39;oracle.com&#39;,
+  db_port                   =&gt; &#39;1521&#39;,
+  sys_password              =&gt; &#39;Welcome01&#39;,
+  system_password           =&gt; &#39;Welcome01&#39;,
+  data_file_destination     =&gt; &quot;/oracle/oradata&quot;,
+  recovery_area_destination =&gt; &quot;/oracle/flash_recovery_area&quot;,
+  character_set             =&gt; &quot;AL32UTF8&quot;,
+  nationalcharacter_set     =&gt; &quot;UTF8&quot;,
+  init_params               =&gt; {&#39;open_cursors&#39;        =&gt; &#39;1000&#39;,
+                                &#39;processes&#39;           =&gt; &#39;600&#39;,
+                                &#39;job_queue_processes&#39; =&gt; &#39;4&#39; },
+  sample_schema             =&gt; &#39;TRUE&#39;,
+  memory_percentage         =&gt; 40,
+  memory_total              =&gt; 800,
+  database_type             =&gt; &quot;MULTIPURPOSE&quot;,
+  em_configuration          =&gt; &quot;NONE&quot;,
+}
+
+oradb::database{ &#39;oraDb&#39;:
+  oracle_base               =&gt; &#39;/oracle&#39;,
+  oracle_home               =&gt; &#39;/oracle/product/12.1/db&#39;,
+  version                   =&gt; &#39;12.1&#39;,
+  user                      =&gt; &#39;oracle&#39;,
+  group                     =&gt; &#39;dba&#39;
+  download_dir              =&gt; &#39;/var/tmp/install&#39;,
+  action                    =&gt; &#39;create&#39;,
+  db_name                   =&gt; &#39;orcl&#39;,
+  db_domain                 =&gt; &#39;example.com&#39;,
+  sys_password              =&gt; &#39;Welcome01&#39;,
+  system_password           =&gt; &#39;Welcome01&#39;,
+  character_set             =&gt; &#39;AL32UTF8&#39;,
+  nationalcharacter_set     =&gt; &#39;UTF8&#39;,
+  sample_schema             =&gt; &#39;FALSE&#39;,
+  memory_percentage         =&gt; 40,
+  memory_total              =&gt; 800,
+  database_type             =&gt; &#39;MULTIPURPOSE&#39;,
+  em_configuration          =&gt; &#39;NONE&#39;,
+  data_file_destination     =&gt; &#39;/oracle/oradata&#39;,
+  recovery_area_destination =&gt; &#39;/oracle/flash_recovery_area&#39;,
+  init_params               =&gt; {&#39;open_cursors&#39;        =&gt; &#39;1000&#39;,
+                                &#39;processes&#39;           =&gt; &#39;600&#39;,
+                                &#39;job_queue_processes&#39; =&gt; &#39;4&#39; },
+  container_database        =&gt; true,
+}</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>oracle_base</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Base directory</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>oracle_home</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the Oracle Home directory inside Oracle Base</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>db_port</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::listener_port&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>database listener port number</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::user&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>operating system user</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::group&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the operating group name for using the oracle software</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>download_dir</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::download_dir&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>location for installation files used by this module</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>puppet_download_mnt_point</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::module_mountpoint&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the location where the installation software is available</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>version</span>
+      
+      
+        <span class='type'>(<tt>Enum['11.2', '12.1', '12.2']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::version&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Oracle installation version</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>action</span>
+      
+      
+        <span class='type'>(<tt>Enum['create','delete']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::database::action&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>create or delete the database</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>template</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>dbt template for your own full database configution</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>template_seeded</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>seeded template name</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>template_variables</span>
+      
+      
+        <span class='type'>(<tt>Optional[Hash]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>variables which you can use in your dbt template</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>db_name</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::database_name&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>database name</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>db_domain</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>database domain name</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>sys_password</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::default::password&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>sys username password</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>system_password</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::default::password&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>system username password</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>data_file_destination</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to for the Datafiles location</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>recovery_area_destination</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to for the recovery area destination location</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>character_set</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::database::character_set&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>nationalcharacter_set</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::database::nationalcharacter_set&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>init_params</span>
+      
+      
+        <span class='type'>(<tt>Optional[Hash]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>database parameters</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>sample_schema</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::database::sample_schema&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>add sample schemas</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>memory_percentage</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::database::memory_percentage&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>memory_total</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::database::memory_total&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>database_type</span>
+      
+      
+        <span class='type'>(<tt>Enum['MULTIPURPOSE', 'DATA_WAREHOUSING', 'OLTP']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::database::database_type&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>em_configuration</span>
+      
+      
+        <span class='type'>(<tt>Enum['NONE', 'CENTRAL', 'LOCAL', 'ALL']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::database::em_configuration&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>storage_type</span>
+      
+      
+        <span class='type'>(<tt>Optional[Enum['FS', 'CFS', 'ASM']]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>asm_snmp_password</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::default::password&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>db_snmp_password</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::default::password&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>asm_diskgroup</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::database::asm_diskgroup&#39;)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>recovery_diskgroup</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>cluster_nodes</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>container_database</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>configure as a 12c container database which allows plugleable databases</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>automatic_memory_management</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>timeout</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>0</tt>)</em>
+      
+      
+    </li>
+  
+</ul>
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/database.pp', line 96</span>
+
+define oradb::database(
+  String $oracle_base                                             = undef,
+  String $oracle_home                                             = undef,
+  Enum[&#39;11.2&#39;, &#39;12.1&#39;, &#39;12.2&#39;] $version                           = lookup(&#39;oradb::version&#39;),
+  String $user                                                    = lookup(&#39;oradb::user&#39;),
+  String $group                                                   = lookup(&#39;oradb::group&#39;),
+  String $download_dir                                            = lookup(&#39;oradb::download_dir&#39;),
+  Enum[&#39;create&#39;,&#39;delete&#39;] $action                                 = lookup(&#39;oradb::database::action&#39;),
+  Optional[String] $template                                      = undef,
+  Optional[String] $template_seeded                               = undef,
+  Optional[Hash] $template_variables                              = undef, # for dbt template
+  String $db_name                                                 = lookup(&#39;oradb::database_name&#39;),
+  Optional[String] $db_domain                                     = undef,
+  Integer $db_port                                                = lookup(&#39;oradb::listener_port&#39;),
+  String $sys_password                                            = lookup(&#39;oradb::default::password&#39;),
+  String $system_password                                         = lookup(&#39;oradb::default::password&#39;),
+  Optional[String] $data_file_destination                         = undef,
+  Optional[String] $recovery_area_destination                     = undef,
+  String $character_set                                           = lookup(&#39;oradb::database::character_set&#39;),
+  String $nationalcharacter_set                                   = lookup(&#39;oradb::database::nationalcharacter_set&#39;),
+  Optional[Hash] $init_params                                     = undef,
+  String $sample_schema                                           = lookup(&#39;oradb::database::sample_schema&#39;),
+  Integer $memory_percentage                                      = lookup(&#39;oradb::database::memory_percentage&#39;),
+  Integer $memory_total                                           = lookup(&#39;oradb::database::memory_total&#39;),
+  Enum[&#39;MULTIPURPOSE&#39;, &#39;DATA_WAREHOUSING&#39;, &#39;OLTP&#39;] $database_type = lookup(&#39;oradb::database::database_type&#39;),
+  Enum[&#39;NONE&#39;, &#39;CENTRAL&#39;, &#39;LOCAL&#39;, &#39;ALL&#39;] $em_configuration       = lookup(&#39;oradb::database::em_configuration&#39;),
+  Optional[Enum[&#39;FS&#39;, &#39;CFS&#39;, &#39;ASM&#39;]] $storage_type                = undef,
+  String $asm_snmp_password                                       = lookup(&#39;oradb::default::password&#39;),
+  String $db_snmp_password                                        = lookup(&#39;oradb::default::password&#39;),
+  String $asm_diskgroup                                           = lookup(&#39;oradb::database::asm_diskgroup&#39;),
+  Optional[String] $recovery_diskgroup                            = undef,
+  Optional[String] $cluster_nodes                                 = undef, # comma separated list with at first the local and at second the remode host e.g. &quot;racnode1,racnode2&quot;
+  Boolean $container_database                                     = false, # 12.1 feature for pluggable database
+  String $puppet_download_mnt_point                               = lookup(&#39;oradb::module_mountpoint&#39;),
+  Boolean $automatic_memory_management                            = true, # for 12.2 , choose false when more than 4gb memory
+  Optional[Integer] $timeout                                      = 0,
+)
+{
+
+  $supported_db_kernels = join( lookup(&#39;oradb::kernels&#39;), &#39;|&#39;)
+  if ( $::kernel in $supported_db_kernels == false){
+    fail(&quot;Unrecognized operating system, please use it on a ${supported_db_kernels} host&quot;)
+  }
+
+  if $action == &#39;create&#39; {
+    $operation_type = &#39;createDatabase&#39;
+  } elsif $action == &#39;delete&#39; {
+    $operation_type = &#39;deleteDatabase&#39;
+  } else {
+    fail(&#39;Unrecognized database action&#39;)
+  }
+
+  if ( $database_type in lookup(&#39;oradb::instance_types&#39;) == false ) {
+    fail(&#39;Unrecognized database_type&#39;)
+  }
+
+  if ( $em_configuration in lookup(&#39;oradb::instance_em_configuration&#39;) == false) {
+    fail(&#39;Unrecognized emConfiguration&#39;)
+  }
+
+  if ( $storage_type != undef and  $storage_type in lookup(&#39;oradb::instance_storage_type&#39;) == false ) {
+    fail(&#39;Unrecognized storageType&#39;)
+  }
+
+  if ( $version == &#39;11.2&#39; and $container_database == true ){
+    fail(&#39;container or pluggable database is not supported on version 11.2&#39;)
+  }
+
+#  if ( $version &gt;= &#39;12.2&#39; and $container_database == false ){
+#    fail(&#39;version 12.2 or higher requires container_database = true&#39;)
+#  }
+
+  $exec_path = lookup(&#39;oradb::exec_path&#39;)
+  $user_base = lookup(&#39;oradb::user_base_dir&#39;)
+  $user_home = &quot;${user_base}/${user}&quot;
+
+  if (is_hash($init_params) or is_string($init_params)) {
+    if is_hash($init_params) {
+      $init_params_array = sort(join_keys_to_values($init_params, &#39;=&#39;))
+      $sanitized_init_params = join($init_params_array,&#39;,&#39;)
+    } else {
+      $sanitized_init_params = $init_params
+    }
+  } else {
+    fail &#39;init_params only supports a String or a Hash as value type&#39;
+  }
+
+  $sanitized_title = regsubst($title, &#39;[^a-zA-Z0-9.-]&#39;, &#39;_&#39;, &#39;G&#39;)
+
+  if $db_domain {
+    $globaldb_name = &quot;${db_name}.${db_domain}&quot;
+  } else {
+    $globaldb_name = $db_name
+  }
+
+  if ! defined(File[&quot;${download_dir}/database_${sanitized_title}.rsp&quot;]) {
+    file { &quot;${download_dir}/database_${sanitized_title}.rsp&quot;:
+      ensure  =&gt; present,
+      content =&gt; epp(&quot;oradb/dbca_${version}.rsp.epp&quot;,
+                    { &#39;operationType&#39;               =&gt; $operation_type,
+                      &#39;globaldb_name&#39;               =&gt; $globaldb_name,
+                      &#39;db_name&#39;                     =&gt; $db_name,
+                      &#39;cluster_nodes&#39;               =&gt; $cluster_nodes,
+                      &#39;sys_password&#39;                =&gt; $sys_password,
+                      &#39;system_password&#39;             =&gt; $system_password,
+                      &#39;em_configuration&#39;            =&gt; $em_configuration,
+                      &#39;db_snmp_password&#39;            =&gt; $db_snmp_password,
+                      &#39;data_file_destination&#39;       =&gt; $data_file_destination,
+                      &#39;recovery_area_destination&#39;   =&gt; $recovery_area_destination,
+                      &#39;storage_type&#39;                =&gt; $storage_type,
+                      &#39;asm_diskgroup&#39;               =&gt; $asm_diskgroup,
+                      &#39;asm_snmp_password&#39;           =&gt; $asm_snmp_password,
+                      &#39;recovery_diskgroup&#39;          =&gt; $recovery_diskgroup,
+                      &#39;character_set&#39;               =&gt; $character_set,
+                      &#39;nationalcharacter_set&#39;       =&gt; $nationalcharacter_set,
+                      &#39;sanitizedInitParams&#39;         =&gt; $sanitized_init_params,
+                      &#39;sample_schema&#39;               =&gt; $sample_schema,
+                      &#39;memory_percentage&#39;           =&gt; $memory_percentage,
+                      &#39;database_type&#39;               =&gt; $database_type,
+                      &#39;memory_total&#39;                =&gt; $memory_total,
+                      &#39;db_port&#39;                     =&gt; $db_port,
+                      &#39;container_database&#39;          =&gt; $container_database,
+                      &#39;automatic_memory_management&#39; =&gt; $automatic_memory_management }),
+      mode    =&gt; &#39;0770&#39;,
+      owner   =&gt; $user,
+      group   =&gt; $group,
+      before  =&gt; Exec[&quot;oracle database ${title}&quot;],
+    }
+  }
+
+  if ( $template_seeded ) {
+    $templatename = &quot;${oracle_home}/assistants/dbca/templates/${template_seeded}.dbc&quot;
+  } elsif ( $template ) {
+    $templatename = &quot;${download_dir}/${template}_${sanitized_title}.dbt&quot;
+    file { $templatename:
+      ensure  =&gt; present,
+      content =&gt; template(&quot;${puppet_download_mnt_point}/${template}.dbt.erb&quot;),
+      mode    =&gt; &#39;0775&#39;,
+      owner   =&gt; $user,
+      group   =&gt; $group,
+      before  =&gt; Exec[&quot;oracle database ${title}&quot;],
+    }
+  } else {
+    $templatename = undef
+  }
+
+  if ($version == &#39;12.2&#39; and $templatename != undef and $storage_type != undef and $data_file_destination == undef ) {
+    fail(&#39;data_file_destination is required on version 12.2 when storage_type and template are defined&#39;)
+  }
+
+  $elevation_prefix = &quot;su - ${user} -c \&quot;/bin/ksh -c \\\&quot;&quot;
+  $elevation_suffix = &quot;\\\&quot;\&quot;&quot;
+
+  if $action == &#39;create&#39; {
+    if ( $templatename ) {
+
+      if ( $template_variables != undef ) {
+        file { &quot;${download_dir}/vars_${sanitized_title}.txt&quot;:
+          ensure  =&gt; present,
+          content =&gt; epp(&#39;oradb/dbca_vars.epp&#39;, { &#39;vars&#39; =&gt; $template_variables }),
+          mode    =&gt; &#39;0775&#39;,
+          owner   =&gt; $user,
+          group   =&gt; $group,
+          before  =&gt; Exec[&quot;oracle database ${title}&quot;],
+        }
+      }
+
+      if ( $version == &#39;11.2&#39; or $container_database == false ) {
+        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -emConfiguration ${em_configuration} &quot;
+      } else {
+        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -emConfiguration ${em_configuration} &quot;
+      }
+
+      if ( $template_variables != undef) {
+        $command_var = &quot; -variablesFile ${download_dir}/vars_${sanitized_title}.txt&quot;
+      } else {
+        $command_var = &#39;&#39;
+      }
+
+      if ( $data_file_destination != undef) {
+        $command_data_file = &quot; -datafileDestination ${data_file_destination}&quot;
+      } else {
+        $command_data_file = &#39;&#39;
+      }
+
+      if ( $init_params != undef) {
+        $command_init = &quot; -initParams ${sanitized_init_params}&quot;
+      } else {
+        $command_init = &#39;&#39;
+      }
+
+      if ( $cluster_nodes != undef) {
+        $command_nodes = &quot; -nodelist ${cluster_nodes}&quot;
+      } else {
+        $command_nodes = &#39;&#39;
+      }
+
+      if ( $storage_type != undef) {
+        $command_storage = &quot; -storageType ${storage_type}&quot;
+      } else {
+        $command_storage = &#39;&#39;
+      }
+
+      $command = &quot;${command_pre} ${command_storage} ${command_data_file} ${command_var} ${command_init} ${command_nodes} ${elevation_suffix}&quot;
+
+    } else {
+      if ( $version == &#39;12.2&#39; ) {
+        $command = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -responseFile ${download_dir}/database_${sanitized_title}.rsp${elevation_suffix}&quot;
+      } else {
+        $command = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp${elevation_suffix}&quot;
+      }
+    }
+
+    exec { &quot;oracle database ${title}&quot;:
+      command     =&gt; $command,
+      creates     =&gt; &quot;${oracle_base}/admin/${db_name}&quot;,
+      timeout     =&gt; $timeout,
+      path        =&gt; $exec_path,
+      user        =&gt; &#39;root&#39;,
+      group       =&gt; &#39;root&#39;,
+      cwd         =&gt; $oracle_base,
+      environment =&gt; [&quot;USER=${user}&quot;,],
+      logoutput   =&gt; true,
+    }
+  } elsif $action == &#39;delete&#39; {
+    if ( $version == &#39;12.2&#39; ) {
+      $command = &quot;${oracle_home}/bin/dbca -silent -deleteDatabase -sourceDB ${db_name} -sysDBAUserName sys -sysDBAPassword ${sys_password}&quot;
+    } else {
+      $command = &quot;${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp&quot;
+    }
+
+    exec { &quot;oracle database ${title}&quot;:
+      command     =&gt; $command,
+      onlyif      =&gt; &quot;ls ${oracle_base}/admin/${db_name}&quot;,
+      timeout     =&gt; $timeout,
+      path        =&gt; $exec_path,
+      user        =&gt; $user,
+      group       =&gt; $group,
+      cwd         =&gt; $oracle_base,
+      environment =&gt; [&quot;USER=${user}&quot;,],
+      logoutput   =&gt; true,
+    }
+  }
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
+</div>
+
+    </div>
+  </body>
+</html>

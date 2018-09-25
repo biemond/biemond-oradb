@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Defined Type: oradb::goldengate
+  
+    &mdash; Documentation by YARD 0.9.16
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_defined_types::oradb::goldengate";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_defined_type_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (o)</a> &raquo;
+    <span class='title'><span class='object_link'>Defined Types</span></span>
+     &raquo; 
+    <span class="title">oradb::goldengate</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Defined Type: oradb::goldengate</h1>
+<div class="box_info">
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/goldengate.pp
+    </dd>
+  </dl>
+</div>
+
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    
+<p>goldengate</p>
+
+<p>install goldengate version 12.3.0, 12.2.1, 12.1.2 or 11.2</p>
+
+  </div>
+</div>
+
+
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>goldengate install</p>
+</div></p>
+      
+      <pre class="example code"><code>
+oradb::goldengate{ &#39;ggate12.1.2&#39;:
+  version                    =&gt; &#39;12.1.2&#39;,
+  file                       =&gt; &#39;121210_fbo_ggs_Linux_x64_shiphome.zip&#39;,
+  database_type              =&gt; &#39;Oracle&#39;,
+  database_version           =&gt; &#39;ORA12c&#39;,
+  database_home              =&gt; &#39;/oracle/product/12.1/db&#39;,
+  oracle_base                =&gt; &#39;/oracle&#39;,
+  goldengate_home            =&gt; &#39;/oracle/product/12.1/ggate&#39;,
+  manager_port               =&gt; 16000,
+  user                       =&gt; &#39;oracle&#39;,
+  group                      =&gt; &#39;dba&#39;,
+  group_install              =&gt; &#39;oinstall&#39;,
+  download_dir               =&gt; &#39;/var/tmp/install&#39;,
+  puppet_download_mnt_point  =&gt; &#39;/software&#39;,
+}
+
+oradb::goldengate{ &#39;ggate11.2.1&#39;:
+  version                    =&gt; &#39;11.2.1&#39;,
+  file                       =&gt; &#39;ogg112101_fbo_ggs_Linux_x64_ora11g_64bit.zip&#39;,
+  tar_file                   =&gt; &#39;fbo_ggs_Linux_x64_ora11g_64bit.tar&#39;,
+  goldengate_home            =&gt; &quot;/oracle/product/11.2.1/ggate&quot;,
+  user                       =&gt; &#39;oracle&#39;,
+  group                      =&gt; &#39;dba&#39;,
+  download_dir               =&gt; &#39;/var/tmp/install&#39;,
+  puppet_download_mnt_point  =&gt; &#39;/software&#39;,</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>version</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;12.2.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>goldengate software version</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>file</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>goldengate installation file</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>tar_file</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>tar file inside zip for 11g version</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>database_type</span>
+      
+      
+        <span class='type'>(<tt>Enum['Oracle']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;Oracle&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>goldengate db version only for 12c</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>database_version</span>
+      
+      
+        <span class='type'>(<tt>Enum['ORA11g', 'ORA12c']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;ORA11g&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>for oracle database 11g or 12c only for 12c</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>oracle_base</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>oracle base directory only for 12c</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ora_inventory_dir</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the oracle inventory directory only for 12c</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>database_version</span>
+      
+      
+        <span class='type'></span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;ORA11g&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>for oracle database 11g or 12c only for 12c</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>oracle_base</span>
+      
+      
+        <span class='type'></span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>oracle base directory only for 12c</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ora_inventory_dir</span>
+      
+      
+        <span class='type'></span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the oracle inventory directory only for 12c</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>manager_port</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>manager port number</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>goldengate_home</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>full path to the goldengate home under oracle base</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;ggate&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>operating system username</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::group&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>operating system group name</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group_install</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::group_install&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>operating system group install name</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>puppet_download_mnt_point</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::module_mountpoint&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the location where the installation software is available</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>download_dir</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::download_dir&#39;)</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>location for installation files used by this module</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>database_home</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the oracle database home for connecting goldengat only for 12c</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/goldengate.pp', line 53</span>
+
+define oradb::goldengate(
+  String $version                            = &#39;12.2.1&#39;,
+  String $file                               = undef,
+  Optional[String] $tar_file                 = undef,     # only for &lt; 12.1.2
+  Enum[&#39;Oracle&#39;] $database_type              = &#39;Oracle&#39;,  # only for &gt; 12.1.2
+  Enum[&#39;ORA11g&#39;, &#39;ORA12c&#39;] $database_version = &#39;ORA11g&#39;,  # only for &gt; 12.1.2
+  Optional[String] $database_home            = undef,     # only for &gt; 12.1.2
+  Optional[String] $oracle_base              = undef,     # only for &gt; 12.1.2
+  Optional[String] $ora_inventory_dir        = undef,     # only for &gt; 12.1.2
+  String $goldengate_home                    = undef,
+  Optional[Integer] $manager_port            = undef,
+  String $user                               = &#39;ggate&#39;,
+  String $group                              = lookup(&#39;oradb::group&#39;),
+  String $group_install                      = lookup(&#39;oradb::group_install&#39;),
+  String $download_dir                       = lookup(&#39;oradb::download_dir&#39;),
+  String $puppet_download_mnt_point          = lookup(&#39;oradb::module_mountpoint&#39;),
+)
+{
+  $exec_path = lookup(&#39;oradb::exec_path&#39;)
+
+  if ( $version in [&#39;12.1.2&#39;, &#39;12.2.1&#39;, &#39;12.3.0&#39;] ) {
+    # check if the oracle software already exists
+    if ( $database_home == undef or is_string($database_home) == false) {fail(&#39;You must specify a database_home&#39;) }
+    if ( $oracle_base == undef or is_string($oracle_base) == false) {fail(&#39;You must specify an oracle_base&#39;) }
+    if ( $manager_port == undef or is_integer($manager_port) == false) {fail(&#39;You must specify a manager_port&#39;) }
+
+    $found = oradb::oracle_exists( $goldengate_home )
+
+    if $found == undef {
+      $continue = true
+    } else {
+      if ( $found ) {
+        $continue = false
+      } else {
+        notify {&quot;oradb::goldengate ${goldengate_home} does not exists&quot;:}
+        $continue = true
+      }
+    }
+  } else {
+    $continue = false
+  }
+
+  if ( $version in [&#39;12.1.2&#39;, &#39;12.2.1&#39;, &#39;12.3.0&#39;] ) {
+    if $ora_inventory_dir == undef {
+      $ora_inventory = oradb::cleanpath(&quot;${oracle_base}/../oraInventory&quot;)
+    } else {
+      validate_absolute_path($ora_inventory_dir)
+      $ora_inventory = &quot;${ora_inventory_dir}/oraInventory&quot;
+    }
+
+    db_directory_structure{&quot;oracle goldengate structure ${version}&quot;:
+      ensure            =&gt; present,
+      oracle_base_dir   =&gt; $oracle_base,
+      ora_inventory_dir =&gt; $ora_inventory,
+      download_dir      =&gt; $download_dir,
+      os_user           =&gt; $user,
+      os_group          =&gt; $group_install,
+    }
+  }
+
+  # only for 12.1.2, 12.2.1, 12.3.0
+  if ( $continue == true ) {
+
+    $ggate_install_dir = &#39;fbo_ggs_Linux_x64_shiphome&#39;
+
+    file { &quot;${download_dir}/${file}&quot;:
+      source  =&gt; &quot;${puppet_download_mnt_point}/${file}&quot;,
+      owner   =&gt; $user,
+      group   =&gt; $group,
+      require =&gt; Db_directory_structure[&quot;oracle goldengate structure ${version}&quot;],
+    }
+
+    exec { &#39;extract gg&#39;:
+      command   =&gt; &quot;unzip -o ${download_dir}/${file} -d ${download_dir}&quot;,
+      creates   =&gt; &quot;${download_dir}/${ggate_install_dir}&quot;,
+      timeout   =&gt; 0,
+      path      =&gt; $exec_path,
+      user      =&gt; $user,
+      group     =&gt; $group,
+      logoutput =&gt; false,
+      require   =&gt; File[&quot;${download_dir}/${file}&quot;],
+    }
+
+    file { &quot;${download_dir}/oggcore.rsp&quot;:
+      content =&gt; epp(&quot;oradb/oggcore_${version}.rsp.epp&quot;, {
+                      &#39;database_version&#39; =&gt; $database_version,
+                      &#39;goldengate_home&#39;  =&gt; $goldengate_home,
+                      &#39;database_home&#39;    =&gt; $database_home,
+                      &#39;ora_inventory&#39;    =&gt; $ora_inventory,
+                      &#39;group_install&#39;    =&gt; $group_install,
+                      &#39;manager_port&#39;     =&gt; $manager_port }),
+      owner   =&gt; $user,
+      group   =&gt; $group,
+      require =&gt; Db_directory_structure[&quot;oracle goldengate structure ${version}&quot;],
+    }
+
+    oradb::utils::dborainst{&quot;ggate orainst ${version}&quot;:
+      ora_inventory_dir =&gt; $ora_inventory,
+      os_group          =&gt; $group_install,
+    }
+
+    exec { &#39;install oracle goldengate&#39;:
+      command   =&gt; &quot;/bin/sh -c &#39;unset DISPLAY;${download_dir}/${ggate_install_dir}/Disk1/runInstaller -silent -waitforcompletion -responseFile ${download_dir}/oggcore.rsp&#39;&quot;,
+      require   =&gt; [File[&quot;${download_dir}/oggcore.rsp&quot;],
+                    Oradb::Utils::Dborainst[&quot;ggate orainst ${version}&quot;],
+                    Exec[&#39;extract gg&#39;],],
+      creates   =&gt; $goldengate_home,
+      timeout   =&gt; 0,
+      path      =&gt; $exec_path,
+      logoutput =&gt; true,
+      user      =&gt; $user,
+      group     =&gt; $group_install,
+      returns   =&gt; [3,0],
+    }
+
+  }
+
+  if ( $version != &#39;12.1.2&#39; and $version != &#39;12.2.1&#39; and $version != &#39;12.3.0&#39;){
+
+    if ( $tar_file == undef or is_string($tar_file) == false) {fail(&quot;${title} You must specify a tar_file&quot;) }
+
+    # # check oracle install folder
+    # if !defined(File[$download_dir]) {
+    #   file { $download_dir:
+    #     ensure  =&gt; directory,
+    #     recurse =&gt; false,
+    #     replace =&gt; false,
+    #     mode    =&gt; &#39;0777&#39;,
+    #   }
+    # }
+
+    #version is different, use the old way
+    file { &quot;${download_dir}/${file}&quot;:
+      source =&gt; &quot;${puppet_download_mnt_point}/${file}&quot;,
+      owner  =&gt; $user,
+      group  =&gt; $group,
+    }
+
+    exec { &quot;extract gg ${title}&quot;:
+      command   =&gt; &quot;unzip -o ${download_dir}/${file} -d ${download_dir}&quot;,
+      require   =&gt; File[&quot;${download_dir}/${file}&quot;],
+      creates   =&gt; &quot;${download_dir}/${tar_file}&quot;,
+      timeout   =&gt; 0,
+      path      =&gt; $exec_path,
+      user      =&gt; $user,
+      group     =&gt; $group,
+      logoutput =&gt; true,
+    }
+
+    file { $goldengate_home :
+      ensure  =&gt; directory,
+      recurse =&gt; false,
+      replace =&gt; false,
+      mode    =&gt; &#39;0775&#39;,
+      owner   =&gt; $user,
+      group   =&gt; $group,
+    }
+
+    exec { &quot;extract tar ${title}&quot;:
+      command   =&gt; &quot;tar -xf ${download_dir}/${tar_file} -C ${goldengate_home}&quot;,
+      require   =&gt; [File[$goldengate_home],
+                    Exec[&quot;extract gg ${title}&quot;]],
+      creates   =&gt; &quot;${goldengate_home}/ggsci&quot;,
+      timeout   =&gt; 0,
+      path      =&gt; $exec_path,
+      user      =&gt; $user,
+      group     =&gt; $group,
+      logoutput =&gt; true,
+    }
+  }
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
+</div>
+
+    </div>
+  </body>
+</html>
