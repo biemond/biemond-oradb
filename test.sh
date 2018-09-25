@@ -37,3 +37,14 @@ rake module:push
 rake module:tag
 rake module:bump_commit  # Bump version and git commit
 
+
+
+brew cask install puppetlabs/puppet/pdk
+brew cask upgrade pdk
+
+/opt/puppetlabs/pdk/bin/pdk convert
+/opt/puppetlabs/pdk/bin/pdk validate metadata,puppet
+/opt/puppetlabs/pdk/bin/pdk test unit
+
+
+pdk build

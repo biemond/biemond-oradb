@@ -1,37 +1,22 @@
 {
+  "name": "biemond-oradb",
+  "version": "3.0.16",
   "author": "Edwin Biemond",
-  "data_provider": "hiera",
+  "summary": "Oracle Database 11.2, 12.1 & 12.2 for Linux & Solaris plus ASM, Client, Enterprise Manager & GoldenGate",
+  "license": "Apache-2.0",
+  "source": "https://github.com/biemond/biemond-oradb",
+  "project_page": "https://github.com/biemond/biemond-oradb",
   "dependencies": [
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">= 1.0.0"
+      "version_requirement": ">= 2.1.0 < 5.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
       "version_requirement": ">= 4.13.0 < 5.0.0"
     }
   ],
-  "license": "Apache-2.0",
-  "name": "biemond-oradb",
-  "project_page": "https://github.com/biemond/biemond-oradb",
-  "source": "https://github.com/biemond/biemond-oradb",
-  "summary": "Oracle Database 11.2, 12.1 & 12.2 for Linux & Solaris plus ASM, Client, Enterprise Manager & GoldenGate",
-  "tags": [
-    "database",
-    "asm",
-    "grid",
-    "12c",
-    "12.1",
-    "12.2",
-    "oracle",
-    "11g",
-    "11gR2",
-    "11.2",
-    "client",
-    "goldengate",
-    "rcu",
-    "enterprise manager"
-  ],
+  "data_provider": "hiera",
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
@@ -102,5 +87,23 @@
       "version_requirement": ">=4.3.0"
     }
   ],
-  "version": "3.0.16"
+  "tags": [
+    "database",
+    "asm",
+    "grid",
+    "12c",
+    "12.1",
+    "12.2",
+    "oracle",
+    "11g",
+    "11gR2",
+    "11.2",
+    "client",
+    "goldengate",
+    "rcu",
+    "enterprise manager"
+  ],
+  "pdk-version": "1.7.0",
+  "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git",
+  "template-ref": "1.7.0-0-g57412ed"
 }
