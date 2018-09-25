@@ -1,6 +1,6 @@
 {
   "name": "biemond-oradb",
-  "version": "3.0.16",
+  "version": "3.0.17",
   "author": "Edwin Biemond",
   "summary": "Oracle Database 11.2, 12.1 & 12.2 for Linux & Solaris plus ASM, Client, Enterprise Manager & GoldenGate",
   "license": "Apache-2.0",
