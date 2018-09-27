@@ -1,5 +1,9 @@
 # Version updates
 
+## 3.0.17
+- same as 3.0.16 (which had missing templates)
+- pdk build
+
 ## 3.0.16
 - fix database.pp change parameter storage_type to optional, to use template file without parameter -datafileDestination (issue #197)
 - Modifying database_pluggable so it supports ASM support

@@ -46,5 +46,4 @@ brew cask upgrade pdk
 /opt/puppetlabs/pdk/bin/pdk validate metadata,puppet
 /opt/puppetlabs/pdk/bin/pdk test unit
 
-
-pdk build
+/opt/puppetlabs/pdk/bin/pdk build
