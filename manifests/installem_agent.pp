@@ -68,7 +68,7 @@
 # @param manage_curl download curl package
 #
 define oradb::installem_agent(
-  Enum['12.1.0.4', '12.1.0.5', '13.2.0.0'] $version  = '12.1.0.5',
+  Enum['12.1.0.3', '12.1.0.4', '12.1.0.5', '13.2.0.0'] $version  = '12.1.0.5',
   Enum['agentPull', 'agentDeploy'] $install_type     = undef,
   String $install_version                            = '12.1.0.5.0',
   String $install_platform                           = 'Linux x86-64',

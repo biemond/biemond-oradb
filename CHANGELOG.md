@@ -1,5 +1,8 @@
 # Version updates
 
+## 3.0.18
+- added emagent version 12.1.0.3
+
 ## 3.0.17
 - same as 3.0.16 (which had missing templates)
 - pdk build
