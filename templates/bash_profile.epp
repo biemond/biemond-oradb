@@ -8,7 +8,7 @@ fi
 
 ORACLE_TERM=xterm; export ORACLE_TERM
 
-LD_LIBRARY_PATH=$<%= $oracle_home %>/lib
+LD_LIBRARY_PATH=<%= $oracle_home %>/lib
 ORACLE_BASE=<%= $oracle_base %>
 ORACLE_HOME=<%= $oracle_home %>
 SQLPLUS_HOME=<%= $oracle_home %>

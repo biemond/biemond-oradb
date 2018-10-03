@@ -6,7 +6,7 @@
 <title>
   Defined Type: oradb::installem_agent
   
-    &mdash; Documentation by YARD 0.9.12
+    &mdash; Documentation by YARD 0.9.16
   
 </title>
 
@@ -79,6 +79,8 @@
 
   </div>
 </div>
+
+
 <div class="tags">
   
   <div class="examples">
@@ -497,7 +499,7 @@ group_install the operating group name for the installed software</p>
         <span class='type'>(<tt>String</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>undef</tt>)</em>
+        <em class="default">(defaults to: <tt>lookup(&#39;oradb::oracle_hostname&#39;,{default_value =&gt; $::fqdn})</tt>)</em>
       
       
         &mdash;
@@ -774,7 +776,7 @@ define oradb::installem_agent(
   String $group                                      = lookup(&#39;oradb::group_install&#39;),
   String $download_dir                               = lookup(&#39;oradb::download_dir&#39;),
   Boolean $log_output                                = false,
-  String $oracle_hostname                            = undef, # FQDN hostname where to install on
+  String $oracle_hostname                            = lookup(&#39;oradb::oracle_hostname&#39;,{default_value =&gt; $::fqdn}),
   Boolean $manage_curl                               = true,
 )
 {
@@ -929,9 +931,9 @@ define oradb::installem_agent(
       }
 
       if ( $agent_instance_home_dir == undef ) {
-        $command = &quot;${download_dir}/em_agent_${version}/agentDeploy.sh AGENT_BASE_DIR=${agent_base_dir} AGENT_REGISTRATION_PASSWORD=${agent_registration_password} OMS_HOST=${oms_host} AGENT_PORT=${agent_port} EM_UPLOAD_PORT=${em_upload_port}&quot;
+        $command = &quot;${download_dir}/em_agent_${version}/agentDeploy.sh AGENT_BASE_DIR=${agent_base_dir} AGENT_REGISTRATION_PASSWORD=${agent_registration_password} OMS_HOST=${oms_host} AGENT_PORT=${agent_port} EM_UPLOAD_PORT=${em_upload_port} ORACLE_HOSTNAME=${oracle_hostname}&quot;
       } else {
-        $command = &quot;${download_dir}/em_agent_${version}/agentDeploy.sh AGENT_BASE_DIR=${agent_base_dir} AGENT_INSTANCE_HOME=${agent_instance_home_dir} AGENT_REGISTRATION_PASSWORD=${agent_registration_password} OMS_HOST=${oms_host} AGENT_PORT=${agent_port} EM_UPLOAD_PORT=${em_upload_port}&quot;
+        $command = &quot;${download_dir}/em_agent_${version}/agentDeploy.sh AGENT_BASE_DIR=${agent_base_dir} AGENT_INSTANCE_HOME=${agent_instance_home_dir} AGENT_REGISTRATION_PASSWORD=${agent_registration_password} OMS_HOST=${oms_host} AGENT_PORT=${agent_port} EM_UPLOAD_PORT=${em_upload_port} ORACLE_HOSTNAME=${oracle_hostname}&quot;
       }
 
       exec { &quot;agentDeploy execute ${title}&quot;:
