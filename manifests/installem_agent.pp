@@ -243,9 +243,10 @@ define oradb::installem_agent(
                       Oradb::Utils::Dborainst["em agent orainst ${version}"],],
       }
 
-      $param_ignore_prereq=''
       if ( $ignore_sys_prerequisite ) {
         $param_ignore_prereq='-ignorePrereqs'
+      } else {
+        $param_ignore_prereq=''
       }
 
       if ( $agent_instance_home_dir == undef ) {
