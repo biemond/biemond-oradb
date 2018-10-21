@@ -81,6 +81,7 @@ define oradb::opatch(
             require   => File["${download_dir}/${patch_file}"],
             creates   => "${download_dir}/${patch_id}",
             path      => $exec_path,
+            group     => $group,
             logoutput => false,
             before    => Db_opatch["${patch_id} ${title}"],
           }
