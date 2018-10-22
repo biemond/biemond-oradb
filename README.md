@@ -42,7 +42,7 @@ Should work for Puppet >=  4.0
 
 ## Oracle Database Features
 
-- Oracle Grid 11.2.0.4, 12.1.0.1, 12.1.0.2, 12.2.0.1 Linux / Solaris installation
+- Oracle Grid 11.2.0.4, 12.1.0.1, 12.1.0.2, 12.2.0.1, 18.0.0.0 Linux / Solaris installation
 - Oracle Database 12.1.0.1, 12.1.0.2, 12.2.0.1  Linux / Solaris installation
 - Oracle Database 11.2.0.1, 11.2.0.3, 11.2.0.4 Linux / Solaris installation
 - Oracle Database Instance 11.2, 12.1 & 12.2 with pluggable database or provide your own db template
