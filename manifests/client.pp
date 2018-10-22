@@ -51,7 +51,7 @@
 # @param temp_dir location for temporaray file used by the installer
 #
 define oradb::client(
-  Enum['11.2.0.1','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1'] $version = undef,
+  Enum['11.2.0.1','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1','18.0.0.0'] $version = undef,
   String $file                                                          = undef,
   Stdlib::Absolutepath $oracle_base                                     = undef,
   Stdlib::Absolutepath $oracle_home                                     = undef,
@@ -119,6 +119,7 @@ define oradb::client(
     } else {
       $source = $puppet_download_mnt_point
     }
+
     exec { "extract ${download_dir}/${file}":
       command   => "unzip -o ${source}/${file} -d ${download_dir}/client_${version}",
       timeout   => 0,
@@ -150,9 +151,11 @@ define oradb::client(
       }
     }
 
+    $command = "/bin/sh -c 'unset DISPLAY;${download_dir}/client_${version}/${install_type}/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/db_${install_type}_${version}.rsp'"
+
     # In $download_dir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
     exec { "install oracle client ${title}":
-      command     => "/bin/sh -c 'unset DISPLAY;${download_dir}/client_${version}/${install_type}/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/db_${install_type}_${version}.rsp'",
+      command     => $command,
       require     => [Oradb::Utils::Dborainst["oracle orainst ${title}"],
                       File["${download_dir}/db_${install_type}_${version}.rsp"],
                       Exec["extract ${download_dir}/${file}"]],

@@ -35,7 +35,7 @@
 #
 define oradb::database_pluggable(
   Enum['present', 'absent'] $ensure = 'present',
-  Enum['12.1', '12.2'] $version     = lookup('oradb::version'),
+  Enum['12.1', '12.2', '18.3'] $version = lookup('oradb::version'),
   String $oracle_base               = undef,
   String $oracle_home_dir           = undef,
   String $user                      = lookup('oradb::user'),

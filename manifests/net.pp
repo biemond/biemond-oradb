@@ -23,7 +23,7 @@
 #
 define oradb::net(
   String $oracle_home                   = undef,
-  Enum['11.2', '12.1', '12.2'] $version = lookup('oradb::version'),
+  Enum['11.2', '12.1', '12.2', '18.3'] $version = lookup('oradb::version'),
   String $user                          = lookup('oradb::user'),
   String $group                         = lookup('oradb::group'),
   String $download_dir                  = lookup('oradb::download_dir'),
