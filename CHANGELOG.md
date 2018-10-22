@@ -2,6 +2,8 @@
 
 ## 3.0.18
 - added emagent version 12.1.0.3
+- opatch set user/group permissions with remote source
+- opatchupgrade works now on grid 12.2 home
 
 ## 3.0.17
 - same as 3.0.16 (which had missing templates)

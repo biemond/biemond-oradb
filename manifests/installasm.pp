@@ -209,26 +209,27 @@ define oradb::installasm(
       }
 
       if ($version == '12.2.0.1') {
-        exec { "make ${grid_home}":
-          command   => "mkdir -p ${grid_home}",
-          timeout   => 0,
-          logoutput => false,
-          path      => $exec_path,
-          user      => $user,
-          group     => $group,
-          creates   => $grid_home,
-          require   => Db_directory_structure["grid structure ${version}"],
-          before    => Exec["install oracle grid ${title}"],
-        }
-        file { $grid_home:
-          ensure  => directory,
-          recurse => false,
-          replace => false,
-          mode    => '0775',
-          owner   => $user,
-          group   => $group_install,
-          require => [Db_directory_structure["grid structure ${version}"], Exec["make ${grid_home}"]],
-        }
+        # exec { "make ${grid_home}":
+        #   command   => "mkdir -p ${grid_home}",
+        #   timeout   => 0,
+        #   logoutput => false,
+        #   path      => $exec_path,
+        #   user      => $user,
+        #   group     => $group,
+        #   creates   => $grid_home,
+        #   require   => Db_directory_structure["grid structure ${version}"],
+        #   before    => Exec["install oracle grid ${title}"],
+        # }
+        # replaced to the end, else this is double it will be root as owner
+        # file { $grid_home:
+        #   ensure  => directory,
+        #   recurse => true,
+        #   replace => false,
+        #   mode    => '0775',
+        #   owner   => $user,
+        #   group   => $group_install,
+        #   require => [Db_directory_structure["grid structure ${version}"], Exec["make ${grid_home}"]],
+        # }
         exec { "extract ${download_dir}/${file1}":
           command   => "unzip -o ${source}/${file1} -d ${grid_home}",
           timeout   => 0,
@@ -237,7 +238,8 @@ define oradb::installasm(
           user      => $user,
           group     => $group,
           creates   => "${grid_home}/bin",
-          require   => [Db_directory_structure["grid structure ${version}"], File[$grid_home]],
+          require   => Db_directory_structure["grid structure ${version}"],
+          # require   => [Db_directory_structure["grid structure ${version}"], File[$grid_home]],
           before    => Exec["install oracle grid ${title}"],
         }
       } else {
