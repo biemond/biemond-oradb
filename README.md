@@ -31,6 +31,7 @@ Should work on Docker, for Solaris and on all Linux version like RedHat, CentOS,
 - Docker image of Oracle Database 12.1 SE [Docker Oracle Database 12.1.0.1](https://github.com/biemond/docker-database-puppet)
 - CentOS 7.2 vagrant box with Oracle Database 12.1 and Enterprise Manager 13.2.0.0 [Enterprise puppet 4 vagrant box](https://github.com/biemond/biemond-em-13.2-puppet4_3)
 - CentOS 6.7 vagrant box with Oracle Database 12.1 and Enterprise Manager 12.1.0.5 [Enterprise puppet 4 vagrant box](https://github.com/biemond/biemond-em-12c-puppet4_3)
+- CentOS 7.3 vagrant box with Oracle Database 18.0.0.0 (18.3) on NFS ASM [ASM puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-18.3-ASM-puppet4_3)
 - CentOS 7.3 vagrant box with Oracle Database 12.2.0.1 on NFS ASM [ASM puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.2-ASM-puppet4_3)
 - CentOS 7.2 vagrant box with Oracle Database 12.1.0.2 on NFS ASM [ASM puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.1-ASM-puppet4_3)
 - CentOS 6.6 vagrant box with Oracle Database 11.2.0.4 on NFS ASM [ASM puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-11.2-ASM-puppet4_3)
@@ -45,7 +46,7 @@ Should work for Puppet >=  4.0
 - Oracle Grid 11.2.0.4, 12.1.0.1, 12.1.0.2, 12.2.0.1, 18.0.0.0 Linux / Solaris installation
 - Oracle Database 12.1.0.1, 12.1.0.2, 12.2.0.1, 18.0.0.0  Linux / Solaris installation
 - Oracle Database 11.2.0.1, 11.2.0.3, 11.2.0.4 Linux / Solaris installation
-- Oracle Database Instance 11.2, 12.1 & 12.2 with pluggable database or provide your own db template
+- Oracle Database Instance 11.2, 12.1, 12.2, 18.3 with pluggable database or provide your own db template
 - Oracle Database Client 12.2.0.1, 12.1.0.1, 12.1.0.2, 11.2.0.4, 11.2.0.1 Linux / Solaris installation
 - Oracle Database Net configuration
 - Oracle Database Listener
