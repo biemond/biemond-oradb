@@ -1,7 +1,7 @@
 # Version updates
 
 ## 3.0.18
-- added grid & db version 18.0.0.0 or 18.3
+- added support for 18.3 (18.0.0.0) grid, db & client
 - added emagent version 12.1.0.3
 - opatch set user/group permissions with remote source
 - opatchupgrade works now on grid 12.2 home
