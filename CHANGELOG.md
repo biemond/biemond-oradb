@@ -1,5 +1,7 @@
 # Version updates
 
+## 3.0.19
+
 ## 3.0.18
 - added support for 18.3 (18.0.0.0) grid, db & client
 - added emagent version 12.1.0.3

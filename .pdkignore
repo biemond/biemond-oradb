@@ -17,6 +17,7 @@
 /pkg/
 /spec/fixtures/manifests/
 /spec/fixtures/modules/
+/spec/reports/
 /tmp/
 /vendor/
 /convert_report.txt
