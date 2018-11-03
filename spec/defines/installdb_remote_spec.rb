@@ -125,7 +125,6 @@ describe 'oradb::installdb', :type => :define do
       it {
            should contain_exec("install oracle database 12.1.0.1_Linux-x86-64").with({
              'command'  => "/bin/sh -c 'unset DISPLAY;/install/linuxamd64_12c_database/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile /install/db_install_12.1.0.1_12.1.0.1_Linux-x86-64.rsp'",
-             'creates'  => "/u01/app/oracle/product/12.1/db/dbs",
              'group'    => 'oinstall',
            }).that_requires('Oradb::Utils::Dborainst[database orainst 12.1.0.1_12.1.0.1_Linux-x86-64]').that_requires('File[/install/db_install_12.1.0.1_12.1.0.1_Linux-x86-64.rsp]')
          }
@@ -231,7 +230,6 @@ describe 'oradb::installdb', :type => :define do
       it {
            should contain_exec("install oracle database 11.2.0.4_Linux-x86-64").with({
              'command'  => "/bin/sh -c 'unset DISPLAY;/install/p13390677_112040_Linux-x86-64/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile /install/db_install_11.2.0.4_11.2.0.4_Linux-x86-64.rsp'",
-             'creates'  => "/u01/app/oracle/product/11.2/db/dbs",
              'group'    => 'oinstall',
            }).that_requires('Oradb::Utils::Dborainst[database orainst 11.2.0.4_11.2.0.4_Linux-x86-64]').that_requires('File[/install/db_install_11.2.0.4_11.2.0.4_Linux-x86-64.rsp]')
          }
@@ -322,7 +320,6 @@ describe 'oradb::installdb', :type => :define do
       it {
            should contain_exec("install oracle database 11.2.0.3_Linux-x86-64").with({
              'command'  => "/bin/sh -c 'unset DISPLAY;/mnt/p10404530_112030_Linux-x86-64/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile /mnt/db_install_11.2.0.3_11.2.0.3_Linux-x86-64.rsp'",
-             'creates'  => "/u01/app/oracle/product/11.2/db/dbs",
              'group'    => 'oinstall',
            }).that_requires('Oradb::Utils::Dborainst[database orainst 11.2.0.3_11.2.0.3_Linux-x86-64]').that_requires('File[/mnt/db_install_11.2.0.3_11.2.0.3_Linux-x86-64.rsp]')
          }

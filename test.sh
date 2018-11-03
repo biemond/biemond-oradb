@@ -43,6 +43,9 @@ brew cask install puppetlabs/puppet/pdk
 brew cask upgrade pdk
 
 /opt/puppetlabs/pdk/bin/pdk convert
+or
+/opt/puppetlabs/pdk/bin/pdk update
+
 /opt/puppetlabs/pdk/bin/pdk validate metadata,puppet
 /opt/puppetlabs/pdk/bin/pdk test unit
 

@@ -27,6 +27,7 @@ def changelog_future_release
   returnVal
 end
 
+PuppetLint.configuration.send('disable_relative')
 
 if Bundler.rubygems.find_name('github_changelog_generator').any?
   GitHubChangelogGenerator::RakeTask.new :changelog do |config|
@@ -71,5 +72,4 @@ Gemfile:
 EOM
   end
 end
-
 
