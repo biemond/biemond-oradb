@@ -227,7 +227,7 @@ define oradb::client(
         user    => 'root',
         group   => 'root',
         path    => $exec_path,
-        require => Exec["install oracle net ${title}"],
+        before  => Exec["install oracle client ${title}"],
       }
     }
 
