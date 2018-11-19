@@ -228,6 +228,7 @@ define oradb::client(
         group   => 'root',
         path    => $exec_path,
         before  => Exec["install oracle client ${title}"],
+        require => Exec["extract ${download_dir}/${file}"],
       }
     }
 
