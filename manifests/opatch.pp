@@ -47,10 +47,10 @@ define oradb::opatch(
   Boolean $ocmrf                        = false,
   String $puppet_download_mnt_point     = lookup('oradb::module_mountpoint'),
   Boolean $remote_file                  = true,
+  String $ora_inst_path                 = lookup('oradb::orainst_dir'),
 )
 {
   $exec_path     = lookup('oradb::exec_path')
-  $ora_inst_path = lookup('oradb::orainst_dir')
 
   if ! defined(File["${oracle_product_home}/bin/fuser"]) {
     file { "${oracle_product_home}/bin/fuser":
