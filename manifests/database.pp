@@ -316,6 +316,7 @@ define oradb::database(
       cwd         => $oracle_base,
       environment => ["USER=${user}",],
       logoutput   => true,
+      returns     => [6,0],
     }
   } elsif $action == 'delete' {
     if ( $version in ['12.2','18.3','19.3']) {

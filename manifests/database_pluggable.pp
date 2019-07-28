@@ -62,6 +62,7 @@ define oradb::database_pluggable(
       group     => $group,
       creates   => "${oracle_base}/cfgtoollogs/dbca/${source_db}/${pdb_name}/postPDBCreation.log",
       logoutput => $log_output,
+      returns   => [6,0],
     }
   } else {
     $command = "${oracle_home_dir}/bin/dbca -silent -deletePluggableDatabase -sourceDB ${source_db} -pdbName ${pdb_name}"
