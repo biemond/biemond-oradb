@@ -27,6 +27,7 @@ Dependency with
 - puppetlabs/stdlib >= 4.0.0
 
 Should work on Docker, for Solaris and on all Linux version like RedHat, CentOS, Ubuntu, Debian, Suse SLES or OracleLinux
+- CentOS 7.3 vagrant box with Oracle Database 19.0.0.0 with pluggable databases [19.3 pluggable db puppet 4 vagrant box](biemond-oradb-vagrant-19.3-CDB-puppet4_3)
 - CentOS 7.3 vagrant box with Oracle Database 18.0.0.0 with pluggable databases [18.3 pluggable db puppet 4 vagrant box](biemond-oradb-vagrant-18.3-CDB-puppet4_3)
 - CentOS 7.3 vagrant box with Oracle Database 12.2.0.1 with pluggable databases [12c pluggable db puppet 4 vagrant box](https://github.com/biemond/biemond-oradb-vagrant-12.2-CDB-puppet4_3)
 - Docker image of Oracle Database 12.1 SE [Docker Oracle Database 12.1.0.1](https://github.com/biemond/docker-database-puppet)
@@ -44,11 +45,11 @@ Should work for Puppet >=  4.0
 
 ## Oracle Database Features
 
-- Oracle Grid 11.2.0.4, 12.1.0.1, 12.1.0.2, 12.2.0.1, 18.0.0.0 Linux / Solaris installation
-- Oracle Database 12.1.0.1, 12.1.0.2, 12.2.0.1, 18.0.0.0  Linux / Solaris installation
+- Oracle Grid 11.2.0.4, 12.1.0.1, 12.1.0.2, 12.2.0.1, 18.0.0.0, 19.0.0.0 Linux / Solaris installation
+- Oracle Database 12.1.0.1, 12.1.0.2, 12.2.0.1, 18.0.0.0, 19.0.0.0  Linux / Solaris installation
 - Oracle Database 11.2.0.1, 11.2.0.3, 11.2.0.4 Linux / Solaris installation
-- Oracle Database Instance 11.2, 12.1, 12.2, 18.3 with pluggable database or provide your own db template
-- Oracle Database Client 18.0.0.0, 12.2.0.1, 12.1.0.1, 12.1.0.2, 11.2.0.4, 11.2.0.1 Linux / Solaris installation
+- Oracle Database Instance 11.2, 12.1, 12.2, 18.3, 19.3 with pluggable database or provide your own db template
+- Oracle Database Client 19.0.0.0, 18.0.0.0, 12.2.0.1, 12.1.0.1, 12.1.0.2, 11.2.0.4, 11.2.0.1 Linux / Solaris installation
 - Oracle Database Net configuration
 - Oracle Database Listener
 - Tnsnames entry

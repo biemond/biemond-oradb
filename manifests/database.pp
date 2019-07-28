@@ -96,7 +96,7 @@
 define oradb::database(
   String $oracle_base                                             = undef,
   String $oracle_home                                             = undef,
-  Enum['11.2', '12.1', '12.2', '18.3'] $version                   = lookup('oradb::version'),
+  Enum['11.2', '12.1', '12.2', '18.3', '19.3'] $version           = lookup('oradb::version'),
   String $user                                                    = lookup('oradb::user'),
   String $group                                                   = lookup('oradb::group'),
   String $download_dir                                            = lookup('oradb::download_dir'),
@@ -299,7 +299,7 @@ define oradb::database(
       $command = "${command_pre} ${command_storage} ${command_data_file} ${command_var} ${command_init} ${command_nodes} ${elevation_suffix}"
 
     } else {
-      if ( $version in ['12.2','18.3']) {
+      if ( $version in ['12.2','18.3','19.3']) {
         $command = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -responseFile ${download_dir}/database_${sanitized_title}.rsp${elevation_suffix}"
       } else {
         $command = "${elevation_prefix}${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp${elevation_suffix}"
@@ -318,7 +318,7 @@ define oradb::database(
       logoutput   => true,
     }
   } elsif $action == 'delete' {
-    if ( $version in ['12.2','18.3']) {
+    if ( $version in ['12.2','18.3','19.3']) {
       $command = "${oracle_home}/bin/dbca -silent -deleteDatabase -sourceDB ${db_name} -sysDBAUserName sys -sysDBAPassword ${sys_password}"
     } else {
       $command = "${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp"

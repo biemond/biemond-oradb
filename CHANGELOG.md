@@ -1,6 +1,7 @@
 # Version updates
 
 ## 3.0.19
+- added support for 19.3 (19.0.0.0) grid, db & client
 
 ## 3.0.18
 - added support for 18.3 (18.0.0.0) grid, db & client

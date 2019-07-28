@@ -22,12 +22,12 @@
 # @param db_port the listener port
 #
 define oradb::net(
-  String $oracle_home                   = undef,
-  Enum['11.2', '12.1', '12.2', '18.3'] $version = lookup('oradb::version'),
-  String $user                          = lookup('oradb::user'),
-  String $group                         = lookup('oradb::group'),
-  String $download_dir                  = lookup('oradb::download_dir'),
-  Integer $db_port                      = lookup('oradb::listener_port'),
+  String $oracle_home                                   = undef,
+  Enum['11.2', '12.1', '12.2', '18.3', '19.3'] $version = lookup('oradb::version'),
+  String $user                                          = lookup('oradb::user'),
+  String $group                                         = lookup('oradb::group'),
+  String $download_dir                                  = lookup('oradb::download_dir'),
+  Integer $db_port                                      = lookup('oradb::listener_port'),
 ){
   $exec_path = lookup('oradb::exec_path')
 

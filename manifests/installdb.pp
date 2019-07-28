@@ -47,7 +47,7 @@
 # @param remote_node
 #
 define oradb::installdb(
-  Enum['11.2.0.1','11.2.0.3','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1', '18.0.0.0'] $version = undef,
+  Enum['11.2.0.1','11.2.0.3','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1', '18.0.0.0', '19.0.0.0'] $version = undef,
   String $file                                                                     = undef,
   Enum['SE', 'EE', 'SEONE', 'SE2', 'HP', 'XP', 'PE'] $database_type                = lookup('oradb:installdb:database_type'),
   Optional[String] $ora_inventory_dir                                              = undef,
@@ -114,7 +114,7 @@ define oradb::installdb(
     $ora_inventory = "${ora_inventory_dir}/oraInventory"
   }
 
-  if ( $version in ['18.0.0.0']) {
+  if ( $version in ['18.0.0.0', '19.0.0.0']) {
     # add oracle home for the unzip
     db_directory_structure{"oracle structure ${version}_${title}":
       ensure            => present,
@@ -141,7 +141,7 @@ define oradb::installdb(
     if ( $zip_extract ) {
       # In $download_dir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
 
-      if ( $version in ['12.2.0.1','18.0.0.0']) {
+      if ( $version in ['12.2.0.1','18.0.0.0','19.0.0.0']) {
         $file1 =  "${file}.zip"
         $total_files = 1
       }
@@ -186,7 +186,7 @@ define oradb::installdb(
         $source = $mount_point
       }
 
-      if ($version in ['18.0.0.0']) {
+      if ($version in ['18.0.0.0', '19.0.0.0']) {
         exec { "extract ${download_dir}/${file1}":
           command   => "unzip -o ${source}/${file1} -d ${oracle_home}",
           timeout   => 0,
@@ -256,7 +256,7 @@ define oradb::installdb(
       }
     }
 
-    if ($version in ['18.0.0.0']) {
+    if ($version in ['18.0.0.0', '19.0.0.0']) {
       $command = "/bin/sh -c 'unset DISPLAY;cd ${oracle_home};./runInstaller -silent -waitforcompletion -ignorePrereq -responseFile ${download_dir}/db_install_${version}_${title}.rsp'"
     } else {
       $command = "/bin/sh -c 'unset DISPLAY;${download_dir}/${file}/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/db_install_${version}_${title}.rsp'"
