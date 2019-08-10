@@ -51,7 +51,7 @@
 # @param temp_dir location for temporaray file used by the installer
 #
 define oradb::client(
-  Enum['11.2.0.1','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1','18.0.0.0'] $version = undef,
+  Enum['11.2.0.1','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1','18.0.0.0','19.0.0.0'] $version = undef,
   String $file                                                          = undef,
   Stdlib::Absolutepath $oracle_base                                     = undef,
   Stdlib::Absolutepath $oracle_home                                     = undef,
