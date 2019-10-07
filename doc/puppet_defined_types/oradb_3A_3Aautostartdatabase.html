@@ -6,7 +6,7 @@
 <title>
   Defined Type: oradb::autostartdatabase
   
-    &mdash; Documentation by YARD 0.9.12
+    &mdash; Documentation by YARD 0.9.16
   
 </title>
 
@@ -79,6 +79,8 @@
 
   </div>
 </div>
+
+
 <div class="tags">
   
   <div class="examples">
@@ -234,10 +236,10 @@ define oradb::autostartdatabase(
     }
   }
 
-  exec { &quot;set dbora ${db_name}:${oracle_home}&quot;:
+  exec { &quot;set ${service_name} ${db_name}:${oracle_home}&quot;:
     command   =&gt; $sed_command,
     unless    =&gt; &quot;/bin/grep &#39;^${db_name}:${oracle_home}:Y&#39; ${oratab}&quot;,
-    require   =&gt; File[&quot;${dbora_location}/dbora&quot;],
+    require   =&gt; File[&quot;${dbora_location}/${service_name}&quot;],
     path      =&gt; $exec_path,
     logoutput =&gt; true,
   }

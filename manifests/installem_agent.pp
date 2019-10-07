@@ -68,7 +68,7 @@
 # @param manage_curl download curl package
 #
 define oradb::installem_agent(
-  Enum['12.1.0.4', '12.1.0.5', '13.2.0.0'] $version  = '12.1.0.5',
+  Enum['12.1.0.3', '12.1.0.4', '12.1.0.5', '13.2.0.0'] $version  = '12.1.0.5',
   Enum['agentPull', 'agentDeploy'] $install_type     = undef,
   String $install_version                            = '12.1.0.5.0',
   String $install_platform                           = 'Linux x86-64',
@@ -88,7 +88,8 @@ define oradb::installem_agent(
   String $group                                      = lookup('oradb::group_install'),
   String $download_dir                               = lookup('oradb::download_dir'),
   Boolean $log_output                                = false,
-  String $oracle_hostname                            = undef, # FQDN hostname where to install on
+  Boolean $ignore_sys_prerequisite                   = false,
+  String $oracle_hostname                            = lookup('oradb::oracle_hostname',{default_value => $::fqdn}),
   Boolean $manage_curl                               = true,
 )
 {
@@ -242,10 +243,16 @@ define oradb::installem_agent(
                       Oradb::Utils::Dborainst["em agent orainst ${version}"],],
       }
 
-      if ( $agent_instance_home_dir == undef ) {
-        $command = "${download_dir}/em_agent_${version}/agentDeploy.sh AGENT_BASE_DIR=${agent_base_dir} AGENT_REGISTRATION_PASSWORD=${agent_registration_password} OMS_HOST=${oms_host} AGENT_PORT=${agent_port} EM_UPLOAD_PORT=${em_upload_port}"
+      if ( $ignore_sys_prerequisite ) {
+        $param_ignore_prereq='-ignorePrereqs'
       } else {
-        $command = "${download_dir}/em_agent_${version}/agentDeploy.sh AGENT_BASE_DIR=${agent_base_dir} AGENT_INSTANCE_HOME=${agent_instance_home_dir} AGENT_REGISTRATION_PASSWORD=${agent_registration_password} OMS_HOST=${oms_host} AGENT_PORT=${agent_port} EM_UPLOAD_PORT=${em_upload_port}"
+        $param_ignore_prereq=''
+      }
+
+      if ( $agent_instance_home_dir == undef ) {
+        $command = "${download_dir}/em_agent_${version}/agentDeploy.sh ${param_ignore_prereq} AGENT_BASE_DIR=${agent_base_dir} AGENT_REGISTRATION_PASSWORD=${agent_registration_password} OMS_HOST=${oms_host} AGENT_PORT=${agent_port} EM_UPLOAD_PORT=${em_upload_port} ORACLE_HOSTNAME=${oracle_hostname}"
+      } else {
+        $command = "${download_dir}/em_agent_${version}/agentDeploy.sh ${param_ignore_prereq} AGENT_BASE_DIR=${agent_base_dir} AGENT_INSTANCE_HOME=${agent_instance_home_dir} AGENT_REGISTRATION_PASSWORD=${agent_registration_password} OMS_HOST=${oms_host} AGENT_PORT=${agent_port} EM_UPLOAD_PORT=${em_upload_port} ORACLE_HOSTNAME=${oracle_hostname}"
       }
 
       exec { "agentDeploy execute ${title}":

@@ -34,6 +34,8 @@ oradb::versions:
  - '12.1.0.1'
  - '12.1.0.2'
  - '12.2.0.1'
+ - '18.0.0.0'
+ - '19.0.0.0'
 
 # check on all supported grid versions
 oradb::grid_versions:
@@ -41,6 +43,8 @@ oradb::grid_versions:
  - '12.1.0.1'
  - '12.1.0.2'
  - '12.2.0.1'
+ - '18.0.0.0'
+ - '19.0.0.0'
 
 # check on all supported enterprise agent versions
 oradb::enterprise_manager_agent_versions:
@@ -51,15 +55,21 @@ oradb::net_versions:
  - '11.2'
  - '12.1'
  - '12.2'
+ - '18.3'
+ - '19.3'
 
 oradb::database_versions:
  - '11.2'
  - '12.1'
  - '12.2'
+ - '18.3'
+ - '19.3' 
 
 oradb::database_pluggable_versions:
  - '12.1'
  - '12.2'
+ - '18.3'
+ - '19.3'
 
 # check on supported kernels
 oradb::kernels:
@@ -71,6 +81,10 @@ oradb::database_types:
  - 'EE'
  - 'SE'
  - 'SEONE'
+ - 'SE2'
+ - 'HP'
+ - 'XP'
+ - 'PE'
 
 # full versions which can be downloaded at OTN
 oradb::versions_full:

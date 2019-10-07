@@ -6,7 +6,7 @@
 <title>
   Defined Type: oradb::installdb
   
-    &mdash; Documentation by YARD 0.9.12
+    &mdash; Documentation by YARD 0.9.16
   
 </title>
 
@@ -79,6 +79,8 @@
 
   </div>
 </div>
+
+
 <div class="tags">
   
   <div class="examples">
@@ -368,7 +370,7 @@ oradb::installdb{ &#39;db_linux-x64&#39;:
         <span class='name'>database_type</span>
       
       
-        <span class='type'>(<tt>Enum['SE', 'EE', 'SEONE']</tt>)</span>
+        <span class='type'>(<tt>Enum['SE', 'EE', 'SEONE', 'SE2', 'HP', 'XP', 'PE']</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>lookup(&#39;oradb:installdb:database_type&#39;)</tt>)</em>
@@ -836,7 +838,7 @@ oradb::installdb{ &#39;db_linux-x64&#39;:
 define oradb::installdb(
   Enum[&#39;11.2.0.1&#39;,&#39;11.2.0.3&#39;,&#39;11.2.0.4&#39;,&#39;12.1.0.1&#39;,&#39;12.1.0.2&#39;,&#39;12.2.0.1&#39;] $version = undef,
   String $file                                                                     = undef,
-  Enum[&#39;SE&#39;, &#39;EE&#39;, &#39;SEONE&#39;] $database_type                                         = lookup(&#39;oradb:installdb:database_type&#39;),
+  Enum[&#39;SE&#39;, &#39;EE&#39;, &#39;SEONE&#39;, &#39;SE2&#39;, &#39;HP&#39;, &#39;XP&#39;, &#39;PE&#39;] $database_type                = lookup(&#39;oradb:installdb:database_type&#39;),
   Optional[String] $ora_inventory_dir                                              = undef,
   String $oracle_base                                                              = undef,
   String $oracle_home                                                              = undef,

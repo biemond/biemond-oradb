@@ -1,5 +1,32 @@
 # Version updates
 
+## 3.0.19
+- added support for 19.3 (19.0.0.0) grid, db & client
+
+## 3.0.18
+- added support for 18.3 (18.0.0.0) grid, db & client
+- added emagent version 12.1.0.3
+- opatch set user/group permissions with remote source
+- opatchupgrade works now on grid 12.2 home
+
+## 3.0.17
+- same as 3.0.16 (which had missing templates)
+- pdk build
+
+## 3.0.16
+- fix database.pp change parameter storage_type to optional, to use template file without parameter -datafileDestination (issue #197)
+- Modifying database_pluggable so it supports ASM support
+- Adding 32bit Client install
+- Support goldengate 12.3.0
+
+## 3.0.15
+- fix autostart and removed the hard dbora reference
+
+## 3.0.14
+- database.pp & data_file_destination went wrong with dbt templates
+- fix dbt templates for memory_total param
+- Allow 'SE2', 'HP', 'XP', 'PE' as 12.2 database type
+
 ## 3.0.13
 - opatchupgrade now also has remote_file parameter
 - opatchupgrade fix error when supportid is supplied

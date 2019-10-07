@@ -25,7 +25,7 @@
          <initParam name="db_name" value="<%= @db_name %>"/>
          <initParam name="db_domain" value="<%= @db_domain %>"/>
          <initParam name="db_block_size" value="8" unit="KB"/>
-         <initParam name="memory_target" value="%= @memory_total %" unit="MB"/>
+         <initParam name="memory_target" value="<%= @memory_total %>" unit="MB"/>
          <initParam name="undo_tablespace" value="UNDOTBS1"/>
          <initParam name="control_files" value="(&quot;{ORACLE_BASE}/oradata/{DB_UNIQUE_NAME}/control01.ctl&quot;, &quot;{ORACLE_BASE}/fast_recovery_area/{DB_UNIQUE_NAME}/control02.ctl&quot;)"/>
          <initParam name="compatible" value="12.1.0.2.0"/>
@@ -44,7 +44,7 @@
       <MiscParams>
          <characterSet>"<%= @character_set %>"</characterSet>
          <nationalCharacterSet>"<%= @nationalcharacter_set %>"</nationalCharacterSet>
-         <databaseType>%= @database_type %></databaseType>
+         <databaseType><%= @database_type %></databaseType>
          <maxUserConn>20</maxUserConn>
          <percentageMemTOSGA>40</percentageMemTOSGA>
          <customSGA>false</customSGA>

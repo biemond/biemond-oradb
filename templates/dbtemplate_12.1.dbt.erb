@@ -35,7 +35,7 @@
          <initParam name="audit_trail" value="none"/>
          <initParam name="db_block_size" value="8" unit="KB"/>
          <initParam name="open_cursors" value="300"/>
-         <initParam name="memory_target" value="%= @memory_total %" unit="MB"/>
+         <initParam name="memory_target" value="<%= @memory_total %>" unit="MB"/>
          <initParam name="job_queue_processes" value="4"/>
          <initParam name="db_recovery_file_dest_size" value="1" unit="GB"/>
          <initParam name="db_recovery_file_dest" value="<%= @recovery_area_destination %>"/>

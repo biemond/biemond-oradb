@@ -6,7 +6,7 @@
 <title>
   Defined Type: oradb::database_pluggable
   
-    &mdash; Documentation by YARD 0.9.12
+    &mdash; Documentation by YARD 0.9.16
   
 </title>
 
@@ -79,6 +79,8 @@
 
   </div>
 </div>
+
+
 <div class="tags">
   
   <div class="examples">
@@ -325,6 +327,19 @@ oradb::database_pluggable{&#39;pdb1&#39;:
       
     </li>
   
+    <li>
+      
+        <span class='name'>oracle_base</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
 </ul>
 
 
@@ -379,7 +394,8 @@ oradb::database_pluggable{&#39;pdb1&#39;:
 77
 78
 79
-80</pre>
+80
+81</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/database_pluggable.pp', line 36</span>
@@ -387,6 +403,7 @@ oradb::database_pluggable{&#39;pdb1&#39;:
 define oradb::database_pluggable(
   Enum[&#39;present&#39;, &#39;absent&#39;] $ensure = &#39;present&#39;,
   Enum[&#39;12.1&#39;, &#39;12.2&#39;] $version     = lookup(&#39;oradb::version&#39;),
+  String $oracle_base               = undef,
   String $oracle_home_dir           = undef,
   String $user                      = lookup(&#39;oradb::user&#39;),
   String $group                     = lookup(&#39;oradb::group&#39;),
@@ -410,7 +427,7 @@ define oradb::database_pluggable(
       cwd       =&gt; $oracle_home_dir,
       user      =&gt; $user,
       group     =&gt; $group,
-      creates   =&gt; $pdb_datafile_destination,
+      creates   =&gt; &quot;${oracle_base}/cfgtoollogs/dbca/${source_db}/${pdb_name}/postPDBCreation.log&quot;,
       logoutput =&gt; $log_output,
     }
   } else {
@@ -423,7 +440,7 @@ define oradb::database_pluggable(
       cwd       =&gt; $oracle_home_dir,
       user      =&gt; $user,
       group     =&gt; $group,
-      onlyif    =&gt; &quot;ls ${$pdb_datafile_destination}&quot;,
+      onlyif    =&gt; &quot;test ! -f ${oracle_base}/cfgtoollogs/dbca/${source_db}/${pdb_name}/deletePDB.log&quot;,
       logoutput =&gt; $log_output,
     }
 

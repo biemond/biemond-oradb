@@ -6,7 +6,7 @@
 <title>
   Defined Type: oradb::database
   
-    &mdash; Documentation by YARD 0.9.12
+    &mdash; Documentation by YARD 0.9.16
   
 </title>
 
@@ -79,6 +79,8 @@
 
   </div>
 </div>
+
+
 <div class="tags">
   
   <div class="examples">
@@ -591,10 +593,10 @@ oradb::database{ &#39;oraDb&#39;:
         <span class='name'>storage_type</span>
       
       
-        <span class='type'>(<tt>Enum['FS', 'CFS', 'ASM']</tt>)</span>
+        <span class='type'>(<tt>Optional[Enum['FS', 'CFS', 'ASM']]</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>lookup(&#39;oradb::database::storage_type&#39;)</tt>)</em>
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
       
       
     </li>
@@ -691,6 +693,19 @@ oradb::database{ &#39;oraDb&#39;:
       
       
         <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>timeout</span>
+      
+      
+        <span class='type'>(<tt>Optional[Integer]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>0</tt>)</em>
       
       
     </li>
@@ -939,7 +954,16 @@ oradb::database{ &#39;oraDb&#39;:
 327
 328
 329
-330</pre>
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/database.pp', line 96</span>
@@ -970,7 +994,7 @@ define oradb::database(
   Integer $memory_total                                           = lookup(&#39;oradb::database::memory_total&#39;),
   Enum[&#39;MULTIPURPOSE&#39;, &#39;DATA_WAREHOUSING&#39;, &#39;OLTP&#39;] $database_type = lookup(&#39;oradb::database::database_type&#39;),
   Enum[&#39;NONE&#39;, &#39;CENTRAL&#39;, &#39;LOCAL&#39;, &#39;ALL&#39;] $em_configuration       = lookup(&#39;oradb::database::em_configuration&#39;),
-  Enum[&#39;FS&#39;, &#39;CFS&#39;, &#39;ASM&#39;] $storage_type                          = lookup(&#39;oradb::database::storage_type&#39;),
+  Optional[Enum[&#39;FS&#39;, &#39;CFS&#39;, &#39;ASM&#39;]] $storage_type                = undef,
   String $asm_snmp_password                                       = lookup(&#39;oradb::default::password&#39;),
   String $db_snmp_password                                        = lookup(&#39;oradb::default::password&#39;),
   String $asm_diskgroup                                           = lookup(&#39;oradb::database::asm_diskgroup&#39;),
@@ -979,6 +1003,7 @@ define oradb::database(
   Boolean $container_database                                     = false, # 12.1 feature for pluggable database
   String $puppet_download_mnt_point                               = lookup(&#39;oradb::module_mountpoint&#39;),
   Boolean $automatic_memory_management                            = true, # for 12.2 , choose false when more than 4gb memory
+  Optional[Integer] $timeout                                      = 0,
 )
 {
 
@@ -1003,7 +1028,7 @@ define oradb::database(
     fail(&#39;Unrecognized emConfiguration&#39;)
   }
 
-  if ( $storage_type in lookup(&#39;oradb::instance_storage_type&#39;) == false ) {
+  if ( $storage_type != undef and  $storage_type in lookup(&#39;oradb::instance_storage_type&#39;) == false ) {
     fail(&#39;Unrecognized storageType&#39;)
   }
 
@@ -1090,7 +1115,7 @@ define oradb::database(
   }
 
   if ($version == &#39;12.2&#39; and $templatename != undef and $storage_type != undef and $data_file_destination == undef ) {
-    fail(&#39;data_file_destination is required on version 12.2 when storage_type and templaten are defined&#39;)
+    fail(&#39;data_file_destination is required on version 12.2 when storage_type and template are defined&#39;)
   }
 
   $elevation_prefix = &quot;su - ${user} -c \&quot;/bin/ksh -c \\\&quot;&quot;
@@ -1111,9 +1136,9 @@ define oradb::database(
       }
 
       if ( $version == &#39;11.2&#39; or $container_database == false ) {
-        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} &quot;
+        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -emConfiguration ${em_configuration} &quot;
       } else {
-        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -storageType ${storage_type} -emConfiguration ${em_configuration} &quot;
+        $command_pre = &quot;${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -templateName ${templatename} -gdbname ${globaldb_name} -sid ${db_name} -characterSet ${character_set} -createAsContainerDatabase ${container_database} -responseFile NO_VALUE -sysPassword ${sys_password} -systemPassword ${system_password} -dbsnmpPassword ${db_snmp_password} -asmsnmpPassword ${asm_snmp_password} -emConfiguration ${em_configuration} &quot;
       }
 
       if ( $template_variables != undef) {
@@ -1139,7 +1164,14 @@ define oradb::database(
       } else {
         $command_nodes = &#39;&#39;
       }
-      $command = &quot;${command_pre} ${data_file_destination} ${command_var} ${command_init} ${command_nodes} ${elevation_suffix}&quot;
+
+      if ( $storage_type != undef) {
+        $command_storage = &quot; -storageType ${storage_type}&quot;
+      } else {
+        $command_storage = &#39;&#39;
+      }
+
+      $command = &quot;${command_pre} ${command_storage} ${command_data_file} ${command_var} ${command_init} ${command_nodes} ${elevation_suffix}&quot;
 
     } else {
       if ( $version == &#39;12.2&#39; ) {
@@ -1152,7 +1184,7 @@ define oradb::database(
     exec { &quot;oracle database ${title}&quot;:
       command     =&gt; $command,
       creates     =&gt; &quot;${oracle_base}/admin/${db_name}&quot;,
-      timeout     =&gt; 0,
+      timeout     =&gt; $timeout,
       path        =&gt; $exec_path,
       user        =&gt; &#39;root&#39;,
       group       =&gt; &#39;root&#39;,
@@ -1166,10 +1198,11 @@ define oradb::database(
     } else {
       $command = &quot;${oracle_home}/bin/dbca -silent -responseFile ${download_dir}/database_${sanitized_title}.rsp&quot;
     }
+
     exec { &quot;oracle database ${title}&quot;:
       command     =&gt; $command,
       onlyif      =&gt; &quot;ls ${oracle_base}/admin/${db_name}&quot;,
-      timeout     =&gt; 0,
+      timeout     =&gt; $timeout,
       path        =&gt; $exec_path,
       user        =&gt; $user,
       group       =&gt; $group,

@@ -46,10 +46,10 @@ define oradb::autostartdatabase(
     }
   }
 
-  exec { "set dbora ${db_name}:${oracle_home}":
+  exec { "set ${service_name} ${db_name}:${oracle_home}":
     command   => $sed_command,
     unless    => "/bin/grep '^${db_name}:${oracle_home}:Y' ${oratab}",
-    require   => File["${dbora_location}/dbora"],
+    require   => File["${dbora_location}/${service_name}"],
     path      => $exec_path,
     logoutput => true,
   }

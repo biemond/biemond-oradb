@@ -19,7 +19,7 @@
 #      create_user_tablespace   => true,
 #      log_output               => true,
 #    }
-# 
+#
 # @param version Oracle installation version
 # @param oracle_home_dir full path to the Oracle Home directory inside Oracle Base
 # @param user operating system user
@@ -34,18 +34,19 @@
 # @param create_user_tablespace create user tablespace for the pluggable DB
 #
 define oradb::database_pluggable(
-  Enum['present', 'absent'] $ensure = 'present',
-  Enum['12.1', '12.2'] $version     = lookup('oradb::version'),
-  String $oracle_home_dir           = undef,
-  String $user                      = lookup('oradb::user'),
-  String $group                     = lookup('oradb::group'),
-  String $source_db                 = undef,
-  String $pdb_name                  = undef,
-  String $pdb_datafile_destination  = undef,
-  String $pdb_admin_username        = 'pdb_adm',
-  String $pdb_admin_password        = undef,
-  Boolean $create_user_tablespace   = true,
-  Boolean $log_output               = false,
+  Enum['present', 'absent'] $ensure             = 'present',
+  Enum['12.1', '12.2', '18.3', '19.3'] $version = lookup('oradb::version'),
+  String $oracle_base                           = undef,
+  String $oracle_home_dir                       = undef,
+  String $user                                  = lookup('oradb::user'),
+  String $group                                 = lookup('oradb::group'),
+  String $source_db                             = undef,
+  String $pdb_name                              = undef,
+  String $pdb_datafile_destination              = undef,
+  String $pdb_admin_username                    = 'pdb_adm',
+  String $pdb_admin_password                    = undef,
+  Boolean $create_user_tablespace               = true,
+  Boolean $log_output                           = false,
 ){
   $exec_path = lookup('oradb::exec_path')
 
@@ -59,8 +60,9 @@ define oradb::database_pluggable(
       cwd       => $oracle_home_dir,
       user      => $user,
       group     => $group,
-      creates   => $pdb_datafile_destination,
+      creates   => "${oracle_base}/cfgtoollogs/dbca/${source_db}/${pdb_name}/postPDBCreation.log",
       logoutput => $log_output,
+      returns   => [6,0],
     }
   } else {
     $command = "${oracle_home_dir}/bin/dbca -silent -deletePluggableDatabase -sourceDB ${source_db} -pdbName ${pdb_name}"
@@ -72,7 +74,7 @@ define oradb::database_pluggable(
       cwd       => $oracle_home_dir,
       user      => $user,
       group     => $group,
-      onlyif    => "ls ${$pdb_datafile_destination}",
+      onlyif    => "test ! -f ${oracle_base}/cfgtoollogs/dbca/${source_db}/${pdb_name}/deletePDB.log",
       logoutput => $log_output,
     }
 

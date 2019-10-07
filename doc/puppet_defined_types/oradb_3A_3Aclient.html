@@ -6,7 +6,7 @@
 <title>
   Defined Type: oradb::client
   
-    &mdash; Documentation by YARD 0.9.12
+    &mdash; Documentation by YARD 0.9.16
   
 </title>
 
@@ -79,6 +79,8 @@
 
   </div>
 </div>
+
+
 <div class="tags">
   
   <div class="examples">
@@ -164,7 +166,7 @@ oradb::client{ &#39;11.2.0.1_Linux-x86-64&#39;:
         <span class='name'>oracle_base</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt>Stdlib::Absolutepath</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
@@ -182,7 +184,7 @@ oradb::client{ &#39;11.2.0.1_Linux-x86-64&#39;:
         <span class='name'>oracle_home</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt>Stdlib::Absolutepath</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
@@ -411,6 +413,19 @@ oradb::client{ &#39;11.2.0.1_Linux-x86-64&#39;:
       
     </li>
   
+    <li>
+      
+        <span class='name'>install_type</span>
+      
+      
+        <span class='type'>(<tt>Enum['client','client32']</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;client&#39;</tt>)</em>
+      
+      
+    </li>
+  
 </ul>
 
 
@@ -600,9 +615,7 @@ oradb::client{ &#39;11.2.0.1_Linux-x86-64&#39;:
 229
 230
 231
-232
-233
-234</pre>
+232</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/client.pp', line 53</span>
@@ -610,8 +623,8 @@ oradb::client{ &#39;11.2.0.1_Linux-x86-64&#39;:
 define oradb::client(
   Enum[&#39;11.2.0.1&#39;,&#39;11.2.0.4&#39;,&#39;12.1.0.1&#39;,&#39;12.1.0.2&#39;,&#39;12.2.0.1&#39;] $version = undef,
   String $file                                                          = undef,
-  String $oracle_base                                                   = undef,
-  String $oracle_home                                                   = undef,
+  Stdlib::Absolutepath $oracle_base                                     = undef,
+  Stdlib::Absolutepath $oracle_home                                     = undef,
   Optional[String] $ora_inventory_dir                                   = undef,
   Integer $db_port                                                      = lookup(&#39;oradb::listener_port&#39;),
   String $user                                                          = lookup(&#39;oradb::user&#39;),
@@ -624,11 +637,9 @@ define oradb::client(
   Boolean $remote_file                                                  = true,
   Boolean $log_output                                                   = true,
   String $temp_dir                                                      = lookup(&#39;oradb::tmp_dir&#39;),
+  Enum[&#39;client&#39;,&#39;client32&#39;] $install_type                               = &#39;client&#39;,
 )
 {
-  validate_absolute_path($oracle_home)
-  validate_absolute_path($oracle_base)
-
   # check if the oracle software already exists
   $found = oradb::oracle_exists( $oracle_home )
 
@@ -650,7 +661,7 @@ define oradb::client(
     $ora_inventory = &quot;${ora_inventory_dir}/oraInventory&quot;
   }
 
-  db_directory_structure{&quot;client structure ${version}&quot;:
+  db_directory_structure{&quot;client structure ${title}&quot;:
     ensure            =&gt; present,
     oracle_base_dir   =&gt; $oracle_base,
     ora_inventory_dir =&gt; $ora_inventory,
@@ -672,7 +683,7 @@ define oradb::client(
         mode    =&gt; &#39;0775&#39;,
         owner   =&gt; $user,
         group   =&gt; $group,
-        require =&gt; Db_directory_structure[&quot;client structure ${version}&quot;],
+        require =&gt; Db_directory_structure[&quot;client structure ${title}&quot;],
       }
       $source = $download_dir
     } else {
@@ -685,16 +696,16 @@ define oradb::client(
       user      =&gt; $user,
       group     =&gt; $group,
       logoutput =&gt; false,
-      require   =&gt; Db_directory_structure[&quot;client structure ${version}&quot;],
+      require   =&gt; Db_directory_structure[&quot;client structure ${title}&quot;],
     }
 
-    oradb::utils::dborainst{&quot;oracle orainst ${version}&quot;:
+    oradb::utils::dborainst{&quot;oracle orainst ${title}&quot;:
       ora_inventory_dir =&gt; $ora_inventory,
       os_group          =&gt; $group_install,
     }
 
-    if ! defined(File[&quot;${download_dir}/db_client_${version}.rsp&quot;]) {
-      file { &quot;${download_dir}/db_client_${version}.rsp&quot;:
+    if ! defined(File[&quot;${download_dir}/db_${install_type}_${version}.rsp&quot;]) {
+      file { &quot;${download_dir}/db_${install_type}_${version}.rsp&quot;:
         ensure  =&gt; present,
         content =&gt; epp(&quot;oradb/db_client_${version}.rsp.epp&quot;, {
                         &#39;group_install&#39; =&gt; $group_install,
@@ -704,16 +715,16 @@ define oradb::client(
         mode    =&gt; &#39;0775&#39;,
         owner   =&gt; $user,
         group   =&gt; $group,
-        require =&gt; [Oradb::Utils::Dborainst[&quot;oracle orainst ${version}&quot;],
-                    Db_directory_structure[&quot;client structure ${version}&quot;],],
+        require =&gt; [Oradb::Utils::Dborainst[&quot;oracle orainst ${title}&quot;],
+                    Db_directory_structure[&quot;client structure ${title}&quot;],],
       }
     }
 
     # In $download_dir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
     exec { &quot;install oracle client ${title}&quot;:
-      command     =&gt; &quot;/bin/sh -c &#39;unset DISPLAY;${download_dir}/client_${version}/client/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/db_client_${version}.rsp&#39;&quot;,
-      require     =&gt; [Oradb::Utils::Dborainst[&quot;oracle orainst ${version}&quot;],
-                      File[&quot;${download_dir}/db_client_${version}.rsp&quot;],
+      command     =&gt; &quot;/bin/sh -c &#39;unset DISPLAY;${download_dir}/client_${version}/${install_type}/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/db_${install_type}_${version}.rsp&#39;&quot;,
+      require     =&gt; [Oradb::Utils::Dborainst[&quot;oracle orainst ${title}&quot;],
+                      File[&quot;${download_dir}/db_${install_type}_${version}.rsp&quot;],
                       Exec[&quot;extract ${download_dir}/${file}&quot;]],
       creates     =&gt; $oracle_home,
       timeout     =&gt; 0,
@@ -734,7 +745,7 @@ define oradb::client(
       logoutput =&gt; $log_output,
     }
 
-    file { &quot;${download_dir}/netca_client_${version}.rsp&quot;:
+    file { &quot;${download_dir}/netca_${install_type}_${version}.rsp&quot;:
       ensure  =&gt; present,
       content =&gt; epp(&quot;oradb/netca_client_${version}.rsp.epp&quot;, { &#39;db_port&#39; =&gt; $db_port }),
       require =&gt; Exec[&quot;run root.sh script ${title}&quot;],
@@ -744,8 +755,8 @@ define oradb::client(
     }
 
     exec { &quot;install oracle net ${title}&quot;:
-      command   =&gt; &quot;${oracle_home}/bin/netca /silent /responsefile ${download_dir}/netca_client_${version}.rsp&quot;,
-      require   =&gt; [File[&quot;${download_dir}/netca_client_${version}.rsp&quot;],Exec[&quot;run root.sh script ${title}&quot;],],
+      command   =&gt; &quot;${oracle_home}/bin/netca /silent /responsefile ${download_dir}/netca_${install_type}_${version}.rsp&quot;,
+      require   =&gt; [File[&quot;${download_dir}/netca_${install_type}_${version}.rsp&quot;],Exec[&quot;run root.sh script ${title}&quot;],],
       creates   =&gt; &quot;${oracle_home}/network/admin/sqlnet.ora&quot;,
       path      =&gt; $exec_path,
       user      =&gt; $user,

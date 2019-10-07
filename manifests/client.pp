@@ -51,10 +51,10 @@
 # @param temp_dir location for temporaray file used by the installer
 #
 define oradb::client(
-  Enum['11.2.0.1','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1'] $version = undef,
+  Enum['11.2.0.1','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1','18.0.0.0','19.0.0.0'] $version = undef,
   String $file                                                          = undef,
-  String $oracle_base                                                   = undef,
-  String $oracle_home                                                   = undef,
+  Stdlib::Absolutepath $oracle_base                                     = undef,
+  Stdlib::Absolutepath $oracle_home                                     = undef,
   Optional[String] $ora_inventory_dir                                   = undef,
   Integer $db_port                                                      = lookup('oradb::listener_port'),
   String $user                                                          = lookup('oradb::user'),
@@ -67,11 +67,9 @@ define oradb::client(
   Boolean $remote_file                                                  = true,
   Boolean $log_output                                                   = true,
   String $temp_dir                                                      = lookup('oradb::tmp_dir'),
+  Enum['client','client32'] $install_type                               = 'client',
 )
 {
-  validate_absolute_path($oracle_home)
-  validate_absolute_path($oracle_base)
-
   # check if the oracle software already exists
   $found = oradb::oracle_exists( $oracle_home )
 
@@ -93,7 +91,7 @@ define oradb::client(
     $ora_inventory = "${ora_inventory_dir}/oraInventory"
   }
 
-  db_directory_structure{"client structure ${version}":
+  db_directory_structure{"client structure ${title}":
     ensure            => present,
     oracle_base_dir   => $oracle_base,
     ora_inventory_dir => $ora_inventory,
@@ -115,12 +113,13 @@ define oradb::client(
         mode    => '0775',
         owner   => $user,
         group   => $group,
-        require => Db_directory_structure["client structure ${version}"],
+        require => Db_directory_structure["client structure ${title}"],
       }
       $source = $download_dir
     } else {
       $source = $puppet_download_mnt_point
     }
+
     exec { "extract ${download_dir}/${file}":
       command   => "unzip -o ${source}/${file} -d ${download_dir}/client_${version}",
       timeout   => 0,
@@ -128,16 +127,16 @@ define oradb::client(
       user      => $user,
       group     => $group,
       logoutput => false,
-      require   => Db_directory_structure["client structure ${version}"],
+      require   => Db_directory_structure["client structure ${title}"],
     }
 
-    oradb::utils::dborainst{"oracle orainst ${version}":
+    oradb::utils::dborainst{"oracle orainst ${title}":
       ora_inventory_dir => $ora_inventory,
       os_group          => $group_install,
     }
 
-    if ! defined(File["${download_dir}/db_client_${version}.rsp"]) {
-      file { "${download_dir}/db_client_${version}.rsp":
+    if ! defined(File["${download_dir}/db_${install_type}_${version}.rsp"]) {
+      file { "${download_dir}/db_${install_type}_${version}.rsp":
         ensure  => present,
         content => epp("oradb/db_client_${version}.rsp.epp", {
                         'group_install' => $group_install,
@@ -147,16 +146,18 @@ define oradb::client(
         mode    => '0775',
         owner   => $user,
         group   => $group,
-        require => [Oradb::Utils::Dborainst["oracle orainst ${version}"],
-                    Db_directory_structure["client structure ${version}"],],
+        require => [Oradb::Utils::Dborainst["oracle orainst ${title}"],
+                    Db_directory_structure["client structure ${title}"],],
       }
     }
 
+    $command = "/bin/sh -c 'unset DISPLAY;${download_dir}/client_${version}/${install_type}/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/db_${install_type}_${version}.rsp'"
+
     # In $download_dir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
     exec { "install oracle client ${title}":
-      command     => "/bin/sh -c 'unset DISPLAY;${download_dir}/client_${version}/client/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/db_client_${version}.rsp'",
-      require     => [Oradb::Utils::Dborainst["oracle orainst ${version}"],
-                      File["${download_dir}/db_client_${version}.rsp"],
+      command     => $command,
+      require     => [Oradb::Utils::Dborainst["oracle orainst ${title}"],
+                      File["${download_dir}/db_${install_type}_${version}.rsp"],
                       Exec["extract ${download_dir}/${file}"]],
       creates     => $oracle_home,
       timeout     => 0,
@@ -177,7 +178,7 @@ define oradb::client(
       logoutput => $log_output,
     }
 
-    file { "${download_dir}/netca_client_${version}.rsp":
+    file { "${download_dir}/netca_${install_type}_${version}.rsp":
       ensure  => present,
       content => epp("oradb/netca_client_${version}.rsp.epp", { 'db_port' => $db_port }),
       require => Exec["run root.sh script ${title}"],
@@ -187,8 +188,8 @@ define oradb::client(
     }
 
     exec { "install oracle net ${title}":
-      command   => "${oracle_home}/bin/netca /silent /responsefile ${download_dir}/netca_client_${version}.rsp",
-      require   => [File["${download_dir}/netca_client_${version}.rsp"],Exec["run root.sh script ${title}"],],
+      command   => "${oracle_home}/bin/netca /silent /responsefile ${download_dir}/netca_${install_type}_${version}.rsp",
+      require   => [File["${download_dir}/netca_${install_type}_${version}.rsp"],Exec["run root.sh script ${title}"],],
       creates   => "${oracle_home}/network/admin/sqlnet.ora",
       path      => $exec_path,
       user      => $user,
@@ -226,7 +227,8 @@ define oradb::client(
         user    => 'root',
         group   => 'root',
         path    => $exec_path,
-        require => Exec["install oracle net ${title}"],
+        before  => Exec["install oracle client ${title}"],
+        require => Exec["extract ${download_dir}/${file}"],
       }
     }
 

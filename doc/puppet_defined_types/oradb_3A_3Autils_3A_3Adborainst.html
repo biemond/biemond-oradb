@@ -6,7 +6,7 @@
 <title>
   Defined Type: oradb::utils::dborainst
   
-    &mdash; Documentation by YARD 0.9.12
+    &mdash; Documentation by YARD 0.9.16
   
 </title>
 
@@ -79,6 +79,8 @@
 
   </div>
 </div>
+
+
 <div class="tags">
   
   <div class="examples">
@@ -185,7 +187,7 @@ define oradb::utils::dborainst
       file { $ora_inst_path:
         ensure =&gt; directory,
         before =&gt; File[&quot;${ora_inst_path}/oraInst.loc&quot;],
-        mode   =&gt; &#39;0755&#39;,
+        mode   =&gt; &#39;0644&#39;,
       }
     }
   }
@@ -196,7 +198,7 @@ define oradb::utils::dborainst
       content =&gt; epp(&#39;oradb/oraInst.loc.epp&#39;, {
                       &#39;ora_inventory_dir&#39; =&gt; $ora_inventory_dir,
                       &#39;os_group&#39;          =&gt; $os_group }),
-      mode    =&gt; &#39;0755&#39;,
+      mode    =&gt; &#39;0644&#39;,
     }
   }
 }</pre>
