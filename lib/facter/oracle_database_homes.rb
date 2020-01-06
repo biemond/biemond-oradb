@@ -80,27 +80,29 @@ def get_orainst_products(path)
       software = ''
       patches_fact = {}
       doc.elements.each('/INVENTORY/HOME_LIST/HOME') do |element|
-        str = element.attributes['LOC']
-        unless str.nil?
-          software += str + ';'
-          if str.include? 'plugins'
-            # skip EM agent
-          elsif str.include? 'agent'
-            # skip EM agent
-          elsif str.include? 'OraPlaceHolderDummyHome'
-            # skip EM agent
-          else
-            home = str.gsub('/', '_').gsub("\\", '_').gsub('c:', '_c').gsub('d:', '_d').gsub('e:', '_e')
-            opatchver = get_opatch_version(str)
-            Facter.add("oradb_inst_opatch#{home}") do
-              setcode do
-                opatchver
+        if element.attributes['REMOVED'] != 'T'
+          str = element.attributes['LOC']
+          unless str.nil?
+            software += str + ';'
+            if str.include? 'plugins'
+              # skip EM agent
+            elsif str.include? 'agent'
+              # skip EM agent
+            elsif str.include? 'OraPlaceHolderDummyHome'
+              # skip EM agent
+            else
+              home = str.gsub('/', '_').gsub("\\", '_').gsub('c:', '_c').gsub('d:', '_d').gsub('e:', '_e')
+              opatchver = get_opatch_version(str)
+              Facter.add("oradb_inst_opatch#{home}") do
+                setcode do
+                  opatchver
+                end
               end
-            end
 
-            patches = get_opatch_patches(str)
-            # Puppet.info "-patches hash- #{patches}"
-            patches_fact[str] = patches unless patches.nil?
+              patches = get_opatch_patches(str)
+              # Puppet.info "-patches hash- #{patches}"
+              patches_fact[str] = patches unless patches.nil?
+            end
           end
         end
       end
