@@ -296,7 +296,13 @@ define oradb::database(
         $command_storage = ''
       }
 
-      $command = "${command_pre} ${command_storage} ${command_data_file} ${command_var} ${command_init} ${command_nodes} ${elevation_suffix}"
+      if ( $automatic_memory_management == false ) {
+        $command_amm = '-automaticMemoryManagement false'
+      } else {
+        $command_amm = ''
+      }
+
+      $command = "${command_pre} ${command_amm} ${command_storage} ${command_data_file} ${command_var} ${command_init} ${command_nodes} ${elevation_suffix}"
 
     } else {
       if ( $version in ['12.2','18.3','19.3']) {
