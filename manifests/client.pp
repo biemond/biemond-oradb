@@ -49,6 +49,7 @@
 # @param remote_file the installation is remote accessiable or not
 # @param log_output log all output
 # @param temp_dir location for temporaray file used by the installer
+# @param image_install unzip client_home.zip and use runInstaller
 #
 define oradb::client(
   Enum['11.2.0.1','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1','18.0.0.0','19.0.0.0'] $version = undef,
@@ -68,6 +69,7 @@ define oradb::client(
   Boolean $log_output                                                   = true,
   String $temp_dir                                                      = lookup('oradb::tmp_dir'),
   Enum['client','client32'] $install_type                               = 'client',
+  Boolean $image_install                                                = false,
 )
 {
   # check if the oracle software already exists
@@ -90,14 +92,31 @@ define oradb::client(
     validate_absolute_path($ora_inventory_dir)
     $ora_inventory = "${ora_inventory_dir}/oraInventory"
   }
+  
+  if ( $image_install ) {
+    # add oracle home for the unzip
+    db_directory_structure{"client structure ${title}":
+      ensure            => present,
+      oracle_base_dir   => $oracle_base,
+      oracle_home_dir   => $oracle_home,
+      ora_inventory_dir => $ora_inventory,
+      download_dir      => $download_dir,
+      os_user           => $user,
+      os_group          => $group_install,
+    }
+  } else {
+    db_directory_structure{"client structure ${title}":
+      ensure            => present,
+      oracle_base_dir   => $oracle_base,
+      ora_inventory_dir => $ora_inventory,
+      download_dir      => $download_dir,
+      os_user           => $user,
+      os_group          => $group_install,
+    }
+  }
 
-  db_directory_structure{"client structure ${title}":
-    ensure            => present,
-    oracle_base_dir   => $oracle_base,
-    ora_inventory_dir => $ora_inventory,
-    download_dir      => $download_dir,
-    os_user           => $user,
-    os_group          => $group_install,
+  if ( $image_install ) and !( $version in ['18.0.0.0', '19.0.0.0'] ) {
+    fail('Image Install not supported on this oracle client version!')
   }
 
   if ( $continue ) {
@@ -120,15 +139,27 @@ define oradb::client(
       $source = $puppet_download_mnt_point
     }
 
-    exec { "extract ${download_dir}/${file}":
-      command   => "unzip -o ${source}/${file} -d ${download_dir}/client_${version}",
-      timeout   => 0,
-      path      => $exec_path,
-      user      => $user,
-      group     => $group,
-      logoutput => false,
-      require   => Db_directory_structure["client structure ${title}"],
-    }
+  if ( $image_install ) {
+      exec { "extract ${download_dir}/${file}":
+        command   => "unzip -o ${source}/${file} -d ${oracle_home}",
+        timeout   => 0,
+        path      => $exec_path,
+        user      => $user,
+        group     => $group,
+        logoutput => false,
+        require   => Db_directory_structure["client structure ${title}"],
+      }
+  } else {
+      exec { "extract ${download_dir}/${file}":
+        command   => "unzip -o ${source}/${file} -d ${download_dir}/client_${version}",
+        timeout   => 0,
+        path      => $exec_path,
+        user      => $user,
+        group     => $group,
+        logoutput => false,
+        require   => Db_directory_structure["client structure ${title}"],
+      }
+  }
 
     oradb::utils::dborainst{"oracle orainst ${title}":
       ora_inventory_dir => $ora_inventory,
@@ -150,16 +181,19 @@ define oradb::client(
                     Db_directory_structure["client structure ${title}"],],
       }
     }
+    if ($image_install) {
+      $command = "/bin/sh -c 'unset DISPLAY;cd ${oracle_home};./runInstaller -silent -waitforcompletion -force -responseFile ${download_dir}/db_${install_type}_${version}.rsp'"
 
-    $command = "/bin/sh -c 'unset DISPLAY;${download_dir}/client_${version}/${install_type}/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/db_${install_type}_${version}.rsp'"
-
+    } else {
+      $command = "/bin/sh -c 'unset DISPLAY;${download_dir}/client_${version}/${install_type}/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/db_${install_type}_${version}.rsp'"
+    }
     # In $download_dir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
     exec { "install oracle client ${title}":
       command     => $command,
       require     => [Oradb::Utils::Dborainst["oracle orainst ${title}"],
                       File["${download_dir}/db_${install_type}_${version}.rsp"],
                       Exec["extract ${download_dir}/${file}"]],
-      creates     => $oracle_home,
+      #creates     => $oracle_home, # remove creates to support image install.
       timeout     => 0,
       returns     => [6,0],
       path        => $exec_path,
