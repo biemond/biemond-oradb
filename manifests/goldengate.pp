@@ -1,9 +1,25 @@
 #
 # goldengate
 #
-# install goldengate version 12.3.0, 12.2.1, 12.1.2 or 11.2
+# install goldengate version 19.1, 18.1, 12.3.0, 12.2.1, 12.1.2 or 11.2
 #
 # @example goldengate install
+#
+#  oradb::goldengate{ 'ggate19.1':
+#    version                    => '19.1',
+#    file                       => '191004_fbo_ggs_Linux_x64_shiphome.zip',
+#    database_type              => 'Oracle',
+#    database_version           => 'ORA19c',
+#    database_home              => '/oracle/product/19.3/db',
+#    oracle_base                => '/oracle',
+#    goldengate_home            => '/oracle/product/19.3/ggate',
+#    manager_port               => 7809,
+#    user                       => 'oracle',
+#    group                      => 'dba',
+#    group_install              => 'oinstall',
+#    download_dir               => '/var/tmp/install',
+#    puppet_download_mnt_point  => '/software',
+#  }
 #
 #  oradb::goldengate{ 'ggate12.1.2':
 #    version                    => '12.1.2',
@@ -51,26 +67,26 @@
 # @param database_home the oracle database home for connecting goldengat only for 12c
 #
 define oradb::goldengate(
-  String $version                            = '12.2.1',
-  String $file                               = undef,
-  Optional[String] $tar_file                 = undef,     # only for < 12.1.2
-  Enum['Oracle'] $database_type              = 'Oracle',  # only for > 12.1.2
-  Enum['ORA11g', 'ORA12c'] $database_version = 'ORA11g',  # only for > 12.1.2
-  Optional[String] $database_home            = undef,     # only for > 12.1.2
-  Optional[String] $oracle_base              = undef,     # only for > 12.1.2
-  Optional[String] $ora_inventory_dir        = undef,     # only for > 12.1.2
-  String $goldengate_home                    = undef,
-  Optional[Integer] $manager_port            = undef,
-  String $user                               = 'ggate',
-  String $group                              = lookup('oradb::group'),
-  String $group_install                      = lookup('oradb::group_install'),
-  String $download_dir                       = lookup('oradb::download_dir'),
-  String $puppet_download_mnt_point          = lookup('oradb::module_mountpoint'),
+  String $version                                                = '12.2.1',
+  String $file                                                   = undef,
+  Optional[String] $tar_file                                     = undef,     # only for < 12.1.2
+  Enum['Oracle'] $database_type                                  = 'Oracle',  # only for > 12.1.2
+  Enum['ORA11g', 'ORA12c', 'ORA18c', 'ORA19c'] $database_version = 'ORA11g',  # only for > 12.1.2
+  Optional[String] $database_home                                = undef,     # only for > 12.1.2
+  Optional[String] $oracle_base                                  = undef,     # only for > 12.1.2
+  Optional[String] $ora_inventory_dir                            = undef,     # only for > 12.1.2
+  String $goldengate_home                                        = undef,
+  Optional[Integer] $manager_port                                = undef,
+  String $user                                                   = 'ggate',
+  String $group                                                  = lookup('oradb::group'),
+  String $group_install                                          = lookup('oradb::group_install'),
+  String $download_dir                                           = lookup('oradb::download_dir'),
+  String $puppet_download_mnt_point                              = lookup('oradb::module_mountpoint'),
 )
 {
   $exec_path = lookup('oradb::exec_path')
 
-  if ( $version in ['12.1.2', '12.2.1', '12.3.0'] ) {
+  if ( $version in ['12.1.2', '12.2.1', '12.3.0', '18.1', '19.1'] ) {
     # check if the oracle software already exists
     if ( $database_home == undef or is_string($database_home) == false) {fail('You must specify a database_home') }
     if ( $oracle_base == undef or is_string($oracle_base) == false) {fail('You must specify an oracle_base') }
@@ -92,7 +108,7 @@ define oradb::goldengate(
     $continue = false
   }
 
-  if ( $version in ['12.1.2', '12.2.1', '12.3.0'] ) {
+  if ( $version in ['12.1.2', '12.2.1', '12.3.0', '18.1', '19.1'] ) {
     if $ora_inventory_dir == undef {
       $ora_inventory = oradb::cleanpath("${oracle_base}/../oraInventory")
     } else {
@@ -110,7 +126,7 @@ define oradb::goldengate(
     }
   }
 
-  # only for 12.1.2, 12.2.1, 12.3.0
+  # only for 12.1.2, 12.2.1, 12.3.0, 18.1, 19.1
   if ( $continue == true ) {
 
     $ggate_install_dir = 'fbo_ggs_Linux_x64_shiphome'
@@ -167,7 +183,7 @@ define oradb::goldengate(
 
   }
 
-  if ( $version != '12.1.2' and $version != '12.2.1' and $version != '12.3.0'){
+  if ( $version != '12.1.2' and $version != '12.2.1' and $version != '12.3.0' and $version != '18.1' and $version != '19.1'){
 
     if ( $tar_file == undef or is_string($tar_file) == false) {fail("${title} You must specify a tar_file") }
 
