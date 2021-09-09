@@ -66,6 +66,7 @@
 # @param em_upload_port em upload port
 # @param oracle_hostname the FQDN hostname to install the agent on
 # @param manage_curl download curl package
+# @param ignore_sys_prerequisite skip operating system verification steps prior to installation
 #
 define oradb::installem_agent(
   Enum['12.1.0.3', '12.1.0.4', '12.1.0.5', '13.2.0.0', '13.3.0.0', '13.4.0.0'] $version  = '12.1.0.5',
@@ -143,6 +144,12 @@ define oradb::installem_agent(
     if ( $agent_registration_password == undef or is_string($agent_registration_password) == false) {fail('You must specify agent_registration_password') }
     if ( $em_upload_port == undef or is_numeric($em_upload_port) == false) {fail('You must specify em_upload_port') }
 
+    if ( $ignore_sys_prerequisite ) {
+      $param_ignore_prereq='-ignorePrereqs'
+    } else {
+      $param_ignore_prereq=''
+    }
+
     # chmod +x /tmp/AgentPull.sh
     if ( $install_type  == 'agentPull') {
 
@@ -192,7 +199,7 @@ define oradb::installem_agent(
         require => Db_directory_structure["oracle em agent structure ${version}"],
       }
 
-      $command = "${download_dir}/AgentPull.sh LOGIN_USER=${sysman_user} LOGIN_PASSWORD=${sysman_password} PLATFORM=\"${install_platform}\" VERSION=${install_version} AGENT_BASE_DIR=${agent_base_dir} AGENT_REGISTRATION_PASSWORD=${agent_registration_password} ORACLE_HOSTNAME=${oracle_hostname} RSPFILE_LOC=${download_dir}/em_agent.properties"
+      $command = "${download_dir}/AgentPull.sh ${param_ignore_prereq} LOGIN_USER=${sysman_user} LOGIN_PASSWORD=${sysman_password} PLATFORM=\"${install_platform}\" VERSION=${install_version} AGENT_BASE_DIR=${agent_base_dir} AGENT_REGISTRATION_PASSWORD=${agent_registration_password} ORACLE_HOSTNAME=${oracle_hostname} RSPFILE_LOC=${download_dir}/em_agent.properties"
 
       exec { "agentPull execute ${title}":
         command   => $command,
@@ -241,12 +248,6 @@ define oradb::installem_agent(
         group     => $group,
         require   => [Db_directory_structure["oracle em agent structure ${version}"],
                       Oradb::Utils::Dborainst["em agent orainst ${version}"],],
-      }
-
-      if ( $ignore_sys_prerequisite ) {
-        $param_ignore_prereq='-ignorePrereqs'
-      } else {
-        $param_ignore_prereq=''
       }
 
       if ( $agent_instance_home_dir == undef ) {
