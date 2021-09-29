@@ -345,7 +345,7 @@ define oradb::installasm(
     }
 
     # Enterprise Linux 7 and greater uses systemd for service control
-    if ($facts['osfamily'] == 'RedHat' and $facts['operatingsystemmajrelease'] >= '7'){
+    if ($facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] >= '7'){
       file {'/etc/systemd/system/oracle-ohasd.service':
         ensure  => 'file',
         content => epp('oradb/ohas.service.epp'),
