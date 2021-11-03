@@ -344,25 +344,20 @@ define oradb::installasm(
       }
     }
 
-    #because of RHEL7 uses systemd we need to create the service differently
-    if ($facts['osfamily'] == 'RedHat' and $facts['operatingsystemmajrelease'] == '7')
-    {
+    # Enterprise Linux 7 and greater uses systemd for service control
+    if ($facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] >= '7'){
       file {'/etc/systemd/system/oracle-ohasd.service':
         ensure  => 'file',
         content => epp('oradb/ohas.service.epp'),
         mode    => '0644',
         require => Exec["install oracle grid ${title}"],
-      } -> exec { 'daemon-reload for ohas':
-        command => '/bin/systemctl daemon-reload',
+        notify  => Exec['daemon-reload for ohas'],
       }
-      # ->
 
-      # service { 'ohas.service':
-      #   ensure => running,
-      #   enable => true,
-      #   before => Exec["run root.sh grid script ${title}"],
-      # }
-
+      exec { 'daemon-reload for ohas':
+        command     => '/bin/systemctl daemon-reload',
+        refreshonly => true,
+      }
     }
 
     exec { "run root.sh grid script ${title}":
