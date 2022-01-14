@@ -18,7 +18,7 @@
        String $disk_redundancy = 'NORMAL',
        Integer $disk_au_size = 1,
        Optional[String] $disks = undef,
-       Optional[String] $disks_with_failure_goups = undef,
+       Optional[String] $disks_with_failure_groups = undef,
        Optional[String] $disk_discovery_string = undef | -%>
 
 ###############################################################################
@@ -432,7 +432,7 @@ oracle.install.asm.diskGroup.FailureGroups=
 #     oracle.install.asm.diskGroup.disksWithFailureGroupNames=\\.\ORCLDISKDATA0,FGName,\\.\ORCLDISKDATA1,FGName
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.diskGroup.disksWithFailureGroupNames=<%= $disks_with_failure_goups %>
+oracle.install.asm.diskGroup.disksWithFailureGroupNames=<%= $disks_with_failure_groups %>
 
 #-------------------------------------------------------------------------------
 # List of disks to create a ASM DiskGroup
@@ -525,7 +525,7 @@ oracle.install.asm.gimrDG.FailureGroups=
 #     oracle.install.asm.gimrDG.disksWithFailureGroupNames=\\.\ORCLDISKDATA0,FGName,\\.\ORCLDISKDATA1,FGName
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.gimrDG.disksWithFailureGroupNames=<%= $disks_with_failure_goups %>
+oracle.install.asm.gimrDG.disksWithFailureGroupNames=<%= $disks_with_failure_groups %>
 
 #-------------------------------------------------------------------------------
 # List of disks to create GIMR data ASM DiskGroup
