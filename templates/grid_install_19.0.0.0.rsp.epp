@@ -12,6 +12,7 @@
        Optional[String] $cluster_nodes = undef,
        Optional[String] $network_interface_list = undef,
        Optional[String] $storage_option = undef,
+       Optional[Enum['true','false']] $configure_gimr_data = undef,
        String $sys_asm_password,
        String $asm_monitor_password,
        String $asm_diskgroup,
@@ -305,7 +306,7 @@ oracle.install.crs.config.networkInterfaceList=<%= $network_interface_list %>
 # Value should be 'true' for DOMAIN cluster configurations
 # Value can be true/false for STANDALONE cluster configurations.
 #------------------------------------------------------------------------------
-oracle.install.asm.configureGIMRDataDG=
+oracle.install.asm.configureGIMRDataDG=<%= $configure_gimr_data %>
 
 ################################################################################
 #                                                                              #
