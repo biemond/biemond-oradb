@@ -15,10 +15,14 @@
        String $sys_asm_password,
        String $asm_monitor_password,
        String $asm_diskgroup,
+       Optional[String] $gimr_diskgroup = undef,
        String $disk_redundancy = 'NORMAL',
+       Optional[String] $gimr_disk_redundancy = undef,
        Integer $disk_au_size = 1,
        Optional[String] $disks = undef,
+       Optional[String] $gimr_disks = undef,
        Optional[String] $disks_with_failure_groups = undef,
+       Optional[String] $gimr_disks_with_failure_groups = undef,
        Optional[String] $disk_discovery_string = undef | -%>
 
 ###############################################################################
@@ -463,7 +467,7 @@ oracle.install.asm.monitorPassword=<%= $asm_monitor_password %>
 # Example: oracle.install.asm.GIMRDG.name=MGMT
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.gimrDG.name=
+oracle.install.asm.gimrDG.name=<%= $gimr_diskgroup %>
 
 #-------------------------------------------------------------------------------
 # Redundancy level to be used by ASM.
@@ -475,7 +479,7 @@ oracle.install.asm.gimrDG.name=
 # Example: oracle.install.asm.gimrDG.redundancy=NORMAL
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.gimrDG.redundancy=
+oracle.install.asm.gimrDG.redundancy=<%= $gimr_disk_redundancy %>
 
 #-------------------------------------------------------------------------------
 # Allocation unit size to be used by ASM.
@@ -489,7 +493,7 @@ oracle.install.asm.gimrDG.redundancy=
 # size unit is MB
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.gimrDG.AUSize=
+oracle.install.asm.gimrDG.AUSize=<%= $disk_au_size %>
 
 #-------------------------------------------------------------------------------
 # Failure Groups for the GIMR storage data ASM disk group
@@ -510,7 +514,7 @@ oracle.install.asm.gimrDG.FailureGroups=
 #     oracle.install.asm.gimrDG.disksWithFailureGroupNames=\\.\ORCLDISKDATA0,FGName,\\.\ORCLDISKDATA1,FGName
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.gimrDG.disksWithFailureGroupNames=<%= $disks_with_failure_groups %>
+oracle.install.asm.gimrDG.disksWithFailureGroupNames=<%= $gimr_disks_with_failure_groups %>
 
 #-------------------------------------------------------------------------------
 # List of disks to create GIMR data ASM DiskGroup
@@ -522,7 +526,7 @@ oracle.install.asm.gimrDG.disksWithFailureGroupNames=<%= $disks_with_failure_gro
 #     oracle.install.asm.gimrDG.disks=\\.\ORCLDISKDATA0,\\.\ORCLDISKDATA1
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.gimrDG.disks=
+oracle.install.asm.gimrDG.disks=<%= $gimr_disks %>
 
 #-------------------------------------------------------------------------------
 # List of failure groups to be marked as QUORUM.
