@@ -320,9 +320,11 @@ define oradb::installasm(
     }
 
     if ($version in ['12.2.0.1','18.0.0.0','19.0.0.0']) {
-      $command = "/bin/sh -c 'unset DISPLAY;cd ${grid_home};./gridSetup.sh -silent -waitforcompletion -skipPrereqs -responseFile ${download_dir}/grid_install_${version}.rsp'"
+      # $command = "/bin/sh -c 'unset DISPLAY;cd ${grid_home};./gridSetup.sh -silent -waitforcompletion -skipPrereqs -responseFile ${download_dir}/grid_install_${version}.rsp'"
+      $command = 'echo \"fake install\"'
     } else {
-      $command = "/bin/sh -c 'unset DISPLAY;cd ${grid_base};${download_dir}/${file_without_ext}/grid/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/grid_install_${version}.rsp'"
+      # $command = "/bin/sh -c 'unset DISPLAY;cd ${grid_base};${download_dir}/${file_without_ext}/grid/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/grid_install_${version}.rsp'"
+      $command = 'echo \"fake install\"'
     }
 
     exec { "install oracle grid ${title}":
