@@ -320,168 +320,166 @@ define oradb::installasm(
     }
 
     if ($version in ['12.2.0.1','18.0.0.0','19.0.0.0']) {
-      # $command = "/bin/sh -c 'unset DISPLAY;cd ${grid_home};./gridSetup.sh -silent -waitforcompletion -skipPrereqs -responseFile ${download_dir}/grid_install_${version}.rsp'"
-      $command = 'echo \"fake install\"'
+      $command = "/bin/sh -c 'unset DISPLAY;cd ${grid_home};./gridSetup.sh -silent -waitforcompletion -skipPrereqs -responseFile ${download_dir}/grid_install_${version}.rsp'"
     } else {
-      # $command = "/bin/sh -c 'unset DISPLAY;cd ${grid_base};${download_dir}/${file_without_ext}/grid/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/grid_install_${version}.rsp'"
-      $command = 'echo \"fake install\"'
+      $command = "/bin/sh -c 'unset DISPLAY;cd ${grid_base};${download_dir}/${file_without_ext}/grid/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/grid_install_${version}.rsp'"
     }
 
-    exec { "install oracle grid ${title}":
-      command     => $command,
-      # creates     => "${grid_home}/bin",
-      environment => ["USER=${user}","LOGNAME=${user}"],
-      timeout     => 0,
-      returns     => [6,0],
-      path        => $exec_path,
-      user        => $user,
-      group       => $group_install,
-      logoutput   => true,
-      require     => [Oradb::Utils::Dborainst["grid orainst ${version}"],
-                      File["${download_dir}/grid_install_${version}.rsp"]],
-    }
+    # exec { "install oracle grid ${title}":
+    #   command     => $command,
+    #   # creates     => "${grid_home}/bin",
+    #   environment => ["USER=${user}","LOGNAME=${user}"],
+    #   timeout     => 0,
+    #   returns     => [6,0],
+    #   path        => $exec_path,
+    #   user        => $user,
+    #   group       => $group_install,
+    #   logoutput   => true,
+    #   require     => [Oradb::Utils::Dborainst["grid orainst ${version}"],
+    #                   File["${download_dir}/grid_install_${version}.rsp"]],
+    # }
 
-    if ( $bash_profile == true ) {
-      if ! defined(File["${user_base_dir}/${user}/.bash_profile"]) {
-        file { "${user_base_dir}/${user}/.bash_profile":
-          ensure  => present,
-          # content => template('oradb/grid_bash_profile.erb'),
-          content => regsubst(epp('oradb/grid_bash_profile.epp',
-                              { 'grid_home' => $grid_home,
-                                'grid_base' => $grid_base,
-                                'grid_type' => $grid_type,
-                                'temp_dir'  => $temp_dir }), '\r\n', "\n", 'EMG'),
-          mode    => '0775',
-          owner   => $user,
-          group   => $group,
-        }
-      }
-    }
+    # if ( $bash_profile == true ) {
+    #   if ! defined(File["${user_base_dir}/${user}/.bash_profile"]) {
+    #     file { "${user_base_dir}/${user}/.bash_profile":
+    #       ensure  => present,
+    #       # content => template('oradb/grid_bash_profile.erb'),
+    #       content => regsubst(epp('oradb/grid_bash_profile.epp',
+    #                           { 'grid_home' => $grid_home,
+    #                             'grid_base' => $grid_base,
+    #                             'grid_type' => $grid_type,
+    #                             'temp_dir'  => $temp_dir }), '\r\n', "\n", 'EMG'),
+    #       mode    => '0775',
+    #       owner   => $user,
+    #       group   => $group,
+    #     }
+    #   }
+    # }
 
-    # Enterprise Linux 7 and greater uses systemd for service control
-    if ($facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] >= '7'){
-      file {'/etc/systemd/system/oracle-ohasd.service':
-        ensure  => 'file',
-        content => epp('oradb/ohas.service.epp'),
-        mode    => '0644',
-        require => Exec["install oracle grid ${title}"],
-        notify  => Exec['daemon-reload for ohas'],
-      }
+    # # Enterprise Linux 7 and greater uses systemd for service control
+    # if ($facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] >= '7'){
+    #   file {'/etc/systemd/system/oracle-ohasd.service':
+    #     ensure  => 'file',
+    #     content => epp('oradb/ohas.service.epp'),
+    #     mode    => '0644',
+    #     require => Exec["install oracle grid ${title}"],
+    #     notify  => Exec['daemon-reload for ohas'],
+    #   }
 
-      exec { 'daemon-reload for ohas':
-        command     => '/bin/systemctl daemon-reload',
-        refreshonly => true,
-      }
-    }
+    #   exec { 'daemon-reload for ohas':
+    #     command     => '/bin/systemctl daemon-reload',
+    #     refreshonly => true,
+    #   }
+    # }
 
-    exec { "run root.sh grid script ${title}":
-      timeout   => 0,
-      command   => "${grid_home}/root.sh",
-      user      => 'root',
-      group     => 'root',
-      path      => $exec_path,
-      cwd       => $grid_base,
-      logoutput => true,
-      require   => Exec["install oracle grid ${title}"],
-    }
+    # exec { "run root.sh grid script ${title}":
+    #   timeout   => 0,
+    #   command   => "${grid_home}/root.sh",
+    #   user      => 'root',
+    #   group     => 'root',
+    #   path      => $exec_path,
+    #   cwd       => $grid_base,
+    #   logoutput => true,
+    #   require   => Exec["install oracle grid ${title}"],
+    # }
 
-    if ( $version in ['12.2.0.1','18.0.0.0','19.0.0.0'] and $grid_type != 'CRS_SWONLY' ) {
-      exec { "configure asm ${title}":
-        timeout   => 0,
-        command   => "${grid_home}/gridSetup.sh -executeConfigTools -silent -responseFile ${download_dir}/grid_install_${version}.rsp",
-        user      => $user,
-        group     => $group,
-        path      => $exec_path,
-        cwd       => $grid_home,
-        logoutput => true,
-        require   => Exec["install oracle grid ${title}","run root.sh grid script ${title}"],
-      }
-    }
+    # if ( $version in ['12.2.0.1','18.0.0.0','19.0.0.0'] and $grid_type != 'CRS_SWONLY' ) {
+    #   exec { "configure asm ${title}":
+    #     timeout   => 0,
+    #     command   => "${grid_home}/gridSetup.sh -executeConfigTools -silent -responseFile ${download_dir}/grid_install_${version}.rsp",
+    #     user      => $user,
+    #     group     => $group,
+    #     path      => $exec_path,
+    #     cwd       => $grid_home,
+    #     logoutput => true,
+    #     require   => Exec["install oracle grid ${title}","run root.sh grid script ${title}"],
+    #   }
+    # }
 
-    if !defined(File[$grid_home]) {
-      file { $grid_home:
-        ensure  => directory,
-        recurse => false,
-        replace => false,
-        mode    => '0775',
-        owner   => $user,
-        group   => $group_install,
-        require => Exec["install oracle grid ${title}","run root.sh grid script ${title}"],
-      }
-    }
-    # cleanup
-    if ( $zip_extract ) {
-      if ($version != '12.2.0.1' and $version != '18.0.0.0' and $version != '19.0.0.0') {
-        exec { "remove oracle asm extract folder ${title}":
-          command => "rm -rf ${download_dir}/${file_without_ext}",
-          user    => 'root',
-          group   => 'root',
-          path    => $exec_path,
-          require => Exec["install oracle grid ${title}"],
-        }
-      }
+    # if !defined(File[$grid_home]) {
+    #   file { $grid_home:
+    #     ensure  => directory,
+    #     recurse => false,
+    #     replace => false,
+    #     mode    => '0775',
+    #     owner   => $user,
+    #     group   => $group_install,
+    #     require => Exec["install oracle grid ${title}","run root.sh grid script ${title}"],
+    #   }
+    # }
+    # # cleanup
+    # if ( $zip_extract ) {
+    #   if ($version != '12.2.0.1' and $version != '18.0.0.0' and $version != '19.0.0.0') {
+    #     exec { "remove oracle asm extract folder ${title}":
+    #       command => "rm -rf ${download_dir}/${file_without_ext}",
+    #       user    => 'root',
+    #       group   => 'root',
+    #       path    => $exec_path,
+    #       require => Exec["install oracle grid ${title}"],
+    #     }
+    #   }
 
-      if ( $remote_file == true ){
-        if ( $total_files > 1 ) {
-          exec { "remove oracle asm file2 ${file2} ${title}":
-            command => "rm -rf ${download_dir}/${file2}",
-            user    => 'root',
-            group   => 'root',
-            path    => $exec_path,
-            require => Exec["install oracle grid ${title}"],
-          }
-        }
+    #   if ( $remote_file == true ){
+    #     if ( $total_files > 1 ) {
+    #       exec { "remove oracle asm file2 ${file2} ${title}":
+    #         command => "rm -rf ${download_dir}/${file2}",
+    #         user    => 'root',
+    #         group   => 'root',
+    #         path    => $exec_path,
+    #         require => Exec["install oracle grid ${title}"],
+    #       }
+    #     }
 
-        exec { "remove oracle asm file1 ${file1} ${title}":
-          command => "rm -rf ${download_dir}/${file1}",
-          user    => 'root',
-          group   => 'root',
-          path    => $exec_path,
-          require => Exec["install oracle grid ${title}"],
-        }
-      }
-    }
+    #     exec { "remove oracle asm file1 ${file1} ${title}":
+    #       command => "rm -rf ${download_dir}/${file1}",
+    #       user    => 'root',
+    #       group   => 'root',
+    #       path    => $exec_path,
+    #       require => Exec["install oracle grid ${title}"],
+    #     }
+    #   }
+    # }
 
-    if ( $grid_type == 'CRS_SWONLY' ) {
-      if ( $stand_alone == true ) {
-        exec { 'Configuring Grid Infrastructure for a Stand-Alone Server':
-          command   => "${grid_home}/perl/bin/perl -I${grid_home}/perl/lib -I${grid_home}/crs/install ${grid_home}/crs/install/roothas.pl",
-          user      => 'root',
-          group     => 'root',
-          path      => $exec_path,
-          cwd       => $grid_base,
-          logoutput => true,
-          require   => [Exec["run root.sh grid script ${title}"],
-                        File[$grid_home],],
-        }
-      }
-    } else {
-      file { "${download_dir}/cfgrsp.properties":
-        ensure  => present,
-        content => epp('oradb/grid_password.properties.epp', { 'sys_asm_password' => $sys_asm_password } ),
-        mode    => '0600',
-        owner   => $user,
-        group   => $group,
-        require => [Exec["run root.sh grid script ${title}"],
-                    File[$grid_home],],
-      }
+    # if ( $grid_type == 'CRS_SWONLY' ) {
+    #   if ( $stand_alone == true ) {
+    #     exec { 'Configuring Grid Infrastructure for a Stand-Alone Server':
+    #       command   => "${grid_home}/perl/bin/perl -I${grid_home}/perl/lib -I${grid_home}/crs/install ${grid_home}/crs/install/roothas.pl",
+    #       user      => 'root',
+    #       group     => 'root',
+    #       path      => $exec_path,
+    #       cwd       => $grid_base,
+    #       logoutput => true,
+    #       require   => [Exec["run root.sh grid script ${title}"],
+    #                     File[$grid_home],],
+    #     }
+    #   }
+    # } else {
+    #   file { "${download_dir}/cfgrsp.properties":
+    #     ensure  => present,
+    #     content => epp('oradb/grid_password.properties.epp', { 'sys_asm_password' => $sys_asm_password } ),
+    #     mode    => '0600',
+    #     owner   => $user,
+    #     group   => $group,
+    #     require => [Exec["run root.sh grid script ${title}"],
+    #                 File[$grid_home],],
+    #   }
 
-      exec { "run configToolAllCommands grid tool ${title}":
-        timeout   => 0, # This can sometimes take a long time
-        command   => "${grid_home}/cfgtoollogs/configToolAllCommands RESPONSE_FILE=${download_dir}/cfgrsp.properties",
-        user      => $user,
-        group     => $group_install,
-        path      => $exec_path,
-        provider  => 'shell',
-        cwd       => "${grid_home}/cfgtoollogs",
-        logoutput => true,
-        returns   => [0,3], # when a scan adress is not defined in the DNS, it fails, buut we can continue
-        require   => [File["${download_dir}/cfgrsp.properties"],
-                      Exec["run root.sh grid script ${title}"],
-                      Exec["install oracle grid ${title}"],
-                      ],
-      }
-    }
+    #   exec { "run configToolAllCommands grid tool ${title}":
+    #     timeout   => 0, # This can sometimes take a long time
+    #     command   => "${grid_home}/cfgtoollogs/configToolAllCommands RESPONSE_FILE=${download_dir}/cfgrsp.properties",
+    #     user      => $user,
+    #     group     => $group_install,
+    #     path      => $exec_path,
+    #     provider  => 'shell',
+    #     cwd       => "${grid_home}/cfgtoollogs",
+    #     logoutput => true,
+    #     returns   => [0,3], # when a scan adress is not defined in the DNS, it fails, buut we can continue
+    #     require   => [File["${download_dir}/cfgrsp.properties"],
+    #                   Exec["run root.sh grid script ${title}"],
+    #                   Exec["install oracle grid ${title}"],
+    #                   ],
+    #   }
+    # }
 
   }
 }
