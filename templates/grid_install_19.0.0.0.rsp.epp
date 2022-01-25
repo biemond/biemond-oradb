@@ -557,7 +557,7 @@ oracle.install.asm.configureAFD=<%= $configure_afd %>
 # Applicable only for DOMAIN cluster configuration
 # Specify 'true' if you want to configure RHP service, else specify 'false'
 #-------------------------------------------------------------------------------
-oracle.install.crs.configureRHPS=
+oracle.install.crs.configureRHPS=<%= $configure_rhps %>
 
 ################################################################################
 #                                                                              #
@@ -568,7 +568,7 @@ oracle.install.crs.configureRHPS=
 # Specify whether to ignore down nodes during upgrade operation.
 # Value should be 'true' to ignore down nodes otherwise specify 'false'
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.ignoreDownNodes=
+oracle.install.crs.config.ignoreDownNodes=<%= $ignore_down_nodes %>
 ################################################################################
 #                                                                              #
 #                               MANAGEMENT OPTIONS                             #
