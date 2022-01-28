@@ -14,6 +14,7 @@
        Optional[String] $network_interface_list = undef,
        Optional[String] $storage_option = undef,
        Optional[Enum['true','false']] $configure_gimr_data = undef,
+       Optional[Enum['true','false']] $configure_gimr = undef,
        String $sys_asm_password,
        String $asm_monitor_password,
        String $asm_diskgroup,
@@ -307,6 +308,13 @@ oracle.install.crs.config.clusterNodes=<%= $cluster_nodes %>
 #
 #-------------------------------------------------------------------------------
 oracle.install.crs.config.networkInterfaceList=<%= $network_interface_list %>
+
+#------------------------------------------------------------------------------
+# Specify 'true' if you would like to configure Grid Infrastructure Management
+# Repository (GIMR), else specify 'false'.
+# This option is only applicable when STANDALONE is chosen as cluster configuration.
+#------------------------------------------------------------------------------
+oracle.install.crs.configureGIMR=<%= $configure_gimr %>
 
 #------------------------------------------------------------------------------
 # Create a separate ASM DiskGroup to store GIMR data.
