@@ -5,6 +5,7 @@
        String $group_oper = 'asmoper',
        String $group = 'asmdba',
        String $group_asm,
+       Enum['true','false'] $execute_root_script = 'false',
        Optional[String] $scan_name = undef,
        Optional[Integer] $scan_port = undef,
        Optional[Integer] $oms_port = undef,
@@ -13,6 +14,8 @@
        Optional[String] $cluster_nodes = undef,
        Optional[String] $network_interface_list = undef,
        Optional[String] $storage_option = undef,
+       Optional[String] $root_script_sudo_path = undef,
+       Optional[String] $root_script_sudo_user = undef,
        Optional[Enum['true','false']] $configure_gimr_data = undef,
        String $sys_asm_password,
        String $asm_monitor_password,
@@ -21,6 +24,7 @@
        String $disk_redundancy = 'NORMAL',
        Optional[String] $gimr_disk_redundancy = undef,
        Integer $disk_au_size = 1,
+       Optional[Enum['ROOT','SUDO']] $root_script_config = undef,
        Optional[Enum['true','false']] $configure_gns = undef,
        Optional[Enum['true','false']] $auto_configure_vip = undef,
        Optional[Enum['true','false']] $use_ipmi = undef,
@@ -623,7 +627,7 @@ oracle.install.config.emAdminPassword=
 #
 # If this option is selected, password should be specified on the console.
 #-------------------------------------------------------------------------------------------------------
-oracle.install.crs.rootconfig.executeRootScript=false
+oracle.install.crs.rootconfig.executeRootScript=<%= $execute_root_script %>
 
 #--------------------------------------------------------------------------------------
 # Specify the configuration method to be used for automatic root script execution.
@@ -632,20 +636,20 @@ oracle.install.crs.rootconfig.executeRootScript=false
 #   - ROOT
 #   - SUDO
 #--------------------------------------------------------------------------------------
-oracle.install.crs.rootconfig.configMethod=
+oracle.install.crs.rootconfig.configMethod=<%= $root_script_config %>
 #--------------------------------------------------------------------------------------
 # Specify the absolute path of the sudo program.
 #
 # Applicable only when SUDO configuration method was chosen.
 #--------------------------------------------------------------------------------------
-oracle.install.crs.rootconfig.sudoPath=
+oracle.install.crs.rootconfig.sudoPath=<%= $root_script_sudo_path %>
 
 #--------------------------------------------------------------------------------------
 # Specify the name of the user who is in the sudoers list. 
 #
 # Applicable only when SUDO configuration method was chosen.
 #--------------------------------------------------------------------------------------
-oracle.install.crs.rootconfig.sudoUserName=
+oracle.install.crs.rootconfig.sudoUserName=<%= $root_script_sudo_user %>
 #--------------------------------------------------------------------------------------
 # Specify the nodes batch map.
 #
