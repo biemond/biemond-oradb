@@ -59,6 +59,7 @@ define oradb::installasm(
   String $file                                                                     = undef,
   Enum['HA_CONFIG', 'CRS_CONFIG', 'UPGRADE', 'CRS_SWONLY'] $grid_type              = 'HA_CONFIG',
   Boolean $stand_alone                                                             = true, # in case of 'CRS_SWONLY' and used as stand alone or in RAC
+  Boolean $config_asm                                                              = true,
   String $grid_base                                                                = undef,
   String $grid_home                                                                = undef,
   Optional[String] $ora_inventory_dir                                              = undef,
@@ -411,7 +412,7 @@ define oradb::installasm(
       require   => Exec["install oracle grid ${title}"],
     }
 
-    if ( $version in ['12.2.0.1','18.0.0.0','19.0.0.0'] and $grid_type != 'CRS_SWONLY' ) {
+    if ( $version in ['12.2.0.1','18.0.0.0','19.0.0.0'] and $grid_type != 'CRS_SWONLY' and $config_asm == true ) {
       exec { "configure asm ${title}":
         timeout   => 0,
         command   => "${grid_home}/gridSetup.sh -executeConfigTools -silent -responseFile ${download_dir}/grid_install_${version}.rsp",
