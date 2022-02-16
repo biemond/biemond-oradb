@@ -60,6 +60,8 @@ define oradb::installasm(
   Enum['HA_CONFIG', 'CRS_CONFIG', 'UPGRADE', 'CRS_SWONLY'] $grid_type              = 'HA_CONFIG',
   Boolean $stand_alone                                                             = true, # in case of 'CRS_SWONLY' and used as stand alone or in RAC
   Boolean $config_asm                                                              = true,
+  Boolean $install_cvuqdisk                                                        = false,
+  String $cvuqdisk_rpmname                                                         = 'cvuqdisk-1.0.10-1.rpm',
   String $grid_base                                                                = undef,
   String $grid_home                                                                = undef,
   Optional[String] $ora_inventory_dir                                              = undef,
@@ -288,7 +290,18 @@ define oradb::installasm(
           }
         }
       }
+
+      if $install_cvuqdisk {
+        package { 'cvuqdisk':
+          ensure  => 'installed',
+          name    => $cvuqdisk_rpmname,
+          source  => "${grid_home}/cv/rpm/",
+          require => Exec["extract ${download_dir}/${file1}"],
+        }
+      }
     }
+
+
 
     oradb::utils::dborainst{"grid orainst ${version}":
       ora_inventory_dir => $ora_inventory,
