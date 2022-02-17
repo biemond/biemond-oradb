@@ -295,7 +295,7 @@ define oradb::installasm(
         package { 'cvuqdisk':
           ensure  => 'installed',
           name    => $cvuqdisk_rpmname,
-          source  => "${grid_home}/cv/rpm/",
+          source  => "${grid_home}/cv/rpm/${cvuqdisk_rpmname}",
           require => Exec["extract ${download_dir}/${file1}"],
         }
       }
