@@ -5,19 +5,39 @@
        String $group_oper = 'asmoper',
        String $group = 'asmdba',
        String $group_asm,
+       Enum['true','false'] $execute_root_script = 'false',
        Optional[String] $scan_name = undef,
-       Optional[Integer] $scan_port = undef,   
+       Optional[Integer] $scan_port = undef,
+       Optional[Integer] $oms_port = undef,
        String $grid_type,
        Optional[String] $cluster_name = undef,
        Optional[String] $cluster_nodes = undef,
        Optional[String] $network_interface_list = undef,
        Optional[String] $storage_option = undef,
+       Optional[String] $root_script_sudo_path = undef,
+       Optional[String] $root_script_sudo_user = undef,
+       Optional[Enum['true','false']] $configure_gimr_data = undef,
+       Optional[Enum['true','false']] $configure_gimr = undef,
        String $sys_asm_password,
        String $asm_monitor_password,
        String $asm_diskgroup,
+       Optional[String] $gimr_diskgroup = undef,
        String $disk_redundancy = 'NORMAL',
+       Optional[String] $gimr_disk_redundancy = undef,
        Integer $disk_au_size = 1,
+       Optional[Enum['ROOT','SUDO']] $root_script_config = undef,
+       Optional[Enum['true','false']] $configure_gns = undef,
+       Optional[Enum['true','false']] $auto_configure_vip = undef,
+       Optional[Enum['true','false']] $use_ipmi = undef,
+       Optional[Enum['true','false']] $configure_afd = undef,
+       Optional[Enum['true','false']] $configure_rhps = undef,
+       Optional[Enum['true','false']] $ignore_down_nodes = undef,
+       Optional[Enum['NONE','CLOUD_CONTROL']] $management_option = undef,
+       Optional[String] $scan_type = undef,
        Optional[String] $disks = undef,
+       Optional[String] $gimr_disks = undef,
+       Optional[String] $disks_with_failure_groups = undef,
+       Optional[String] $gimr_disks_with_failure_groups = undef,
        Optional[String] $disk_discovery_string = undef | -%>
 
 ###############################################################################
@@ -142,7 +162,7 @@ oracle.install.asm.OSASM=<%= $group_asm %>
 # Specify the type of SCAN configuration for the cluster
 # Allowed values : LOCAL_SCAN and SHARED_SCAN
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.scanType=
+oracle.install.crs.config.scanType=<%= $scan_type %>
 
 #-------------------------------------------------------------------------------
 # Applicable only if SHARED_SCAN is being configured for cluster
@@ -206,14 +226,14 @@ oracle.install.crs.config.clusterName=<%= $cluster_name %>
 # Specify 'true' if you would like to configure Grid Naming Service(GNS), else
 # specify 'false'
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.gpnp.configureGNS=
+oracle.install.crs.config.gpnp.configureGNS=<%= $configure_gns %>
 
 #-------------------------------------------------------------------------------
 # Applicable only for STANDALONE and DOMAIN cluster configuration if you choose to configure GNS.
 # Specify 'true' if you would like to assign SCAN name VIP and Node VIPs by DHCP
 # , else specify 'false'
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.autoConfigureClusterNodeVIP=
+oracle.install.crs.config.autoConfigureClusterNodeVIP=<%= $auto_configure_vip %>
 
 #-------------------------------------------------------------------------------
 # Applicable only if you choose to configure GNS.
@@ -294,13 +314,20 @@ oracle.install.crs.config.clusterNodes=<%= $cluster_nodes %>
 oracle.install.crs.config.networkInterfaceList=<%= $network_interface_list %>
 
 #------------------------------------------------------------------------------
+# Specify 'true' if you would like to configure Grid Infrastructure Management
+# Repository (GIMR), else specify 'false'.
+# This option is only applicable when STANDALONE is chosen as cluster configuration.
+#------------------------------------------------------------------------------
+oracle.install.crs.configureGIMR=<%= $configure_gimr %>
+
+#------------------------------------------------------------------------------
 # Create a separate ASM DiskGroup to store GIMR data.
 # Specify 'true' if you would like to separate GIMR data with clusterware data, 
 # else specify 'false'
 # Value should be 'true' for DOMAIN cluster configurations
 # Value can be true/false for STANDALONE cluster configurations.
 #------------------------------------------------------------------------------
-oracle.install.asm.configureGIMRDataDG=
+oracle.install.asm.configureGIMRDataDG=<%= $configure_gimr_data %>
 
 ################################################################################
 #                                                                              #
@@ -342,7 +369,7 @@ oracle.install.crs.config.sharedFileSystemStorage.ocrLocations=
 # Specify 'true' if you would like to configure Intelligent Power Management interface
 # (IPMI), else specify 'false'
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.useIPMI=
+oracle.install.crs.config.useIPMI=<%= $use_ipmi %>
 
 #-------------------------------------------------------------------------------
 # Applicable only if you choose to configure IPMI
@@ -416,7 +443,7 @@ oracle.install.asm.diskGroup.FailureGroups=
 #     oracle.install.asm.diskGroup.disksWithFailureGroupNames=\\.\ORCLDISKDATA0,FGName,\\.\ORCLDISKDATA1,FGName
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.diskGroup.disksWithFailureGroupNames=
+oracle.install.asm.diskGroup.disksWithFailureGroupNames=<%= $disks_with_failure_groups %>
 
 #-------------------------------------------------------------------------------
 # List of disks to create a ASM DiskGroup
@@ -462,7 +489,7 @@ oracle.install.asm.monitorPassword=<%= $asm_monitor_password %>
 # Example: oracle.install.asm.GIMRDG.name=MGMT
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.gimrDG.name=
+oracle.install.asm.gimrDG.name=<%= $gimr_diskgroup %>
 
 #-------------------------------------------------------------------------------
 # Redundancy level to be used by ASM.
@@ -474,7 +501,7 @@ oracle.install.asm.gimrDG.name=
 # Example: oracle.install.asm.gimrDG.redundancy=NORMAL
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.gimrDG.redundancy=
+oracle.install.asm.gimrDG.redundancy=<%= $gimr_disk_redundancy %>
 
 #-------------------------------------------------------------------------------
 # Allocation unit size to be used by ASM.
@@ -488,7 +515,7 @@ oracle.install.asm.gimrDG.redundancy=
 # size unit is MB
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.gimrDG.AUSize=
+oracle.install.asm.gimrDG.AUSize=<%= $disk_au_size %>
 
 #-------------------------------------------------------------------------------
 # Failure Groups for the GIMR storage data ASM disk group
@@ -509,7 +536,7 @@ oracle.install.asm.gimrDG.FailureGroups=
 #     oracle.install.asm.gimrDG.disksWithFailureGroupNames=\\.\ORCLDISKDATA0,FGName,\\.\ORCLDISKDATA1,FGName
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.gimrDG.disksWithFailureGroupNames=
+oracle.install.asm.gimrDG.disksWithFailureGroupNames=<%= $gimr_disks_with_failure_groups %>
 
 #-------------------------------------------------------------------------------
 # List of disks to create GIMR data ASM DiskGroup
@@ -521,7 +548,7 @@ oracle.install.asm.gimrDG.disksWithFailureGroupNames=
 #     oracle.install.asm.gimrDG.disks=\\.\ORCLDISKDATA0,\\.\ORCLDISKDATA1
 #
 #-------------------------------------------------------------------------------
-oracle.install.asm.gimrDG.disks=
+oracle.install.asm.gimrDG.disks=<%= $gimr_disks %>
 
 #-------------------------------------------------------------------------------
 # List of failure groups to be marked as QUORUM.
@@ -536,13 +563,13 @@ oracle.install.asm.gimrDG.quorumFailureGroupNames=
 # Applicable only for FLEX_ASM_STORAGE option
 # Specify 'true' if you want to configure AFD, else specify 'false'
 #-------------------------------------------------------------------------------
-oracle.install.asm.configureAFD=
+oracle.install.asm.configureAFD=<%= $configure_afd %>
 #-------------------------------------------------------------------------------
 # Configure RHPS - Rapid Home Provisioning Service
 # Applicable only for DOMAIN cluster configuration
 # Specify 'true' if you want to configure RHP service, else specify 'false'
 #-------------------------------------------------------------------------------
-oracle.install.crs.configureRHPS=
+oracle.install.crs.configureRHPS=<%= $configure_rhps %>
 
 ################################################################################
 #                                                                              #
@@ -553,7 +580,7 @@ oracle.install.crs.configureRHPS=
 # Specify whether to ignore down nodes during upgrade operation.
 # Value should be 'true' to ignore down nodes otherwise specify 'false'
 #-------------------------------------------------------------------------------
-oracle.install.crs.config.ignoreDownNodes=
+oracle.install.crs.config.ignoreDownNodes=<%= $ignore_down_nodes %>
 ################################################################################
 #                                                                              #
 #                               MANAGEMENT OPTIONS                             #
@@ -566,7 +593,7 @@ oracle.install.crs.config.ignoreDownNodes=
 # 1. CLOUD_CONTROL - If you want to manage your Oracle Grid Infrastructure with Enterprise Manager Cloud Control.
 # 2. NONE   -If you do not want to manage your Oracle Grid Infrastructure with Enterprise Manager Cloud Control.
 #-------------------------------------------------------------------------------
-oracle.install.config.managementOption=
+oracle.install.config.managementOption=<%= $management_option %>
 
 #-------------------------------------------------------------------------------
 # Specify the OMS host to connect to Cloud Control.
@@ -578,7 +605,7 @@ oracle.install.config.omsHost=
 # Specify the OMS port to connect to Cloud Control.
 # Applicable only when oracle.install.config.managementOption=CLOUD_CONTROL
 #-------------------------------------------------------------------------------
-oracle.install.config.omsPort=
+oracle.install.config.omsPort=<%= $oms_port %>
 
 #-------------------------------------------------------------------------------
 # Specify the EM Admin user name to use to connect to Cloud Control.
@@ -605,7 +632,7 @@ oracle.install.config.emAdminPassword=
 #
 # If this option is selected, password should be specified on the console.
 #-------------------------------------------------------------------------------------------------------
-oracle.install.crs.rootconfig.executeRootScript=false
+oracle.install.crs.rootconfig.executeRootScript=<%= $execute_root_script %>
 
 #--------------------------------------------------------------------------------------
 # Specify the configuration method to be used for automatic root script execution.
@@ -614,20 +641,20 @@ oracle.install.crs.rootconfig.executeRootScript=false
 #   - ROOT
 #   - SUDO
 #--------------------------------------------------------------------------------------
-oracle.install.crs.rootconfig.configMethod=
+oracle.install.crs.rootconfig.configMethod=<%= $root_script_config %>
 #--------------------------------------------------------------------------------------
 # Specify the absolute path of the sudo program.
 #
 # Applicable only when SUDO configuration method was chosen.
 #--------------------------------------------------------------------------------------
-oracle.install.crs.rootconfig.sudoPath=
+oracle.install.crs.rootconfig.sudoPath=<%= $root_script_sudo_path %>
 
 #--------------------------------------------------------------------------------------
 # Specify the name of the user who is in the sudoers list. 
 #
 # Applicable only when SUDO configuration method was chosen.
 #--------------------------------------------------------------------------------------
-oracle.install.crs.rootconfig.sudoUserName=
+oracle.install.crs.rootconfig.sudoUserName=<%= $root_script_sudo_user %>
 #--------------------------------------------------------------------------------------
 # Specify the nodes batch map.
 #
