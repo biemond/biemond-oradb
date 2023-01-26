@@ -3,28 +3,34 @@
        String $loadbalance,
        String $failover,
        String $connect_server,
-       String $connect_service_name,
-       Integer $size | -%>
+       Optional[Integer] $connect_timeout           = undef,
+       Optional[Integer] $transport_connect_timeout = undef,
+       Optional[Integer] $retry_count               = undef,
+       String $connect_service_name | -%> 
 
 <%= $title %> =
   (DESCRIPTION =
-  <%- if $size == 1 { -%>
-    <%- $server.each |$key, $server2| { -%>
-    (ADDRESS = (PROTOCOL = <% if $server2['protocol'].empty { -%>TCP<% } else { -%><%= $server2['protocol'] %> <%} -%>)(HOST = <%= $server2['host'] %>)(PORT = <%= $server2['port'] %>))
-    <%- } -%>
-  <%- } -%>
-  <%- unless $size == 1 { -%>
+  <%- unless $connect_timeout.empty { -%>
+    (CONNECT_TIMEOUT = <%= $connect_timeout %>)
+  <%- } -%> 
+  <%- unless $transport_connect_timeout.empty { -%>
+    (TRANSPORT_CONNECT_TIMEOUT = <%= $transport_connect_timeout %>)
+  <%- } -%> 
+  <%- unless $retry_count.empty { -%>
+    (RETRY_COUNT = <%= $retry_count %>)
+  <%- } -%> 
+  <%- if $server.size() > 1 { -%> 
     (ADDRESS_LIST=
-     (LOAD_BALANCE = <%= $loadbalance %>)
-     (FAILOVER = <%= $failover %>)
-     <%- $server.each |$key, $server2| { -%>
-     (ADDRESS = (PROTOCOL = <% if $server2['protocol'].empty { -%>TCP<% } else { -%>%<= $server2['protocol'] %> <%} -%>)(HOST = <%= $server2['host'] %>)(PORT = <%= $server2['port'] %>))
-     <%- } -%>
-    )
-  <%- } -%>
+      (LOAD_BALANCE = <%= $loadbalance %>) 
+      (FAILOVER = <%= $failover %>) 
+  <%- } -%> 
+    <%- $server.each |$key, $server2| { -%> 
+    (ADDRESS = (PROTOCOL = <%= getvar('server2.protocol','TCP').upcase() -%> )(HOST = <%= $server2['host'] %>)(PORT = <%= $server2['port'] %>))
+    <%- } -%> 
     (CONNECT_DATA =
-      (SERVER = <%= $connect_server %>)
-      (SERVICE_NAME = <%= $connect_service_name %>)
-    )
+      <%- unless $connect_server.empty { -%>
+      (SERVER = <%= $connect_server %>) 
+      <%- } -%> 
+      (SERVICE_NAME = <%= $connect_service_name %>) 
+    )   
   )
-
