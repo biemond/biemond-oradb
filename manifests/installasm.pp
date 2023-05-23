@@ -64,7 +64,7 @@ define oradb::installasm(
   String $cvuqdisk_rpmname                                                         = 'cvuqdisk-1.0.10-1.rpm',
   String $grid_base                                                                = undef,
   String $grid_home                                                                = undef,
-  Optional[String] $ora_inventory_dir                                              = undef,
+  Optional[Stdlib::Absolutepath] $ora_inventory_dir                                = undef,
   String $user                                                                     = lookup('oradb::grid::user'),
   String $user_base_dir                                                            = lookup('oradb::user_base_dir'),
   String $group                                                                    = lookup('oradb::grid::group'),
@@ -123,11 +123,11 @@ define oradb::installasm(
   #notify {"oradb::installasm file without extension ${$file_without_ext} ":}
 
   if($cluster_name){ # We've got a RAC cluster. Check the cluster specific parameters
-    if ( $scan_name == undef or is_string($scan_name) == false) {fail('You must specify scan_name if cluster_name is defined') }
-    if ( $scan_port == undef or is_integer($scan_port) == false) {fail('You must specify scan_port if cluster_name is defined') }
-    if ( $cluster_nodes == undef or is_string($cluster_nodes) == false) {fail('You must specify cluster_nodes if cluster_name is defined') }
-    if ( $network_interface_list == undef or is_string($network_interface_list) == false) {fail('You must specify network_interface_list if cluster_name is defined') }
-    if ( $storage_option == undef or is_string($storage_option) == false) {fail('You must specify storage_option if cluster_name is defined') }
+    if ( $scan_name == undef or !($scan_name =~ String)) {fail('You must specify scan_name if cluster_name is defined') }
+    if ( $scan_port == undef or !($scan_port =~ Stdlib::Port)) {fail('You must specify scan_port if cluster_name is defined') }
+    if ( $cluster_nodes == undef or !($cluster_nodes =~ String)) {fail('You must specify cluster_nodes if cluster_name is defined') }
+    if ( $network_interface_list == undef or !($network_interface_list =~ String)) {fail('You must specify network_interface_list if cluster_name is defined') }
+    if ( $storage_option == undef or !($storage_option =~ String)) {fail('You must specify storage_option if cluster_name is defined') }
     unless $storage_option in ['ASM_STORAGE','FLEX_ASM_STORAGE','CLIENT_ASM_STORAGE','NEAR_ASM_STORAGE', 'FILE_SYSTEM_STORAGE'] {fail 'storage_option must be either ASM_STORAGE,FLEX_ASM_STORAGE,CLIENT_ASM_STORAGE,NEAR_ASM_STORAGE or FILE_SYSTEM_STORAGE'}
   }
 
@@ -146,8 +146,8 @@ define oradb::installasm(
     fail("Unrecognized database grid type, please use ${supported_grid_types}")
   }
 
-  if ( $grid_base == undef or is_string($grid_base) == false) {fail('You must specify an grid_base') }
-  if ( $grid_home == undef or is_string($grid_home) == false) {fail('You must specify an grid_home') }
+  if ( $grid_base == undef or !($grid_base =~ String)) {fail('You must specify an grid_base') }
+  if ( $grid_home == undef or !($grid_home =~ String)) {fail('You must specify an grid_home') }
 
   # check if the oracle software already exists
   $found = oradb::oracle_exists( $grid_home )
@@ -166,7 +166,6 @@ define oradb::installasm(
   if $ora_inventory_dir == undef {
     $ora_inventory = oradb::cleanpath("${grid_base}/../oraInventory")
   } else {
-    validate_absolute_path($ora_inventory_dir)
     $ora_inventory = "${ora_inventory_dir}/oraInventory"
   }
 

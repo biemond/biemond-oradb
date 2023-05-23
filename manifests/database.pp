@@ -169,17 +169,12 @@ define oradb::database(
   $user_base = lookup('oradb::user_base_dir')
   $user_home = "${user_base}/${user}"
 
-  if (is_hash($init_params) or is_string($init_params)) {
-    if is_hash($init_params) {
-      $init_params_array = sort(join_keys_to_values($init_params, '='))
-      $sanitized_init_params = join($init_params_array,',')
-    } else {
-      $sanitized_init_params = $init_params
-    }
+  if $init_params {
+    $init_params_array = sort(join_keys_to_values($init_params, '='))
   } else {
-    fail 'init_params only supports a String or a Hash as value type'
+    $init_params_array = []
   }
-
+  $sanitized_init_params = join($init_params_array,',')
   $sanitized_title = regsubst($title, '[^a-zA-Z0-9.-]', '_', 'G')
 
   if $db_domain {

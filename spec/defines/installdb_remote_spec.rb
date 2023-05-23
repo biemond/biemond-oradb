@@ -73,8 +73,8 @@ describe 'oradb::installdb', :type => :define do
       params = default_params.merge( { :ora_inventory_dir => 'not_an_absolute_path' } )
       let(:params) { params }
       it 'should raise an error' do
-        expect { expect(subject).to contain_db_directory_structure("oracle structure 12.1.0.1_12.1.0.1_Linux-x86-64") }.to raise_error Puppet::Error,
-          /"not_an_absolute_path" is not an absolute path/
+        expect { expect(subject).to contain_db_directory_structure("oracle structure 12.1.0.1_12.1.0.1_Linux-x86-64") }.to raise_error Puppet::PreformattedError,
+          /got String/
       end
     end
     context 'with oracle base = /oracle' do
