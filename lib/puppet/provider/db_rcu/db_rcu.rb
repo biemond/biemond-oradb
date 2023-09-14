@@ -65,7 +65,7 @@ EOS
     #                 "#{oracle_home}/bin/sqlplus", " \"#{sys_user}/'#{sys_password}'@//#{db_server}/#{db_service} as sysdba\"", "@#{tmpFile.path}")
     raise ArgumentError, "Error executing puppet code, #{output}" if $? != 0
 
-    if FileTest.exists?("/tmp/check_rcu_#{prefix}2.txt")
+    if FileTest.exist?("/tmp/check_rcu_#{prefix}2.txt")
       File.open("/tmp/check_rcu_#{prefix}2.txt") do |outputfile|
         outputfile.each_line do |li|
           unless li.nil?

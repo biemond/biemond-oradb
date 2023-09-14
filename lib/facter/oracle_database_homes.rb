@@ -58,7 +58,7 @@ def get_opatch_patches(name)
 end
 
 def get_orainst_loc
-  if FileTest.exists?(get_ora_inv_path + '/oraInst.loc')
+  if FileTest.exist?(get_ora_inv_path + '/oraInst.loc')
     str = ''
     output = File.read(get_ora_inv_path + '/oraInst.loc')
     output.split(/\r?\n/).each do |item|
@@ -74,7 +74,7 @@ end
 
 def get_orainst_products(path)
   unless path.nil?
-    if FileTest.exists?(path + '/ContentsXML/inventory.xml')
+    if FileTest.exist?(path + '/ContentsXML/inventory.xml')
       file = File.read(path + '/ContentsXML/inventory.xml')
       doc = REXML::Document.new file
       software = ''
