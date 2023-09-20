@@ -68,7 +68,7 @@
 define oradb::installem(
   Enum['12.1.0.4', '12.1.0.5', '13.2.0.0'] $version = '12.1.0.5',
   String $file                                      = undef,
-  Optional[String] $ora_inventory_dir               = undef,
+  Optional[Stdlib::Absolutepath] $ora_inventory_dir = undef,
   String $oracle_base_dir                           = undef,
   String $oracle_home_dir                           = undef,
   Optional[String] $agent_base_dir                  = undef,
@@ -126,7 +126,6 @@ define oradb::installem(
   if $ora_inventory_dir == undef {
     $ora_inventory = oradb::cleanpath("${oracle_base_dir}/../oraInventory")
   } else {
-    validate_absolute_path($ora_inventory_dir)
     $ora_inventory = "${ora_inventory_dir}/oraInventory"
   }
 

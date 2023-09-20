@@ -74,9 +74,9 @@ define oradb::installem_agent(
   String $install_version                            = '12.1.0.5.0',
   String $install_platform                           = 'Linux x86-64',
   String $source                                     = undef, # 'https://<OMS_HOST>:<OMS_PORT>/em/install/getAgentImage'|'/tmp/12.1.0.4.0_AgentCore_226_Linux_x64.zip'
-  Optional[String] $ora_inventory_dir                = undef,
-  String $oracle_base_dir                            = undef,
-  String $agent_base_dir                             = undef,
+  Optional[Stdlib::Absolutepath] $ora_inventory_dir  = undef,
+  Stdlib::Absolutepath $oracle_base_dir              = undef,
+  Stdlib::Absolutepath $agent_base_dir               = undef,
   String $agent_instance_home_dir                    = undef,
   String $agent_registration_password                = undef,
   Integer $agent_port                                = 1830,
@@ -96,7 +96,6 @@ define oradb::installem_agent(
 {
 
   # check if the oracle software already exists
-  validate_absolute_path( $agent_base_dir )
   $found = oradb::oracle_exists( $agent_base_dir )
 
   if $found == undef {
@@ -110,11 +109,9 @@ define oradb::installem_agent(
     }
   }
 
-  validate_absolute_path($oracle_base_dir)
   if $ora_inventory_dir == undef {
     $ora_inventory = oradb::cleanpath("${oracle_base_dir}/../oraInventory")
   } else {
-    validate_absolute_path($ora_inventory_dir)
     $ora_inventory = "${ora_inventory_dir}/oraInventory"
   }
 
@@ -138,11 +135,11 @@ define oradb::installem_agent(
       os_group          => $group,
     }
 
-    if ( $source == undef or is_string($source) == false) {fail('You must specify source') }
-    if ( $agent_base_dir == undef or is_string($agent_base_dir) == false) {fail('You must specify agent_base_dir') }
-    if ( $oracle_base_dir == undef or is_string($oracle_base_dir) == false) {fail('You must specify oracle_base_dir') }
-    if ( $agent_registration_password == undef or is_string($agent_registration_password) == false) {fail('You must specify agent_registration_password') }
-    if ( $em_upload_port == undef or is_numeric($em_upload_port) == false) {fail('You must specify em_upload_port') }
+    if ( $source == undef or !($source =~ String)) {fail('You must specify source') }
+    if ( $agent_base_dir == undef or !($agent_base_dir =~ String)) {fail('You must specify agent_base_dir') }
+    if ( $oracle_base_dir == undef or !($oracle_base_dir =~ String)) {fail('You must specify oracle_base_dir') }
+    if ( $agent_registration_password == undef or !($agent_registration_password =~ String)) {fail('You must specify agent_registration_password') }
+    if ( $em_upload_port == undef or !($em_upload_port =~ Stdlib::Port)) {fail('You must specify em_upload_port') }
 
     if ( $ignore_sys_prerequisite ) {
       $param_ignore_prereq='-ignorePrereqs'
@@ -153,8 +150,8 @@ define oradb::installem_agent(
     # chmod +x /tmp/AgentPull.sh
     if ( $install_type  == 'agentPull') {
 
-      if ( $sysman_user == undef or is_string($sysman_user) == false) {fail('You must specify sysman_user') }
-      if ( $sysman_password == undef or is_string($sysman_password) == false) {fail('You must specify sysman_password') }
+      if ( $sysman_user == undef or !($sysman_user =~ String)) {fail('You must specify sysman_user') }
+      if ( $sysman_password == undef or !($sysman_password =~ String)) {fail('You must specify sysman_password') }
 
       if $manage_curl and !defined(Package['curl']) {
         package { 'curl':

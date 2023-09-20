@@ -56,7 +56,7 @@ define oradb::client(
   String $file                                                          = undef,
   Stdlib::Absolutepath $oracle_base                                     = undef,
   Stdlib::Absolutepath $oracle_home                                     = undef,
-  Optional[String] $ora_inventory_dir                                   = undef,
+  Optional[Stdlib::Absolutepath] $ora_inventory_dir                     = undef,
   Integer $db_port                                                      = lookup('oradb::listener_port'),
   String $user                                                          = lookup('oradb::user'),
   String $user_base_dir                                                 = lookup('oradb::user_base_dir'),
@@ -89,10 +89,9 @@ define oradb::client(
   if $ora_inventory_dir == undef {
     $ora_inventory = oradb::cleanpath("${oracle_base}/../oraInventory")
   } else {
-    validate_absolute_path($ora_inventory_dir)
     $ora_inventory = "${ora_inventory_dir}/oraInventory"
   }
-  
+
   if ( $image_install ) {
     # add oracle home for the unzip
     db_directory_structure{"client structure ${title}":

@@ -74,7 +74,7 @@ define oradb::goldengate(
   Enum['ORA11g', 'ORA12c', 'ORA18c', 'ORA19c'] $database_version = 'ORA11g',  # only for > 12.1.2
   Optional[String] $database_home                                = undef,     # only for > 12.1.2
   Optional[String] $oracle_base                                  = undef,     # only for > 12.1.2
-  Optional[String] $ora_inventory_dir                            = undef,     # only for > 12.1.2
+  Optional[Stdlib::Absolutepath] $ora_inventory_dir              = undef,     # only for > 12.1.2
   String $goldengate_home                                        = undef,
   Optional[Integer] $manager_port                                = undef,
   String $user                                                   = 'ggate',
@@ -88,9 +88,9 @@ define oradb::goldengate(
 
   if ( $version in ['12.1.2', '12.2.1', '12.3.0', '18.1', '19.1'] ) {
     # check if the oracle software already exists
-    if ( $database_home == undef or is_string($database_home) == false) {fail('You must specify a database_home') }
-    if ( $oracle_base == undef or is_string($oracle_base) == false) {fail('You must specify an oracle_base') }
-    if ( $manager_port == undef or is_integer($manager_port) == false) {fail('You must specify a manager_port') }
+    if ( $database_home == undef or !($database_home =~ String)) {fail('You must specify a database_home') }
+    if ( $oracle_base == undef or !($oracle_base =~ String)) {fail('You must specify an oracle_base') }
+    if ( $manager_port == undef or !($manager_port =~ Stdlib::Port)) {fail('You must specify a manager_port') }
 
     $found = oradb::oracle_exists( $goldengate_home )
 
@@ -112,7 +112,6 @@ define oradb::goldengate(
     if $ora_inventory_dir == undef {
       $ora_inventory = oradb::cleanpath("${oracle_base}/../oraInventory")
     } else {
-      validate_absolute_path($ora_inventory_dir)
       $ora_inventory = "${ora_inventory_dir}/oraInventory"
     }
 
@@ -185,7 +184,7 @@ define oradb::goldengate(
 
   if ( $version != '12.1.2' and $version != '12.2.1' and $version != '12.3.0' and $version != '18.1' and $version != '19.1'){
 
-    if ( $tar_file == undef or is_string($tar_file) == false) {fail("${title} You must specify a tar_file") }
+    if ( $tar_file == undef or !($tar_file =~ String)) {fail("${title} You must specify a tar_file") }
 
     # # check oracle install folder
     # if !defined(File[$download_dir]) {

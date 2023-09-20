@@ -21,7 +21,7 @@
 #      remote_file            => false,
 #      puppet_download_mnt_point => '/software',
 #  }
-#    
+#
 # @param version Oracle installation version
 # @param file filename of the installation software
 # @param oracle_base full path to the Oracle Base directory
@@ -50,7 +50,7 @@ define oradb::installdb(
   Enum['11.2.0.1','11.2.0.3','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1', '18.0.0.0', '19.0.0.0'] $version = undef,
   String $file                                                                     = undef,
   Enum['SE', 'EE', 'SEONE', 'SE2', 'HP', 'XP', 'PE'] $database_type                = lookup('oradb:installdb:database_type'),
-  Optional[String] $ora_inventory_dir                                              = undef,
+  Optional[Stdlib::Absolutepath] $ora_inventory_dir                                = undef,
   String $oracle_base                                                              = undef,
   String $oracle_home                                                              = undef,
   Boolean $ee_options_selection                                                    = false,
@@ -110,7 +110,6 @@ define oradb::installdb(
   if $ora_inventory_dir == undef {
     $ora_inventory = oradb::cleanpath("${oracle_base}/../oraInventory")
   } else {
-    validate_absolute_path($ora_inventory_dir)
     $ora_inventory = "${ora_inventory_dir}/oraInventory"
   }
 
