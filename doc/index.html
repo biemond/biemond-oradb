@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
   File: README
-  
+
     &mdash; Documentation by YARD 0.9.16
-  
+
 </title>
 
   <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
@@ -35,14 +35,14 @@
     <div id="main" tabindex="-1">
       <div id="header">
         <div id="menu">
-  
-    <a href="_index.html">Index</a> &raquo; 
+
+    <a href="_index.html">Index</a> &raquo;
     <span class="title">File: README</span>
-  
+
 </div>
 
         <div id="search">
-  
+
     <a class="full_list_link" id="puppet_class_list_link"
         href="puppet_class_list.html">
 
@@ -52,7 +52,7 @@
           <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
         </svg>
     </a>
-  
+
 </div>
         <div class="clear"></div>
       </div>
@@ -251,7 +251,7 @@ hosts:
     ip:                &quot;127.0.0.1&quot;
     host_aliases:      &#39;localhost.localdomain,localhost4,localhost4.localdomain4&#39;
 
-$host_instances = hiera(&#39;hosts&#39;, {})
+$host_instances = lookup(&#39;hosts&#39;, Hash, &#39;deep&#39;, {})
 create_resources(&#39;host&#39;,$host_instances)
 
 # disable the firewall
@@ -474,15 +474,15 @@ oradb::opatchupgrade{&#39;112000_opatch_upgrade&#39;:
 }
 
 oradb::opatchupgrade{&#39;122000_opatch_upgrade_db&#39;:
-  oracle_home               =&gt; hiera(&#39;oracle_home_dir&#39;),
+  oracle_home               =&gt; lookup(&#39;oracle_home_dir&#39;),
   patch_file                =&gt; &#39;p6880880_122010_Linux-x86-64.zip&#39;,
   csi_number                =&gt; undef,
   support_id                =&gt; undef,
   opversion                 =&gt; &#39;12.2.0.1.8&#39;,
-  user                      =&gt; hiera(&#39;oracle_os_user&#39;),
-  group                     =&gt; hiera(&#39;oracle_os_group&#39;),
-  download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
-  puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+  user                      =&gt; lookup(&#39;oracle_os_user&#39;),
+  group                     =&gt; lookup(&#39;oracle_os_group&#39;),
+  download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
+  puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
   require                   =&gt; Oradb::Installdb[&#39;db_linux-x64&#39;],
 }</code></pre>
 
@@ -491,15 +491,15 @@ oradb::opatchupgrade{&#39;122000_opatch_upgrade_db&#39;:
 <pre class="code ruby"><code class="ruby"># october 2014 11.2.0.4.4 patch
 oradb::opatch{&#39;19121551_db_patch&#39;:
   ensure                    =&gt; &#39;present&#39;,
-  oracle_product_home       =&gt; hiera(&#39;oracle_home_dir&#39;),
+  oracle_product_home       =&gt; lookup(&#39;oracle_home_dir&#39;),
   patch_id                  =&gt; &#39;19121551&#39;,
   patch_file                =&gt; &#39;p19121551_112040_Linux-x86-64.zip&#39;,
-  user                      =&gt; hiera(&#39;oracle_os_user&#39;),
+  user                      =&gt; lookup(&#39;oracle_os_user&#39;),
   group                     =&gt; &#39;oinstall&#39;,
-  download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+  download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
   ocmrf                     =&gt; true,
   require                   =&gt; Oradb::Opatchupgrade[&#39;112000_opatch_upgrade_db&#39;],
-  puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+  puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
 }</code></pre>
 
 <h3 id="label-Clusterware+aka+opatch+auto">Clusterware aka opatch auto</h3>
@@ -509,17 +509,17 @@ this parameter use_opatchauto_utility =&gt; true</p>
 
 <pre class="code ruby"><code class="ruby">oradb::opatch{&#39;21523260_grid_patch&#39;:
   ensure                    =&gt; &#39;present&#39;,
-  oracle_product_home       =&gt; hiera(&#39;grid_home_dir&#39;),
+  oracle_product_home       =&gt; lookup(&#39;grid_home_dir&#39;),
   patch_id                  =&gt; &#39;21523260&#39;,
   patch_file                =&gt; &#39;p21523260_121020_Linux-x86-64.zip&#39;,
   clusterware               =&gt; true,
   use_opatchauto_utility    =&gt; true,
   bundle_sub_patch_id       =&gt; &#39;21359755&#39;, # sub patch_id of bundle patch ( else I can&#39;t detect it)
-  user                      =&gt; hiera(&#39;grid_os_user&#39;),
+  user                      =&gt; lookup(&#39;grid_os_user&#39;),
   group                     =&gt; &#39;oinstall&#39;,
-  download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+  download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
   ocmrf                     =&gt; true,
-  puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+  puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
   require                   =&gt; Oradb::Opatchupgrade[&#39;121000_opatch_upgrade_asm&#39;],
 }</code></pre>
 
@@ -527,71 +527,71 @@ this parameter use_opatchauto_utility =&gt; true</p>
 
 <pre class="code ruby"><code class="ruby">oradb::opatch{&#39;18706472_grid_patch&#39;:
   ensure                    =&gt; &#39;present&#39;,
-  oracle_product_home       =&gt; hiera(&#39;grid_home_dir&#39;),
+  oracle_product_home       =&gt; lookup(&#39;grid_home_dir&#39;),
   patch_id                  =&gt; &#39;18706472&#39;,
   patch_file                =&gt; &#39;p18706472_112040_Linux-x86-64.zip&#39;,
   clusterware               =&gt; true,
   bundle_sub_patch_id       =&gt; &#39;18522515&#39;,  sub patch_id of bundle patch ( else I can&#39;t detect it if it is already applied)
-  user                      =&gt; hiera(&#39;grid_os_user&#39;),
+  user                      =&gt; lookup(&#39;grid_os_user&#39;),
   group                     =&gt; &#39;oinstall&#39;,
-  download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+  download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
   ocmrf                     =&gt; true,
   require                   =&gt; Oradb::Opatchupgrade[&#39;112000_opatch_upgrade&#39;],
-  puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+  puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
 }
 
 # this 19791420 patch contains 2 patches (in different sub folders), one bundle and a normal one.
 # we want to apply the bundle and need to provide the right value for bundle_sub_folder
 oradb::opatch{&#39;19791420_grid_patch&#39;:
   ensure                    =&gt; &#39;present&#39;,
-  oracle_product_home       =&gt; hiera(&#39;grid_home_dir&#39;),
+  oracle_product_home       =&gt; lookup(&#39;grid_home_dir&#39;),
   patch_id                  =&gt; &#39;19791420&#39;,
   patch_file                =&gt; &#39;p19791420_112040_Linux-x86-64.zip&#39;,
   clusterware               =&gt; true,
   bundle_sub_patch_id       =&gt; &#39;19121552&#39;, # sub patch_id of bundle patch ( else I can&#39;t detect it if it is already applied)
   bundle_sub_folder         =&gt; &#39;19380115&#39;, # optional subfolder inside the patch zip
-  user                      =&gt; hiera(&#39;grid_os_user&#39;),
+  user                      =&gt; lookup(&#39;grid_os_user&#39;),
   group                     =&gt; &#39;oinstall&#39;,
-  download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+  download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
   ocmrf                     =&gt; true,
   require                   =&gt; Oradb::Opatchupgrade[&#39;112000_opatch_upgrade_asm&#39;],
-  puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+  puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
 }
 
 # the same patch applied with opatch auto to an oracle database home, this time we need to use the 19121551 as bundle_sub_patch_id
 # this is the october 2014  11.2.0.4.4 patch
 oradb::opatch{&#39;19791420_grid_patch&#39;:
   ensure                    =&gt; &#39;present&#39;,
-  oracle_product_home       =&gt; hiera(&#39;oracle_home_dir&#39;),
+  oracle_product_home       =&gt; lookup(&#39;oracle_home_dir&#39;),
   patch_id                  =&gt; &#39;19791420&#39;,
   patch_file                =&gt; &#39;p19791420_112040_Linux-x86-64.zip&#39;,
   clusterware               =&gt; true,
   bundle_sub_patch_id       =&gt; &#39;19121551&#39;, # sub patch_id of bundle patch ( else I can&#39;t detect it if it is already applied)
   bundle_sub_folder         =&gt; &#39;19380115&#39;, # optional subfolder inside the patch zip
-  user                      =&gt; hiera(&#39;grid_os_user&#39;),
+  user                      =&gt; lookup(&#39;grid_os_user&#39;),
   group                     =&gt; &#39;oinstall&#39;,
-  download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+  download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
   ocmrf                     =&gt; true,
   require                   =&gt; Oradb::Opatchupgrade[&#39;112000_opatch_upgrade_asm&#39;],
-  puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+  puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
 }
 
 # same patch 19791420 but then for the oracle db home, this patch requires the bundle patch of 19791420 or
 # 19121551 october 2014  11.2.0.4.4 patch
 oradb::opatch{&#39;19791420_db_patch&#39;:
   ensure                     =&gt; &#39;present&#39;,
-  oracle_product_home       =&gt; hiera(&#39;oracle_home_dir&#39;),
+  oracle_product_home       =&gt; lookup(&#39;oracle_home_dir&#39;),
   patch_id                  =&gt; &#39;19791420&#39;,
   patch_file                =&gt; &#39;p19791420_112040_Linux-x86-64.zip&#39;,
   clusterware               =&gt; false,
   bundle_sub_patch_id       =&gt; &#39;19282021&#39;, # sub patch_id of bundle patch ( else I can&#39;t detect it)
   bundle_sub_folder         =&gt; &#39;19282021&#39;, # optional subfolder inside the patch zip
-  user                      =&gt; hiera(&#39;oracle_os_user&#39;),
+  user                      =&gt; lookup(&#39;oracle_os_user&#39;),
   group                     =&gt; &#39;oinstall&#39;,
-  download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+  download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
   ocmrf                     =&gt; true,
   require                   =&gt; Oradb::Opatch[&#39;19121551_db_patch&#39;],
-  puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+  puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
 }</code></pre>
 
 <h2 id="label-Oracle+net">Oracle net</h2>
@@ -891,9 +891,9 @@ oradb::dbactions{ &#39;start testDb&#39;:
 
 # database instance with srvctl
 oradb::dbactions{ &#39;start testDb&#39;:
-  oracle_home             =&gt; hiera(&#39;oracle_home_dir&#39;),
-  user                    =&gt; hiera(&#39;oracle_os_user&#39;),
-  group                   =&gt; hiera(&#39;oracle_os_group&#39;),
+  oracle_home             =&gt; lookup(&#39;oracle_home_dir&#39;),
+  user                    =&gt; lookup(&#39;oracle_os_user&#39;),
+  group                   =&gt; lookup(&#39;oracle_os_group&#39;),
   action                  =&gt; &#39;start&#39;,
   db_name                 =&gt; &#39;test&#39;,
   require                 =&gt; Oradb::Dbactions[&#39;stop testDb&#39;],
@@ -904,17 +904,17 @@ db_control{&#39;instance control asm&#39;:
   provider                =&gt; &#39;srvctl&#39;,
   ensure                  =&gt; &#39;start&#39;,
   instance_name           =&gt; &#39;+ASM&#39;,
-  oracle_product_home_dir =&gt; hiera(&#39;oracle_home_dir&#39;),
-  os_user                 =&gt; hiera(&#39;grid_os_user&#39;),
+  oracle_product_home_dir =&gt; lookup(&#39;oracle_home_dir&#39;),
+  os_user                 =&gt; lookup(&#39;grid_os_user&#39;),
   db_type                 =&gt; &#39;grid&#39;,
 }
 
 oradb::dbactions{ &#39;start grid&#39;:
   db_type                 =&gt; &#39;grid&#39;,
-  oracle_home             =&gt; hiera(&#39;oracle_home_dir&#39;),
-  grid_home               =&gt; hiera(&#39;grid_home_dir&#39;),
-  user                    =&gt; hiera(&#39;grid_os_user&#39;),
-  group                   =&gt; hiera(&#39;oracle_os_group&#39;),
+  oracle_home             =&gt; lookup(&#39;oracle_home_dir&#39;),
+  grid_home               =&gt; lookup(&#39;grid_home_dir&#39;),
+  user                    =&gt; lookup(&#39;grid_os_user&#39;),
+  group                   =&gt; lookup(&#39;oracle_os_group&#39;),
   action                  =&gt; &#39;start&#39;,
   db_name                 =&gt; &#39;+ASM&#39;,
 }
@@ -1094,14 +1094,14 @@ oradb::tnsnames{&#39;testlistener&#39;:
 
 
   oradb::installasm{ &#39;db_linux-x64&#39;:
-    version                   =&gt; hiera(&#39;db_version&#39;),
-    file                      =&gt; hiera(&#39;asm_file&#39;),
+    version                   =&gt; lookup(&#39;db_version&#39;),
+    file                      =&gt; lookup(&#39;asm_file&#39;),
     grid_type                 =&gt; &#39;HA_CONFIG&#39;,
-    grid_base                 =&gt; hiera(&#39;grid_base_dir&#39;),
-    grid_home                 =&gt; hiera(&#39;grid_home_dir&#39;),
-    ora_inventory_dir         =&gt; hiera(&#39;oraInventory_dir&#39;),
+    grid_base                 =&gt; lookup(&#39;grid_base_dir&#39;),
+    grid_home                 =&gt; lookup(&#39;grid_home_dir&#39;),
+    ora_inventory_dir         =&gt; lookup(&#39;oraInventory_dir&#39;),
     user_base_dir             =&gt; &#39;/home&#39;,
-    user                      =&gt; hiera(&#39;grid_os_user&#39;),
+    user                      =&gt; lookup(&#39;grid_os_user&#39;),
     group                     =&gt; &#39;asmdba&#39;,
     group_install             =&gt; &#39;oinstall&#39;,
     group_oper                =&gt; &#39;asmoper&#39;,
@@ -1114,12 +1114,12 @@ oradb::tnsnames{&#39;testlistener&#39;:
     # disk_discovery_string   =&gt; &quot;ORCL:*&quot;,
     # disks                   =&gt; &quot;ORCL:DISK1,ORCL:DISK2&quot;,
     disk_redundancy           =&gt; &quot;EXTERNAL&quot;,
-    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
     remote_file               =&gt; false,
-    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
   }
 
-  # 12.2 
+  # 12.2
   oradb::installasm{ &#39;db_linux-x64&#39;:
     version                =&gt; lookup(&#39;db_version&#39;),
     file                   =&gt; lookup(&#39;asm_file&#39;),
@@ -1137,95 +1137,95 @@ oradb::tnsnames{&#39;testlistener&#39;:
   }
 
   oradb::opatchupgrade{&#39;112000_opatch_upgrade_asm&#39;:
-    oracle_home               =&gt; hiera(&#39;grid_home_dir&#39;),
+    oracle_home               =&gt; lookup(&#39;grid_home_dir&#39;),
     patch_file                =&gt; &#39;p6880880_112000_Linux-x86-64.zip&#39;,
     csi_number                =&gt; undef,
     support_id                =&gt; undef,
     opversion                 =&gt; &#39;11.2.0.3.6&#39;,
-    user                      =&gt; hiera(&#39;grid_os_user&#39;),
+    user                      =&gt; lookup(&#39;grid_os_user&#39;),
     group                     =&gt; &#39;oinstall&#39;,
-    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
-    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
+    puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
     require                   =&gt; Oradb::Installasm[&#39;db_linux-x64&#39;],
   }
 
   oradb::opatch{&#39;19791420_grid_patch&#39;:
     ensure                    =&gt; &#39;present&#39;,
-    oracle_product_home       =&gt; hiera(&#39;grid_home_dir&#39;),
+    oracle_product_home       =&gt; lookup(&#39;grid_home_dir&#39;),
     patch_id                  =&gt; &#39;19791420&#39;,
     patch_file                =&gt; &#39;p19791420_112040_Linux-x86-64.zip&#39;,
     clusterware               =&gt; true,
     bundle_sub_patch_id       =&gt; &#39;19121552&#39;, # sub patch_id of bundle patch ( else I can&#39;t detect it)
     bundle_sub_folder         =&gt; &#39;19380115&#39;, # optional subfolder inside the patch zip
-    user                      =&gt; hiera(&#39;grid_os_user&#39;),
+    user                      =&gt; lookup(&#39;grid_os_user&#39;),
     group                     =&gt; &#39;oinstall&#39;,
-    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
     ocmrf                     =&gt; true,
     require                   =&gt; Oradb::Opatchupgrade[&#39;112000_opatch_upgrade_asm&#39;],
-    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
   }
 
   oradb::installdb{ &#39;db_linux-x64&#39;:
-    version                   =&gt; hiera(&#39;db_version&#39;),
-    file                      =&gt; hiera(&#39;db_file&#39;),
+    version                   =&gt; lookup(&#39;db_version&#39;),
+    file                      =&gt; lookup(&#39;db_file&#39;),
     database_type             =&gt; &#39;EE&#39;,
-    ora_inventory_dir         =&gt; hiera(&#39;oraInventory_dir&#39;),
-    oracle_base               =&gt; hiera(&#39;oracle_base_dir&#39;),
-    oracle_home               =&gt; hiera(&#39;oracle_home_dir&#39;),
+    ora_inventory_dir         =&gt; lookup(&#39;oraInventory_dir&#39;),
+    oracle_base               =&gt; lookup(&#39;oracle_base_dir&#39;),
+    oracle_home               =&gt; lookup(&#39;oracle_home_dir&#39;),
     user_base_dir             =&gt; &#39;/home&#39;,
-    user                      =&gt; hiera(&#39;oracle_os_user&#39;),
+    user                      =&gt; lookup(&#39;oracle_os_user&#39;),
     group                     =&gt; &#39;dba&#39;,
     group_install             =&gt; &#39;oinstall&#39;,
     group_oper                =&gt; &#39;oper&#39;,
-    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
     remote_file               =&gt; false,
-    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
     require                   =&gt; Oradb::Opatch[&#39;19791420_grid_patch&#39;],
   }
 
   oradb::opatchupgrade{&#39;112000_opatch_upgrade_db&#39;:
-    oracle_home               =&gt; hiera(&#39;oracle_home_dir&#39;),
+    oracle_home               =&gt; lookup(&#39;oracle_home_dir&#39;),
     patch_file                =&gt; &#39;p6880880_112000_Linux-x86-64.zip&#39;,
     csi_number                =&gt; undef,
     support_id                =&gt; undef,
     opversion                 =&gt; &#39;11.2.0.3.6&#39;,
-    user                      =&gt; hiera(&#39;oracle_os_user&#39;),
-    group                     =&gt; hiera(&#39;oracle_os_group&#39;),
-    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
-    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    user                      =&gt; lookup(&#39;oracle_os_user&#39;),
+    group                     =&gt; lookup(&#39;oracle_os_group&#39;),
+    download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
+    puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
     require                   =&gt; Oradb::Installdb[&#39;db_linux-x64&#39;],
   }
 
   oradb::opatch{&#39;19791420_db_patch&#39;:
     ensure                    =&gt; &#39;present&#39;,
-    oracle_product_home       =&gt; hiera(&#39;oracle_home_dir&#39;),
+    oracle_product_home       =&gt; lookup(&#39;oracle_home_dir&#39;),
     patch_id                  =&gt; &#39;19791420&#39;,
     patch_file                =&gt; &#39;p19791420_112040_Linux-x86-64.zip&#39;,
     clusterware               =&gt; true,
     bundle_sub_patch_id       =&gt; &#39;19121551&#39;, #,&#39;19121552&#39;, # sub patch_id of bundle patch ( else I can&#39;t detect it)
     bundle_sub_folder         =&gt; &#39;19380115&#39;, # optional subfolder inside the patch zip
-    user                      =&gt; hiera(&#39;oracle_os_user&#39;),
+    user                      =&gt; lookup(&#39;oracle_os_user&#39;),
     group                     =&gt; &#39;oinstall&#39;,
-    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
     ocmrf                     =&gt; true,
     require                   =&gt; Oradb::Opatchupgrade[&#39;112000_opatch_upgrade_db&#39;],
-    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
   }
 
   oradb::opatch{&#39;19791420_db_patch_2&#39;:
     ensure                    =&gt; &#39;present&#39;,
-    oracle_product_home       =&gt; hiera(&#39;oracle_home_dir&#39;),
+    oracle_product_home       =&gt; lookup(&#39;oracle_home_dir&#39;),
     patch_id                  =&gt; &#39;19791420&#39;,
     patch_file                =&gt; &#39;p19791420_112040_Linux-x86-64.zip&#39;,
     clusterware               =&gt; false,
     bundle_sub_patch_id       =&gt; &#39;19282021&#39;, # sub patch_id of bundle patch ( else I can&#39;t detect it)
     bundle_sub_folder         =&gt; &#39;19282021&#39;, # optional subfolder inside the patch zip
-    user                      =&gt; hiera(&#39;oracle_os_user&#39;),
+    user                      =&gt; lookup(&#39;oracle_os_user&#39;),
     group                     =&gt; &#39;oinstall&#39;,
-    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
     ocmrf                     =&gt; true,
     require                   =&gt; Oradb::Opatch[&#39;19791420_db_patch&#39;],
-    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
   }
 
   # with the help of the oracle and easy-type module of Bert Hajee
@@ -1243,17 +1243,17 @@ oradb::tnsnames{&#39;testlistener&#39;:
 
   # based on a template
   oradb::database{ &#39;oraDb&#39;:
-    oracle_base               =&gt; hiera(&#39;oracle_base_dir&#39;),
-    oracle_home               =&gt; hiera(&#39;oracle_home_dir&#39;),
-    version                   =&gt; hiera(&#39;dbinstance_version&#39;),
-    user                      =&gt; hiera(&#39;oracle_os_user&#39;),
-    group                     =&gt; hiera(&#39;oracle_os_group&#39;),
-    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    oracle_base               =&gt; lookup(&#39;oracle_base_dir&#39;),
+    oracle_home               =&gt; lookup(&#39;oracle_home_dir&#39;),
+    version                   =&gt; lookup(&#39;dbinstance_version&#39;),
+    user                      =&gt; lookup(&#39;oracle_os_user&#39;),
+    group                     =&gt; lookup(&#39;oracle_os_group&#39;),
+    download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
     action                    =&gt; &#39;create&#39;,
-    db_name                   =&gt; hiera(&#39;oracle_database_name&#39;),
-    db_domain                 =&gt; hiera(&#39;oracle_database_domain_name&#39;),
-    sys_password              =&gt; hiera(&#39;oracle_database_sys_password&#39;),
-    system_password           =&gt; hiera(&#39;oracle_database_system_password&#39;),
+    db_name                   =&gt; lookup(&#39;oracle_database_name&#39;),
+    db_domain                 =&gt; lookup(&#39;oracle_database_domain_name&#39;),
+    sys_password              =&gt; lookup(&#39;oracle_database_sys_password&#39;),
+    system_password           =&gt; lookup(&#39;oracle_database_system_password&#39;),
     template                  =&gt; &#39;dbtemplate_11gR2_asm&#39;,
     character_set             =&gt; &quot;AL32UTF8&quot;,
     nationalcharacter_set     =&gt; &quot;UTF8&quot;,
@@ -1273,17 +1273,17 @@ oradb::tnsnames{&#39;testlistener&#39;:
 
   # or not based on a template
   oradb::database{ &#39;oraDb&#39;:
-    oracle_base               =&gt; hiera(&#39;oracle_base_dir&#39;),
-    oracle_home               =&gt; hiera(&#39;oracle_home_dir&#39;),
-    version                   =&gt; hiera(&#39;dbinstance_version&#39;),
-    user                      =&gt; hiera(&#39;oracle_os_user&#39;),
-    group                     =&gt; hiera(&#39;oracle_os_group&#39;),
-    download_dir              =&gt; hiera(&#39;oracle_download_dir&#39;),
+    oracle_base               =&gt; lookup(&#39;oracle_base_dir&#39;),
+    oracle_home               =&gt; lookup(&#39;oracle_home_dir&#39;),
+    version                   =&gt; lookup(&#39;dbinstance_version&#39;),
+    user                      =&gt; lookup(&#39;oracle_os_user&#39;),
+    group                     =&gt; lookup(&#39;oracle_os_group&#39;),
+    download_dir              =&gt; lookup(&#39;oracle_download_dir&#39;),
     action                    =&gt; &#39;create&#39;,
-    db_name                   =&gt; hiera(&#39;oracle_database_name&#39;),
-    db_domain                 =&gt; hiera(&#39;oracle_database_domain_name&#39;),
-    sys_password              =&gt; hiera(&#39;oracle_database_sys_password&#39;),
-    system_password           =&gt; hiera(&#39;oracle_database_system_password&#39;),
+    db_name                   =&gt; lookup(&#39;oracle_database_name&#39;),
+    db_domain                 =&gt; lookup(&#39;oracle_database_domain_name&#39;),
+    sys_password              =&gt; lookup(&#39;oracle_database_sys_password&#39;),
+    system_password           =&gt; lookup(&#39;oracle_database_system_password&#39;),
     character_set             =&gt; &quot;AL32UTF8&quot;,
     nationalcharacter_set     =&gt; &quot;UTF8&quot;,
     sample_schema             =&gt; &#39;FALSE&#39;,
@@ -1524,7 +1524,7 @@ oradb::installem_agent{ &#39;em12104_agent2&#39;:
     group                     =&gt; &#39;dba&#39;,
     group_install             =&gt; &#39;oinstall&#39;,
     download_dir              =&gt; &#39;/install&#39;,
-    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
     require                   =&gt; User[&#39;ggate&#39;],
   }
 
@@ -1546,7 +1546,7 @@ oradb::installem_agent{ &#39;em12104_agent2&#39;:
     user                      =&gt; &#39;ggate&#39;,
     group                     =&gt; &#39;dba&#39;,
     download_dir              =&gt; &#39;/install&#39;,
-    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
     require                   =&gt; File[&quot;/oracle/product/11.2.1&quot;],
   }
 
@@ -1559,7 +1559,7 @@ oradb::installem_agent{ &#39;em12104_agent2&#39;:
     group                     =&gt; &#39;dba&#39;,
     group_install             =&gt; &#39;oinstall&#39;,
     download_dir              =&gt; &#39;/install&#39;,
-    puppet_download_mnt_point =&gt; hiera(&#39;oracle_source&#39;),
+    puppet_download_mnt_point =&gt; lookup(&#39;oracle_source&#39;),
     require                   =&gt; File[&quot;/oracle/product/11.2.1&quot;],
   }</code></pre>
 
@@ -1637,9 +1637,9 @@ oradb::installem_agent{ &#39;em12104_agent2&#39;:
   action                    =&gt; &#39;create&#39;,
   db_server                 =&gt; &#39;oimdb.alfa.local:1521&#39;,
   db_service                =&gt; &#39;oim.oracle.com&#39;,
-  sys_password              =&gt; hiera(&#39;database_test_sys_password&#39;),
+  sys_password              =&gt; lookup(&#39;database_test_sys_password&#39;),
   schema_prefix             =&gt; &#39;DEV&#39;,
-  repos_password            =&gt; hiera(&#39;database_test_rcu_dev_password&#39;),
+  repos_password            =&gt; lookup(&#39;database_test_rcu_dev_password&#39;),
   puppet_download_mnt_point =&gt; $puppet_download_mnt_point,
   logoutput                 =&gt; true,
   require                   =&gt; Oradb::Dbactions[&#39;start oimDb&#39;],

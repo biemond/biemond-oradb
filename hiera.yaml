@@ -1,10 +1,7 @@
 ---
-version: 4
-datadir: data
+version: 5
 hierarchy:
-  - name: "kernel"
-    backend: yaml
-    path: "kernel/%{facts.kernel}"
-
-  - name: "common"
-    backend: yaml
+- name: kernel
+  path: kernel/%{facts.kernel}
+- name: common
+  path: common.yaml
