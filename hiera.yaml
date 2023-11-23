@@ -2,6 +2,6 @@
 version: 5
 hierarchy:
 - name: kernel
-  path: kernel/%{facts.kernel}
+  path: kernel/%{facts.kernel}.yaml
 - name: common
   path: common.yaml
