@@ -50,14 +50,20 @@ define oradb::tnsnames(
   Enum['tnsnames','listener'] $entry_type      = 'tnsnames',
 )
 {
-  if ! defined(Concat["${oracle_home}/network/admin/tnsnames.ora"]) {
-    concat { "${oracle_home}/network/admin/tnsnames.ora":
+  if ! defined(Concat['tnsnames.ora']) {
+    concat { 'tnsnames.ora':
       ensure         => present,
+      path           => "${oracle_home}/network/admin/tnsnames.ora",
       owner          => $user,
       group          => $group,
       mode           => '0774',
       ensure_newline => true,
     }
+
+    # Include the "Managed by Puppet" fragment.  This will be added only
+    # once due to the behavor of 'include' (below).
+    include oradb::tnsnames::header
+
   }
 
   case $entry_type {
@@ -67,7 +73,7 @@ define oradb::tnsnames(
   }
 
   concat::fragment { $title:
-    target  => "${oracle_home}/network/admin/tnsnames.ora",
+    target  => 'tnsnames.ora',
     content => epp($template_path , { 'title'                     => $title,
                                       'server'                    => $server,
                                       'loadbalance'               => $loadbalance,
