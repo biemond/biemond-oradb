@@ -67,15 +67,15 @@ define oradb::tnsnames (
 
   concat::fragment { $title:
     target  => "${oracle_home}/network/admin/tnsnames.ora",
-    content => epp($template_path , { 'title'                     => $title,
-      'server'                    => $server,
-      'loadbalance'               => $loadbalance,
-      'failover'                  => $failover,
-      'connect_server'            => $connect_server,
-      'connect_service_name'      => $connect_service_name,
-      'connect_timeout'           => $connect_timeout,
-      'transport_connect_timeout' => $transport_connect_timeout,
-      'retry_count'               => $retry_count,
+    content => epp($template_path , { 'title' => $title,
+      'server'                                => $server,
+      'loadbalance'                           => $loadbalance,
+      'failover'                              => $failover,
+      'connect_server'                        => $connect_server,
+      'connect_service_name'                  => $connect_service_name,
+      'connect_timeout'                       => $connect_timeout,
+      'transport_connect_timeout'             => $transport_connect_timeout,
+      'retry_count'                           => $retry_count,
     }),
   }
 }

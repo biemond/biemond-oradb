@@ -27,9 +27,9 @@ class oradb::prepareautostart (
     mode    => '0755',
     owner   => 'root',
     content => regsubst(epp("oradb/dbora_${facts['kernel']}.epp",
-        { 'oracle_home'  => $oracle_home,
-          'user'         => $user,
-      'service_name' => $service_name }),
+        { 'oracle_home' => $oracle_home,
+          'user'        => $user,
+      'service_name'    => $service_name }),
     '\r\n', "\n", 'EMG'),
   }
 
@@ -61,7 +61,7 @@ class oradb::prepareautostart (
         owner   => 'root',
         content => epp('oradb/oradb_smf.xml.epp', {
           'dboraLocation' => $dbora_location,
-        'service_name'  => $service_name }),
+        'service_name'    => $service_name }),
       }
       exec { "enable service ${service_name}":
         command   => 'svccfg -v import /tmp/oradb_smf.xml',

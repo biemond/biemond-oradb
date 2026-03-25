@@ -144,7 +144,7 @@ define oradb::rcu (
     ensure  => file,
     require => Exec["extract ${rcu_file}"],
     content => epp('oradb/rcu_passwords.txt.epp',
-      { 'sys_password'        => $sys_password,
+      { 'sys_password'    => $sys_password,
     'componentsPasswords' => $components_passwords }),
     mode    => '0775',
     owner   => $user,

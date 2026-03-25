@@ -188,7 +188,7 @@ define oradb::installem_agent (
           'agent_port'                  => $agent_port,
           'em_upload_port'              => $em_upload_port,
           'agent_registration_password' => $agent_registration_password,
-        'agent_base_dir'              => $agent_base_dir }),
+        'agent_base_dir'                => $agent_base_dir }),
         mode    => '0755',
         owner   => $user,
         group   => $group,

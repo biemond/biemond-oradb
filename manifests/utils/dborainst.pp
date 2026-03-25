@@ -32,7 +32,7 @@ define oradb::utils::dborainst (
       ensure  => file,
       content => epp('oradb/oraInst.loc.epp', {
         'ora_inventory_dir' => $ora_inventory_dir,
-      'os_group'          => $os_group }),
+      'os_group'            => $os_group }),
       mode    => '0644',
     }
   }

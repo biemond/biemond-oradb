@@ -154,7 +154,7 @@ define oradb::goldengate (
         'database_home'    => $database_home,
         'ora_inventory'    => $ora_inventory,
         'group_install'    => $group_install,
-      'manager_port'     => $manager_port }),
+      'manager_port'       => $manager_port }),
       owner   => $user,
       group   => $group,
       require => Db_directory_structure["oracle goldengate structure ${version}"],
