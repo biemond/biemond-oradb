@@ -92,6 +92,8 @@
 # @param recovery_diskgroup
 # @param cluster_nodes
 # @param container_database configure as a 12c container database which allows plugleable databases
+# @param automatic_memory_management TODO
+# @param timeout TODO
 #
 define oradb::database (
   String $oracle_base                                             = undef,

@@ -64,6 +64,7 @@
 # @param bi_publisher_https_port
 # @param nodemanager_https_port
 # @param agent_port
+# @param temp_dir
 #
 define oradb::installem (
   Enum['12.1.0.4', '12.1.0.5', '13.2.0.0'] $version = '12.1.0.5',

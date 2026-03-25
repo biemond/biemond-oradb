@@ -53,6 +53,31 @@
 # @param cluster_nodes
 # @param network_interface_list
 # @param storage_option
+# @param temp_dir
+# @param config_asm
+# @param install_cvuqdisk
+# @param cvuqdisk_rpmname
+# @param gimr_diskgroup
+# @param gimr_disk_redundancy
+# @param execute_root_script
+# @param scan_type
+# @param configure_gns
+# @param configure_gimr_data
+# @param configure_gimr
+# @param auto_configure_vip
+# @param use_ipmi
+# @param configure_afd
+# @param configure_rhps
+# @param ignore_down_nodes
+# @param management_option
+# @param root_script_config
+# @param root_script_sudo_path
+# @param temp_dir
+# @param disks_with_failure_groups
+# @param gimr_disks
+# @param gimr_disks_with_failure_groups
+# @param root_script_sudo_user
+# @param oms_port
 #
 define oradb::installasm (
   Enum['11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1','18.0.0.0','19.0.0.0'] $version = undef,

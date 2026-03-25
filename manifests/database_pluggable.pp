@@ -32,6 +32,7 @@
 # @param pdb_admin_username the pluggable DB admin username
 # @param pdb_admin_password the pluggable DB admin password
 # @param create_user_tablespace create user tablespace for the pluggable DB
+# @param oracle_base
 #
 define oradb::database_pluggable (
   Enum['present', 'absent'] $ensure             = 'present',

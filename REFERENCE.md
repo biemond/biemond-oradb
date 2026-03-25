@@ -370,7 +370,7 @@ Default value: `false`
 
 Data type: `Enum['client','client32']`
 
-
+TODO
 
 Default value: `'client'`
 
@@ -749,7 +749,7 @@ Default value: `false`
 
 Data type: `Boolean`
 
-
+TODO
 
 Default value: `true`
 
@@ -757,7 +757,7 @@ Default value: `true`
 
 Data type: `Optional[Integer]`
 
-
+TODO
 
 Default value: `0`
 
@@ -1281,6 +1281,7 @@ The following parameters are available in the `oradb::installasm` defined type:
 * [`cluster_nodes`](#-oradb--installasm--cluster_nodes)
 * [`network_interface_list`](#-oradb--installasm--network_interface_list)
 * [`storage_option`](#-oradb--installasm--storage_option)
+* [`temp_dir`](#-oradb--installasm--temp_dir)
 * [`config_asm`](#-oradb--installasm--config_asm)
 * [`install_cvuqdisk`](#-oradb--installasm--install_cvuqdisk)
 * [`cvuqdisk_rpmname`](#-oradb--installasm--cvuqdisk_rpmname)
@@ -1299,10 +1300,11 @@ The following parameters are available in the `oradb::installasm` defined type:
 * [`management_option`](#-oradb--installasm--management_option)
 * [`root_script_config`](#-oradb--installasm--root_script_config)
 * [`root_script_sudo_path`](#-oradb--installasm--root_script_sudo_path)
-* [`root_script_sudo_user`](#-oradb--installasm--root_script_sudo_user)
+* [`temp_dir`](#-oradb--installasm--temp_dir)
 * [`disks_with_failure_groups`](#-oradb--installasm--disks_with_failure_groups)
 * [`gimr_disks`](#-oradb--installasm--gimr_disks)
 * [`gimr_disks_with_failure_groups`](#-oradb--installasm--gimr_disks_with_failure_groups)
+* [`root_script_sudo_user`](#-oradb--installasm--root_script_sudo_user)
 * [`oms_port`](#-oradb--installasm--oms_port)
 
 ##### <a name="-oradb--installasm--version"></a>`version`
@@ -1561,6 +1563,12 @@ Data type: `Optional[String]`
 
 Default value: `undef`
 
+##### <a name="-oradb--installasm--temp_dir"></a>`temp_dir`
+
+
+
+Default value: `lookup('oradb::tmp_dir')`
+
 ##### <a name="-oradb--installasm--config_asm"></a>`config_asm`
 
 Data type: `Boolean`
@@ -1705,13 +1713,11 @@ Data type: `Optional[String]`
 
 Default value: `undef`
 
-##### <a name="-oradb--installasm--root_script_sudo_user"></a>`root_script_sudo_user`
-
-Data type: `Optional[String]`
+##### <a name="-oradb--installasm--temp_dir"></a>`temp_dir`
 
 
 
-Default value: `undef`
+Default value: `lookup('oradb::tmp_dir')`
 
 ##### <a name="-oradb--installasm--disks_with_failure_groups"></a>`disks_with_failure_groups`
 
@@ -1730,6 +1736,14 @@ Data type: `Optional[String]`
 Default value: `undef`
 
 ##### <a name="-oradb--installasm--gimr_disks_with_failure_groups"></a>`gimr_disks_with_failure_groups`
+
+Data type: `Optional[String]`
+
+
+
+Default value: `undef`
+
+##### <a name="-oradb--installasm--root_script_sudo_user"></a>`root_script_sudo_user`
 
 Data type: `Optional[String]`
 
@@ -1995,7 +2009,7 @@ Default value: `undef`
 
 Data type: `String`
 
-
+TODO
 
 Default value: `lookup('oradb::group')`
 
@@ -2003,7 +2017,7 @@ Default value: `lookup('oradb::group')`
 
 Data type: `String`
 
-
+TODO
 
 Default value: `lookup('oradb::group')`
 
@@ -2011,7 +2025,7 @@ Default value: `lookup('oradb::group')`
 
 Data type: `String`
 
-
+TODO
 
 Default value: `lookup('oradb::group')`
 
@@ -2019,7 +2033,7 @@ Default value: `lookup('oradb::group')`
 
 Data type: `String`
 
-
+TODO
 
 Default value: `lookup('oradb::group')`
 
@@ -2627,7 +2641,7 @@ Data type: `String`
 
 the FQDN hostname to install the agent on
 
-Default value: `lookup('oradb::oracle_hostname',{default_value => $::fqdn})`
+Default value: `lookup('oradb::oracle_hostname', { default_value => $facts['networking']['fqdn'] })`
 
 ##### <a name="-oradb--installem_agent--manage_curl"></a>`manage_curl`
 
@@ -2968,7 +2982,7 @@ Default value: `false`
 
 Data type: `String`
 
-
+TODO
 
 Default value: `lookup('oradb::orainst_dir')`
 
@@ -3365,7 +3379,7 @@ Data type: `Hash`
 
 the tnsnames connection details
 
-Default value: `{ myserver => { host => undef, port => '1521', protocol => 'TCP' }}`
+Default value: `{ myserver => { host => undef, port => '1521', protocol => 'TCP' } }`
 
 ##### <a name="-oradb--tnsnames--loadbalance"></a>`loadbalance`
 

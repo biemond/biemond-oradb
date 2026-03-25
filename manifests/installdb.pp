@@ -45,6 +45,10 @@
 # @param cleanup_install_files
 # @param is_rack_one_install
 # @param remote_node
+# @param group_backup TODO
+# @param group_dg TODO
+# @param group_km TODO
+# @param group_rac TODO
 #
 define oradb::installdb (
   Enum['11.2.0.1','11.2.0.3','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1', '18.0.0.0', '19.0.0.0'] $version = undef,

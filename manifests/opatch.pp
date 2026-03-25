@@ -31,6 +31,7 @@
 # @param bundle_sub_patch_id sub opatch id in case of a bundle patch to check if the bundle patch is already applied
 # @param bundle_sub_folder just apply a patch from a bundle
 # @param ocmrf
+# @param ora_inst_path TODO
 #
 define oradb::opatch (
   Enum['present', 'absent'] $ensure     = 'present',

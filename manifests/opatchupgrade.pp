@@ -26,6 +26,7 @@
 # @param csi_number oracle support csi number
 # @param support_id oracle support id
 # @param opversion opatch version of current patch
+# @param remote_file
 #
 define oradb::opatchupgrade (
   String $oracle_home               = undef,

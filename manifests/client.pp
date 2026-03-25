@@ -50,6 +50,7 @@
 # @param log_output log all output
 # @param temp_dir location for temporaray file used by the installer
 # @param image_install unzip client_home.zip and use runInstaller
+# @param install_type TODO
 #
 define oradb::client (
   Enum['11.2.0.1','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1','18.0.0.0','19.0.0.0'] $version = undef,
