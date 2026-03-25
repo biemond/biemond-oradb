@@ -3,5 +3,5 @@
 #
 # oradb init class
 #
-class oradb() {
+class oradb () {
 }

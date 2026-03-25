@@ -17,13 +17,12 @@
 # @param user
 # @param service_name
 #
-define oradb::autostartdatabase(
+define oradb::autostartdatabase (
   String $oracle_home  = undef,
   String $db_name      = lookup('oradb::database_name'),
   String $user         = lookup('oradb::user'),
   String $service_name = lookup('oradb::host::service_name')
-){
-
+) {
   class { 'oradb::prepareautostart':
     oracle_home  => $oracle_home,
     user         => $user,
@@ -53,5 +52,4 @@ define oradb::autostartdatabase(
     path      => $exec_path,
     logoutput => true,
   }
-
 }

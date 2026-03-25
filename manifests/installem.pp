@@ -65,7 +65,7 @@
 # @param nodemanager_https_port
 # @param agent_port
 #
-define oradb::installem(
+define oradb::installem (
   Enum['12.1.0.4', '12.1.0.5', '13.2.0.0'] $version = '12.1.0.5',
   String $file                                      = undef,
   Optional[String] $ora_inventory_dir               = undef,
@@ -101,11 +101,9 @@ define oradb::installem(
   Integer $nodemanager_https_port                   = 7401,
   Integer $agent_port                               = 3872,
   String $temp_dir                                  = lookup('oradb::tmp_dir'),# /tmp temporary directory for files extractions
-)
-{
-
+) {
   $supported_db_kernels = join( lookup('oradb::kernels'), '|')
-  if ( $::kernel in $supported_db_kernels == false){
+  if ( $facts['kernel'] in $supported_db_kernels == false) {
     fail("Unrecognized operating system, please use it on a ${supported_db_kernels} host")
   }
 
@@ -118,7 +116,7 @@ define oradb::installem(
     if ( $found ) {
       $continue = false
     } else {
-      notify {"oradb::installem ${oracle_home_dir} does not exists":}
+      notify { "oradb::installem ${oracle_home_dir} does not exists": }
       $continue = true
     }
   }
@@ -130,7 +128,7 @@ define oradb::installem(
     $ora_inventory = "${ora_inventory_dir}/oraInventory"
   }
 
-  db_directory_structure{"oracle em structure ${version}":
+  db_directory_structure { "oracle em structure ${version}":
     ensure            => present,
     oracle_base_dir   => $oracle_base_dir,
     ora_inventory_dir => $ora_inventory,
@@ -140,7 +138,6 @@ define oradb::installem(
   }
 
   if ( $continue ) {
-
     $exec_path = lookup('oradb::exec_path')
 
     if $puppet_download_mnt_point == undef {
@@ -156,7 +153,6 @@ define oradb::installem(
 
       $total_files = 3
       $oracle_instance_home_dir = "${oracle_home_dir}/db"
-
     } elsif ($version in ['13.2.0.0']) {
       $file1 = "${file}.bin"
       $file2 = "${file}-2.zip"
@@ -171,9 +167,8 @@ define oradb::installem(
     }
 
     if $remote_file == true {
-
       file { "${download_dir}/${file1}":
-        ensure  => present,
+        ensure  => file,
         source  => "${mount_point}/${file1}",
         mode    => '0775',
         owner   => $user,
@@ -183,60 +178,60 @@ define oradb::installem(
       }
       # db file 2 installer zip
       file { "${download_dir}/${file2}":
-        ensure  => present,
+        ensure  => file,
         source  => "${mount_point}/${file2}",
         mode    => '0775',
         owner   => $user,
         group   => $group,
         require => File["${download_dir}/${file1}"],
-        before  => Exec["extract ${download_dir}/${file2}"]
+        before  => Exec["extract ${download_dir}/${file2}"],
       }
       # db file 3 installer zip
       file { "${download_dir}/${file3}":
-        ensure  => present,
+        ensure  => file,
         source  => "${mount_point}/${file3}",
         mode    => '0775',
         owner   => $user,
         group   => $group,
         require => File["${download_dir}/${file2}"],
-        before  => Exec["extract ${download_dir}/${file3}"]
+        before  => Exec["extract ${download_dir}/${file3}"],
       }
 
       if ( $total_files == 7 ) {
         file { "${download_dir}/${file4}":
-          ensure  => present,
+          ensure  => file,
           source  => "${mount_point}/${file4}",
           mode    => '0775',
           owner   => $user,
           group   => $group,
-          require => File["${download_dir}/${file3}"]
+          require => File["${download_dir}/${file3}"],
         }
         # db file 5 installer zip
         file { "${download_dir}/${file5}":
-          ensure  => present,
+          ensure  => file,
           source  => "${mount_point}/${file5}",
           mode    => '0775',
           owner   => $user,
           group   => $group,
-          require => File["${download_dir}/${file4}"]
+          require => File["${download_dir}/${file4}"],
         }
         # db file 6 installer zip
         file { "${download_dir}/${file6}":
-          ensure  => present,
+          ensure  => file,
           source  => "${mount_point}/${file6}",
           mode    => '0775',
           owner   => $user,
           group   => $group,
-          require => File["${download_dir}/${file5}"]
+          require => File["${download_dir}/${file5}"],
         }
         # db file 7 installer zip
         file { "${download_dir}/${file7}":
-          ensure  => present,
+          ensure  => file,
           source  => "${mount_point}/${file7}",
           mode    => '0775',
           owner   => $user,
           group   => $group,
-          require => File["${download_dir}/${file6}"]
+          require => File["${download_dir}/${file6}"],
         }
       }
       $source = $download_dir
@@ -247,7 +242,7 @@ define oradb::installem(
     if ( $zip_extract ) {
       # In $download_dir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
 
-      if ( $version in ['12.1.0.4', '12.1.0.5'] ) {
+      if ( $version in ['12.1.0.4', '12.1.0.5']) {
         exec { "extract ${download_dir}/${file1}":
           command   => "unzip -o ${source}/${file1} -d ${download_dir}/${file}",
           timeout   => 0,
@@ -281,59 +276,59 @@ define oradb::installem(
       }
     }
 
-    oradb::utils::dborainst{"em orainst ${version}":
+    oradb::utils::dborainst { "em orainst ${version}":
       ora_inventory_dir => $ora_inventory,
       os_group          => $group,
     }
 
     if ! defined(File["${download_dir}/em_install_${version}.rsp"]) {
       file { "${download_dir}/em_install_${version}.rsp":
-        ensure  => present,
+        ensure  => file,
         content => epp("oradb/em_install_${version}.rsp.epp",
-                      { 'group_install'               => $group,
-                        'oraInventory'                => $ora_inventory,
-                        'agent_base_dir'              => $agent_base_dir,
-                        'oracle_home_dir'             => $oracle_home_dir,
-                        'weblogic_user'               => $weblogic_user,
-                        'weblogic_password'           => $weblogic_password,
-                        'database_hostname'           => $database_hostname,
-                        'database_listener_port'      => $database_listener_port,
-                        'database_service_sid_name'   => $database_service_sid_name,
-                        'database_sys_password'       => $database_sys_password,
-                        'sysman_password'             => $sysman_password,
-                        'software_library_dir'        => $software_library_dir,
-                        'deployment_size'             => $deployment_size,
-                        'agent_registration_password' => $agent_registration_password,
-                        'download_dir'                => $download_dir,
-                        'version'                     => $version,
-                        'oracle_instance_home_dir'    => $oracle_instance_home_dir }),
+          { 'group_install'               => $group,
+            'oraInventory'                => $ora_inventory,
+            'agent_base_dir'              => $agent_base_dir,
+            'oracle_home_dir'             => $oracle_home_dir,
+            'weblogic_user'               => $weblogic_user,
+            'weblogic_password'           => $weblogic_password,
+            'database_hostname'           => $database_hostname,
+            'database_listener_port'      => $database_listener_port,
+            'database_service_sid_name'   => $database_service_sid_name,
+            'database_sys_password'       => $database_sys_password,
+            'sysman_password'             => $sysman_password,
+            'software_library_dir'        => $software_library_dir,
+            'deployment_size'             => $deployment_size,
+            'agent_registration_password' => $agent_registration_password,
+            'download_dir'                => $download_dir,
+            'version'                     => $version,
+        'oracle_instance_home_dir'    => $oracle_instance_home_dir }),
         mode    => '0775',
         owner   => $user,
         group   => $group,
         require => [Oradb::Utils::Dborainst["em orainst ${version}"],
-                    Db_directory_structure["oracle em structure ${version}"],],
+        Db_directory_structure["oracle em structure ${version}"],],
       }
     }
     if ! defined(File["${download_dir}/em_install_static_${version}.ini"]) {
       file { "${download_dir}/em_install_static_${version}.ini":
-        ensure  => present,
+        ensure  => file,
         content => epp("oradb/em_install_static_${version}.ini.epp",
-                      { 'admin_server_https_port'       => $admin_server_https_port,
-                        'managed_server_http_port'      => $managed_server_http_port,
-                        'managed_server_https_port'     => $managed_server_https_port,
-                        'em_upload_http_port'           => $em_upload_http_port,
-                        'em_upload_https_port'          => $em_upload_https_port,
-                        'em_central_console_http_port'  => $em_central_console_http_port,
-                        'em_central_console_https_port' => $em_central_console_https_port,
-                        'bi_publisher_http_port'        => $bi_publisher_http_port,
-                        'bi_publisher_https_port'       => $bi_publisher_https_port,
-                        'nodemanager_https_port'        => $nodemanager_https_port,
-                        'agent_port'                    => $agent_port }),
+          { 'admin_server_https_port'       => $admin_server_https_port,
+            'managed_server_http_port'      => $managed_server_http_port,
+            'managed_server_https_port'     => $managed_server_https_port,
+            'em_upload_http_port'           => $em_upload_http_port,
+            'em_upload_https_port'          => $em_upload_https_port,
+            'em_central_console_http_port'  => $em_central_console_http_port,
+            'em_central_console_https_port' => $em_central_console_https_port,
+            'bi_publisher_http_port'        => $bi_publisher_http_port,
+            'bi_publisher_https_port'       => $bi_publisher_https_port,
+            'nodemanager_https_port'        => $nodemanager_https_port,
+        'agent_port'                    => $agent_port }),
         mode    => '0775',
         owner   => $user,
         group   => $group,
         require => [Oradb::Utils::Dborainst["em orainst ${version}"],
-                    Db_directory_structure["oracle em structure ${version}"],],
+        Db_directory_structure["oracle em structure ${version}"],],
       }
     }
 
@@ -352,8 +347,8 @@ define oradb::installem(
       cwd       => $oracle_base_dir,
       logoutput => true,
       require   => [Oradb::Utils::Dborainst["em orainst ${version}"],
-                    File["${download_dir}/em_install_${version}.rsp"],
-                    File["${download_dir}/em_install_static_${version}.ini"],],
+        File["${download_dir}/em_install_${version}.rsp"],
+      File["${download_dir}/em_install_static_${version}.ini"],],
     }
 
     if ( $version in ['12.1.0.4', '12.1.0.5']) {
@@ -366,7 +361,6 @@ define oradb::installem(
         logoutput => $log_output,
         require   => Exec["install oracle em ${title}"],
       }
-
 
       file { $oracle_home_dir:
         ensure  => directory,
@@ -391,7 +385,7 @@ define oradb::installem(
         }
       }
 
-      if ( $remote_file == true ){
+      if ( $remote_file == true ) {
         exec { "remove oracle em file1 ${file1} ${title}":
           command => "rm -rf ${download_dir}/${file1}",
           user    => 'root',

@@ -21,7 +21,7 @@
 # @param db_name
 # @param provider
 #
-define oradb::dbactions(
+define oradb::dbactions (
   Enum['database', 'grid', 'asm'] $db_type                  = 'database',
   Optional[String] $oracle_home                             = undef,
   String $user                                              = lookup('oradb::user'),
@@ -29,7 +29,7 @@ define oradb::dbactions(
   Enum['start', 'stop', 'running', 'abort','mount'] $action = 'start',
   String $db_name                                           = lookup('oradb::database_name'),
   Enum['srvctl','sqlplus'] $provider                        = 'sqlplus',
-){
+) {
   if ( $db_type in ['grid','asm'] and $provider != 'srvctl') {
     fail('Provider must be srvctl if db_type is grid or asm')
   }
@@ -40,7 +40,7 @@ define oradb::dbactions(
     fail('Unrecognized action for db_type grid and asm, use running, start, abort, stop or mount')
   }
 
-  db_control{"instance control ${title}":
+  db_control { "instance control ${title}":
     ensure                  => $action,
     provider                => $provider,
     instance_name           => $db_name,

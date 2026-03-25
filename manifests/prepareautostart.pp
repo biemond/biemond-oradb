@@ -14,26 +14,26 @@
 # @param user
 # @param service_name
 #
-class oradb::prepareautostart(
+class oradb::prepareautostart (
   String $oracle_home  = undef,
   String $user         = lookup('oradb::user'),
   String $service_name = lookup('oradb::host::service_name'),
-){
+) {
   $exec_path      = lookup('oradb::exec_path')
   $dbora_location = lookup('oradb::dbora_dir')
 
   file { "${dbora_location}/${service_name}" :
-    ensure  => present,
+    ensure  => file,
     mode    => '0755',
     owner   => 'root',
     content => regsubst(epp("oradb/dbora_${facts['kernel']}.epp",
-                            { 'oracle_home'  => $oracle_home,
-                              'user'         => $user,
-                              'service_name' => $service_name} ),
-                        '\r\n', "\n", 'EMG'),
+        { 'oracle_home'  => $oracle_home,
+          'user'         => $user,
+      'service_name' => $service_name }),
+    '\r\n', "\n", 'EMG'),
   }
 
-  case $facts['operatingsystem'] {
+  case $facts['os']['name'] {
     'CentOS', 'RedHat', 'OracleLinux', 'SLES': {
       exec { "enable service ${service_name}":
         command   => "chkconfig --add ${service_name}",
@@ -56,12 +56,12 @@ class oradb::prepareautostart(
     }
     'Solaris': {
       file { '/tmp/oradb_smf.xml' :
-        ensure  => present,
+        ensure  => file,
         mode    => '0755',
         owner   => 'root',
         content => epp('oradb/oradb_smf.xml.epp', {
-                        'dboraLocation' => $dbora_location,
-                        'service_name'  => $service_name } ),
+          'dboraLocation' => $dbora_location,
+        'service_name'  => $service_name }),
       }
       exec { "enable service ${service_name}":
         command   => 'svccfg -v import /tmp/oradb_smf.xml',

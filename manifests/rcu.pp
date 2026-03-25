@@ -40,7 +40,7 @@
 # @param repos_password the rcu schemas password
 # @param temp_tablespace shared temp tablespace used by the rcu schemas
 #
-define oradb::rcu(
+define oradb::rcu (
   String $rcu_file                                            = undef,
   Enum['soasuite', 'webcenter', 'oam', 'oim', 'all'] $product = 'soasuite',
   String $version                                             = '11.1.1.7',
@@ -59,7 +59,7 @@ define oradb::rcu(
   String $puppet_download_mnt_point                           = lookup('oradb::module_mountpoint'),
   Boolean $remote_file                                        = true,
   Boolean $log_output                                         = false,
-){
+) {
   $exec_path = lookup('oradb::exec_path')
 
   # create the rcu folder
@@ -80,7 +80,7 @@ define oradb::rcu(
   if $remote_file == true {
     if ! defined(File["${download_dir}/${rcu_file}"]) {
       file { "${download_dir}/${rcu_file}":
-        ensure => present,
+        ensure => file,
         mode   => '0775',
         owner  => $user,
         group  => $group,
@@ -135,17 +135,17 @@ define oradb::rcu(
   } elsif $product == 'all' {
     $components           = '-component SOAINFRA -component ORASDPM -component MDS -component OPSS -component BAM -component CONTENTSERVER11 -component CONTENTSERVER11SEARCH -component URM -component PORTLET -component WEBCENTER -component ACTIVITIES -component DISCUSSIONS'
     # extra password for DISCUSSIONS and ACTIVITIES
-    $components_passwords = [ $repos_password, $repos_password, $repos_password,$repos_password,$repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password]
+    $components_passwords = [$repos_password, $repos_password, $repos_password,$repos_password,$repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password, $repos_password]
   } else {
     fail('Unrecognized FMW product')
   }
 
   file { "${download_dir}/rcu_${version}/rcu_passwords_${title}.txt":
-    ensure  => present,
+    ensure  => file,
     require => Exec["extract ${rcu_file}"],
     content => epp('oradb/rcu_passwords.txt.epp',
-                    { 'sys_password'        => $sys_password,
-                      'componentsPasswords' => $components_passwords } ),
+      { 'sys_password'        => $sys_password,
+    'componentsPasswords' => $components_passwords }),
     mode    => '0775',
     owner   => $user,
     group   => $group,
@@ -174,7 +174,7 @@ define oradb::rcu(
     $statement = $delete_command
   }
 
-  db_rcu{ $schema_prefix:
+  db_rcu { $schema_prefix:
     ensure       => $action,
     statement    => $statement,
     os_user      => $user,
@@ -184,7 +184,6 @@ define oradb::rcu(
     db_server    => $db_server,
     db_service   => $db_service,
     require      => [Exec["extract ${rcu_file}"],
-                    File["${download_dir}/rcu_${version}/rcu_passwords_${title}.txt"],],
+    File["${download_dir}/rcu_${version}/rcu_passwords_${title}.txt"],],
   }
-
 }

@@ -21,18 +21,18 @@
 # @param download_dir location for installation files used by this module
 # @param db_port the listener port
 #
-define oradb::net(
+define oradb::net (
   String $oracle_home                                   = undef,
   Enum['11.2', '12.1', '12.2', '18.3', '19.3'] $version = lookup('oradb::version'),
   String $user                                          = lookup('oradb::user'),
   String $group                                         = lookup('oradb::group'),
   String $download_dir                                  = lookup('oradb::download_dir'),
   Integer $db_port                                      = lookup('oradb::listener_port'),
-){
+) {
   $exec_path = lookup('oradb::exec_path')
 
   file { "${download_dir}/netca_${version}.rsp":
-    ensure  => present,
+    ensure  => file,
     content => epp("oradb/netca_${version}.rsp.epp", { 'db_port' => $db_port }),
     mode    => '0775',
     owner   => $user,
