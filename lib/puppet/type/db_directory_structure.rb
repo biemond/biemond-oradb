@@ -1,5 +1,5 @@
 module Puppet
-  Type::newtype(:db_directory_structure) do
+  Type.newtype(:db_directory_structure) do
     desc 'add all the directories needed by the oracle db or asm installation'
 
     newparam(:name) do
@@ -34,9 +34,7 @@ module Puppet
         The oracle base folder.
       EOT
       validate do |value|
-        if value.nil?
-          fail ArgumentError, 'oracle_base_dir cannot be empty'
-        end
+        raise ArgumentError, 'oracle_base_dir cannot be empty' if value.nil?
       end
     end
 
@@ -51,9 +49,7 @@ module Puppet
         The oracle inventory folder.
       EOT
       validate do |value|
-        if value.nil?
-          fail ArgumentError, 'ora_inventory_dir cannot be empty'
-        end
+        raise ArgumentError, 'ora_inventory_dir cannot be empty' if value.nil?
       end
     end
 
@@ -62,9 +58,7 @@ module Puppet
         The download folder.
       EOT
       validate do |value|
-        if value.nil?
-          fail ArgumentError, 'download_dir cannot be empty'
-        end
+        raise ArgumentError, 'download_dir cannot be empty' if value.nil?
       end
     end
 

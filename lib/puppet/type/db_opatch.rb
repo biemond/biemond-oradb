@@ -1,15 +1,15 @@
 module Puppet
-  Type::newtype(:db_opatch) do
+  Type.newtype(:db_opatch) do
     desc 'This is the Oracle Patch process called OPatch'
 
     newproperty(:ensure) do
       desc 'Whether a patch should be applied.'
 
-      newvalue(:present, :event => :opatch_installed) do
+      newvalue(:present, event: :opatch_installed) do
         provider.present
       end
 
-      newvalue(:absent, :event => :opatch_absent) do
+      newvalue(:absent, event: :opatch_absent) do
         provider.absent
       end
 
@@ -21,7 +21,7 @@ module Puppet
       end
 
       def sync
-        event = super()
+        event = super
 
         if property = @resource.property(:enable)
           val = property.retrieve

@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-describe 'oradb::installasm', :type => :define do
-
+describe 'oradb::installasm', type: :define do
   # describe "wrong grid version" do
   #   let(:params){{
   #         :version                 => '11.2.0.1',
@@ -33,67 +32,74 @@ describe 'oradb::installasm', :type => :define do
 
   # end
 
-
-  describe "wrong grid type" do
-    let(:params){{
-          :version                 => '11.2.0.4',
-          :file                    => 'p13390677_112040_Linux-x86-64_3of7.zip',
-          :grid_type                => 'XXXX',
-          :grid_base                => '/app/grid',
-          :grid_home                => '/app/grid/product/11.2/grid',
-          :remote_file              => false,
-          :download_dir             => '/install',
-          :puppet_download_mnt_point  => '/software',
-          :user_base_dir             => '/home',
-          :user                    => 'grid',
-          :group                   => 'asmdba',
-          :group_install           => 'oinstall',
-          :group_oper              => 'asmoper',
-          :group_asm               => 'asmadmin',
-          :sys_asm_password        => 'Welcome01',
-          :asm_monitor_password    => 'Welcome01',
-                }}
-    let(:title) {'11.2.0.4_Linux-x86-64'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+  describe 'wrong grid type' do
+    let(:params) do
+      {
+        version: '11.2.0.4',
+        file: 'p13390677_112040_Linux-x86-64_3of7.zip',
+        grid_type: 'XXXX',
+        grid_base: '/app/grid',
+        grid_home: '/app/grid/product/11.2/grid',
+        remote_file: false,
+        download_dir: '/install',
+        puppet_download_mnt_point: '/software',
+        user_base_dir: '/home',
+        user: 'grid',
+        group: 'asmdba',
+        group_install: 'oinstall',
+        group_oper: 'asmoper',
+        group_asm: 'asmadmin',
+        sys_asm_password: 'Welcome01',
+        asm_monitor_password: 'Welcome01',
+      }
+    end
+    let(:title) { '11.2.0.4_Linux-x86-64' }
+    let(:facts) do
+      { operatingsystem: 'CentOS',
+        kernel: 'Linux',
+        osfamily: 'RedHat', }
+    end
 
     it do
-      expect { should contain_notify("oradb::installasm /app/grid/product/11.2/grid does not exists")
-             }.to raise_error(Puppet::Error, /Unrecognized database grid type, please use CRS_CONFIG|HA_CONFIG|UPGRADE/)
+      expect do
+        is_expected.to contain_notify('oradb::installasm /app/grid/product/11.2/grid does not exists')
+      end.to raise_error(Puppet::Error, %r{Unrecognized database grid type, please use CRS_CONFIG|HA_CONFIG|UPGRADE})
     end
   end
 
-  describe "wrong disk_au_size" do
-    let(:params){{
-          :version                 => '11.2.0.4',
-          :file                    => 'p13390677_112040_Linux-x86-64_3of7.zip',
-          :grid_type                => 'HA_CONFIG',
-          :grid_base                => '/app/grid',
-          :grid_home                => '/app/grid/product/11.2/grid',
-          :remote_file              => false,
-          :download_dir             => '/install',
-          :puppet_download_mnt_point  => '/software',
-          :user_base_dir             => '/home',
-          :user                    => 'grid',
-          :group                   => 'asmdba',
-          :group_install           => 'oinstall',
-          :group_oper              => 'asmoper',
-          :group_asm               => 'asmadmin',
-          :sys_asm_password        => 'Welcome01',
-          :asm_monitor_password    => 'Welcome01',
-          :disk_au_size            => 200,
-                }}
-    let(:title) {'11.2.0.4_Linux-x86-64'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
-
-    it do
-      expect { should contain_notify("oradb::installasm /app/grid/product/11.2/grid does not exists")
-             }.to raise_error(Puppet::Error, /invalid disk_au_size/)
+  describe 'wrong disk_au_size' do
+    let(:params) do
+      {
+        version: '11.2.0.4',
+        file: 'p13390677_112040_Linux-x86-64_3of7.zip',
+        grid_type: 'HA_CONFIG',
+        grid_base: '/app/grid',
+        grid_home: '/app/grid/product/11.2/grid',
+        remote_file: false,
+        download_dir: '/install',
+        puppet_download_mnt_point: '/software',
+        user_base_dir: '/home',
+        user: 'grid',
+        group: 'asmdba',
+        group_install: 'oinstall',
+        group_oper: 'asmoper',
+        group_asm: 'asmadmin',
+        sys_asm_password: 'Welcome01',
+        asm_monitor_password: 'Welcome01',
+        disk_au_size: 200,
+      }
+    end
+    let(:title) { '11.2.0.4_Linux-x86-64' }
+    let(:facts) do
+      { operatingsystem: 'CentOS',
+        kernel: 'Linux',
+        osfamily: 'RedHat', }
     end
 
+    it do
+      expect do
+        is_expected.to contain_notify('oradb::installasm /app/grid/product/11.2/grid does not exists')
+      end.to raise_error(Puppet::Error, %r{invalid disk_au_size})
+    end
   end
-
 end

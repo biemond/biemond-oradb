@@ -36,12 +36,12 @@
 # @param entry_type type of configuration
 #
 define oradb::tnsnames (
-  String $oracle_home                          = undef,
   String $user                                 = lookup('oradb::user'),
   String $group                                = lookup('oradb::group'),
   Hash   $server                               = { myserver => { host => undef, port => '1521', protocol => 'TCP' } },
   String $loadbalance                          = 'ON',
   String $failover                             = 'ON',
+  Optional[String] $oracle_home                = undef,
   Optional[String] $connect_service_name       = undef,
   String $connect_server                       = 'DEDICATED',
   Optional[Integer] $connect_timeout           = undef,

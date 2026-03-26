@@ -1,15 +1,15 @@
 module Puppet
-  Type::newtype(:db_rcu) do
+  Type.newtype(:db_rcu) do
     desc 'This is the Oracle RCU ( Repository creation utility) installer type'
 
     newproperty(:ensure) do
       desc 'Whether a Repository should be created.'
 
-      newvalue(:present, :event => :rcu_installed) do
+      newvalue(:present, event: :rcu_installed) do
         provider.present
       end
 
-      newvalue(:absent, :event => :rcu_absent) do
+      newvalue(:absent, event: :rcu_absent) do
         provider.absent
       end
 
@@ -21,7 +21,7 @@ module Puppet
       end
 
       def sync
-        event = super()
+        event = super
 
         if property = @resource.property(:enable)
           val = property.retrieve
