@@ -1,6 +1,6 @@
 fixtures:
   repositories:
-    'stdlib':
-       repo: 'git://github.com/puppetlabs/puppetlabs-stdlib'
+    concat: https://github.com/puppetlabs/puppetlabs-concat.git
+    stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
   symlinks:
     'oradb': '#{source_dir}'
