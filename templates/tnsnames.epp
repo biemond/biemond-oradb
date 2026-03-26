@@ -2,6 +2,8 @@
        Hash   $server,
        String $loadbalance,
        String $failover,
+       Boolean $failover_mode,
+       Hash $failover_mode_params,
        String $connect_server,
        Optional[Integer] $connect_timeout           = undef,
        Optional[Integer] $transport_connect_timeout = undef,
@@ -32,6 +34,13 @@
       (SERVER = <%= $connect_server %>) 
       <%- } -%> 
       (SERVICE_NAME = <%= $connect_service_name %>) 
+      <%- if $failover_mode { -%> 
+      (FAILOVER_MODE =
+        <%- $failover_mode_params.each |$key, $param| {-%> 
+        (<%= $key.upcase() %> = <%= $param.upcase() %> )
+        <%- } -%> 
+      )
+      <%- } -%> 
     )   
   <%- if $server.size() > 1 { -%> 
     ) 
