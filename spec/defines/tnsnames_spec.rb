@@ -12,8 +12,11 @@ describe 'oradb::tnsnames', type: :define do
       let(:params) do
         {
           oracle_home: '/oracle/product/11.2/db',
-          connect_service_name: 'service_name',
-          server: { 'myserver' => { 'host' => '127.0.0.1', 'port' => '1521', 'protocol' => 'TCP' } },
+          connect_service_name: 'my_service_name',
+          server: { 'myserver' => { 'host' => 'my_host', 'port' => '1521', 'protocol' => 'TCP' } },
+          connect_timeout: 5,
+          transport_connect_timeout: 5,
+          retry_count: 3,
         }
       end
 
@@ -31,17 +34,24 @@ describe 'oradb::tnsnames', type: :define do
         end
 
         it do
-          is_expected.to contain_concat__fragment('tnsnames').with(
-            target: '/oracle/product/11.2/db/network/admin/tnsnames.ora',
-          )
+          is_expected.to contain_concat__fragment('tnsnames')
+            .with_target('/oracle/product/11.2/db/network/admin/tnsnames.ora')
+            .with_content(%r{^tnsnames =})
+            .with_content(%r{^\s+\(DESCRIPTION =})
+            .with_content(%r{^\s+\(CONNECT_TIMEOUT = 5})
+            .with_content(%r{^\s+\(TRANSPORT_CONNECT_TIMEOUT = 5})
+            .with_content(%r{^\s+\(RETRY_COUNT = 3})
+            .with_content(%r{^\s+\(ADDRESS = \(PROTOCOL = TCP\)\(HOST = my_host\)\(PORT = 1521\)\)})
+            .with_content(%r{^\s+\(SERVER = DEDICATED\)})
+            .with_content(%r{^\s+\(SERVICE_NAME = my_service_name\)})
         end
       end
 
       context 'with entry_type => listener' do
         let(:params) do
           {
-            connect_service_name: 'service_name',
-            server: { 'myserver' => { 'host' => '127.0.0.1', 'port' => '1521', 'protocol' => 'TCP' } },
+            connect_service_name: 'my_service_name',
+            server: { 'myserver' => { 'host' => 'my_host', 'port' => '1521', 'protocol' => 'TCP' } },
           }
         end
 
