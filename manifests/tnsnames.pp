@@ -46,7 +46,7 @@ define oradb::tnsnames (
   String $connect_server                       = 'DEDICATED',
   Optional[Integer] $connect_timeout           = undef,
   Optional[Integer] $transport_connect_timeout = undef,
-  Optional[Integer] $retry_count               = undef,
+  Integer $retry_count               = 0,
   Enum['tnsnames','listener'] $entry_type      = 'tnsnames',
 ) {
   if ! defined(Concat["${oracle_home}/network/admin/tnsnames.ora"]) {

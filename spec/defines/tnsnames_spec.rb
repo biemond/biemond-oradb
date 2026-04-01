@@ -16,7 +16,6 @@ describe 'oradb::tnsnames', type: :define do
           server: { 'myserver' => { 'host' => 'my_host', 'port' => '1521', 'protocol' => 'TCP' } },
           connect_timeout: 5,
           transport_connect_timeout: 5,
-          retry_count: 3,
         }
       end
 
@@ -40,9 +39,32 @@ describe 'oradb::tnsnames', type: :define do
             .with_content(%r{^\s+\(DESCRIPTION =})
             .with_content(%r{^\s+\(CONNECT_TIMEOUT = 5})
             .with_content(%r{^\s+\(TRANSPORT_CONNECT_TIMEOUT = 5})
-            .with_content(%r{^\s+\(RETRY_COUNT = 3})
+            .with_content(%r{^\s+\(RETRY_COUNT = 0})
             .with_content(%r{^\s+\(ADDRESS = \(PROTOCOL = TCP\)\(HOST = my_host\)\(PORT = 1521\)\)})
             .with_content(%r{^\s+\(SERVER = DEDICATED\)})
+            .with_content(%r{^\s+\(SERVICE_NAME = my_service_name\)})
+        end
+      end
+
+      context 'with multiple servers and retry count specified' do
+      let(:params) do
+        {
+          oracle_home: '/oracle/product/11.2/db',
+          connect_service_name: 'my_service_name',
+          server: { 'myserver1' => { 'host' => 'my_host1', 'port' => '1521', 'protocol' => 'TCP' }, 'myserver2' => { 'host' => 'my_host2', 'port' => '1522', 'protocol' => 'UDP' } },
+          connect_timeout: 5,
+          retry_count: 5,
+        }
+      end
+
+        it do
+          is_expected.to contain_concat__fragment('tnsnames')
+            .with_content(%r{^\s+\(ADDRESS_LIST =})
+            .with_content(%r{^\s+\(LOAD_BALANCE = ON\)})
+            .with_content(%r{^\s+\(FAILOVER = ON\)})
+            .with_content(%r{^\s+\(ADDRESS = \(PROTOCOL = TCP\)\(HOST = my_host1\)\(PORT = 1521\)\)})
+            .with_content(%r{^\s+\(ADDRESS = \(PROTOCOL = UDP\)\(HOST = my_host2\)\(PORT = 1522\)\)})
+            .with_content(%r{^\s+\(SERVICE_NAME = my_service_name\)})
             .with_content(%r{^\s+\(SERVICE_NAME = my_service_name\)})
         end
       end
