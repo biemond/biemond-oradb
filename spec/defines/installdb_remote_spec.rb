@@ -20,9 +20,8 @@ describe 'oradb::installdb', :type => :define do
           :puppet_download_mnt_point => '/software' }
     let(:params) { default_params }
     let(:title) {'12.1.0.1_Linux-x86-64'}
-    default_facts = { :operatingsystem => 'CentOS',
-                      :kernel          => 'Linux',
-                      :osfamily        => 'RedHat' }
+    default_facts = { :os              => {name: 'CentOS', family: 'RedHat'},
+                      :kernel          => 'Linux' }
     let(:facts) { default_facts }
     context 'with no oradb_inst_loc_data fact' do
       describe "oradb utils structure" do
@@ -178,9 +177,8 @@ describe 'oradb::installdb', :type => :define do
           :puppet_download_mnt_point => '/software',
                 }}
     let(:title) {'11.2.0.4_Linux-x86-64'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     describe "oradb utils structure" do
       it do
@@ -283,9 +281,8 @@ describe 'oradb::installdb', :type => :define do
           :puppet_download_mnt_point => '/software',
                 }}
     let(:title) {'11.2.0.3_Linux-x86-64'}
-    let(:facts) {{ :operatingsystem => 'OracleLinux' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'OracleLinux', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
 
     describe "oradb utils structure" do

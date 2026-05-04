@@ -33,7 +33,7 @@ class oradb::prepareautostart(
                         '\r\n', "\n", 'EMG'),
   }
 
-  case $facts['operatingsystem'] {
+  case $facts['os']['name'] {
     'CentOS', 'RedHat', 'OracleLinux', 'SLES': {
       exec { "enable service ${service_name}":
         command   => "chkconfig --add ${service_name}",

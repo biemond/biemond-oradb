@@ -90,7 +90,7 @@ define oradb::installem_agent(
   String $download_dir                               = lookup('oradb::download_dir'),
   Boolean $log_output                                = false,
   Boolean $ignore_sys_prerequisite                   = false,
-  String $oracle_hostname                            = lookup('oradb::oracle_hostname',{default_value => $::fqdn}),
+  String $oracle_hostname                            = lookup('oradb::oracle_hostname',{default_value => $facts['networking']['fqdn']}),
   Boolean $manage_curl                               = true,
 )
 {

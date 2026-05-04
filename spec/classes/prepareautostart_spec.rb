@@ -9,7 +9,7 @@ describe 'oradb::prepareautostart', :type => :class do
   # rspec-puppet does not allow you to swap out hiera data on a per test block
   #include_context :hiera
 
-  
+
   # below is the facts hash that gives you the ability to mock
   # facts on a per describe/context block.  If you use a fact in your
   # manifest you should mock the facts below.
@@ -32,7 +32,7 @@ describe 'oradb::prepareautostart', :type => :class do
   describe 'Solaris' do
     let(:facts) {{
         :kernel => 'SunOS',
-        :operatingsystem => 'Solaris'
+        :os => {name: 'Solaris'}
     }}
 
     it do
@@ -68,7 +68,7 @@ describe 'oradb::prepareautostart', :type => :class do
 
   describe 'Linux' do
     let(:facts) do
-      {:kernel => 'Linux', :operatingsystem => 'RedHat'}
+      {:kernel => 'Linux', :os => {name: 'RedHat'}}
     end
 
     it do
@@ -88,7 +88,7 @@ describe 'oradb::prepareautostart', :type => :class do
           {
 
             :kernel => 'Linux',
-            :operatingsystem => os
+            :os => {name: os}
           }
 
         end
@@ -111,7 +111,7 @@ describe 'oradb::prepareautostart', :type => :class do
         let(:facts) do
           {
             :kernel => 'Linux',
-            :operatingsystem => os
+            :os => {name: os}
           }
 
         end

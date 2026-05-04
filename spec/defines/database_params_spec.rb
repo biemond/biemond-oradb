@@ -14,9 +14,8 @@ describe 'oradb::database', :type => :define do
                    :db_domain               => 'xxxxx',
     }}
     let(:title) {'testDb_Create'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_file("/install/database_testDb_Create.rsp")
@@ -38,9 +37,8 @@ describe 'oradb::database', :type => :define do
                    :db_domain               => 'xxxxx',
     }}
     let(:title) {'testDb_Create'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_file("/install/database_testDb_Create.rsp")
@@ -61,9 +59,8 @@ describe 'oradb::database', :type => :define do
                    :database_type            => "XXXX",
     }}
     let(:title) {'testDb_Create'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_file("/install/database_testDb_Create.rsp")
@@ -84,9 +81,8 @@ describe 'oradb::database', :type => :define do
                    :em_configuration         => "XXXX",
     }}
     let(:title) {'testDb_Create'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_file("/install/database_testDb_Create.rsp")
@@ -107,9 +103,8 @@ describe 'oradb::database', :type => :define do
                    :storage_type             => "XXXX",
     }}
     let(:title) {'testDb_Create'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_file("/install/database_testDb_Create.rsp")
@@ -131,9 +126,8 @@ describe 'oradb::database', :type => :define do
                    :db_domain               => 'a'
     }}
     let(:title) {'testDb_Create'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_file("/install/database_testDb_Create.rsp")
@@ -146,9 +140,8 @@ describe 'oradb::database', :type => :define do
   describe "init params" do
 
     let(:title) {'testDb_Create'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
     let(:base_params) {{
                          :oracle_base              => '/oracle',
                          :oracle_home              => '/oracle/product/11.2/db',

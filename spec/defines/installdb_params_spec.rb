@@ -19,9 +19,8 @@ describe 'oradb::installdb', :type => :define do
           :puppet_download_mnt_point  => '/software',
                 }}
     let(:title) {'10.2.0.4_Linux-x86-64'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_notify("oradb::installdb /oracle/product/10.2/db does not exists")
@@ -48,9 +47,8 @@ describe 'oradb::installdb', :type => :define do
           :puppet_download_mnt_point  => '/software',
                 }}
     let(:title) {'11.2.0.4_Linux-x86-64'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_notify("oradb::installdb /oracle/product/11.2/db does not exists")
@@ -75,9 +73,8 @@ describe 'oradb::installdb', :type => :define do
           :puppet_download_mnt_point  => '/software',
                 }}
     let(:title) {'11.2.0.4_Linux-x86-64'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_notify("oradb::installdb /oracle/product/11.2/db does not exists")
@@ -103,9 +100,8 @@ describe 'oradb::installdb', :type => :define do
           :puppet_download_mnt_point  => '/software',
                 }}
     let(:title) {'11.2.0.4_Linux-x86-64'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_notify("oradb::installdb /oracle/product/11.2/db does not exists")
@@ -130,9 +126,8 @@ describe 'oradb::installdb', :type => :define do
           :puppet_download_mnt_point  => '/software',
                 }}
     let(:title) {'11.2.0.4_Linux-x86-64'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_notify("oradb::installdb /oracle/product/11.2/db does not exists")
@@ -157,9 +152,8 @@ describe 'oradb::installdb', :type => :define do
           :puppet_download_mnt_point  => '/software',
                 }}
     let(:title) {'11.2.0.4_Linux-x86-64'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_notify("oradb::installdb /oracle/product/11.2/db does not exists")
@@ -185,9 +179,8 @@ describe 'oradb::installdb', :type => :define do
           :puppet_download_mnt_point  => '/software',
                 }}
     let(:title) {'11.2.0.4_Linux-x86-64'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_notify("oradb::installdb /oracle/product/11.2/db does not exists")

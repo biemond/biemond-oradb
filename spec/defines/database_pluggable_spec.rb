@@ -16,9 +16,8 @@ describe 'oradb::database_pluggable', :type => :define do
          :pdb_admin_password       => 'Welcome01'
     }}
     let(:title) {'pdb1'}
-    let(:facts) {{ :operatingsystem => 'CentOS',
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_exec("dbca pdb execute pdb1")
@@ -41,9 +40,8 @@ describe 'oradb::database_pluggable', :type => :define do
          :pdb_admin_password       => 'Welcome01'
     }}
     let(:title) {'pdb1'}
-    let(:facts) {{ :operatingsystem => 'CentOS',
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_exec("dbca pdb execute pdb1")
@@ -65,9 +63,8 @@ describe 'oradb::database_pluggable', :type => :define do
          :pdb_admin_password       => 'Welcome01'
     }}
     let(:title) {'pdb1'}
-    let(:facts) {{ :operatingsystem => 'CentOS',
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_exec("dbca pdb execute pdb1")
@@ -89,9 +86,8 @@ describe 'oradb::database_pluggable', :type => :define do
          :pdb_admin_username       => 'pdb_adm',
     }}
     let(:title) {'pdb1'}
-    let(:facts) {{ :operatingsystem => 'CentOS',
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_exec("dbca pdb execute pdb1")
@@ -113,9 +109,8 @@ describe 'oradb::database_pluggable', :type => :define do
          :pdb_admin_password       => 'Welcome01'
     }}
     let(:title) {'pdb1'}
-    let(:facts) {{ :operatingsystem => 'CentOS',
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_exec("dbca pdb execute pdb1")
@@ -137,9 +132,8 @@ describe 'oradb::database_pluggable', :type => :define do
          :pdb_admin_password       => 'Welcome01'
     }}
     let(:title) {'pdb1'}
-    let(:facts) {{ :operatingsystem => 'CentOS',
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_exec("dbca pdb execute pdb1")
@@ -161,9 +155,8 @@ describe 'oradb::database_pluggable', :type => :define do
          :pdb_admin_password       => 'Welcome01'
     }}
     let(:title) {'pdb1'}
-    let(:facts) {{ :operatingsystem => 'CentOS',
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_exec("dbca pdb execute pdb1")

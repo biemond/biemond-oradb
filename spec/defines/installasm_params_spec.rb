@@ -54,9 +54,8 @@ describe 'oradb::installasm', :type => :define do
           :asm_monitor_password    => 'Welcome01',
                 }}
     let(:title) {'11.2.0.4_Linux-x86-64'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_notify("oradb::installasm /app/grid/product/11.2/grid does not exists")
@@ -85,9 +84,8 @@ describe 'oradb::installasm', :type => :define do
           :disk_au_size            => 200,
                 }}
     let(:title) {'11.2.0.4_Linux-x86-64'}
-    let(:facts) {{ :operatingsystem => 'CentOS' ,
-                   :kernel          => 'Linux',
-                   :osfamily        => 'RedHat' }}
+    let(:facts) {{ :os              => {name: 'CentOS', family: 'RedHat'} ,
+                   :kernel          => 'Linux'}}
 
     it do
       expect { should contain_notify("oradb::installasm /app/grid/product/11.2/grid does not exists")
