@@ -13,21 +13,23 @@ Puppet::Type.type(:db_rcu).provide(:db_rcu) do
     Puppet.debug "rcu statement: #{statement}"
 
     # stdin from password file is lost if running as oracle but try to su
-    output = if Puppet.features.root?
-      `su - #{user} -c '#{statement}'`
+    if Puppet.features.root?
+      output = `su - #{user} -c '#{statement}'`
     else
-      `#{statement}`
-             end
+      output = `#{statement}`
+    end
 
     # output = execute statement, :failonfail => true ,:uid => user, :custom_environment => environment
     Puppet.info "RCU result: #{output}"
     result = false
     output.each_line do |li|
       unless li.nil?
-        next unless li.include? 'Operation Completed'result = true if li.include? 'Operation Completed'
+        if li.include? 'Operation Completed'
+          result = true
+        end
       end
     end
-    raise(output) if result == false
+    fail(output) if result == false
   end
 
   def rcu_status
@@ -41,7 +43,7 @@ Puppet::Type.type(:db_rcu).provide(:db_rcu) do
     db_service              = resource[:db_service]
     db_server               = resource[:db_server]
 
-    sql = <<~EOS
+    sql = <<-EOS
 set term off echo off pages 0 colsep '|' trimspool on
 spool /tmp/check_rcu_#{prefix}2.txt
 select distinct 'found' from system.schema_version_registry where upper(mrc_name) = upper('#{prefix}');
@@ -49,12 +51,12 @@ grant execute on sys.dbms_job to PUBLIC;
 grant execute on sys.dbms_reputil to PUBLIC;
 spool off
 exit
-    EOS
+EOS
 
     tmpFile = Tempfile.new(['rcuCheck', '.sql'])
     tmpFile.write(sql)
     tmpFile.close
-    FileUtils.chmod(0o555, tmpFile.path)
+    FileUtils.chmod(0555, tmpFile.path)
 
     Puppet.debug "rcu for prefix #{prefix} execute SQL"
     output = `su - #{user} -c 'export ORACLE_HOME=#{oracle_home};LD_LIBRARY_PATH=#{oracle_home}/lib #{oracle_home}/bin/sqlplus \"#{sys_user}/#{sys_password}@//#{db_server}/#{db_service} as sysdba\" @#{tmpFile.path}'`
@@ -63,20 +65,21 @@ exit
     #                 "#{oracle_home}/bin/sqlplus", " \"#{sys_user}/'#{sys_password}'@//#{db_server}/#{db_service} as sysdba\"", "@#{tmpFile.path}")
     raise ArgumentError, "Error executing puppet code, #{output}" if $? != 0
 
-    return 'NoOutput' unless FileTest.exists?("/tmp/check_rcu_#{prefix}2.txt")
+    if FileTest.exist?("/tmp/check_rcu_#{prefix}2.txt")
       File.open("/tmp/check_rcu_#{prefix}2.txt") do |outputfile|
         outputfile.each_line do |li|
-          next if li.nil?
-          Puppet.debug "line #{li}"
-          if (li.include? 'found') and !(li.include? 'select')
-            Puppet.debug "found RCU #{prefix}"
-            return prefix
+          unless li.nil?
+            Puppet.debug "line #{li}"
+            if (li.include? 'found') and !(li.include? 'select')
+              Puppet.debug "found RCU #{prefix}"
+              return prefix
+            end
           end
         end
       end
-    
-      
-    
+    else
+      return 'NoOutput'
+    end
     'NotFound'
   end
 
@@ -92,20 +95,21 @@ exit
     Puppet.debug 'status'
 
     if resource[:oracle_home].nil?
-      return :absent if resource[:ensure] == :present
-        
-      
+      if resource[:ensure] == :present
+        return :absent
+      else
         return :present
-      
+      end
     end
 
     output  = rcu_status
     prefix  = resource[:name]
     Puppet.info "rcu_status output #{output} for prefix #{prefix}"
-    return :present if output == prefix
-      
-    
-      :absent
-    
+    if output == prefix
+      return :present
+    else
+      return :absent
+    end
   end
+
 end

@@ -264,7 +264,7 @@ Default value: `undef`
 
 ##### <a name="-oradb--client--ora_inventory_dir"></a>`ora_inventory_dir`
 
-Data type: `Optional[String]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 full path to the Oracle Inventory location directory
 
@@ -1128,7 +1128,7 @@ Default value: `undef`
 
 ##### <a name="-oradb--goldengate--ora_inventory_dir"></a>`ora_inventory_dir`
 
-Data type: `Optional[String]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 full path to the oracle inventory directory only for 12c
 
@@ -1341,7 +1341,7 @@ Default value: `undef`
 
 ##### <a name="-oradb--installasm--ora_inventory_dir"></a>`ora_inventory_dir`
 
-Data type: `Optional[String]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 full path to the Oracle Inventory location directory
 
@@ -1855,7 +1855,7 @@ Default value: `undef`
 
 ##### <a name="-oradb--installdb--ora_inventory_dir"></a>`ora_inventory_dir`
 
-Data type: `Optional[String]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 full path to the Oracle Inventory location directory
 
@@ -2149,7 +2149,7 @@ Default value: `undef`
 
 ##### <a name="-oradb--installem--ora_inventory_dir"></a>`ora_inventory_dir`
 
-Data type: `Optional[String]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 full path to the Oracle Inventory location directory
 
@@ -2493,7 +2493,7 @@ Default value: `undef`
 
 ##### <a name="-oradb--installem_agent--oracle_base_dir"></a>`oracle_base_dir`
 
-Data type: `String`
+Data type: `Stdlib::Absolutepath`
 
 full path to the Oracle Base directory
 
@@ -2501,7 +2501,7 @@ Default value: `undef`
 
 ##### <a name="-oradb--installem_agent--agent_base_dir"></a>`agent_base_dir`
 
-Data type: `String`
+Data type: `Stdlib::Absolutepath`
 
 full path to the Oracle Agent Home directory inside Oracle Base
 
@@ -2509,7 +2509,7 @@ Default value: `undef`
 
 ##### <a name="-oradb--installem_agent--ora_inventory_dir"></a>`ora_inventory_dir`
 
-Data type: `Optional[String]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 full path to the Oracle Inventory location directory
 
@@ -3431,11 +3431,11 @@ Default value: `undef`
 
 ##### <a name="-oradb--tnsnames--retry_count"></a>`retry_count`
 
-Data type: `Optional[Integer]`
+Data type: `Integer`
 
 The number of times an ADDRESS list is traversed before the connection attempt is terminated. The default value is 0.
 
-Default value: `undef`
+Default value: `0`
 
 ##### <a name="-oradb--tnsnames--entry_type"></a>`entry_type`
 
@@ -3720,6 +3720,7 @@ The following parameters are available in the `db_opatch` type.
 * [`orainst_dir`](#-db_opatch--orainst_dir)
 * [`os_user`](#-db_opatch--os_user)
 * [`patch_id`](#-db_opatch--patch_id)
+* [`provider`](#-db_opatch--provider)
 * [`use_opatchauto_utility`](#-db_opatch--use_opatchauto_utility)
 
 ##### <a name="-db_opatch--bundle_sub_patch_id"></a>`bundle_sub_patch_id`
@@ -3760,6 +3761,11 @@ The weblogic operating system user.
 
 The patchId of the OPatch.
 
+##### <a name="-db_opatch--provider"></a>`provider`
+
+The specific backend to use for this `db_opatch` resource. You will seldom need to specify this --- Puppet will usually
+discover the appropriate provider for your platform.
+
 ##### <a name="-db_opatch--use_opatchauto_utility"></a>`use_opatchauto_utility`
 
 use the opatchauto_utility instead of opatch auto
@@ -3789,6 +3795,7 @@ The following parameters are available in the `db_rcu` type.
 * [`name`](#-db_rcu--name)
 * [`oracle_home`](#-db_rcu--oracle_home)
 * [`os_user`](#-db_rcu--os_user)
+* [`provider`](#-db_rcu--provider)
 * [`statement`](#-db_rcu--statement)
 * [`sys_password`](#-db_rcu--sys_password)
 * [`sys_user`](#-db_rcu--sys_user)
@@ -3814,6 +3821,11 @@ The oracle database home folder.
 ##### <a name="-db_rcu--os_user"></a>`os_user`
 
 The weblogic operating system user.
+
+##### <a name="-db_rcu--provider"></a>`provider`
+
+The specific backend to use for this `db_rcu` resource. You will seldom need to specify this --- Puppet will usually
+discover the appropriate provider for your platform.
 
 ##### <a name="-db_rcu--statement"></a>`statement`
 
