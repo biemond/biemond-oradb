@@ -34,12 +34,14 @@
 # @param transport_connect_timeout the transportation timeout duration in seconds for a client to establish an Oracle Net connection to an Oracle Database
 # @param retry_count The number of times an ADDRESS list is traversed before the connection attempt is terminated. The default value is 0.
 # @param entry_type type of configuration
+# @param failover_mode enable FAILOVER_MODE
+# @param failover_mode_params FAILOVER_MODE parameters from https://docs.oracle.com/cd/E19509-01/820-3492/boaem/index.html
 #
 define oradb::tnsnames(
   String $oracle_home                          = undef,
   String $user                                 = lookup('oradb::user'),
   String $group                                = lookup('oradb::group'),
-  Hash   $server                               = { myserver => { host => undef, port => '1521', protocol => 'TCP' }},
+  Hash   $server                               = { myserver => { host => undef, port => '1521', protocol => 'TCP' } },
   String $loadbalance                          = 'ON',
   String $failover                             = 'ON',
   Optional[String] $connect_service_name       = undef,
@@ -48,6 +50,8 @@ define oradb::tnsnames(
   Optional[Integer] $transport_connect_timeout = undef,
   Optional[Integer] $retry_count               = undef,
   Enum['tnsnames','listener'] $entry_type      = 'tnsnames',
+  Boolean $failover_mode                       = false,
+  Hash $failover_mode_params                   = { type => 'NONE', method => 'BASIC', retries => '5', delay => '30' }
 )
 {
   if ! defined(Concat["${oracle_home}/network/admin/tnsnames.ora"]) {
@@ -72,6 +76,8 @@ define oradb::tnsnames(
                                       'server'                    => $server,
                                       'loadbalance'               => $loadbalance,
                                       'failover'                  => $failover,
+                                      'failover_mode'             => $failover_mode,
+                                      'failover_mode_params'      => $failover_mode_params,
                                       'connect_server'            => $connect_server,
                                       'connect_service_name'      => $connect_service_name,
                                       'connect_timeout'           => $connect_timeout,
