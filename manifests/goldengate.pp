@@ -74,7 +74,7 @@ define oradb::goldengate (
   Enum['ORA11g', 'ORA12c', 'ORA18c', 'ORA19c'] $database_version = 'ORA11g',  # only for > 12.1.2
   Optional[String] $database_home                                = undef,     # only for > 12.1.2
   Optional[String] $oracle_base                                  = undef,     # only for > 12.1.2
-  Optional[String] $ora_inventory_dir                            = undef,     # only for > 12.1.2
+  Optional[Stdlib::Absolutepath] $ora_inventory_dir              = undef,     # only for > 12.1.2
   String $goldengate_home                                        = undef,
   Optional[Integer] $manager_port                                = undef,
   String $user                                                   = 'ggate',
@@ -111,7 +111,6 @@ define oradb::goldengate (
     if $ora_inventory_dir == undef {
       $ora_inventory = oradb::cleanpath("${oracle_base}/../oraInventory")
     } else {
-      validate_absolute_path($ora_inventory_dir)
       $ora_inventory = "${ora_inventory_dir}/oraInventory"
     }
 

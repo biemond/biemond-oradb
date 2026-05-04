@@ -1,154 +1,134 @@
 ---
+oradb::database::action:                create
+oradb::database::asm_diskgroup:         DATA
+oradb::database::character_set:         AL32UTF8
+oradb::database::database_type:         MULTIPURPOSE # MULTIPURPOSE|DATA_WAREHOUSING|OLTP
+oradb::database::em_configuration:      NONE # CENTRAL|LOCAL|ALL|NONE
+oradb::database::memory_percentage:     40
+oradb::database::memory_total:          800
+oradb::database::nationalcharacter_set: UTF8
+oradb::database::sample_schema:         'TRUE'
+oradb::database::storage_type:          FS #FS|CFS|ASM
 
-oradb::exec_path:         '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin'
-
-oradb::user:             'oracle'
-oradb::group:            'dba'
-oradb::group_install:    'oinstall'
-oradb::group_oper:       'oper'
-
-oradb::grid::user:          'grid'
-oradb::grid::group:         'asmdba'
-oradb::grid::group_install: 'oinstall'
-oradb::grid::group_oper:    'asmoper'
-oradb::grid::group_asm:     'asmadmin'
-
-oradb::tmp_dir:           '/tmp'
-oradb::download_dir:      '/var/tmp/install'
-oradb::module_mountpoint: 'oradb/'
-
-oradb::version:           '12.1'
-oradb::listener_port:     1521
-
-oradb::database_name:     'orcl'
-oradb::host::service_name: 'dbora'
-
-oradb::default::password:       'Welcome01'
-oradb::grid::default::password: 'Welcome01'
-
-# check on all supported database versions
-oradb::versions:
- - '11.2.0.1'
- - '11.2.0.3'
- - '11.2.0.4'
- - '12.1.0.1'
- - '12.1.0.2'
- - '12.2.0.1'
- - '18.0.0.0'
- - '19.0.0.0'
-
-# check on all supported grid versions
-oradb::grid_versions:
- - '11.2.0.4'
- - '12.1.0.1'
- - '12.1.0.2'
- - '12.2.0.1'
- - '18.0.0.0'
- - '19.0.0.0'
-
-# check on all supported enterprise agent versions
-oradb::enterprise_manager_agent_versions:
- - '12.1.0.4'
- - '12.1.0.5'
-
-oradb::net_versions:
- - '11.2'
- - '12.1'
- - '12.2'
- - '18.3'
- - '19.3'
-
-oradb::database_versions:
- - '11.2'
- - '12.1'
- - '12.2'
- - '18.3'
- - '19.3' 
-
+oradb::database_name: orcl
 oradb::database_pluggable_versions:
- - '12.1'
- - '12.2'
- - '18.3'
- - '19.3'
-
-# check on supported kernels
-oradb::kernels:
- - 'Linux'
- - 'SunOS'
+- '12.1'
+- '12.2'
+- '18.3'
+- '19.3'
 
 # oracle database type options
 oradb::database_types:
- - 'EE'
- - 'SE'
- - 'SEONE'
- - 'SE2'
- - 'HP'
- - 'XP'
- - 'PE'
+- EE
+- SE
+- SEONE
+- SE2
+- HP
+- XP
+- PE
+oradb::database_versions:
+- '11.2'
+- '12.1'
+- '12.2'
+- '18.3'
+- '19.3'
+oradb::default::password: Welcome01
+oradb::download_dir: "/var/tmp/install"
+oradb::em_versions_three_files:
+- 12.1.0.4
+- 12.1.0.5
+oradb::enterprise_manager_agent_install_types:
+- agentPull
+- agentDeploy
+
+# check on all supported enterprise agent versions
+oradb::enterprise_manager_agent_versions:
+- 12.1.0.4
+- 12.1.0.5
+oradb::exec_path: "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin"
+oradb::grid::default::password: Welcome01
+oradb::grid::group: asmdba
+oradb::grid::group_asm: asmadmin
+oradb::grid::group_install: oinstall
+oradb::grid::group_oper: asmoper
+oradb::grid::user: grid
+oradb::grid_storage_option:
+- ASM_STORAGE
+- FILE_SYSTEM_STORAGE
+oradb::grid_type:
+- CRS_CONFIG
+- HA_CONFIG
+- UPGRADE
+- CRS_SWONLY
+
+# check on all supported grid versions
+oradb::grid_versions:
+- 11.2.0.4
+- 12.1.0.1
+- 12.1.0.2
+- 12.2.0.1
+- 18.0.0.0
+- 19.0.0.0
+oradb::grid_versions_one_file:
+- 11.2.0.4
+oradb::grid_versions_two_files:
+- 12.1.0.1
+- 12.1.0.2
+oradb::group: dba
+oradb::group_install: oinstall
+oradb::group_oper: oper
+oradb::host::service_name: dbora
+
+oradb::installdb::database_type: SE
+
+oradb::instance_em_configuration:
+- NONE
+- CENTRAL
+- LOCAL
+- ALL
+oradb::instance_storage_type:
+- FS
+- CFS
+- ASM
+oradb::instance_types:
+- MULTIPURPOSE
+- DATA_WAREHOUSING
+- OLTP
+
+# check on supported kernels
+oradb::kernels:
+- Linux
+- SunOS
+oradb::listener_port: 1521
+oradb::module_mountpoint: oradb/
+oradb::net_versions:
+- '11.2'
+- '12.1'
+- '12.2'
+- '18.3'
+- '19.3'
+oradb::tmp_dir: "/tmp"
+oradb::user: oracle
+oradb::version: '12.1'
+
+# check on all supported database versions
+oradb::versions:
+- 11.2.0.1
+- 11.2.0.3
+- 11.2.0.4
+- 12.1.0.1
+- 12.1.0.2
+- 12.2.0.1
+- 18.0.0.0
+- 19.0.0.0
 
 # full versions which can be downloaded at OTN
 oradb::versions_full:
- - '11.2.0.1'
- - '12.1.0.1'
- - '12.1.0.2'
+- 11.2.0.1
+- 12.1.0.1
+- 12.1.0.2
 
 # full patch versions can be downloaded at edelivery
 oradb::versions_patch:
- - '11.2.0.3'
- - '11.2.0.4'
-
-oradb::instance_types:
- - 'MULTIPURPOSE'
- - 'DATA_WAREHOUSING'
- - 'OLTP'
-
-oradb::instance_em_configuration:
- - 'NONE'
- - 'CENTRAL'
- - 'LOCAL'
- - 'ALL'
-
-oradb::instance_storage_type:
- - 'FS'
- - 'CFS'
- - 'ASM'
-
-oradb::grid_type:
- - 'CRS_CONFIG'
- - 'HA_CONFIG'
- - 'UPGRADE'
- - 'CRS_SWONLY'
-
-oradb::grid_storage_option:
- - 'ASM_STORAGE'
- - 'FILE_SYSTEM_STORAGE'
-
-oradb::grid_versions_two_files:
- - '12.1.0.1'
- - '12.1.0.2'
-
-oradb::grid_versions_one_file:
- - '11.2.0.4'
-
-oradb::em_versions_three_files:
- - '12.1.0.4'
- - '12.1.0.5'
-
-oradb::enterprise_manager_agent_install_types:
- - 'agentPull'
- - 'agentDeploy'
-
-
-oradb::database::action:                'create'
-oradb::database::character_set:         'AL32UTF8'
-oradb::database::nationalcharacter_set: 'UTF8'
-oradb::database::sample_schema:         'TRUE'
-oradb::database::memory_percentage:     40
-oradb::database::memory_total:          800
-oradb::database::database_type:         'MULTIPURPOSE' # MULTIPURPOSE|DATA_WAREHOUSING|OLTP
-oradb::database::em_configuration:      'NONE'  # CENTRAL|LOCAL|ALL|NONE
-oradb::database::storage_type:          'FS' #FS|CFS|ASM
-oradb::database::asm_diskgroup:         'DATA'
-
-oradb::installdb::database_type:        'SE'
-
+- 11.2.0.3
+- 11.2.0.4

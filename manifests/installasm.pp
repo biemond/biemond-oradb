@@ -89,7 +89,7 @@ define oradb::installasm (
   String $cvuqdisk_rpmname                                                         = 'cvuqdisk-1.0.10-1.rpm',
   String $grid_base                                                                = undef,
   String $grid_home                                                                = undef,
-  Optional[String] $ora_inventory_dir                                              = undef,
+  Optional[Stdlib::Absolutepath] $ora_inventory_dir                                = undef,
   String $user                                                                     = lookup('oradb::grid::user'),
   String $user_base_dir                                                            = lookup('oradb::user_base_dir'),
   String $group                                                                    = lookup('oradb::grid::group'),
@@ -189,7 +189,6 @@ define oradb::installasm (
   if $ora_inventory_dir == undef {
     $ora_inventory = oradb::cleanpath("${grid_base}/../oraInventory")
   } else {
-    validate_absolute_path($ora_inventory_dir)
     $ora_inventory = "${ora_inventory_dir}/oraInventory"
   }
 

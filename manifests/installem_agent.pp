@@ -74,9 +74,9 @@ define oradb::installem_agent (
   String $install_version                            = '12.1.0.5.0',
   String $install_platform                           = 'Linux x86-64',
   String $source                                     = undef, # 'https://<OMS_HOST>:<OMS_PORT>/em/install/getAgentImage'|'/tmp/12.1.0.4.0_AgentCore_226_Linux_x64.zip'
-  Optional[String] $ora_inventory_dir                = undef,
-  String $oracle_base_dir                            = undef,
-  String $agent_base_dir                             = undef,
+  Optional[Stdlib::Absolutepath] $ora_inventory_dir  = undef,
+  Stdlib::Absolutepath $oracle_base_dir              = undef,
+  Stdlib::Absolutepath $agent_base_dir               = undef,
   String $agent_instance_home_dir                    = undef,
   String $agent_registration_password                = undef,
   Integer $agent_port                                = 1830,
@@ -94,7 +94,6 @@ define oradb::installem_agent (
   Boolean $manage_curl                               = true,
 ) {
   # check if the oracle software already exists
-  validate_absolute_path( $agent_base_dir )
   $found = oradb::oracle_exists( $agent_base_dir )
 
   if $found == undef {
@@ -108,11 +107,9 @@ define oradb::installem_agent (
     }
   }
 
-  validate_absolute_path($oracle_base_dir)
   if $ora_inventory_dir == undef {
     $ora_inventory = oradb::cleanpath("${oracle_base_dir}/../oraInventory")
   } else {
-    validate_absolute_path($ora_inventory_dir)
     $ora_inventory = "${ora_inventory_dir}/oraInventory"
   }
 

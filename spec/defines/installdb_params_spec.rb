@@ -56,7 +56,7 @@ describe 'oradb::installdb', type: :define do
       { operatingsystem: 'CentOS',
         kernel: 'Linux',
         osfamily: 'RedHat', }
-    end
+        end
 
     it do
       expect do
