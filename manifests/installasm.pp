@@ -53,8 +53,33 @@
 # @param cluster_nodes
 # @param network_interface_list
 # @param storage_option
+# @param temp_dir
+# @param config_asm
+# @param install_cvuqdisk
+# @param cvuqdisk_rpmname
+# @param gimr_diskgroup
+# @param gimr_disk_redundancy
+# @param execute_root_script
+# @param scan_type
+# @param configure_gns
+# @param configure_gimr_data
+# @param configure_gimr
+# @param auto_configure_vip
+# @param use_ipmi
+# @param configure_afd
+# @param configure_rhps
+# @param ignore_down_nodes
+# @param management_option
+# @param root_script_config
+# @param root_script_sudo_path
+# @param temp_dir
+# @param disks_with_failure_groups
+# @param gimr_disks
+# @param gimr_disks_with_failure_groups
+# @param root_script_sudo_user
+# @param oms_port
 #
-define oradb::installasm(
+define oradb::installasm (
   Enum['11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1','18.0.0.0','19.0.0.0'] $version = undef,
   String $file                                                                     = undef,
   Enum['HA_CONFIG', 'CRS_CONFIG', 'UPGRADE', 'CRS_SWONLY'] $grid_type              = 'HA_CONFIG',
@@ -110,11 +135,9 @@ define oradb::installasm(
   Optional[String] $storage_option                                                 = undef,
   String $temp_dir                                                                 = lookup('oradb::tmp_dir'),
   Boolean $bash_profile                                                            = true,
-)
-{
-
+) {
   case $disk_au_size {
-    1, 2, 4, 8, 16, 32, 64: {  } # Do nothing. These are valid values
+    1, 2, 4, 8, 16, 32, 64: {} # Do nothing. These are valid values
     default: {
       fail("${disk_au_size} is an invalid disk_au_size. It needs to be one of these values: 1, 2, 4, 8, 16, 32, 64")
     }
@@ -122,32 +145,32 @@ define oradb::installasm(
   $file_without_ext = regsubst($file, '(.+?)(\.zip*$|$)', '\1')
   #notify {"oradb::installasm file without extension ${$file_without_ext} ":}
 
-  if($cluster_name){ # We've got a RAC cluster. Check the cluster specific parameters
-    if ( $scan_name == undef or !($scan_name =~ String)) {fail('You must specify scan_name if cluster_name is defined') }
-    if ( $scan_port == undef or !($scan_port =~ Stdlib::Port)) {fail('You must specify scan_port if cluster_name is defined') }
-    if ( $cluster_nodes == undef or !($cluster_nodes =~ String)) {fail('You must specify cluster_nodes if cluster_name is defined') }
-    if ( $network_interface_list == undef or !($network_interface_list =~ String)) {fail('You must specify network_interface_list if cluster_name is defined') }
-    if ( $storage_option == undef or !($storage_option =~ String)) {fail('You must specify storage_option if cluster_name is defined') }
-    unless $storage_option in ['ASM_STORAGE','FLEX_ASM_STORAGE','CLIENT_ASM_STORAGE','NEAR_ASM_STORAGE', 'FILE_SYSTEM_STORAGE'] {fail 'storage_option must be either ASM_STORAGE,FLEX_ASM_STORAGE,CLIENT_ASM_STORAGE,NEAR_ASM_STORAGE or FILE_SYSTEM_STORAGE'}
+  if($cluster_name) { # We've got a RAC cluster. Check the cluster specific parameters
+    if ( $scan_name == undef or is_string($scan_name) == false) { fail('You must specify scan_name if cluster_name is defined') }
+    if ( $scan_port == undef or is_integer($scan_port) == false) { fail('You must specify scan_port if cluster_name is defined') }
+    if ( $cluster_nodes == undef or is_string($cluster_nodes) == false) { fail('You must specify cluster_nodes if cluster_name is defined') }
+    if ( $network_interface_list == undef or is_string($network_interface_list) == false) { fail('You must specify network_interface_list if cluster_name is defined') }
+    if ( $storage_option == undef or is_string($storage_option) == false) { fail('You must specify storage_option if cluster_name is defined') }
+    unless $storage_option in ['ASM_STORAGE','FLEX_ASM_STORAGE','CLIENT_ASM_STORAGE','NEAR_ASM_STORAGE', 'FILE_SYSTEM_STORAGE'] { fail 'storage_option must be either ASM_STORAGE,FLEX_ASM_STORAGE,CLIENT_ASM_STORAGE,NEAR_ASM_STORAGE or FILE_SYSTEM_STORAGE' }
   }
 
   $supported_grid_versions = join( lookup('oradb::grid_versions'), '|')
-  if ( $version in $supported_grid_versions == false ){
+  if ( $version in $supported_grid_versions == false ) {
     fail("Unrecognized database grid install version, use ${supported_grid_versions}")
   }
 
   $supported_db_kernels = join( lookup('oradb::kernels'), '|')
-  if ( $::kernel in $supported_db_kernels == false){
+  if ( $facts['kernel'] in $supported_db_kernels == false) {
     fail("Unrecognized operating system, please use it on a ${supported_db_kernels} host")
   }
 
   $supported_grid_types = join( lookup('oradb::grid_type'), '|')
-  if ($grid_type in $supported_grid_types == false ){
+  if ($grid_type in $supported_grid_types == false ) {
     fail("Unrecognized database grid type, please use ${supported_grid_types}")
   }
 
-  if ( $grid_base == undef or !($grid_base =~ String)) {fail('You must specify an grid_base') }
-  if ( $grid_home == undef or !($grid_home =~ String)) {fail('You must specify an grid_home') }
+  if ( $grid_base == undef or is_string($grid_base) == false) { fail('You must specify an grid_base') }
+  if ( $grid_home == undef or is_string($grid_home) == false) { fail('You must specify an grid_home') }
 
   # check if the oracle software already exists
   $found = oradb::oracle_exists( $grid_home )
@@ -158,7 +181,7 @@ define oradb::installasm(
     if ( $found ) {
       $continue = false
     } else {
-      notify {"oradb::installasm ${grid_home} does not exists":}
+      notify { "oradb::installasm ${grid_home} does not exists": }
       $continue = true
     }
   }
@@ -169,7 +192,7 @@ define oradb::installasm(
     $ora_inventory = "${ora_inventory_dir}/oraInventory"
   }
 
-  db_directory_structure{"grid structure ${version}":
+  db_directory_structure { "grid structure ${version}":
     ensure            => present,
     oracle_base_dir   => $grid_base,
     oracle_home_dir   => $grid_home,
@@ -180,7 +203,6 @@ define oradb::installasm(
   }
 
   if ( $continue ) {
-
     $exec_path = lookup('oradb::exec_path')
 
     if ( $zip_extract ) {
@@ -202,9 +224,8 @@ define oradb::installasm(
       }
 
       if $remote_file == true {
-
         file { "${download_dir}/${file1}":
-          ensure  => present,
+          ensure  => file,
           source  => "${puppet_download_mnt_point}/${file1}",
           mode    => '0775',
           owner   => $user,
@@ -215,13 +236,13 @@ define oradb::installasm(
 
         if ( $total_files > 1 ) {
           file { "${download_dir}/${file2}":
-            ensure  => present,
+            ensure  => file,
             source  => "${puppet_download_mnt_point}/${file2}",
             mode    => '0775',
             owner   => $user,
             group   => $group,
             require => File["${download_dir}/${file1}"],
-            before  => Exec["extract ${download_dir}/${file2}"]
+            before  => Exec["extract ${download_dir}/${file2}"],
           }
         }
 
@@ -300,63 +321,61 @@ define oradb::installasm(
       }
     }
 
-
-
-    oradb::utils::dborainst{"grid orainst ${version}":
+    oradb::utils::dborainst { "grid orainst ${version}":
       ora_inventory_dir => $ora_inventory,
       os_group          => $group_install,
     }
 
     if ! defined(File["${download_dir}/grid_install_${version}.rsp"]) {
       file { "${download_dir}/grid_install_${version}.rsp":
-        ensure  => present,
+        ensure  => file,
         content => epp("oradb/grid_install_${version}.rsp.epp",
-                      { 'group_install'                  =>  $group_install,
-                        'oraInventory'                   =>  $ora_inventory,
-                        'grid_base'                      =>  $grid_base,
-                        'grid_home'                      =>  $grid_home,
-                        'group_oper'                     =>  $group_oper,
-                        'group'                          =>  $group,
-                        'group_asm'                      =>  $group_asm,
-                        'scan_name'                      =>  $scan_name,
-                        'scan_port'                      =>  $scan_port,
-                        'oms_port'                       =>  $oms_port,
-                        'grid_type'                      =>  $grid_type,
-                        'cluster_name'                   =>  $cluster_name,
-                        'cluster_nodes'                  =>  $cluster_nodes,
-                        'network_interface_list'         =>  $network_interface_list,
-                        'storage_option'                 =>  $storage_option,
-                        'sys_asm_password'               =>  $sys_asm_password,
-                        'asm_monitor_password'           =>  $asm_monitor_password,
-                        'asm_diskgroup'                  =>  $asm_diskgroup,
-                        'disk_redundancy'                =>  $disk_redundancy,
-                        'disk_au_size'                   =>  $disk_au_size,
-                        'scan_type'                      =>  $scan_type,
-                        'configure_gns'                  =>  $configure_gns,
-                        'auto_configure_vip'             =>  $auto_configure_vip,
-                        'use_ipmi'                       =>  $use_ipmi,
-                        'configure_afd'                  =>  $configure_afd,
-                        'configure_rhps'                 =>  $configure_rhps,
-                        'ignore_down_nodes'              =>  $ignore_down_nodes,
-                        'management_option'              =>  $management_option,
-                        'root_script_config'             =>  $root_script_config,
-                        'root_script_sudo_path'          =>  $root_script_sudo_path,
-                        'root_script_sudo_user'          =>  $root_script_sudo_user,
-                        'execute_root_script'            =>  $execute_root_script,
-                        'disks'                          =>  $disks,
-                        'disks_with_failure_groups'      =>  $disks_with_failure_groups,
-                        'configure_gimr_data'            =>  $configure_gimr_data,
-                        'configure_gimr'                 =>  $configure_gimr,
-                        'gimr_diskgroup'                 =>  $gimr_diskgroup,
-                        'gimr_disk_redundancy'           =>  $gimr_disk_redundancy,
-                        'gimr_disks'                     =>  $gimr_disks,
-                        'gimr_disks_with_failure_groups' =>  $gimr_disks_with_failure_groups,
-                        'disk_discovery_string'          =>  $disk_discovery_string }),
+          { 'group_install'                  => $group_install,
+            'oraInventory'                   => $ora_inventory,
+            'grid_base'                      => $grid_base,
+            'grid_home'                      => $grid_home,
+            'group_oper'                     => $group_oper,
+            'group'                          => $group,
+            'group_asm'                      => $group_asm,
+            'scan_name'                      => $scan_name,
+            'scan_port'                      => $scan_port,
+            'oms_port'                       => $oms_port,
+            'grid_type'                      => $grid_type,
+            'cluster_name'                   => $cluster_name,
+            'cluster_nodes'                  => $cluster_nodes,
+            'network_interface_list'         => $network_interface_list,
+            'storage_option'                 => $storage_option,
+            'sys_asm_password'               => $sys_asm_password,
+            'asm_monitor_password'           => $asm_monitor_password,
+            'asm_diskgroup'                  => $asm_diskgroup,
+            'disk_redundancy'                => $disk_redundancy,
+            'disk_au_size'                   => $disk_au_size,
+            'scan_type'                      => $scan_type,
+            'configure_gns'                  => $configure_gns,
+            'auto_configure_vip'             => $auto_configure_vip,
+            'use_ipmi'                       => $use_ipmi,
+            'configure_afd'                  => $configure_afd,
+            'configure_rhps'                 => $configure_rhps,
+            'ignore_down_nodes'              => $ignore_down_nodes,
+            'management_option'              => $management_option,
+            'root_script_config'             => $root_script_config,
+            'root_script_sudo_path'          => $root_script_sudo_path,
+            'root_script_sudo_user'          => $root_script_sudo_user,
+            'execute_root_script'            => $execute_root_script,
+            'disks'                          => $disks,
+            'disks_with_failure_groups'      => $disks_with_failure_groups,
+            'configure_gimr_data'            => $configure_gimr_data,
+            'configure_gimr'                 => $configure_gimr,
+            'gimr_diskgroup'                 => $gimr_diskgroup,
+            'gimr_disk_redundancy'           => $gimr_disk_redundancy,
+            'gimr_disks'                     => $gimr_disks,
+            'gimr_disks_with_failure_groups' => $gimr_disks_with_failure_groups,
+        'disk_discovery_string'              => $disk_discovery_string }),
         mode    => '0770',
         owner   => $user,
         group   => $group,
         require => [Oradb::Utils::Dborainst["grid orainst ${version}"],
-                    Db_directory_structure["grid structure ${version}"],],
+        Db_directory_structure["grid structure ${version}"],],
       }
     }
 
@@ -377,19 +396,19 @@ define oradb::installasm(
       group       => $group_install,
       logoutput   => true,
       require     => [Oradb::Utils::Dborainst["grid orainst ${version}"],
-                      File["${download_dir}/grid_install_${version}.rsp"]],
+      File["${download_dir}/grid_install_${version}.rsp"]],
     }
 
     if ( $bash_profile == true ) {
       if ! defined(File["${user_base_dir}/${user}/.bash_profile"]) {
         file { "${user_base_dir}/${user}/.bash_profile":
-          ensure  => present,
+          ensure  => file,
           # content => template('oradb/grid_bash_profile.erb'),
           content => regsubst(epp('oradb/grid_bash_profile.epp',
-                              { 'grid_home' => $grid_home,
-                                'grid_base' => $grid_base,
-                                'grid_type' => $grid_type,
-                                'temp_dir'  => $temp_dir }), '\r\n', "\n", 'EMG'),
+            { 'grid_home' => $grid_home,
+              'grid_base' => $grid_base,
+              'grid_type' => $grid_type,
+          'temp_dir'      => $temp_dir }), '\r\n', "\n", 'EMG'),
           mode    => '0775',
           owner   => $user,
           group   => $group,
@@ -398,8 +417,8 @@ define oradb::installasm(
     }
 
     # Enterprise Linux 7 and greater uses systemd for service control
-    if ($facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] >= '7'){
-      file {'/etc/systemd/system/oracle-ohasd.service':
+    if ($facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] >= '7') {
+      file { '/etc/systemd/system/oracle-ohasd.service':
         ensure  => 'file',
         content => epp('oradb/ohas.service.epp'),
         mode    => '0644',
@@ -460,7 +479,7 @@ define oradb::installasm(
         }
       }
 
-      if ( $remote_file == true ){
+      if ( $remote_file == true ) {
         if ( $total_files > 1 ) {
           exec { "remove oracle asm file2 ${file2} ${title}":
             command => "rm -rf ${download_dir}/${file2}",
@@ -491,18 +510,18 @@ define oradb::installasm(
           cwd       => $grid_base,
           logoutput => true,
           require   => [Exec["run root.sh grid script ${title}"],
-                        File[$grid_home],],
+          File[$grid_home],],
         }
       }
     } else {
       file { "${download_dir}/cfgrsp.properties":
-        ensure  => present,
-        content => epp('oradb/grid_password.properties.epp', { 'sys_asm_password' => $sys_asm_password } ),
+        ensure  => file,
+        content => epp('oradb/grid_password.properties.epp', { 'sys_asm_password' => $sys_asm_password }),
         mode    => '0600',
         owner   => $user,
         group   => $group,
         require => [Exec["run root.sh grid script ${title}"],
-                    File[$grid_home],],
+        File[$grid_home],],
       }
 
       exec { "run configToolAllCommands grid tool ${title}":
@@ -516,11 +535,10 @@ define oradb::installasm(
         logoutput => true,
         returns   => [0,3], # when a scan adress is not defined in the DNS, it fails, buut we can continue
         require   => [File["${download_dir}/cfgrsp.properties"],
-                      Exec["run root.sh grid script ${title}"],
-                      Exec["install oracle grid ${title}"],
-                      ],
+          Exec["run root.sh grid script ${title}"],
+          Exec["install oracle grid ${title}"],
+        ],
       }
     }
-
   }
 }

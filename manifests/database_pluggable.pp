@@ -32,8 +32,9 @@
 # @param pdb_admin_username the pluggable DB admin username
 # @param pdb_admin_password the pluggable DB admin password
 # @param create_user_tablespace create user tablespace for the pluggable DB
+# @param oracle_base
 #
-define oradb::database_pluggable(
+define oradb::database_pluggable (
   Enum['present', 'absent'] $ensure             = 'present',
   Enum['12.1', '12.2', '18.3', '19.3'] $version = lookup('oradb::version'),
   String $oracle_base                           = undef,
@@ -47,7 +48,7 @@ define oradb::database_pluggable(
   String $pdb_admin_password                    = undef,
   Boolean $create_user_tablespace               = true,
   Boolean $log_output                           = false,
-){
+) {
   $exec_path = lookup('oradb::exec_path')
 
   if ( $ensure == 'present') {
@@ -77,6 +78,5 @@ define oradb::database_pluggable(
       onlyif    => "test ! -f ${oracle_base}/cfgtoollogs/dbca/${source_db}/${pdb_name}/deletePDB.log",
       logoutput => $log_output,
     }
-
   }
 }

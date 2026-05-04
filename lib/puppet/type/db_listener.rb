@@ -1,20 +1,16 @@
 module Puppet
-  Type::newtype(:db_listener) do
+  Type.newtype(:db_listener) do
     desc 'control the oracle db listener state like running,stop,restart'
 
     newproperty(:ensure) do
       desc 'Whether to do something.'
 
-      newvalue(:start, :event => :listener_running) do
-        unless resource[:refreshonly] == :true
-          provider.start
-        end
+      newvalue(:start, event: :listener_running) do
+        provider.start unless resource[:refreshonly] == :true
       end
 
-      newvalue(:stop, :event => :listener_stop) do
-        unless resource[:refreshonly] == :true
-          provider.stop
-        end
+      newvalue(:stop, event: :listener_stop) do
+        provider.stop unless resource[:refreshonly] == :true
       end
 
       aliasvalue(:running, :start)
@@ -33,8 +29,8 @@ module Puppet
       end
 
       def sync
-       event = super()
-       if property = @resource.property(:enable)
+        event = super
+        if property = @resource.property(:enable)
           val = property.retrieve
           property.sync unless property.safe_insync?(val)
         end

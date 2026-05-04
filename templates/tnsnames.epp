@@ -20,7 +20,7 @@
     (RETRY_COUNT = <%= $retry_count %>)
   <%- } -%> 
   <%- if $server.size() > 1 { -%> 
-    (ADDRESS_LIST=
+    (ADDRESS_LIST =
       (LOAD_BALANCE = <%= $loadbalance %>) 
       (FAILOVER = <%= $failover %>) 
   <%- } -%> 

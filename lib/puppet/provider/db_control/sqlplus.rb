@@ -1,29 +1,25 @@
-Puppet::Type.type(:db_control).provide(:sqlplus, :parent => :base) do
-
-#
+Puppet::Type.type(:db_control).provide(:sqlplus, parent: :base) do
   # This is bit of a hack. id is always root, but we need to declare a default provider
-  #
-  defaultfor :id => 'root'  
-
+  defaultfor id: 'root'
 
   def instance_control(action)
     Puppet.debug "instance action: #{action}"
 
     command, @succes_output = case action
-    when :start
-      ['startup', /Database opened/]
-    when :mount
-      ['startup mount', /Database mounted/]
-    when :stop
-      ['shutdown immediate', /ORACLE instance shut down/]
-    else
-      fail "internal error unknown action #{action}"
-    end
+                              when :start
+                                ['startup', %r{Database opened}]
+                              when :mount
+                                ['startup mount', %r{Database mounted}]
+                              when :stop
+                                ['shutdown immediate', %r{ORACLE instance shut down}]
+                              else
+                                raise "internal error unknown action #{action}"
+                              end
 
     Puppet.info "instance action: #{action} with command #{command}"
     @output = sql command
-    if unsuccessful? 
-      fail(@output) if unsuccessful?
+    if unsuccessful?
+      raise(@output) if unsuccessful?
     else
       Puppet.info "instance result: #{@output}"
     end
@@ -35,15 +31,14 @@ Puppet::Type.type(:db_control).provide(:sqlplus, :parent => :base) do
     kernel = Facter.value(:kernel)
 
     ps_bin = (kernel != 'SunOS' || (kernel == 'SunOS' && Facter.value(:kernelrelease) == '5.11')) ? '/bin/ps' : '/usr/ucb/ps'
-    ps_arg = kernel == 'SunOS' ? 'awwx' : '-ef'
+    ps_arg = (kernel == 'SunOS') ? 'awwx' : '-ef'
 
     command  = "#{ps_bin} #{ps_arg} | /bin/grep -v grep | /bin/grep 'ora_smon_#{name}'"
 
     Puppet.debug "instance_status #{command}"
     output = `#{command}`
-    output.scan(/ora_smon_#{name}/).empty? ? :stop : :start
+    output.scan(%r{ora_smon_#{name}}).empty? ? :stop : :start
   end
-
 
   private
 
@@ -61,5 +56,4 @@ connect / as sysdba
 EOF"
     `su - #{user} -c 'export ORACLE_HOME="#{oracle_home}";export PATH="#{oracle_home}/bin:$PATH";export ORACLE_SID="#{name}";export LD_LIBRARY_PATH="#{oracle_home}/lib";#{command}'`
   end
-
 end

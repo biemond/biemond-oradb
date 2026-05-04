@@ -31,8 +31,9 @@
 # @param bundle_sub_patch_id sub opatch id in case of a bundle patch to check if the bundle patch is already applied
 # @param bundle_sub_folder just apply a patch from a bundle
 # @param ocmrf
+# @param ora_inst_path TODO
 #
-define oradb::opatch(
+define oradb::opatch (
   Enum['present', 'absent'] $ensure     = 'present',
   String $oracle_product_home           = undef,
   String $patch_id                      = undef,
@@ -48,14 +49,13 @@ define oradb::opatch(
   String $puppet_download_mnt_point     = lookup('oradb::module_mountpoint'),
   Boolean $remote_file                  = true,
   String $ora_inst_path                 = lookup('oradb::orainst_dir'),
-)
-{
+) {
   $exec_path     = lookup('oradb::exec_path')
 
   if ! defined(File["${oracle_product_home}/bin/fuser"]) {
     file { "${oracle_product_home}/bin/fuser":
-      ensure => present,
-      mode   => '0755'
+      ensure => file,
+      mode   => '0755',
     }
   }
 
@@ -64,9 +64,9 @@ define oradb::opatch(
       # the patch used by the opatch
       if ! defined(File["${download_dir}/${patch_file}"]) {
         file { "${download_dir}/${patch_file}":
-          ensure => present,
+          ensure => file,
           source => "${puppet_download_mnt_point}/${patch_file}",
-          mode   => '0775'
+          mode   => '0775',
         }
       }
     }
@@ -107,8 +107,7 @@ define oradb::opatch(
       }
 
       if $ocmrf == true {
-
-        db_opatch{ "${patch_id} ${title}":
+        db_opatch { "${patch_id} ${title}":
           ensure                  => $ensure,
           patch_id                => $patch_id,
           os_user                 => $user,
@@ -120,10 +119,8 @@ define oradb::opatch(
           opatch_auto             => $clusterware,
           use_opatchauto_utility  => $use_opatchauto_utility,
         }
-
       } else {
-
-        db_opatch{ "${patch_id} ${title}":
+        db_opatch { "${patch_id} ${title}":
           ensure                  => $ensure,
           patch_id                => $patch_id,
           os_user                 => $user,
@@ -134,7 +131,6 @@ define oradb::opatch(
           opatch_auto             => $clusterware,
           use_opatchauto_utility  => $use_opatchauto_utility,
         }
-
       }
     }
     default: {

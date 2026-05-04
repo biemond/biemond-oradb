@@ -11,11 +11,11 @@ Puppet::Type.type(:db_listener).provide(:db_listener) do
 
     Puppet.debug "listener action: #{action} #{listenername}"
 
-    if action == :start
-      listener_action = "start #{listenername}"
-    else
-      listener_action = "stop #{listenername}"
-    end
+    listener_action = if action == :start
+                        "start #{listenername}"
+                      else
+                        "stop #{listenername}"
+                      end
 
     command = "#{oracle_home}/bin/lsnrctl #{listener_action}"
 
@@ -32,7 +32,7 @@ Puppet::Type.type(:db_listener).provide(:db_listener) do
     kernel = Facter.value(:kernel)
 
     ps_bin = (kernel != 'SunOS' || (kernel == 'SunOS' && Facter.value(:kernelrelease) == '5.11')) ? '/bin/ps' : '/usr/ucb/ps'
-    ps_arg = kernel == 'SunOS' ? 'awwx' : '-ef'
+    ps_arg = (kernel == 'SunOS') ? 'awwx' : '-ef'
 
     # command  = "#{ps_bin} #{ps_arg} | /bin/grep -v grep | /bin/grep '#{oracle_home}/bin/tnslsnr #{listenername}'"
     command  = "#{ps_bin} #{ps_arg} | /bin/grep -v grep | /bin/grep -w -i '#{listenername}'"
@@ -41,12 +41,12 @@ Puppet::Type.type(:db_listener).provide(:db_listener) do
     output = `#{command}`
 
     output.each_line do |li|
-      unless li.nil?
-        Puppet.debug "line #{li}"
-        if li.include? "#{oracle_home}/bin/tnslsnr"
-          Puppet.debug 'found listener'
-          return 'Found'
-        end
+      next if li.nil?
+
+      Puppet.debug "line #{li}"
+      if li.include? "#{oracle_home}/bin/tnslsnr"
+        Puppet.debug 'found listener'
+        return 'Found'
       end
     end
     'NotFound'
@@ -66,12 +66,10 @@ Puppet::Type.type(:db_listener).provide(:db_listener) do
   end
 
   def status
-    output  = listener_status
+    output = listener_status
     Puppet.debug "listener_status output #{output}"
-    if output == 'Found'
-      return :start
-    else
-      return :stop
-    end
+    return :start if output == 'Found'
+
+    :stop
   end
 end

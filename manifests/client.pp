@@ -50,8 +50,9 @@
 # @param log_output log all output
 # @param temp_dir location for temporaray file used by the installer
 # @param image_install unzip client_home.zip and use runInstaller
+# @param install_type TODO
 #
-define oradb::client(
+define oradb::client (
   Enum['11.2.0.1','11.2.0.4','12.1.0.1','12.1.0.2','12.2.0.1','18.0.0.0','19.0.0.0'] $version = undef,
   String $file                                                          = undef,
   Stdlib::Absolutepath $oracle_base                                     = undef,
@@ -70,8 +71,7 @@ define oradb::client(
   String $temp_dir                                                      = lookup('oradb::tmp_dir'),
   Enum['client','client32'] $install_type                               = 'client',
   Boolean $image_install                                                = false,
-)
-{
+) {
   # check if the oracle software already exists
   $found = oradb::oracle_exists( $oracle_home )
 
@@ -81,7 +81,7 @@ define oradb::client(
     if ( $found ) {
       $continue = false
     } else {
-      notify {"oradb::installdb ${oracle_home} does not exists":}
+      notify { "oradb::installdb ${oracle_home} does not exists": }
       $continue = true
     }
   }
@@ -94,7 +94,7 @@ define oradb::client(
 
   if ( $image_install ) {
     # add oracle home for the unzip
-    db_directory_structure{"client structure ${title}":
+    db_directory_structure { "client structure ${title}":
       ensure            => present,
       oracle_base_dir   => $oracle_base,
       oracle_home_dir   => $oracle_home,
@@ -104,7 +104,7 @@ define oradb::client(
       os_group          => $group_install,
     }
   } else {
-    db_directory_structure{"client structure ${title}":
+    db_directory_structure { "client structure ${title}":
       ensure            => present,
       oracle_base_dir   => $oracle_base,
       ora_inventory_dir => $ora_inventory,
@@ -114,18 +114,17 @@ define oradb::client(
     }
   }
 
-  if ( $image_install ) and !( $version in ['18.0.0.0', '19.0.0.0'] ) {
+  if ( $image_install ) and !( $version in ['18.0.0.0', '19.0.0.0']) {
     fail('Image Install not supported on this oracle client version!')
   }
 
   if ( $continue ) {
-
     $exec_path = lookup('oradb::exec_path')
 
     # db file installer zip
     if $remote_file == true {
       file { "${download_dir}/${file}":
-        ensure  => present,
+        ensure  => file,
         source  => "${puppet_download_mnt_point}/${file}",
         before  => Exec["extract ${download_dir}/${file}"],
         mode    => '0775',
@@ -138,7 +137,7 @@ define oradb::client(
       $source = $puppet_download_mnt_point
     }
 
-  if ( $image_install ) {
+    if ( $image_install ) {
       exec { "extract ${download_dir}/${file}":
         command   => "unzip -o ${source}/${file} -d ${oracle_home}",
         timeout   => 0,
@@ -148,7 +147,7 @@ define oradb::client(
         logoutput => false,
         require   => Db_directory_structure["client structure ${title}"],
       }
-  } else {
+    } else {
       exec { "extract ${download_dir}/${file}":
         command   => "unzip -o ${source}/${file} -d ${download_dir}/client_${version}",
         timeout   => 0,
@@ -158,31 +157,30 @@ define oradb::client(
         logoutput => false,
         require   => Db_directory_structure["client structure ${title}"],
       }
-  }
+    }
 
-    oradb::utils::dborainst{"oracle orainst ${title}":
+    oradb::utils::dborainst { "oracle orainst ${title}":
       ora_inventory_dir => $ora_inventory,
       os_group          => $group_install,
     }
 
     if ! defined(File["${download_dir}/db_${install_type}_${version}.rsp"]) {
       file { "${download_dir}/db_${install_type}_${version}.rsp":
-        ensure  => present,
+        ensure  => file,
         content => epp("oradb/db_client_${version}.rsp.epp", {
-                        'group_install' => $group_install,
-                        'oraInventory'  => $ora_inventory,
-                        'oracle_home'   => $oracle_home,
-                        'oracle_base'   => $oracle_base }),
+          'group_install' => $group_install,
+          'oraInventory'  => $ora_inventory,
+          'oracle_home'   => $oracle_home,
+        'oracle_base'     => $oracle_base }),
         mode    => '0775',
         owner   => $user,
         group   => $group,
         require => [Oradb::Utils::Dborainst["oracle orainst ${title}"],
-                    Db_directory_structure["client structure ${title}"],],
+        Db_directory_structure["client structure ${title}"],],
       }
     }
     if ($image_install) {
       $command = "/bin/sh -c 'unset DISPLAY;cd ${oracle_home};./runInstaller -silent -waitforcompletion -force -responseFile ${download_dir}/db_${install_type}_${version}.rsp'"
-
     } else {
       $command = "/bin/sh -c 'unset DISPLAY;${download_dir}/client_${version}/${install_type}/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${download_dir}/db_${install_type}_${version}.rsp'"
     }
@@ -190,8 +188,8 @@ define oradb::client(
     exec { "install oracle client ${title}":
       command     => $command,
       require     => [Oradb::Utils::Dborainst["oracle orainst ${title}"],
-                      File["${download_dir}/db_${install_type}_${version}.rsp"],
-                      Exec["extract ${download_dir}/${file}"]],
+        File["${download_dir}/db_${install_type}_${version}.rsp"],
+      Exec["extract ${download_dir}/${file}"]],
       #creates     => $oracle_home, # remove creates to support image install.
       timeout     => 0,
       returns     => [6,0],
@@ -212,7 +210,7 @@ define oradb::client(
     }
 
     file { "${download_dir}/netca_${install_type}_${version}.rsp":
-      ensure  => present,
+      ensure  => file,
       content => epp("oradb/netca_client_${version}.rsp.epp", { 'db_port' => $db_port }),
       require => Exec["run root.sh script ${title}"],
       mode    => '0775',
@@ -233,11 +231,11 @@ define oradb::client(
     if ( $bash_profile == true ) {
       if ! defined(File["${user_base_dir}/${user}/.bash_profile"]) {
         file { "${user_base_dir}/${user}/.bash_profile":
-          ensure  => present,
+          ensure  => file,
           # content => template('oradb/bash_profile.erb'),
           content => regsubst(epp('oradb/bash_profile.epp', { 'oracle_home' => $oracle_home,
-                                                              'oracle_base' => $oracle_base,
-                                                              'temp_dir'    => $temp_dir }), '\r\n', "\n", 'EMG'),
+            'oracle_base'                                                   => $oracle_base,
+          'temp_dir'                                                        => $temp_dir }), '\r\n', "\n", 'EMG'),
           mode    => '0775',
           owner   => $user,
           group   => $group,
@@ -254,7 +252,7 @@ define oradb::client(
       require => Exec["install oracle net ${title}"],
     }
 
-    if ( $remote_file == true ){
+    if ( $remote_file == true ) {
       exec { "remove oracle client file ${file} ${title}":
         command => "rm -rf ${download_dir}/${file}",
         user    => 'root',
@@ -264,6 +262,5 @@ define oradb::client(
         require => Exec["extract ${download_dir}/${file}"],
       }
     }
-
   }
 }

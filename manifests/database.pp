@@ -92,8 +92,10 @@
 # @param recovery_diskgroup
 # @param cluster_nodes
 # @param container_database configure as a 12c container database which allows plugleable databases
+# @param automatic_memory_management TODO
+# @param timeout TODO
 #
-define oradb::database(
+define oradb::database (
   String $oracle_base                                             = undef,
   String $oracle_home                                             = undef,
   Enum['11.2', '12.1', '12.2', '18.3', '19.3'] $version           = lookup('oradb::version'),
@@ -129,11 +131,9 @@ define oradb::database(
   String $puppet_download_mnt_point                               = lookup('oradb::module_mountpoint'),
   Boolean $automatic_memory_management                            = true, # for 12.2 , choose false when more than 4gb memory
   Optional[Integer] $timeout                                      = 0,
-)
-{
-
+) {
   $supported_db_kernels = join( lookup('oradb::kernels'), '|')
-  if ( $::kernel in $supported_db_kernels == false){
+  if ( $facts['kernel'] in $supported_db_kernels == false) {
     fail("Unrecognized operating system, please use it on a ${supported_db_kernels} host")
   }
 
@@ -157,7 +157,7 @@ define oradb::database(
     fail('Unrecognized storageType')
   }
 
-  if ( $version == '11.2' and $container_database == true ){
+  if ( $version == '11.2' and $container_database == true ) {
     fail('container or pluggable database is not supported on version 11.2')
   }
 
@@ -185,32 +185,32 @@ define oradb::database(
 
   if ! defined(File["${download_dir}/database_${sanitized_title}.rsp"]) {
     file { "${download_dir}/database_${sanitized_title}.rsp":
-      ensure  => present,
+      ensure  => file,
       content => epp("oradb/dbca_${version}.rsp.epp",
-                    { 'operationType'               => $operation_type,
-                      'globaldb_name'               => $globaldb_name,
-                      'db_name'                     => $db_name,
-                      'cluster_nodes'               => $cluster_nodes,
-                      'sys_password'                => $sys_password,
-                      'system_password'             => $system_password,
-                      'em_configuration'            => $em_configuration,
-                      'db_snmp_password'            => $db_snmp_password,
-                      'data_file_destination'       => $data_file_destination,
-                      'recovery_area_destination'   => $recovery_area_destination,
-                      'storage_type'                => $storage_type,
-                      'asm_diskgroup'               => $asm_diskgroup,
-                      'asm_snmp_password'           => $asm_snmp_password,
-                      'recovery_diskgroup'          => $recovery_diskgroup,
-                      'character_set'               => $character_set,
-                      'nationalcharacter_set'       => $nationalcharacter_set,
-                      'sanitizedInitParams'         => $sanitized_init_params,
-                      'sample_schema'               => $sample_schema,
-                      'memory_percentage'           => $memory_percentage,
-                      'database_type'               => $database_type,
-                      'memory_total'                => $memory_total,
-                      'db_port'                     => $db_port,
-                      'container_database'          => $container_database,
-                      'automatic_memory_management' => $automatic_memory_management }),
+        { 'operationType'             => $operation_type,
+          'globaldb_name'             => $globaldb_name,
+          'db_name'                   => $db_name,
+          'cluster_nodes'             => $cluster_nodes,
+          'sys_password'              => $sys_password,
+          'system_password'           => $system_password,
+          'em_configuration'          => $em_configuration,
+          'db_snmp_password'          => $db_snmp_password,
+          'data_file_destination'     => $data_file_destination,
+          'recovery_area_destination' => $recovery_area_destination,
+          'storage_type'              => $storage_type,
+          'asm_diskgroup'             => $asm_diskgroup,
+          'asm_snmp_password'         => $asm_snmp_password,
+          'recovery_diskgroup'        => $recovery_diskgroup,
+          'character_set'             => $character_set,
+          'nationalcharacter_set'     => $nationalcharacter_set,
+          'sanitizedInitParams'       => $sanitized_init_params,
+          'sample_schema'             => $sample_schema,
+          'memory_percentage'         => $memory_percentage,
+          'database_type'             => $database_type,
+          'memory_total'              => $memory_total,
+          'db_port'                   => $db_port,
+          'container_database'        => $container_database,
+      'automatic_memory_management'   => $automatic_memory_management }),
       mode    => '0770',
       owner   => $user,
       group   => $group,
@@ -223,7 +223,7 @@ define oradb::database(
   } elsif ( $template ) {
     $templatename = "${download_dir}/${template}_${sanitized_title}.dbt"
     file { $templatename:
-      ensure  => present,
+      ensure  => file,
       content => template("${puppet_download_mnt_point}/${template}.dbt.erb"),
       mode    => '0775',
       owner   => $user,
@@ -243,10 +243,9 @@ define oradb::database(
 
   if $action == 'create' {
     if ( $templatename ) {
-
       if ( $template_variables != undef ) {
         file { "${download_dir}/vars_${sanitized_title}.txt":
-          ensure  => present,
+          ensure  => file,
           content => epp('oradb/dbca_vars.epp', { 'vars' => $template_variables }),
           mode    => '0775',
           owner   => $user,
@@ -298,7 +297,6 @@ define oradb::database(
       }
 
       $command = "${command_pre} ${command_amm} ${command_storage} ${command_data_file} ${command_var} ${command_init} ${command_nodes} ${elevation_suffix}"
-
     } else {
       if ( $version in ['12.2','18.3','19.3']) {
         $command = "${elevation_prefix}${oracle_home}/bin/dbca -silent -createDatabase -responseFile ${download_dir}/database_${sanitized_title}.rsp${elevation_suffix}"

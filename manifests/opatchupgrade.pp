@@ -26,8 +26,9 @@
 # @param csi_number oracle support csi number
 # @param support_id oracle support id
 # @param opversion opatch version of current patch
+# @param remote_file
 #
-define oradb::opatchupgrade(
+define oradb::opatchupgrade (
   String $oracle_home               = undef,
   String $patch_file                = undef,
   Optional[Integer] $csi_number     = undef,
@@ -38,12 +39,12 @@ define oradb::opatchupgrade(
   String $download_dir              = lookup('oradb::download_dir'),
   String $puppet_download_mnt_point = lookup('oradb::module_mountpoint'),
   Boolean $remote_file              = true,
-){
+) {
   $exec_path = lookup('oradb::exec_path')
   $patch_dir = "${oracle_home}/OPatch"
 
   $supported_db_kernels = join( lookup('oradb::kernels'), '|')
-  if ( $facts['kernel'] in $supported_db_kernels == false){
+  if ( $facts['kernel'] in $supported_db_kernels == false) {
     fail("Unrecognized operating system, please use it on a ${supported_db_kernels} host")
   }
 
@@ -53,15 +54,15 @@ define oradb::opatchupgrade(
   if $installed_version == $opversion {
     $continue = false
   } else {
-    notify {"oradb::opatchupgrade ${title} ${installed_version} installed - performing upgrade":}
+    notify { "oradb::opatchupgrade ${title} ${installed_version} installed - performing upgrade": }
     $continue = true
   }
 
   if ( $continue ) {
     if $remote_file == true {
       if ! defined(File["${download_dir}/${patch_file}"]) {
-        file {"${download_dir}/${patch_file}":
-          ensure => present,
+        file { "${download_dir}/${patch_file}":
+          ensure => file,
           path   => "${download_dir}/${patch_file}",
           source => "${puppet_download_mnt_point}/${patch_file}",
           mode   => '0775',
@@ -112,7 +113,6 @@ define oradb::opatchupgrade(
               require   => Exec["extract opatch ${title} ${patch_file}"],
             }
           } else {
-
             if ! defined(Package['expect']) {
               package { 'expect':
                 ensure => present,
@@ -120,7 +120,7 @@ define oradb::opatchupgrade(
             }
 
             file { "${download_dir}/opatch_upgrade_${title}_${opversion}.ksh":
-              ensure  => present,
+              ensure  => file,
               content => epp('oradb/ocm.rsp.epp', { 'patchDir' => $patch_dir }),
               mode    => '0775',
               owner   => $user,
@@ -134,8 +134,8 @@ define oradb::opatchupgrade(
               group     => $group,
               logoutput => true,
               require   => [File["${download_dir}/opatch_upgrade_${title}_${opversion}.ksh"],
-                            Exec["extract opatch ${title} ${patch_file}"],
-                            Package['expect'],],
+                Exec["extract opatch ${title} ${patch_file}"],
+              Package['expect'],],
             }
           }
         }
