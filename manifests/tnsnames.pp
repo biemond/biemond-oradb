@@ -57,6 +57,7 @@ define oradb::tnsnames(
       group          => $group,
       mode           => '0774',
       ensure_newline => true,
+      warn           => true,
     }
   }
 
